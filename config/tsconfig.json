@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "incremental": true,
+        "lib": ["ES2020"],
+        "module": "CommonJS",
+        "target": "ES2020",
+        "outDir": "./dist",
+        "strict": true,
+        "esModuleInterop": true
+    },
+    "include": ["./src"],
+    "exclude": ["node_modules"]
+}
