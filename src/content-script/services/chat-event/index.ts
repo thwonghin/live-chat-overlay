@@ -1,8 +1,12 @@
+import { getItemFromNode } from './utils';
+
+import { ChatItem } from './models';
+
 type ChatEvent = 'add' | 'remove';
 
-type ChatEventCallback = (node: Node) => void;
+type ChatEventCallback = (chatItem: ChatItem) => void;
 
-interface initChatEventEmitterParams {
+interface initChatEventObserverParams {
     containerEle: HTMLElement;
 }
 
@@ -22,17 +26,21 @@ export class ChatEventObserver {
 
     private isObserving: boolean = false;
 
-    constructor(params: initChatEventEmitterParams) {
+    constructor(params: initChatEventObserverParams) {
         this.containerEle = params.containerEle;
 
         this.observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 mutation.addedNodes.forEach((node) =>
-                    this.listeners.add.forEach((listener) => listener(node)),
+                    this.listeners.add.forEach((listener) =>
+                        listener(getItemFromNode(node)),
+                    ),
                 );
 
                 mutation.removedNodes.forEach((node) =>
-                    this.listeners.remove.forEach((listener) => listener(node)),
+                    this.listeners.remove.forEach((listener) =>
+                        listener(getItemFromNode(node)),
+                    ),
                 );
             });
         });

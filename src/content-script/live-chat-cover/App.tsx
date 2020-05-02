@@ -1,6 +1,11 @@
 import React from 'react';
-import classes from './App.css';
+import { ChatEventContextProvider } from './contexts/chat-event';
+import ChatFlow from './components/chat-flow';
 
 export default function App() {
-    return <div className={classes.test}>Hello World!</div>;
+    return (
+        <ChatEventContextProvider timeout={10000}>
+            <ChatFlow />
+        </ChatEventContextProvider>
+    );
 }
