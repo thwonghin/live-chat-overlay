@@ -1,5 +1,5 @@
 import { Dispatch, createContext } from 'react';
-import { State, ChatEventAction } from './reducer';
+import { State, ChatEventAction, initialState } from './reducer';
 
 export interface ChatEventContextValue {
     state: State;
@@ -7,8 +7,6 @@ export interface ChatEventContextValue {
 }
 
 export const ChatEventContext = createContext<ChatEventContextValue>({
-    state: {
-        chatItems: [],
-    },
+    state: initialState,
     dispatch: () => {},
 });

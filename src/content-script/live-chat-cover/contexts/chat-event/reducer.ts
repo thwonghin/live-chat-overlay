@@ -1,36 +1,47 @@
 import { ChatItem } from '../../../services/chat-event/models';
 
 const ADD_ITEM_ACTION_TYPE = 'ADD_ITEM';
-const REMOVE_ITEM_ACTION_TYPE = 'REMOVE_ITEM';
+const MARK_AS_DONE_ACTION_TYPE = 'MARK_AS_DONE';
+const CLEANUP_ACTION_TYPE = 'CLEANUP';
 
 export interface State {
     chatItems: ChatItem[];
+    doneItemsIdMap: Record<string, boolean>;
 }
 
 export const initialState: State = {
     chatItems: [],
+    doneItemsIdMap: {},
 };
 
-interface Action {
-    type: string;
-}
-
-export interface AddItemAction extends Action {
+export interface AddItemAction {
+    type: typeof ADD_ITEM_ACTION_TYPE;
     payload: ChatItem;
 }
 
-export interface RemoveItemAction extends Action {
+export interface MarkAsDoneAction {
+    type: typeof MARK_AS_DONE_ACTION_TYPE;
     payload: ChatItem;
 }
 
-export type ChatEventAction = AddItemAction | RemoveItemAction;
+export interface CleanupAction {
+    type: typeof CLEANUP_ACTION_TYPE;
+}
 
-function isAddItemAction(action: Action): action is AddItemAction {
+export type ChatEventAction = AddItemAction | MarkAsDoneAction | CleanupAction;
+
+function isAddItemAction(action: ChatEventAction): action is AddItemAction {
     return action.type === ADD_ITEM_ACTION_TYPE;
 }
 
-function isRemoveItemAction(action: Action): action is RemoveItemAction {
-    return action.type === REMOVE_ITEM_ACTION_TYPE;
+function isMarkAsDoneAction(
+    action: ChatEventAction,
+): action is MarkAsDoneAction {
+    return action.type === MARK_AS_DONE_ACTION_TYPE;
+}
+
+function isCleanupAction(action: ChatEventAction): action is CleanupAction {
+    return action.type === CLEANUP_ACTION_TYPE;
 }
 
 export function addItem(payload: ChatItem): AddItemAction {
@@ -40,26 +51,43 @@ export function addItem(payload: ChatItem): AddItemAction {
     };
 }
 
-export function removeItem(payload: ChatItem): RemoveItemAction {
+export function markAsDone(payload: ChatItem): MarkAsDoneAction {
     return {
-        type: REMOVE_ITEM_ACTION_TYPE,
+        type: MARK_AS_DONE_ACTION_TYPE,
         payload,
     };
 }
 
+export function cleanup(): CleanupAction {
+    return {
+        type: CLEANUP_ACTION_TYPE,
+    };
+}
+
 export function chatItemsReducer(state: State, action: ChatEventAction): State {
-    switch (true) {
-        case isAddItemAction(action):
-            return {
-                chatItems: state.chatItems.concat(action.payload),
-            };
-        case isRemoveItemAction(action):
-            return {
-                chatItems: state.chatItems.filter(
-                    (item) => item.id !== action.payload.id,
-                ),
-            };
-        default:
-            return state;
+    if (isAddItemAction(action)) {
+        return {
+            chatItems: state.chatItems.concat(action.payload),
+            doneItemsIdMap: state.doneItemsIdMap,
+        };
     }
+    if (isMarkAsDoneAction(action)) {
+        return {
+            chatItems: state.chatItems,
+            doneItemsIdMap: {
+                ...state.doneItemsIdMap,
+                [action.payload.id]: true,
+            },
+        };
+    }
+    if (isCleanupAction(action)) {
+        return {
+            chatItems: state.chatItems.filter(
+                (item) => !state.doneItemsIdMap[item.id],
+            ),
+            doneItemsIdMap: {},
+        };
+    }
+
+    return state;
 }

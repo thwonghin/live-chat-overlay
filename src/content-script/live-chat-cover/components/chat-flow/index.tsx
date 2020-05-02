@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import classes from './index.css';
 import { isNormalChatItem } from '../../../services/chat-event/utils';
 import { useChatEventContext } from '../../contexts/chat-event';
 import { ChatItem } from '../../../services/chat-event/models';
-import { removeItem } from '../../contexts/chat-event/reducer';
+import { markAsDone, cleanup } from '../../contexts/chat-event/reducer';
 import { RectResult } from '../../hooks/use-rect';
 
 import MessageFlower from './message-flower';
@@ -19,8 +19,8 @@ interface Props {
 
 function ChatFlowLayout({
     chatItems,
-    onTimeout,
     playerRect,
+    onTimeout,
 }: Props): JSX.Element {
     return (
         <div className={classes.container}>
@@ -29,9 +29,10 @@ function ChatFlowLayout({
                     return (
                         <MessageFlower
                             timeout={10000}
-                            onTimeout={(): void => onTimeout(chatItem)}
+                            onTimeout={onTimeout}
                             containerWidth={playerRect.width}
                             key={chatItem.id}
+                            chatItem={chatItem}
                         >
                             <NormalChatMessage chatItem={chatItem} />
                         </MessageFlower>
@@ -48,9 +49,19 @@ export default function ChatFlow(): JSX.Element {
     const { rect } = useVideoPlayerRectContext();
 
     const onTimeout = useCallback(
-        (chatItem) => dispatch(removeItem(chatItem)),
+        (chatItem) => {
+            dispatch(markAsDone(chatItem));
+        },
         [dispatch],
     );
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            dispatch(cleanup());
+        }, 1000);
+
+        return (): void => clearInterval(intervalId);
+    }, [dispatch]);
 
     return (
         <ChatFlowLayout
