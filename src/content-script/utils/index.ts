@@ -43,7 +43,7 @@ export async function waitForChatReady(): Promise<void> {
     });
 }
 
-export function injectStyles() {
+export function injectStyles(): void {
     const path = browser.extension.getURL('content-script.css');
 
     if (window.parent.document.querySelector(`link[href="${path}"]`)) {

@@ -1,4 +1,4 @@
-export interface NomralChatItem {
+export interface NormalChatItem {
     id: string;
     message: string;
     avatarUrl: string;
@@ -10,7 +10,7 @@ export interface NomralChatItem {
 }
 
 export type SuperChatItem = Omit<
-    NomralChatItem,
+    NormalChatItem,
     'message' | 'authorType' | 'chatType'
 > & {
     donationAmount: string;
@@ -24,13 +24,13 @@ export type SuperStickerItem = Omit<SuperChatItem, 'chatType'> & {
     chatType: 'super-sticker';
 };
 
-export type MembershipItem = Omit<NomralChatItem, 'authorType' | 'chatType'> & {
+export type MembershipItem = Omit<NormalChatItem, 'authorType' | 'chatType'> & {
     color: string;
     chatType: 'membership';
 };
 
 export type ChatItem =
-    | NomralChatItem
+    | NormalChatItem
     | SuperChatItem
     | SuperStickerItem
     | MembershipItem;

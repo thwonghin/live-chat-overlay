@@ -58,7 +58,7 @@ export default (webpackEnv: string): webpack.Configuration => {
                         {
                             loader: 'postcss-loader',
                             options: {
-                                plugins: () =>
+                                plugins: (): unknown[] =>
                                     [
                                         postCssPresetEnv(),
                                         isProd ? cssNano() : '',

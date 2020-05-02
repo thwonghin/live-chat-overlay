@@ -7,7 +7,7 @@ async function init(): Promise<void> {
     await waitForChatReady();
     const cleanupLiveChat = initLiveChat();
 
-    function cleanup() {
+    function cleanup(): void {
         cleanupLiveChat();
     }
 

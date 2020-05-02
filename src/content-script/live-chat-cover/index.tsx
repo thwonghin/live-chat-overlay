@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { getVideoPlayerEle, injectStyles } from '../utils';
-import App from './App';
+import App from './app';
 
 const REACT_CONTAINER = 'react-container';
 
@@ -23,5 +23,5 @@ export function initLiveChat(): () => void {
     ReactDOM.createRoot(reactContainer).render(<App />);
     videoPlayerContainer.appendChild(reactContainer);
 
-    return () => reactContainer.remove();
+    return (): void => reactContainer.remove();
 }

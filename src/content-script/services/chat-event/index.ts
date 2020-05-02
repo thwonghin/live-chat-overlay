@@ -6,7 +6,7 @@ type ChatEvent = 'add' | 'remove';
 
 type ChatEventCallback = (chatItem: ChatItem) => void;
 
-interface initChatEventObserverParams {
+interface InitChatEventObserverParams {
     containerEle: HTMLElement;
 }
 
@@ -24,9 +24,9 @@ export class ChatEventObserver {
         remove: [],
     };
 
-    private isObserving: boolean = false;
+    private isObserving = false;
 
-    constructor(params: initChatEventObserverParams) {
+    constructor(params: InitChatEventObserverParams) {
         this.containerEle = params.containerEle;
 
         this.observer = new MutationObserver((mutations) => {
@@ -78,7 +78,7 @@ export class ChatEventObserver {
         this.handleObserverStatus();
     }
 
-    public cleanup() {
+    public cleanup(): void {
         this.listeners.add = [];
         this.listeners.remove = [];
         this.handleObserverStatus();
