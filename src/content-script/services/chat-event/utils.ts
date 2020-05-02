@@ -11,30 +11,27 @@ const SUPER_CHAT_MSG_TAG_NAME = 'YT-LIVE-CHAT-PAID-MESSAGE-RENDERER';
 const SUPER_STICKER_TAG_NAME = 'YT-LIVE-CHAT-PAID-STICKER-RENDERER';
 const NEW_MEMBER_TAG_NAME = 'YT-LIVE-CHAT-MEMBERSHIP-ITEM-RENDERER';
 
-function hasTagName(node: Node, tagName: string): boolean {
-    const element = node as HTMLElement;
-    return element.tagName.toUpperCase() === tagName.toUpperCase();
+function hasTagName(ele: HTMLElement, tagName: string): boolean {
+    return ele.tagName.toUpperCase() === tagName.toUpperCase();
 }
 
-function isNormalChatNode(node: Node): boolean {
-    return hasTagName(node, CHAT_MSG_TAG_NAME);
+function isNormalChatEle(ele: HTMLElement): boolean {
+    return hasTagName(ele, CHAT_MSG_TAG_NAME);
 }
 
-function isSuperChatNode(node: Node): boolean {
-    return hasTagName(node, SUPER_CHAT_MSG_TAG_NAME);
+function isSuperChatEle(ele: HTMLElement): boolean {
+    return hasTagName(ele, SUPER_CHAT_MSG_TAG_NAME);
 }
 
-function isSuperStickerNode(node: Node): boolean {
-    return hasTagName(node, SUPER_STICKER_TAG_NAME);
+function isSuperStickerEle(ele: HTMLElement): boolean {
+    return hasTagName(ele, SUPER_STICKER_TAG_NAME);
 }
 
-function isMembershipNode(node: Node): boolean {
-    return hasTagName(node, NEW_MEMBER_TAG_NAME);
+function isMembershipEle(ele: HTMLElement): boolean {
+    return hasTagName(ele, NEW_MEMBER_TAG_NAME);
 }
 
-function getNormalChatItemFromNode(node: Node): NormalChatItem {
-    const element = node as HTMLElement;
-
+function getNormalChatItemFromEle(element: HTMLElement): NormalChatItem {
     const { id } = element;
     const authorType = element.getAttribute('author-type') ?? 'guest';
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -68,9 +65,7 @@ function getNormalChatItemFromNode(node: Node): NormalChatItem {
     };
 }
 
-function getSuperChatItemFromNode(node: Node): SuperChatItem {
-    const element = node as HTMLElement;
-
+function getSuperChatItemFromEle(element: HTMLElement): SuperChatItem {
     const { id } = element;
     const message = element.querySelector('#message')?.innerHTML ?? undefined;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -101,9 +96,7 @@ function getSuperChatItemFromNode(node: Node): SuperChatItem {
     };
 }
 
-function getSuperStickerItemFromNode(node: Node): SuperStickerItem {
-    const element = node as HTMLElement;
-
+function getSuperStickerItemFromEle(element: HTMLElement): SuperStickerItem {
     const { id } = element;
     const sticker = element.querySelector('#sticker');
     const message = sticker?.getAttribute('alt') ?? undefined;
@@ -138,9 +131,7 @@ function getSuperStickerItemFromNode(node: Node): SuperStickerItem {
     };
 }
 
-function getMembershipItemFromNode(node: Node): MembershipItem {
-    const element = node as HTMLElement;
-
+function getMembershipItemFromEle(element: HTMLElement): MembershipItem {
     const { id } = element;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const message = element.querySelector('#header-subtext')?.innerHTML!;
@@ -174,20 +165,20 @@ function getMembershipItemFromNode(node: Node): MembershipItem {
     };
 }
 
-export function getItemFromNode(
-    node: Node,
-): NormalChatItem | SuperChatItem | SuperStickerItem | MembershipItem {
+export function getItemFromEle(
+    element: HTMLElement,
+): NormalChatItem | SuperChatItem | SuperStickerItem | MembershipItem | null {
     switch (true) {
-        case isNormalChatNode(node):
-            return getNormalChatItemFromNode(node);
-        case isSuperChatNode(node):
-            return getSuperChatItemFromNode(node);
-        case isSuperStickerNode(node):
-            return getSuperStickerItemFromNode(node);
-        case isMembershipNode(node):
-            return getMembershipItemFromNode(node);
+        case isNormalChatEle(element):
+            return getNormalChatItemFromEle(element);
+        case isSuperChatEle(element):
+            return getSuperChatItemFromEle(element);
+        case isSuperStickerEle(element):
+            return getSuperStickerItemFromEle(element);
+        case isMembershipEle(element):
+            return getMembershipItemFromEle(element);
         default:
-            throw new Error('Unknown node');
+            return null;
     }
 }
 

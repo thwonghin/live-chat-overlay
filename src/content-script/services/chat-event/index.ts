@@ -1,8 +1,8 @@
-import { getItemFromNode } from './utils';
+import { getItemFromEle } from './utils';
 
 import { ChatItem } from './models';
 
-type ChatEvent = 'add' | 'remove';
+type ChatEvent = 'add';
 
 type ChatEventCallback = (chatItem: ChatItem) => void;
 
@@ -21,33 +21,50 @@ export class ChatEventObserver {
 
     private listeners: Record<ChatEvent, ChatEventCallback[]> = {
         add: [],
-        remove: [],
     };
 
     private isObserving = false;
+
+    private queue: HTMLElement[] = [];
+
+    private dequeueInterval = -1;
 
     constructor(params: InitChatEventObserverParams) {
         this.containerEle = params.containerEle;
 
         this.observer = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
-                mutation.addedNodes.forEach((node) =>
-                    this.listeners.add.forEach((listener) =>
-                        listener(getItemFromNode(node)),
-                    ),
-                );
+                if (!this.isObserving) {
+                    return;
+                }
 
-                mutation.removedNodes.forEach((node) =>
-                    this.listeners.remove.forEach((listener) =>
-                        listener(getItemFromNode(node)),
-                    ),
-                );
+                mutation.addedNodes.forEach((node) => {
+                    if (!(node instanceof HTMLElement)) {
+                        return;
+                    }
+                    this.queue.push(node);
+                });
             });
         });
     }
 
+    public start(): void {
+        this.dequeueInterval = window.setInterval(() => {
+            const element = this.queue.shift();
+            if (!element) {
+                return;
+            }
+
+            const chatItem = getItemFromEle(element);
+            if (!chatItem) {
+                return;
+            }
+            this.listeners.add.forEach((listener) => listener(chatItem));
+        }, 100);
+    }
+
     private get listenerCount(): number {
-        return this.listeners.add.length + this.listeners.remove.length;
+        return this.listeners.add.length;
     }
 
     private handleObserverStatus(): void {
@@ -80,7 +97,7 @@ export class ChatEventObserver {
 
     public cleanup(): void {
         this.listeners.add = [];
-        this.listeners.remove = [];
         this.handleObserverStatus();
+        clearInterval(this.dequeueInterval);
     }
 }

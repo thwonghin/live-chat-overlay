@@ -5,7 +5,6 @@ import {
     ChatEventAction,
     State,
     addItem,
-    removeItem,
     initialState,
 } from './reducer';
 import { ChatEventContext, ChatEventContextValue } from './context';
@@ -35,14 +34,9 @@ export default function ChatEventContextProvider({
 
         chatEventObserver.addEventListener('add', (newChatItem) => {
             dispatch(addItem(newChatItem));
-
-            // TODO: remove
-            setTimeout(() => removeItem(newChatItem), 5000);
         });
 
-        chatEventObserver.removeEventListener('remove', (removedChatItem) => {
-            dispatch(removeItem(removedChatItem));
-        });
+        chatEventObserver.start();
 
         return (): void => chatEventObserver.cleanup();
     }, []);
