@@ -1,3 +1,3 @@
-import { main } from './main';
+import { initLiveChat } from './live-chat';
 
-main();
+initLiveChat();

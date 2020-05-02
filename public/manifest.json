@@ -18,7 +18,8 @@
     "content_scripts": [
         {
             "matches": ["https://www.youtube.com/*"],
-            "js": ["browser-polyfill.min.js", "content-script.js"]
+            "js": ["browser-polyfill.min.js", "content-script.js"],
+            "css": ["content-script.css"]
         }
     ]
 }

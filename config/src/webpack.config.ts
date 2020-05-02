@@ -3,6 +3,11 @@ import * as webpack from 'webpack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { TypedCssModulesPlugin } from 'typed-css-modules-webpack-plugin';
+import postCssPresetEnv from 'postcss-preset-env';
+import cssNano from 'cssnano';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 const rootDir = path.resolve(__dirname, '../..');
 const srcDir = path.resolve(rootDir, 'src');
@@ -25,7 +30,7 @@ export default (webpackEnv: string): webpack.Configuration => {
     return {
         mode: getMode(),
         resolve: {
-            extensions: ['.ts', '.tsx', '.js', '.jsx'],
+            extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
         },
         entry: {
             'content-script': path.resolve(srcDir, 'content-script/index.ts'),
@@ -37,12 +42,40 @@ export default (webpackEnv: string): webpack.Configuration => {
         module: {
             rules: [
                 {
-                    test: /\.(js|jsx|ts|tsx)$/,
-                    loader: 'babel-loader',
+                    test: /\.(js|jsx|ts|tsx)$/i,
+                    use: 'babel-loader',
+                },
+                {
+                    test: /\.css$/i,
+                    use: [
+                        isDev ? 'style-loader' : '',
+                        isProd ? MiniCssExtractPlugin.loader : '',
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                modules: true,
+                                localsConvention: 'camelCaseOnly',
+                            },
+                        },
+                        {
+                            loader: 'postcss-loader',
+                            options: {
+                                plugins: () =>
+                                    [
+                                        postCssPresetEnv(),
+                                        isProd ? cssNano() : '',
+                                    ].filter((v) => v !== ''),
+                            },
+                        },
+                    ].filter((v) => v !== ''),
                 },
             ],
         },
         plugins: [
+            new CleanWebpackPlugin(),
+            new TypedCssModulesPlugin({
+                globPattern: 'src/**/*.css',
+            }),
             new ForkTsCheckerWebpackPlugin({
                 tsconfig: path.resolve(rootDir, 'tsconfig.json'),
                 async: isDev,
@@ -59,6 +92,9 @@ export default (webpackEnv: string): webpack.Configuration => {
                     flatten: true,
                 },
             ]),
+            new MiniCssExtractPlugin({
+                filename: '[name].css',
+            }),
         ],
         optimization: {
             minimizer: [new TerserPlugin()],

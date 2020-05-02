@@ -4,6 +4,11 @@ module.exports = {
         tsconfigRootDir: __dirname,
         project: ['./tsconfig.json'],
     },
+    settings: {
+        react: {
+            version: 'detect',
+        },
+    },
     extends: [
         'airbnb-typescript',
         'plugin:@typescript-eslint/recommended-requiring-type-checking',
@@ -13,5 +18,7 @@ module.exports = {
     plugins: ['@typescript-eslint'],
     rules: {
         'import/prefer-default-export': 'off',
+        '@typescript-eslint/prefer-optional-chain': 'error',
+        '@typescript-eslint/prefer-nullish-coalescing': 'error',
     },
 };
