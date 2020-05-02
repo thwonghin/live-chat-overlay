@@ -7,7 +7,6 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { TypedCssModulesPlugin } from 'typed-css-modules-webpack-plugin';
 import postCssPresetEnv from 'postcss-preset-env';
 import cssNano from 'cssnano';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
 const rootDir = path.resolve(__dirname, '../..');
 const srcDir = path.resolve(rootDir, 'src');
@@ -48,8 +47,7 @@ export default (webpackEnv: string): webpack.Configuration => {
                 {
                     test: /\.css$/i,
                     use: [
-                        isDev ? 'style-loader' : '',
-                        isProd ? MiniCssExtractPlugin.loader : '',
+                        MiniCssExtractPlugin.loader,
                         {
                             loader: 'css-loader',
                             options: {
@@ -72,7 +70,6 @@ export default (webpackEnv: string): webpack.Configuration => {
             ],
         },
         plugins: [
-            new CleanWebpackPlugin(),
             new TypedCssModulesPlugin({
                 globPattern: 'src/**/*.css',
             }),
@@ -81,6 +78,7 @@ export default (webpackEnv: string): webpack.Configuration => {
                 async: isDev,
                 silent: true,
                 useTypescriptIncrementalApi: true,
+                eslint: true,
             }),
             new CopyWebpackPlugin([
                 {

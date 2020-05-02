@@ -7,10 +7,12 @@
     "license": "MIT",
     "scripts": {
         "start": "tsc -p config && webpack --config config/dist/webpack.config.js --env production",
-        "watch": "tsc -p config && webpack --config config/dist/webpack.config.js --env development --watch"
+        "watch": "yarn start --env development --watch",
+        "format": "prettier src/**/*.ts src/**/*.tsx --write"
     },
     "devDependencies": {
         "@babel/core": "^7.9.6",
+        "@babel/plugin-proposal-class-properties": "^7.8.3",
         "@babel/preset-env": "^7.9.6",
         "@babel/preset-react": "^7.9.4",
         "@babel/preset-typescript": "^7.9.0",
@@ -26,7 +28,6 @@
         "@types/webpack": "^4.41.12",
         "@typescript-eslint/eslint-plugin": "^2.30.0",
         "babel-loader": "^8.1.0",
-        "clean-webpack-plugin": "^3.0.0",
         "copy-webpack-plugin": "^5.1.1",
         "css-loader": "^3.5.3",
         "cssnano": "^4.1.10",
@@ -64,7 +65,9 @@
         ]
     },
     "dependencies": {
+        "core-js": "3",
         "react": "^0.0.0-experimental-e5d06e34b",
-        "react-dom": "^0.0.0-experimental-e5d06e34b"
+        "react-dom": "^0.0.0-experimental-e5d06e34b",
+        "regenerator-runtime": "^0.13.5"
     }
 }
