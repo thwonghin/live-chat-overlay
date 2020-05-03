@@ -12,7 +12,7 @@ import { useRect } from '../../../hooks/use-rect';
 import { ChatItem } from '../../../../services/chat-event/models';
 
 interface Props {
-    children: JSX.Element;
+    children: React.ReactNode;
     timeout: number;
     chatItem: ChatItem;
     onTimeout: (chatItem: ChatItem) => void;
@@ -37,10 +37,10 @@ export default function MessageFlower({
     const style = useMemo<React.CSSProperties>(
         () => ({
             transitionDuration: `${timeout}ms`,
-            left: -rect.width || -99999,
+            left: containerWidth || 99999,
             fontSize: lineHeight,
             transform: isFlowing
-                ? `translateX(${containerWidth + rect.width}px)`
+                ? `translateX(-${containerWidth + rect.width}px)`
                 : 'translateX(0)',
         }),
         [containerWidth, isFlowing, rect.width, timeout, lineHeight],

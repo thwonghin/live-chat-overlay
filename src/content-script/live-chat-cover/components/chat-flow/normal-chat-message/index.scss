@@ -1,5 +1,10 @@
 .container {
     padding: 10px;
+}
+
+.message {
+    display: flex;
+    align-items: center;
     font-size: 1em;
 
     img {

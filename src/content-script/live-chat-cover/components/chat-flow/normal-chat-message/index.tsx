@@ -10,8 +10,11 @@ interface Props {
 export default function NormalChatMessage({ chatItem }: Props): JSX.Element {
     return (
         <div className={classes.container}>
-            {/* eslint-disable-next-line react/no-danger */}
-            <span dangerouslySetInnerHTML={{ __html: chatItem.message }} />
+            <span
+                className={classes.message}
+                // eslint-disable-next-line react/no-danger
+                dangerouslySetInnerHTML={{ __html: chatItem.message }}
+            />
         </div>
     );
 }

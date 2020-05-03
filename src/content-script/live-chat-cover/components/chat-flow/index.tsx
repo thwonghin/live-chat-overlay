@@ -24,23 +24,20 @@ function ChatFlowLayout({
 }: Props): JSX.Element {
     return (
         <div className={classes.container}>
-            {chatItems.map((chatItem) => {
-                if (isNormalChatItem(chatItem)) {
-                    return (
-                        <MessageFlower
-                            timeout={10000}
-                            onTimeout={onTimeout}
-                            containerWidth={playerRect.width}
-                            key={chatItem.id}
-                            chatItem={chatItem}
-                            lineHeight={playerRect.height / 15}
-                        >
-                            <NormalChatMessage chatItem={chatItem} />
-                        </MessageFlower>
-                    );
-                }
-                return null;
-            })}
+            {chatItems.map((chatItem) => (
+                <MessageFlower
+                    timeout={10000}
+                    onTimeout={onTimeout}
+                    containerWidth={playerRect.width}
+                    key={chatItem.id}
+                    chatItem={chatItem}
+                    lineHeight={playerRect.height / 15}
+                >
+                    {isNormalChatItem(chatItem) ? (
+                        <NormalChatMessage chatItem={chatItem} />
+                    ) : null}
+                </MessageFlower>
+            ))}
         </div>
     );
 }
