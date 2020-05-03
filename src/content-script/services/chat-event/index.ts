@@ -1,6 +1,6 @@
 import { getItemFromEle } from './utils';
 
-import { ChatItem } from './models';
+import { ChatItem } from './models.d';
 
 type ChatEvent = 'add';
 

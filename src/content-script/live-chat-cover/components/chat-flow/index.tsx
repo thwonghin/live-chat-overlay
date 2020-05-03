@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import classes from './index.scss';
+import { RootState } from '../../reducers';
+import { UiChatItem } from '../../reducers/chat-events/types.d';
+import { chatEventsActions } from '../../reducers/chat-events';
 import { isNormalChatItem } from '../../../services/chat-event/utils';
-import { useChatEventContext } from '../../contexts/chat-event';
-import { UiChatItem } from '../../contexts/chat-event/helpers';
-import { markAsDone, cleanup } from '../../contexts/chat-event/reducer';
 import { RectResult } from '../../hooks/use-rect';
 
 import MessageFlower from './message-flower';
@@ -43,19 +44,24 @@ function ChatFlowLayout({
 }
 
 export default function ChatFlow(): JSX.Element {
-    const { state, dispatch } = useChatEventContext();
+    const dispatch = useDispatch();
+    const chatItems = useSelector<
+        RootState,
+        RootState['chatEvents']['chatItems']
+    >((rootState) => rootState.chatEvents.chatItems, shallowEqual);
+
     const { rect } = useVideoPlayerRectContext();
 
     const onTimeout = useCallback(
         (chatItem) => {
-            dispatch(markAsDone(chatItem));
+            dispatch(chatEventsActions.markAsDone(chatItem));
         },
         [dispatch],
     );
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            dispatch(cleanup());
+            dispatch(chatEventsActions.cleanup());
         }, 1000);
 
         return (): void => clearInterval(intervalId);
@@ -63,7 +69,7 @@ export default function ChatFlow(): JSX.Element {
 
     return (
         <ChatFlowLayout
-            chatItems={state.chatItems}
+            chatItems={chatItems}
             onTimeout={onTimeout}
             playerRect={rect}
         />

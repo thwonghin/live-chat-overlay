@@ -4,7 +4,7 @@ import {
     SuperStickerItem,
     MembershipItem,
     ChatItem,
-} from './models';
+} from './models.d';
 
 const CHAT_MSG_TAG_NAME = 'YT-LIVE-CHAT-TEXT-MESSAGE-RENDERER';
 const SUPER_CHAT_MSG_TAG_NAME = 'YT-LIVE-CHAT-PAID-MESSAGE-RENDERER';

@@ -1,5 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+
+import { store } from './reducers';
 
 import { getVideoPlayerContainer, injectStyles } from '../utils';
 import App from './app';
@@ -20,7 +23,11 @@ export function initLiveChat(): () => void {
     reactContainer.style.top = '0';
     reactContainer.style.left = '0';
 
-    ReactDOM.createRoot(reactContainer).render(<App />);
+    ReactDOM.createRoot(reactContainer).render(
+        <Provider store={store}>
+            <App />
+        </Provider>,
+    );
     videoPlayerContainer.appendChild(reactContainer);
 
     return (): void => reactContainer.remove();
