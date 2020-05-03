@@ -5,7 +5,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { TypedCssModulesPlugin } from 'typed-css-modules-webpack-plugin';
-import postCssPresetEnv from 'postcss-preset-env';
+import postcssPresetEnv from 'postcss-preset-env';
 import cssNano from 'cssnano';
 
 const rootDir = path.resolve(__dirname, '../..');
@@ -45,7 +45,7 @@ export default (webpackEnv: string): webpack.Configuration => {
                     use: 'babel-loader',
                 },
                 {
-                    test: /\.css$/i,
+                    test: /\.s[ac]ss$/i,
                     use: [
                         MiniCssExtractPlugin.loader,
                         {
@@ -55,12 +55,13 @@ export default (webpackEnv: string): webpack.Configuration => {
                                 localsConvention: 'camelCaseOnly',
                             },
                         },
+                        'sass-loader',
                         {
                             loader: 'postcss-loader',
                             options: {
                                 plugins: (): unknown[] =>
                                     [
-                                        postCssPresetEnv(),
+                                        postcssPresetEnv(),
                                         isProd ? cssNano() : '',
                                     ].filter((v) => v !== ''),
                             },
@@ -71,7 +72,7 @@ export default (webpackEnv: string): webpack.Configuration => {
         },
         plugins: [
             new TypedCssModulesPlugin({
-                globPattern: 'src/**/*.css',
+                globPattern: 'src/**/*.scss',
             }),
             new ForkTsCheckerWebpackPlugin({
                 tsconfig: path.resolve(rootDir, 'tsconfig.json'),

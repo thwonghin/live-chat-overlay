@@ -1,6 +1,12 @@
-export function getVideoPlayerEle(): HTMLElement | null {
+export function getVideoPlayerContainer(): HTMLElement | null {
     return window.parent.document.querySelector(
         '#ytd-player .html5-video-container',
+    );
+}
+
+export function getVideoPlayerEle(): HTMLElement | null {
+    return window.parent.document.querySelector(
+        '#ytd-player .html5-video-player',
     );
 }
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 
-import classes from './index.css';
+import classes from './index.scss';
 import { isNormalChatItem } from '../../../services/chat-event/utils';
 import { useChatEventContext } from '../../contexts/chat-event';
 import { ChatItem } from '../../../services/chat-event/models';
@@ -33,6 +33,7 @@ function ChatFlowLayout({
                             containerWidth={playerRect.width}
                             key={chatItem.id}
                             chatItem={chatItem}
+                            lineHeight={playerRect.height / 15}
                         >
                             <NormalChatMessage chatItem={chatItem} />
                         </MessageFlower>

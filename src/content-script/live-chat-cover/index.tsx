@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { getVideoPlayerEle, injectStyles } from '../utils';
+import { getVideoPlayerContainer, injectStyles } from '../utils';
 import App from './app';
 
 const REACT_CONTAINER = 'react-container';
 
 export function initLiveChat(): () => void {
-    const videoPlayerContainer = getVideoPlayerEle();
+    const videoPlayerContainer = getVideoPlayerContainer();
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');
     }

@@ -7,7 +7,7 @@ import React, {
     useCallback,
 } from 'react';
 
-import classes from './index.css';
+import classes from './index.scss';
 import { useRect } from '../../../hooks/use-rect';
 import { ChatItem } from '../../../../services/chat-event/models';
 
@@ -17,6 +17,7 @@ interface Props {
     chatItem: ChatItem;
     onTimeout: (chatItem: ChatItem) => void;
     containerWidth: number;
+    lineHeight: number;
 }
 
 export default function MessageFlower({
@@ -25,6 +26,7 @@ export default function MessageFlower({
     chatItem,
     onTimeout,
     containerWidth,
+    lineHeight,
 }: Props): JSX.Element {
     const [isFlowing, setIsFlowing] = useState(false);
 
@@ -36,11 +38,12 @@ export default function MessageFlower({
         () => ({
             transitionDuration: `${timeout}ms`,
             left: -rect.width || -99999,
+            fontSize: lineHeight,
             transform: isFlowing
                 ? `translateX(${containerWidth + rect.width}px)`
                 : 'translateX(0)',
         }),
-        [containerWidth, isFlowing, rect.width, timeout],
+        [containerWidth, isFlowing, rect.width, timeout, lineHeight],
     );
 
     const onTimeoutCallback = useCallback(() => {
