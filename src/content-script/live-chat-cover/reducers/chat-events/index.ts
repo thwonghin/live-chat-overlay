@@ -80,6 +80,9 @@ const chatEventsSlice = createSlice({
                 chatItemsByPosition: state.chatItemsByPosition,
             };
         },
+        reset(): State {
+            return initialState;
+        },
     },
 });
 
