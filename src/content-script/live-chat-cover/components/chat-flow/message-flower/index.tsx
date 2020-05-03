@@ -10,14 +10,13 @@ import React, {
 import classes from './index.scss';
 import { useRect } from '../../../hooks/use-rect';
 import { UiChatItem } from '../../../reducers/chat-events/types.d';
+import { useVideoPlayerRect } from '../../../hooks/use-video-player-rect';
 
 interface Props {
     children: React.ReactNode;
     timeout: number;
     chatItem: UiChatItem;
     onTimeout: (chatItem: UiChatItem) => void;
-    containerWidth: number;
-    lineHeight: number;
 }
 
 export default function MessageFlower({
@@ -25,14 +24,17 @@ export default function MessageFlower({
     timeout,
     chatItem,
     onTimeout,
-    containerWidth,
-    lineHeight,
 }: Props): JSX.Element {
     const [isFlowing, setIsFlowing] = useState(false);
 
     const ref = useRef(null);
-
     const rect = useRect(ref);
+
+    const videoPlayerRect = useVideoPlayerRect();
+    const containerWidth = videoPlayerRect.width;
+    const lineHeight = useMemo(() => videoPlayerRect.height / 15, [
+        videoPlayerRect.height,
+    ]);
 
     const style = useMemo<React.CSSProperties>(
         () => ({
