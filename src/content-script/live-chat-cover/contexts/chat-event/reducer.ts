@@ -1,17 +1,21 @@
 import { ChatItem } from '../../../services/chat-event/models';
+import {
+    estimateMsgWidth,
+    State,
+    UiChatItem,
+    getPosition,
+    serializePosition,
+} from './helpers';
+import { getVideoPlayerEle } from '../../../utils';
 
 const ADD_ITEM_ACTION_TYPE = 'ADD_ITEM';
 const MARK_AS_DONE_ACTION_TYPE = 'MARK_AS_DONE';
 const CLEANUP_ACTION_TYPE = 'CLEANUP';
 
-export interface State {
-    chatItems: ChatItem[];
-    doneItemsIdMap: Record<string, boolean>;
-}
-
 export const initialState: State = {
     chatItems: [],
     doneItemsIdMap: {},
+    chatItemsByPosition: {},
 };
 
 export interface AddItemAction {
@@ -21,7 +25,7 @@ export interface AddItemAction {
 
 export interface MarkAsDoneAction {
     type: typeof MARK_AS_DONE_ACTION_TYPE;
-    payload: ChatItem;
+    payload: UiChatItem;
 }
 
 export interface CleanupAction {
@@ -51,7 +55,7 @@ export function addItem(payload: ChatItem): AddItemAction {
     };
 }
 
-export function markAsDone(payload: ChatItem): MarkAsDoneAction {
+export function markAsDone(payload: UiChatItem): MarkAsDoneAction {
     return {
         type: MARK_AS_DONE_ACTION_TYPE,
         payload,
@@ -66,17 +70,55 @@ export function cleanup(): CleanupAction {
 
 export function chatItemsReducer(state: State, action: ChatEventAction): State {
     if (isAddItemAction(action)) {
+        const addTime = new Date();
+        const estimatedMsgWidth = estimateMsgWidth(
+            action.payload.message ?? '',
+        );
+        const playerEle = getVideoPlayerEle();
+        const rect = playerEle?.getBoundingClientRect();
+        const position = getPosition({
+            state,
+            maxLineNumber: 15,
+            flowTimeInSec: 10,
+            addTime,
+            estimatedMsgWidth,
+            containerWidth: rect?.width ?? 0,
+            lineHeight: (rect?.height ?? 0) / 15,
+        });
+
+        const serializedPosition = serializePosition(position);
+
+        const uiChatItem: UiChatItem = {
+            ...action.payload,
+            addTime,
+            estimatedMsgWidth,
+            position,
+        };
+
         return {
-            chatItems: state.chatItems.concat(action.payload),
+            chatItems: state.chatItems.concat(uiChatItem),
             doneItemsIdMap: state.doneItemsIdMap,
+            chatItemsByPosition: {
+                ...state.chatItemsByPosition,
+                [serializedPosition]: (
+                    state.chatItemsByPosition[serializedPosition] ?? []
+                ).concat(uiChatItem),
+            },
         };
     }
     if (isMarkAsDoneAction(action)) {
+        const serializedPosition = serializePosition(action.payload.position);
         return {
             chatItems: state.chatItems,
             doneItemsIdMap: {
                 ...state.doneItemsIdMap,
                 [action.payload.id]: true,
+            },
+            chatItemsByPosition: {
+                ...state.chatItemsByPosition,
+                [serializedPosition]: (
+                    state.chatItemsByPosition[serializedPosition] ?? []
+                ).filter((chatItem) => chatItem.id !== action.payload.id),
             },
         };
     }
@@ -86,6 +128,7 @@ export function chatItemsReducer(state: State, action: ChatEventAction): State {
                 (item) => !state.doneItemsIdMap[item.id],
             ),
             doneItemsIdMap: {},
+            chatItemsByPosition: state.chatItemsByPosition,
         };
     }
 

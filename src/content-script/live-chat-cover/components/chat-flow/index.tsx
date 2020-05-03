@@ -3,7 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import classes from './index.scss';
 import { isNormalChatItem } from '../../../services/chat-event/utils';
 import { useChatEventContext } from '../../contexts/chat-event';
-import { ChatItem } from '../../../services/chat-event/models';
+import { UiChatItem } from '../../contexts/chat-event/helpers';
 import { markAsDone, cleanup } from '../../contexts/chat-event/reducer';
 import { RectResult } from '../../hooks/use-rect';
 
@@ -12,9 +12,9 @@ import NormalChatMessage from './normal-chat-message';
 import { useVideoPlayerRectContext } from '../../contexts/video-player-rect';
 
 interface Props {
-    chatItems: ChatItem[];
+    chatItems: UiChatItem[];
     playerRect: RectResult;
-    onTimeout: (chatItem: ChatItem) => void;
+    onTimeout: (chatItem: UiChatItem) => void;
 }
 
 function ChatFlowLayout({

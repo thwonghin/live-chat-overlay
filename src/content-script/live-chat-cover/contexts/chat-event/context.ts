@@ -1,5 +1,6 @@
 import { Dispatch, createContext } from 'react';
-import { State, ChatEventAction, initialState } from './reducer';
+import { ChatEventAction, initialState } from './reducer';
+import { State } from './helpers';
 
 export interface ChatEventContextValue {
     state: State;

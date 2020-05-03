@@ -3,10 +3,10 @@ import React, { useReducer, useEffect, useMemo, Reducer } from 'react';
 import {
     chatItemsReducer,
     ChatEventAction,
-    State,
     addItem,
     initialState,
 } from './reducer';
+import { State } from './helpers';
 import { ChatEventContext, ChatEventContextValue } from './context';
 import { ChatEventObserver } from '../../../services/chat-event';
 import { getLiveChatEle } from '../../../utils';

@@ -9,13 +9,13 @@ import React, {
 
 import classes from './index.scss';
 import { useRect } from '../../../hooks/use-rect';
-import { ChatItem } from '../../../../services/chat-event/models';
+import { UiChatItem } from '../../../contexts/chat-event/helpers';
 
 interface Props {
     children: React.ReactNode;
     timeout: number;
-    chatItem: ChatItem;
-    onTimeout: (chatItem: ChatItem) => void;
+    chatItem: UiChatItem;
+    onTimeout: (chatItem: UiChatItem) => void;
     containerWidth: number;
     lineHeight: number;
 }
@@ -38,12 +38,20 @@ export default function MessageFlower({
         () => ({
             transitionDuration: `${timeout}ms`,
             left: containerWidth || 99999,
+            top: chatItem.position.lineNumber * lineHeight,
             fontSize: lineHeight,
             transform: isFlowing
                 ? `translateX(-${containerWidth + rect.width}px)`
                 : 'translateX(0)',
         }),
-        [containerWidth, isFlowing, rect.width, timeout, lineHeight],
+        [
+            timeout,
+            containerWidth,
+            chatItem.position.lineNumber,
+            lineHeight,
+            isFlowing,
+            rect.width,
+        ],
     );
 
     const onTimeoutCallback = useCallback(() => {
