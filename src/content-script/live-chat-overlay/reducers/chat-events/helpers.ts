@@ -1,6 +1,6 @@
 import { last } from 'lodash-es';
 
-import { Position, State } from './types.d';
+import { Position, State } from './types';
 
 export function estimateMsgWidth(html: string): number {
     const ele = document.createElement('div');

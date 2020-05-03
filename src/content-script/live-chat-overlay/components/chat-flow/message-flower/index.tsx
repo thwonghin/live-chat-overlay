@@ -9,7 +9,7 @@ import React, {
 
 import classes from './index.scss';
 import { useRect } from '../../../hooks/use-rect';
-import { UiChatItem } from '../../../reducers/chat-events/types.d';
+import { UiChatItem } from '../../../reducers/chat-events/types';
 import { useVideoPlayerRect } from '../../../hooks/use-video-player-rect';
 
 interface Props {

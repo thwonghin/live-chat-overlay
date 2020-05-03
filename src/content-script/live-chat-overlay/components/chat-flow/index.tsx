@@ -3,7 +3,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import classes from './index.scss';
 import { RootState } from '../../reducers';
-import { UiChatItem } from '../../reducers/chat-events/types.d';
+import { UiChatItem } from '../../reducers/chat-events/types';
 import { chatEventsActions } from '../../reducers/chat-events';
 import { isNormalChatItem } from '../../../services/chat-event/utils';
 

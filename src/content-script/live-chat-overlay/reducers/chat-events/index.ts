@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ChatItem } from '../../../services/chat-event/models.d';
+import { ChatItem } from '../../../services/chat-event/models';
 import { getVideoPlayerEle } from '../../../utils';
-import { State, UiChatItem } from './types.d';
+import { State, UiChatItem } from './types';
 import { estimateMsgWidth, getPosition, serializePosition } from './helpers';
 
 const initialState: State = {

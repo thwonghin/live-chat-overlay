@@ -1,7 +1,7 @@
 import React from 'react';
 
 import classes from './index.scss';
-import { NormalChatItem } from '../../../../services/chat-event/models.d';
+import { NormalChatItem } from '../../../../services/chat-event/models';
 
 interface Props {
     chatItem: NormalChatItem;

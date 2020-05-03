@@ -1,13 +1,17 @@
 {
-    "name": "youtube-live-comment",
-    "version": "1.0.0",
-    "description": "Web Extension for Youtube Live",
-    "main": "index.js",
-    "author": "Hin Wong",
+    "name": "live-chat-overlay",
+    "version": "0.1.0",
+    "description": "Web Extension for Overlay Live Chat on Youtube",
+    "main": "dist/content-script.js",
+    "repository": "git@github.com:thwonghin/live-chat-overlay.git",
+    "author": "Hin Wong <thwong.henry@gmail.com>",
     "license": "MIT",
+    "engines": {
+        "node": ">=14.1.0"
+    },
     "scripts": {
-        "start": "tsc -p config && webpack --config config/dist/webpack.config.js --env production",
-        "watch": "yarn start --env development --watch",
+        "build": "tsc -p config && webpack --config config/dist/webpack.config.js --env production",
+        "watch": "yarn build --env development --watch",
         "format": "prettier src/**/*.ts src/**/*.tsx --write"
     },
     "devDependencies": {
