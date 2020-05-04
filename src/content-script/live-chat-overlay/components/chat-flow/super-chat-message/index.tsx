@@ -14,6 +14,8 @@ export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
     const actualNumberOfLines = chatItem.message
         ? messageSettings.numberOfLines
         : 1;
+
+    const flexDirection = actualNumberOfLines === 2 ? 'column' : 'row';
     return (
         <div
             className={classes.container}
@@ -25,7 +27,10 @@ export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
                 backgroundColor: chatItem.color,
                 WebkitTextStrokeColor: messageSettings.strokeColor,
                 WebkitTextStrokeWidth: `${messageSettings.strokeWidth}em`,
-                flexDirection: actualNumberOfLines === 2 ? 'column' : 'row',
+                flexDirection,
+                justifyContent:
+                    flexDirection === 'column' ? 'center' : undefined,
+                alignItems: flexDirection === 'row' ? 'center' : undefined,
             }}
         >
             <div className={classes.author}>
