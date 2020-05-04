@@ -33,7 +33,8 @@ function isMembershipEle(ele: HTMLElement): boolean {
 
 function getNormalChatItemFromEle(element: HTMLElement): NormalChatItem {
     const { id } = element;
-    const authorType = element.getAttribute('author-type') ?? 'guest';
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const authorType = element.getAttribute('author-type') || 'guest';
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const message = element.querySelector('#message')?.innerHTML!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

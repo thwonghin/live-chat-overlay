@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { settingsStorage } from '../../../../common/settings';
 import { ChatItem } from '../../../services/chat-event/models';
 import { getVideoPlayerEle } from '../../../utils';
 import { State, UiChatItem } from './types';
@@ -22,14 +23,15 @@ const chatEventsSlice = createSlice({
             );
             const playerEle = getVideoPlayerEle();
             const rect = playerEle?.getBoundingClientRect();
+            const settings = settingsStorage.get();
             const position = getPosition({
                 state,
-                maxLineNumber: 15,
-                flowTimeInSec: 10,
                 addTime,
                 estimatedMsgWidth,
+                maxLineNumber: settings.numberOfLines,
+                flowTimeInSec: settings.flowTimeInSec,
                 containerWidth: rect?.width ?? 0,
-                lineHeight: (rect?.height ?? 0) / 15,
+                lineHeight: (rect?.height ?? 0) / settings.numberOfLines,
             });
 
             // Ignore message if overflow

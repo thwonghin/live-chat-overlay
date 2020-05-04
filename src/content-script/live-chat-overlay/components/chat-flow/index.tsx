@@ -20,7 +20,6 @@ function ChatFlowLayout({ chatItems, onTimeout }: Props): JSX.Element {
         <div className={classes.container}>
             {chatItems.map((chatItem) => (
                 <MessageFlower
-                    timeout={10000}
                     onTimeout={onTimeout}
                     key={chatItem.id}
                     chatItem={chatItem}

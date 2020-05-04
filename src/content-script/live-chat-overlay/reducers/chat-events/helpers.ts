@@ -60,7 +60,7 @@ export function getPosition({
 
             const lastMsgFlowedTime =
                 (addTime.getTime() - lastMessage?.addTime.getTime()) / 1000;
-            const lastMsgWidth = lastMessage?.estimatedMsgWidth;
+            const lastMsgWidth = lastMessage?.estimatedMsgWidth * lineHeight;
             const lastMsgSpeed =
                 (containerWidth + lastMsgWidth) / flowTimeInSec;
             const lastMsgPos = lastMsgSpeed * lastMsgFlowedTime - lastMsgWidth;
