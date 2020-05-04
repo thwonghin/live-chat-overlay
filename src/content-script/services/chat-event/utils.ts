@@ -5,6 +5,8 @@ import {
     MembershipItem,
     ChatItem,
 } from './models';
+import { settingsStorage } from '../../../common/settings';
+import { MessageSettings } from '../../../common/settings/types';
 
 const CHAT_MSG_TAG_NAME = 'YT-LIVE-CHAT-TEXT-MESSAGE-RENDERER';
 const SUPER_CHAT_MSG_TAG_NAME = 'YT-LIVE-CHAT-PAID-MESSAGE-RENDERER';
@@ -203,4 +205,18 @@ export function isMembershipItem(
     chatItem: ChatItem,
 ): chatItem is MembershipItem {
     return chatItem.chatType === 'membership';
+}
+
+export function getMessageSettings(chatItem: ChatItem): MessageSettings {
+    const { messageSettings } = settingsStorage.get();
+    if (isNormalChatItem(chatItem)) {
+        return messageSettings[chatItem.authorType];
+    }
+    if (isMembershipItem(chatItem)) {
+        return messageSettings.membership;
+    }
+    if (isSuperChatItem(chatItem) || isSuperStickerItem(chatItem)) {
+        return messageSettings['super-chat'];
+    }
+    throw new Error('Unknow chat item');
 }

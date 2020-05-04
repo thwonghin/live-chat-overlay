@@ -7,6 +7,7 @@ const commonMsgSettings: MessageSettings = {
     bgColor: 'transparent',
     strokeColor: 'black',
     strokeWidth: 0.03,
+    numberOfLines: 1,
 };
 
 const defaultSettings: Settings = {
@@ -21,7 +22,14 @@ const defaultSettings: Settings = {
         you: commonMsgSettings,
         moderator: commonMsgSettings,
         owner: commonMsgSettings,
-        membership: commonMsgSettings,
+        membership: {
+            ...commonMsgSettings,
+            numberOfLines: 2,
+        },
+        'super-chat': {
+            ...commonMsgSettings,
+            numberOfLines: 2,
+        },
     },
 };
 

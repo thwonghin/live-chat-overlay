@@ -6,9 +6,10 @@ export interface Position {
 }
 
 export type UiChatItem = ChatItem & {
-    addTime: Date;
+    addTimestamp: number;
     position: Position;
     estimatedMsgWidth: number;
+    numberOfLines: number;
 };
 
 export interface State {

@@ -1,0 +1,38 @@
+.container {
+    padding: 1px 10px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.2em;
+}
+
+.author {
+    display: flex;
+    align-items: center;
+}
+
+.authorAvator {
+    width: 0.6em;
+    height: 0.6em;
+    margin-right: 10px;
+}
+
+.authorName {
+    font-size: 0.6em;
+    margin-right: 10px;
+}
+
+.donation {
+    font-size: 0.6em;
+}
+
+.message {
+    display: flex;
+    align-items: center;
+    font-size: 0.8em;
+
+    img {
+        width: 0.8em;
+        height: 0.8em;
+    }
+}

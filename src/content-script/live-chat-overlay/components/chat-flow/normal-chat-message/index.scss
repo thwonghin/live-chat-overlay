@@ -1,14 +1,15 @@
 .container {
     padding: 10px;
+    border-radius: 5px;
 }
 
 .message {
     display: flex;
     align-items: center;
-    font-size: 1em;
+    font-size: 0.8em;
 
     img {
-        width: 1em;
-        height: 1em;
+        width: 0.8em;
+        height: 0.8em;
     }
 }

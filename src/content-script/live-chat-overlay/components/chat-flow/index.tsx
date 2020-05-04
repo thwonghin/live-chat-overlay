@@ -5,10 +5,14 @@ import classes from './index.scss';
 import { RootState } from '../../reducers';
 import { UiChatItem } from '../../reducers/chat-events/types';
 import { chatEventsActions } from '../../reducers/chat-events';
-import { isNormalChatItem } from '../../../services/chat-event/utils';
+import {
+    isNormalChatItem,
+    isSuperChatItem,
+} from '../../../services/chat-event/utils';
 
 import MessageFlower from './message-flower';
 import NormalChatMessage from './normal-chat-message';
+import SuperChatMessage from './super-chat-message';
 
 interface Props {
     chatItems: UiChatItem[];
@@ -26,6 +30,9 @@ function ChatFlowLayout({ chatItems, onTimeout }: Props): JSX.Element {
                 >
                     {isNormalChatItem(chatItem) ? (
                         <NormalChatMessage chatItem={chatItem} />
+                    ) : null}
+                    {isSuperChatItem(chatItem) ? (
+                        <SuperChatMessage chatItem={chatItem} />
                     ) : null}
                 </MessageFlower>
             ))}

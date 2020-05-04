@@ -5,6 +5,7 @@ import { ChatItem } from '../../../services/chat-event/models';
 import { getVideoPlayerEle } from '../../../utils';
 import { State, UiChatItem } from './types';
 import { estimateMsgWidth, getPosition, serializePosition } from './helpers';
+import { getMessageSettings } from '../../../services/chat-event/utils';
 
 const initialState: State = {
     chatItems: [],
@@ -17,16 +18,19 @@ const chatEventsSlice = createSlice({
     initialState,
     reducers: {
         addItem(state, action: PayloadAction<ChatItem>): State {
-            const addTime = new Date();
+            const addTimestamp = Date.now();
+            const messageSettings = getMessageSettings(action.payload);
             const estimatedMsgWidth = estimateMsgWidth(
-                action.payload.message ?? '',
+                action.payload,
+                messageSettings,
             );
             const playerEle = getVideoPlayerEle();
             const rect = playerEle?.getBoundingClientRect();
             const settings = settingsStorage.get();
             const position = getPosition({
                 state,
-                addTime,
+                addTimestamp,
+                messageSettings,
                 estimatedMsgWidth,
                 maxLineNumber: settings.numberOfLines,
                 flowTimeInSec: settings.flowTimeInSec,
@@ -41,22 +45,40 @@ const chatEventsSlice = createSlice({
             }
 
             const serializedPosition = serializePosition(position);
+            const serializedPosition2 =
+                messageSettings.numberOfLines === 2 && action.payload.message
+                    ? serializePosition({
+                          ...position,
+                          lineNumber: position.lineNumber + 1,
+                      })
+                    : serializedPosition;
 
             const uiChatItem: UiChatItem = {
                 ...action.payload,
-                addTime,
+                numberOfLines: messageSettings.numberOfLines,
+                addTimestamp,
                 estimatedMsgWidth,
                 position,
             };
+
+            const position1Items = (
+                state.chatItemsByPosition[serializedPosition] ?? []
+            ).concat(uiChatItem);
+
+            const position2Items =
+                serializedPosition2 !== serializedPosition
+                    ? (
+                          state.chatItemsByPosition[serializedPosition2] ?? []
+                      ).concat(uiChatItem)
+                    : position1Items;
 
             return {
                 chatItems: state.chatItems.concat(uiChatItem),
                 doneItemsIdMap: state.doneItemsIdMap,
                 chatItemsByPosition: {
                     ...state.chatItemsByPosition,
-                    [serializedPosition]: (
-                        state.chatItemsByPosition[serializedPosition] ?? []
-                    ).concat(uiChatItem),
+                    [serializedPosition]: position1Items,
+                    [serializedPosition2]: position2Items,
                 },
             };
         },

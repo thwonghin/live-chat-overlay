@@ -5,6 +5,7 @@ export interface MessageSettings {
     bgColor: string;
     strokeColor: string;
     strokeWidth: number;
+    numberOfLines: number;
 }
 
 type MessageSettingsKeys =
@@ -13,7 +14,8 @@ type MessageSettingsKeys =
     | 'guest'
     | 'owner'
     | 'you'
-    | 'membership';
+    | 'membership'
+    | 'super-chat';
 
 export interface Settings {
     numberOfLines: number;
