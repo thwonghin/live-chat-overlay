@@ -8,11 +8,15 @@ import { chatEventsActions } from '../../reducers/chat-events';
 import {
     isNormalChatItem,
     isSuperChatItem,
+    isSuperStickerItem,
+    isMembershipItem,
 } from '../../../services/chat-event/utils';
 
 import MessageFlower from './message-flower';
 import NormalChatMessage from './normal-chat-message';
 import SuperChatMessage from './super-chat-message';
+import SuperChatSticker from './super-chat-sticker';
+import MembershipMessage from './membership-message';
 
 interface Props {
     chatItems: UiChatItem[];
@@ -33,6 +37,12 @@ function ChatFlowLayout({ chatItems, onTimeout }: Props): JSX.Element {
                     ) : null}
                     {isSuperChatItem(chatItem) ? (
                         <SuperChatMessage chatItem={chatItem} />
+                    ) : null}
+                    {isSuperStickerItem(chatItem) ? (
+                        <SuperChatSticker chatItem={chatItem} />
+                    ) : null}
+                    {isMembershipItem(chatItem) ? (
+                        <MembershipMessage chatItem={chatItem} />
                     ) : null}
                 </MessageFlower>
             ))}

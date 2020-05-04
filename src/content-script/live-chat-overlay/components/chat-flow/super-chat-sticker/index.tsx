@@ -2,13 +2,13 @@ import React from 'react';
 
 import classes from './index.scss';
 import { useSettings } from '../../../hooks/use-settings';
-import { SuperChatItem } from '../../../../services/chat-event/models';
+import { SuperStickerItem } from '../../../../services/chat-event/models';
 
 interface Props {
-    chatItem: SuperChatItem;
+    chatItem: SuperStickerItem;
 }
 
-export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
+export default function SuperChatChat({ chatItem }: Props): JSX.Element {
     const settings = useSettings();
     const messageSettings = settings.messageSettings['super-chat'];
 
@@ -22,8 +22,6 @@ export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
                 backgroundColor: chatItem.color,
                 WebkitTextStrokeColor: messageSettings.strokeColor,
                 WebkitTextStrokeWidth: `${messageSettings.strokeWidth}em`,
-                flexDirection:
-                    messageSettings.numberOfLines === 2 ? 'column' : 'row',
             }}
         >
             <div className={classes.author}>
@@ -39,13 +37,9 @@ export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
                     {chatItem.donationAmount}
                 </span>
             </div>
-            {chatItem.message ? (
-                <span
-                    className={classes.message}
-                    // eslint-disable-next-line react/no-danger
-                    dangerouslySetInnerHTML={{ __html: chatItem.message }}
-                />
-            ) : null}
+            <span className={classes.message}>
+                <img src={chatItem.stickerUrl} alt={chatItem.message} />
+            </span>
         </div>
     );
 }

@@ -24,7 +24,7 @@ const defaultSettings: Settings = {
         owner: commonMsgSettings,
         membership: {
             ...commonMsgSettings,
-            numberOfLines: 2,
+            numberOfLines: 1,
         },
         'super-chat': {
             ...commonMsgSettings,

@@ -2,15 +2,15 @@ import React from 'react';
 
 import classes from './index.scss';
 import { useSettings } from '../../../hooks/use-settings';
-import { SuperChatItem } from '../../../../services/chat-event/models';
+import { MembershipItem } from '../../../../services/chat-event/models';
 
 interface Props {
-    chatItem: SuperChatItem;
+    chatItem: MembershipItem;
 }
 
-export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
+export default function MembershipMessage({ chatItem }: Props): JSX.Element {
     const settings = useSettings();
-    const messageSettings = settings.messageSettings['super-chat'];
+    const messageSettings = settings.messageSettings.membership;
 
     return (
         <div
@@ -34,9 +34,6 @@ export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
                 />
                 <span className={classes.authorName}>
                     {chatItem.authorName}
-                </span>
-                <span className={classes.donation}>
-                    {chatItem.donationAmount}
                 </span>
             </div>
             {chatItem.message ? (
