@@ -14,6 +14,7 @@ type MessageSettingsKeys =
     | 'guest'
     | 'owner'
     | 'you'
+    | 'verified'
     | 'membership'
     | 'super-chat';
 

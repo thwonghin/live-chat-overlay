@@ -17,11 +17,23 @@ const defaultSettings: Settings = {
         guest: commonMsgSettings,
         member: {
             ...commonMsgSettings,
-            color: 'rgb(15,157,88)',
+            color: '#2ba640',
         },
         you: commonMsgSettings,
-        moderator: commonMsgSettings,
-        owner: commonMsgSettings,
+        moderator: {
+            ...commonMsgSettings,
+            color: '#5e84f1',
+        },
+        owner: {
+            ...commonMsgSettings,
+            color: 'white',
+            bgColor: '#ffd600',
+        },
+        verified: {
+            ...commonMsgSettings,
+            color: '#E9E9E9',
+            bgColor: '#606060',
+        },
         membership: {
             ...commonMsgSettings,
             numberOfLines: 1,

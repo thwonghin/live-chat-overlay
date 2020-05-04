@@ -5,7 +5,7 @@ export interface NormalChatItem {
     timestamp: string;
     authorName: string;
     authorBadge?: string;
-    authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you';
+    authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you' | 'verified';
     chatType: 'normal';
 }
 
