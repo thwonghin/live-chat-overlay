@@ -32,6 +32,12 @@ const chatEventsSlice = createSlice({
                 lineHeight: (rect?.height ?? 0) / 15,
             });
 
+            // Ignore message if overflow
+            // TODO: still let other type of message to add in
+            if (!position) {
+                return state;
+            }
+
             const serializedPosition = serializePosition(position);
 
             const uiChatItem: UiChatItem = {

@@ -34,6 +34,8 @@ interface GetPositionParams {
     lineHeight: number;
 }
 
+const maxLayers = 3;
+
 export function getPosition({
     state,
     estimatedMsgWidth,
@@ -42,35 +44,37 @@ export function getPosition({
     flowTimeInSec,
     containerWidth,
     lineHeight,
-}: GetPositionParams): Position {
-    let lineNumber = 0;
-    let layerNumber = 0;
-    for (;;) {
-        const position: Position = { lineNumber, layerNumber };
-        const messages = state.chatItemsByPosition[serializePosition(position)];
+}: GetPositionParams): Position | null {
+    for (let layerNumber = 0; layerNumber < maxLayers; layerNumber += 1) {
+        for (let lineNumber = 0; lineNumber < maxLineNumber; lineNumber += 1) {
+            const position: Position = { lineNumber, layerNumber };
+            const messages =
+                state.chatItemsByPosition[serializePosition(position)];
 
-        if (!messages || messages.length === 0) {
-            return position;
-        }
+            if (!messages || messages.length === 0) {
+                return position;
+            }
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const lastMessage = last(messages)!;
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const lastMessage = last(messages)!;
 
-        const remainingTime =
-            flowTimeInSec -
-            (addTime.getTime() - lastMessage?.addTime.getTime()) / 1000;
+            const lastMsgFlowedTime =
+                (addTime.getTime() - lastMessage?.addTime.getTime()) / 1000;
+            const lastMsgWidth = lastMessage?.estimatedMsgWidth;
+            const lastMsgSpeed =
+                (containerWidth + lastMsgWidth) / flowTimeInSec;
+            const lastMsgPos = lastMsgSpeed * lastMsgFlowedTime - lastMsgWidth;
 
-        const estimatedEleWidth = estimatedMsgWidth * lineHeight;
-        const speed = (containerWidth + estimatedEleWidth) / flowTimeInSec;
+            const remainingTime = flowTimeInSec - lastMsgFlowedTime;
 
-        if (speed * remainingTime < containerWidth) {
-            return position;
-        }
+            const estimatedEleWidth = estimatedMsgWidth * lineHeight;
+            const speed = (containerWidth + estimatedEleWidth) / flowTimeInSec;
 
-        lineNumber += 1;
-        if (lineNumber === maxLineNumber) {
-            lineNumber = 0;
-            layerNumber += 1;
+            if (speed * remainingTime < containerWidth && lastMsgPos > 0) {
+                return position;
+            }
         }
     }
+
+    return null;
 }
