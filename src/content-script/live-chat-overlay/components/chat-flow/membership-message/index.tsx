@@ -16,6 +16,7 @@ export default function MembershipMessage({ chatItem }: Props): JSX.Element {
         <div
             className={classes.container}
             style={{
+                height: `${messageSettings.numberOfLines}em`,
                 color: messageSettings.color,
                 fontWeight: messageSettings.weight,
                 opacity: messageSettings.opacity,

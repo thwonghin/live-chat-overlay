@@ -11,19 +11,21 @@ interface Props {
 export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
     const settings = useSettings();
     const messageSettings = settings.messageSettings['super-chat'];
-
+    const actualNumberOfLines = chatItem.message
+        ? messageSettings.numberOfLines
+        : 1;
     return (
         <div
             className={classes.container}
             style={{
+                height: `${actualNumberOfLines}em`,
                 color: messageSettings.color,
                 fontWeight: messageSettings.weight,
                 opacity: messageSettings.opacity,
                 backgroundColor: chatItem.color,
                 WebkitTextStrokeColor: messageSettings.strokeColor,
                 WebkitTextStrokeWidth: `${messageSettings.strokeWidth}em`,
-                flexDirection:
-                    messageSettings.numberOfLines === 2 ? 'column' : 'row',
+                flexDirection: actualNumberOfLines === 2 ? 'column' : 'row',
             }}
         >
             <div className={classes.author}>

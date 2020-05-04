@@ -43,10 +43,7 @@ export function estimateMsgWidth(
     if (isSuperStickerItem(chatItem)) {
         const authorWidth =
             2 + chatItem.authorName.length + 1 + chatItem.donationAmount.length;
-        if (messageSettings.numberOfLines === 2) {
-            return authorWidth;
-        }
-        return authorWidth + 2;
+        return authorWidth + 1 + messageSettings.numberOfLines;
     }
 
     return estimateHtmlWidth(chatItem.message ?? '');

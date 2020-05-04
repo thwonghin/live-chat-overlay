@@ -2,7 +2,8 @@
     padding: 1px 10px;
     border-radius: 5px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     margin-top: 0.2em;
 }
 
@@ -30,9 +31,4 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-
-    img {
-        width: 0.8em;
-        height: 0.8em;
-    }
 }

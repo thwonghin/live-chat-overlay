@@ -101,7 +101,7 @@ function getSuperChatItemFromEle(element: HTMLElement): SuperChatItem {
 
 function getSuperStickerItemFromEle(element: HTMLElement): SuperStickerItem {
     const { id } = element;
-    const sticker = element.querySelector('#sticker');
+    const sticker = element.querySelector('#sticker > #img');
     const message = sticker?.getAttribute('alt') ?? undefined;
     const stickerUrl = sticker?.getAttribute('src') ?? '';
 
@@ -115,10 +115,10 @@ function getSuperStickerItemFromEle(element: HTMLElement): SuperStickerItem {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const authorName = element.querySelector('#author-name')?.textContent!;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const donationAmount = element.querySelector('#purchase-amount')
+    const donationAmount = element.querySelector('#purchase-amount-chip')
         ?.innerHTML!;
     const color = getComputedStyle(element).getPropertyValue(
-        '--yt-live-chat-paid-message-primary-color',
+        '--yt-live-chat-paid-sticker-background-color',
     );
 
     return {
