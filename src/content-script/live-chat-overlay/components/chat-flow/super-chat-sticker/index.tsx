@@ -41,7 +41,7 @@ export default function SuperChatChat({ chatItem }: Props): JSX.Element {
             </div>
             <span className={classes.message}>
                 <img
-                    src={chatItem.stickerUrl}
+                    src={`https:${chatItem.stickerUrl}`}
                     alt={chatItem.message}
                     style={{
                         width: imageSize,

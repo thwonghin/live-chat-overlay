@@ -5,7 +5,10 @@ import { ChatItem } from '../../../services/chat-event/models';
 import { getVideoPlayerEle } from '../../../utils';
 import { State, UiChatItem } from './types';
 import { estimateMsgWidth, getPosition, serializePosition } from './helpers';
-import { getMessageSettings } from '../../../services/chat-event/utils';
+import {
+    getMessageSettings,
+    isSuperChatItem,
+} from '../../../services/chat-event/utils';
 
 const initialState: State = {
     chatItems: [],
@@ -44,9 +47,14 @@ const chatEventsSlice = createSlice({
                 return state;
             }
 
+            const actualNumberOfLines =
+                isSuperChatItem(action.payload) && !action.payload.message
+                    ? 1
+                    : messageSettings.numberOfLines;
+
             const serializedPosition = serializePosition(position);
             const serializedPosition2 =
-                messageSettings.numberOfLines === 2 && action.payload.message
+                actualNumberOfLines === 2
                     ? serializePosition({
                           ...position,
                           lineNumber: position.lineNumber + 1,
@@ -55,7 +63,7 @@ const chatEventsSlice = createSlice({
 
             const uiChatItem: UiChatItem = {
                 ...action.payload,
-                numberOfLines: messageSettings.numberOfLines,
+                numberOfLines: actualNumberOfLines,
                 addTimestamp,
                 estimatedMsgWidth,
                 position,
