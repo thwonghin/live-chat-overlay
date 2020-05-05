@@ -4,6 +4,10 @@ Web Extension for Overlay Live Chat on Youtube
 
 Inspired by [Youtube Live Chat Flow](https://github.com/fiahfy/youtube-live-chat-flow)
 
+## Screenshot
+
+![Screenshot](screenshot.jpg)
+
 ## TODO
 
 - Show super chat & membership
