@@ -10,7 +10,6 @@ Inspired by [Youtube Live Chat Flow](https://github.com/fiahfy/youtube-live-chat
 
 ## TODO
 
-- Show super chat & membership
 - Improve message flow logic & layout
 - Add settings
 - Benchmark & Optimization
