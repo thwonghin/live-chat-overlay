@@ -18,8 +18,7 @@ jobs:
           node-version: '14.1.0'
       - name: Update version
         run: |
-          export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\///v')
-          echo https://github.com/$GITHUB_REPOSITORY/tree/$VER > dist/SOURCE_URL
+          export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\/v//')
           yarn version:set $VER
       - name: Build Project
         run: |
