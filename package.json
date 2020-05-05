@@ -10,9 +10,13 @@
         "node": ">=14.1.0"
     },
     "scripts": {
+        "lint": "eslint src --quiet --ext ts,tsx",
+        "lint:fix": "yarn lint --fix",
         "build": "tsc -p config && webpack --config config/dist/webpack.config.js --env production",
         "watch": "yarn build --env development --watch",
-        "format": "prettier src/**/*.ts src/**/*.tsx --write"
+        "format": "prettier src/**/*.ts src/**/*.tsx --write",
+        "version:set": "dot-json public/manifest.json version",
+        "release:cws": "webstore upload --source=dist --auto-publish"
     },
     "devDependencies": {
         "@babel/core": "^7.9.6",
@@ -34,9 +38,11 @@
         "@types/webpack": "^4.41.12",
         "@typescript-eslint/eslint-plugin": "^2.30.0",
         "babel-loader": "^8.1.0",
+        "chrome-webstore-upload-cli": "^1.2.0",
         "copy-webpack-plugin": "^5.1.1",
         "css-loader": "^3.5.3",
         "cssnano": "^4.1.10",
+        "dot-json": "^1.2.0",
         "eslint": "^6.8.0",
         "eslint-config-airbnb-typescript": "^7.2.1",
         "eslint-config-prettier": "^6.11.0",

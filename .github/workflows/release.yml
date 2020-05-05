@@ -1,0 +1,45 @@
+on:
+    push:
+      tags: 'v*'
+
+  name: Create Release
+
+  jobs:
+    build:
+      runs-on: ubuntu-18.04
+
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v2
+        - name: Use Node
+          uses: actions/setup-node@v1
+          with:
+            node-version: '14.1.0'
+        - name: Update version
+          run: |
+            export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\///v')
+            echo https://github.com/$GITHUB_REPOSITORY/tree/$VER > dist/SOURCE_URL
+            yarn version:set $VER
+        - name: Build Project
+          run: |
+            yarn
+            yarn build
+        - uses: actions/upload-artifact@v1
+          with:
+            name: built-extension
+            path: dist
+
+    deploy-to-chrome:
+      needs: build
+      runs-on: ubuntu-18.04
+      steps:
+      - uses: actions/download-artifact@v1
+        with:
+          name: built-extension
+          path: dist
+      - run: cd dist && npx chrome-webstore-upload-cli upload --auto-publish
+        env:
+          EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
