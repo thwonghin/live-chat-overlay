@@ -16,14 +16,14 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '14.1.0'
-      - name: Update version
-        run: |
-          export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\/v//')
-          yarn version:set $VER
       - name: Build Project
         run: |
           yarn
           yarn build
+      - name: Update version
+        run: |
+          export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\/v//')
+          yarn version:set $VER
       - uses: actions/upload-artifact@v1
         with:
           name: built-extension
