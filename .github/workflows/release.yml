@@ -6,6 +6,7 @@ name: Create Release
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-18.04
 
     steps:
@@ -30,6 +31,7 @@ jobs:
           path: dist
 
   deploy-to-chrome:
+    name: Deploy to Chrome Web Store
     needs: build
     runs-on: ubuntu-18.04
     steps:
