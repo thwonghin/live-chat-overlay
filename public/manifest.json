@@ -1,6 +1,6 @@
 {
     "name": "Live Chat Overlay",
-    "version": "experimental",
+    "version": "0.0.0",
     "description": "Web Extension for Overlay Live Chat on Youtube",
     "homepage_url": "https://github.com/thwonghin/live-chat-overlay",
     "manifest_version": 2,
