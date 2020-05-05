@@ -86,5 +86,8 @@
         "react-dom": "^0.0.0-experimental-e5d06e34b",
         "react-redux": "^7.2.0",
         "regenerator-runtime": "^0.13.5"
+    },
+    "resolutions": {
+        "yargs-parser": "18.1.2"
     }
 }
