@@ -1,6 +1,6 @@
 on:
-    push:
-      tags: 'v*'
+  push:
+    tags: 'v*'
 
   name: Create Release
 
@@ -33,13 +33,13 @@ on:
       needs: build
       runs-on: ubuntu-18.04
       steps:
-      - uses: actions/download-artifact@v1
-        with:
-          name: built-extension
-          path: dist
-      - run: cd dist && npx chrome-webstore-upload-cli upload --auto-publish
-        env:
-          EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+        - uses: actions/download-artifact@v1
+          with:
+            name: built-extension
+            path: dist
+        - run: cd dist && npx chrome-webstore-upload-cli upload --auto-publish
+          env:
+            EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+            CLIENT_ID: ${{ secrets.CLIENT_ID }}
+            CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+            REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
