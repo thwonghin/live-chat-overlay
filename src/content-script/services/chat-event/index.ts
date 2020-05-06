@@ -97,6 +97,7 @@ export class ChatEventObserver {
 
     public cleanup(): void {
         this.listeners.add = [];
+        this.queue = [];
         this.handleObserverStatus();
         clearInterval(this.dequeueInterval);
     }
