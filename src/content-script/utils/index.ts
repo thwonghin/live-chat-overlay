@@ -10,6 +10,12 @@ export function getVideoPlayerEle(): HTMLElement | null {
     );
 }
 
+export function getVideoEle(): HTMLVideoElement | null {
+    return window.parent.document.querySelector(
+        '#ytd-player .html5-video-player video',
+    );
+}
+
 export function getLiveChatEle(): HTMLElement | null {
     const ele = document.querySelector('#item-scroller #items');
     return ele as HTMLElement;

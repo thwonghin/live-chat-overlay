@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 
 import { store } from './reducers';
 
+import { ChatEventObserverProvider } from './contexts/chat-observer';
 import { getVideoPlayerContainer, injectStyles } from '../utils';
 import App from './app';
 
@@ -25,7 +26,9 @@ export function initLiveChat(): () => void {
 
     ReactDOM.createRoot(reactContainer).render(
         <Provider store={store}>
-            <App />
+            <ChatEventObserverProvider>
+                <App />
+            </ChatEventObserverProvider>
         </Provider>,
     );
     videoPlayerContainer.appendChild(reactContainer);

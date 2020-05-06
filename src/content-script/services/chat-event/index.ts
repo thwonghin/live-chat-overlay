@@ -49,6 +49,9 @@ export class ChatEventObserver {
     }
 
     public start(): void {
+        this.isObserving = true;
+        this.observer.observe(this.containerEle, observerConfig);
+
         this.dequeueInterval = window.setInterval(() => {
             const element = this.queue.shift();
             if (!element) {
@@ -63,18 +66,22 @@ export class ChatEventObserver {
         }, 100);
     }
 
-    private get listenerCount(): number {
-        return this.listeners.add.length;
+    public stop(): void {
+        this.isObserving = false;
+        this.observer.disconnect();
+        clearInterval(this.dequeueInterval);
     }
 
-    private handleObserverStatus(): void {
-        if (this.isObserving && this.listenerCount === 0) {
-            this.observer.disconnect();
-            this.isObserving = false;
-        } else if (!this.isObserving && this.listenerCount > 0) {
-            this.observer.observe(this.containerEle, observerConfig);
-            this.isObserving = true;
-        }
+    public pause(): void {
+        this.isObserving = false;
+    }
+
+    public resume(): void {
+        this.isObserving = true;
+    }
+
+    public reset(): void {
+        this.queue = [];
     }
 
     public addEventListener(
@@ -82,7 +89,6 @@ export class ChatEventObserver {
         callback: ChatEventCallback,
     ): void {
         this.listeners[event] = this.listeners[event].concat(callback);
-        this.handleObserverStatus();
     }
 
     public removeEventListener(
@@ -92,13 +98,11 @@ export class ChatEventObserver {
         this.listeners[event] = this.listeners[event].filter(
             (eventListener) => eventListener !== callback,
         );
-        this.handleObserverStatus();
     }
 
     public cleanup(): void {
+        this.stop();
+        this.reset();
         this.listeners.add = [];
-        this.queue = [];
-        this.handleObserverStatus();
-        clearInterval(this.dequeueInterval);
     }
 }
