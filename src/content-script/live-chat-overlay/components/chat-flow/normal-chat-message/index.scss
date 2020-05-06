@@ -1,9 +1,9 @@
 .container {
+    display: flex;
+    align-items: center;
     height: 1em;
     padding: 10px;
     border-radius: 5px;
-    display: flex;
-    align-items: center;
 }
 
 .message {

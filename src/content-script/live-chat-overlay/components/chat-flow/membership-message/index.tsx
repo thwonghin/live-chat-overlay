@@ -29,11 +29,11 @@ export default function MembershipMessage({ chatItem }: Props): JSX.Element {
         >
             <div className={classes.author}>
                 <img
-                    className={classes.authorAvator}
+                    className={classes['author-avator']}
                     src={chatItem.avatarUrl}
                     alt={chatItem.authorName}
                 />
-                <span className={classes.authorName}>
+                <span className={classes['author-name']}>
                     {chatItem.authorName}
                 </span>
             </div>

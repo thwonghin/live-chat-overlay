@@ -7,6 +7,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { TypedCssModulesPlugin } from 'typed-css-modules-webpack-plugin';
 import postcssPresetEnv from 'postcss-preset-env';
 import cssNano from 'cssnano';
+import stylelint from 'stylelint';
 
 const rootDir = path.resolve(__dirname, '../..');
 const srcDir = path.resolve(rootDir, 'src');
@@ -61,6 +62,7 @@ export default (webpackEnv: string): webpack.Configuration => {
                             options: {
                                 plugins: (): unknown[] =>
                                     [
+                                        stylelint,
                                         postcssPresetEnv(),
                                         isProd ? cssNano() : '',
                                     ].filter((v) => v !== ''),

@@ -1,10 +1,10 @@
 .container {
-    padding: 1px 10px;
-    border-radius: 5px;
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-top: 0.2em;
+    padding: 1px 10px;
+    border-radius: 5px;
 }
 
 .author {
@@ -12,16 +12,16 @@
     align-items: center;
 }
 
-.authorAvator {
+.author-avator {
     width: 0.6em;
     height: 0.6em;
-    border-radius: 0.3em;
     margin-right: 10px;
+    border-radius: 0.3em;
 }
 
-.authorName {
-    font-size: 0.6em;
+.author-name {
     margin-right: 10px;
+    font-size: 0.6em;
 }
 
 .donation {
