@@ -10,13 +10,13 @@
         "node": ">=14.1.0"
     },
     "scripts": {
-        "lint": "eslint src --quiet --ext ts,tsx",
-        "lint:fix": "yarn lint --fix",
-        "build": "tsc -p config && webpack --config config/dist/webpack.config.js --env production",
+        "lint:fix": "eslint src --ext ts,tsx --quiet --fix && stylelint src/**/*.scss --fix",
+        "build": "tsc -p config && webpack --config config/dist/webpack.config.js",
+        "build:prod": "yarn build --env production",
+        "build:release": "yarn build --env release",
         "watch": "yarn build --env development --watch",
         "format": "prettier src/**/*.ts src/**/*.tsx --write",
-        "version:set": "dot-json dist/manifest.json version",
-        "release:cws": "webstore upload --source=dist --auto-publish"
+        "version:set": "dot-json dist/manifest.json version"
     },
     "devDependencies": {
         "@babel/core": "^7.9.6",
