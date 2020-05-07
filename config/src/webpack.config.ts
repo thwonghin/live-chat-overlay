@@ -13,22 +13,27 @@ const rootDir = path.resolve(__dirname, '../..');
 const srcDir = path.resolve(rootDir, 'src');
 const distDir = path.resolve(rootDir, 'dist');
 
-export default (webpackEnv: string): webpack.Configuration => {
-    const isProd = webpackEnv === 'production';
-    const isDev = webpackEnv === 'development';
+type WebpackEnv = 'production' | 'development' | 'release';
 
+export default (webpackEnv: WebpackEnv): webpack.Configuration => {
     function getMode(): 'production' | 'development' | 'none' {
-        if (isProd) {
-            return 'production';
+        switch (webpackEnv) {
+            case 'development':
+                return 'development';
+            case 'production':
+            case 'release':
+                return 'production';
+            default:
+                return 'none';
         }
-        if (isDev) {
-            return 'development';
-        }
-        return 'none';
     }
 
-    return {
-        mode: getMode(),
+    const shouldSkipPreChecking = webpackEnv === 'release';
+    const mode = getMode();
+
+    const config: webpack.Configuration = {
+        mode,
+        stats: mode === 'production' ? 'errors-only' : 'normal',
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
         },
@@ -59,29 +64,35 @@ export default (webpackEnv: string): webpack.Configuration => {
                         {
                             loader: 'postcss-loader',
                             options: {
-                                plugins: (): unknown[] =>
-                                    [
-                                        stylelint,
-                                        postcssPresetEnv(),
-                                        isProd ? cssNano() : '',
-                                    ].filter((v) => v !== ''),
+                                plugins: (): unknown[] => [
+                                    ...(shouldSkipPreChecking
+                                        ? []
+                                        : [stylelint]),
+                                    postcssPresetEnv(),
+                                    ...(mode === 'production'
+                                        ? [cssNano()]
+                                        : []),
+                                ],
                             },
                         },
-                    ].filter((v) => v !== ''),
+                    ],
                 },
             ],
         },
         plugins: [
-            new TypedCssModulesPlugin({
-                globPattern: 'src/**/*.scss',
-            }),
-            new ForkTsCheckerWebpackPlugin({
-                tsconfig: path.resolve(rootDir, 'tsconfig.json'),
-                async: isDev,
-                silent: true,
-                useTypescriptIncrementalApi: true,
-                eslint: true,
-            }),
+            ...(shouldSkipPreChecking
+                ? []
+                : [
+                      new TypedCssModulesPlugin({
+                          globPattern: 'src/**/*.scss',
+                      }),
+                      new ForkTsCheckerWebpackPlugin({
+                          tsconfig: path.resolve(rootDir, 'tsconfig.json'),
+                          async: false,
+                          useTypescriptIncrementalApi: true,
+                          eslint: true,
+                      }),
+                  ]),
             new CopyWebpackPlugin([
                 {
                     from:
@@ -100,4 +111,6 @@ export default (webpackEnv: string): webpack.Configuration => {
             minimizer: [new TerserPlugin()],
         },
     };
+
+    return config;
 };

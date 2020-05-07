@@ -19,7 +19,7 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
       - name: Build Project
-        run: yarn build
+        run: yarn build:release
       - name: Update version
         run: |
           export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\/v//')
