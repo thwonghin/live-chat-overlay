@@ -53,7 +53,6 @@ export default (webpackEnv: string): webpack.Configuration => {
                             loader: 'css-loader',
                             options: {
                                 modules: true,
-                                localsConvention: 'camelCaseOnly',
                             },
                         },
                         'sass-loader',
