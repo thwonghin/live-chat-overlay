@@ -16,10 +16,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '14.1.0'
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
       - name: Build Project
-        run: |
-          yarn
-          yarn build
+        run: yarn build
       - name: Update version
         run: |
           export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\/v//')
