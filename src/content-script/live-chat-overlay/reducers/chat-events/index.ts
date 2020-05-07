@@ -42,7 +42,7 @@ const chatEventsSlice = createSlice({
             });
 
             // Ignore message if overflow
-            // TODO: still let other type of message to add in
+            // TODO: Better handling e.g. Slow mode
             if (!position) {
                 return state;
             }
