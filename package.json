@@ -15,7 +15,7 @@
         "build": "tsc -p config && webpack --config config/dist/webpack.config.js --env production",
         "watch": "yarn build --env development --watch",
         "format": "prettier src/**/*.ts src/**/*.tsx --write",
-        "version:set": "dot-json public/manifest.json version",
+        "version:set": "dot-json dist/manifest.json version",
         "release:cws": "webstore upload --source=dist --auto-publish"
     },
     "devDependencies": {
