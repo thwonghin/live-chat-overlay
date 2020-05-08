@@ -13,7 +13,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export function ChatEventObserverProvider({ children }: Props): JSX.Element {
+const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
     const liveChatEle = getLiveChatEle();
     if (!liveChatEle) {
         throw new Error('Live chat ele not found');
@@ -28,4 +28,6 @@ export function ChatEventObserverProvider({ children }: Props): JSX.Element {
             {children}
         </ChatEventObserverContext.Provider>
     );
-}
+};
+
+export { ChatEventObserverProvider };

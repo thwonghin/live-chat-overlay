@@ -6,6 +6,7 @@ export interface MessageSettings {
     strokeColor: string;
     strokeWidth: number;
     numberOfLines: number;
+    authorDisplay: 'avatar-only' | 'name-only' | 'all' | 'none';
 }
 
 type MessageSettingsKeys =

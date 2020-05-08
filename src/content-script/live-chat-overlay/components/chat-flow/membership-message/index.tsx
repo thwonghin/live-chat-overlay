@@ -4,11 +4,13 @@ import classes from './index.scss';
 import { useSettings } from '../../../hooks/use-settings';
 import { MembershipItem } from '../../../../services/chat-event/models';
 
+import AuthorChip from '../author-chip';
+
 interface Props {
     chatItem: MembershipItem;
 }
 
-export default function MembershipMessage({ chatItem }: Props): JSX.Element {
+const MembershipMessage: React.FC<Props> = ({ chatItem }) => {
     const settings = useSettings();
     const messageSettings = settings.messageSettings.membership;
 
@@ -27,23 +29,20 @@ export default function MembershipMessage({ chatItem }: Props): JSX.Element {
                     messageSettings.numberOfLines === 2 ? 'column' : 'row',
             }}
         >
-            <div className={classes.author}>
-                <img
-                    className={classes['author-avator']}
-                    src={chatItem.avatarUrl}
-                    alt={chatItem.authorName}
-                />
-                <span className={classes['author-name']}>
-                    {chatItem.authorName}
-                </span>
-            </div>
-            {chatItem.message ? (
+            <AuthorChip
+                avatarUrl={chatItem.avatarUrl}
+                name={chatItem.authorName}
+                authorDisplaySetting={messageSettings.authorDisplay}
+            />
+            {!!chatItem.message && (
                 <span
                     className={classes.message}
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{ __html: chatItem.message }}
                 />
-            ) : null}
+            )}
         </div>
     );
-}
+};
+
+export default MembershipMessage;

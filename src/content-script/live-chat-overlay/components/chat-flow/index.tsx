@@ -23,7 +23,7 @@ interface Props {
     onTimeout: (chatItem: UiChatItem) => void;
 }
 
-function ChatFlowLayout({ chatItems, onTimeout }: Props): JSX.Element {
+const ChatFlowLayout: React.FC<Props> = ({ chatItems, onTimeout }) => {
     return (
         <div className={classes.container}>
             {chatItems.map((chatItem) => (
@@ -32,25 +32,25 @@ function ChatFlowLayout({ chatItems, onTimeout }: Props): JSX.Element {
                     key={chatItem.id}
                     chatItem={chatItem}
                 >
-                    {isNormalChatItem(chatItem) ? (
+                    {isNormalChatItem(chatItem) && (
                         <NormalChatMessage chatItem={chatItem} />
-                    ) : null}
-                    {isSuperChatItem(chatItem) ? (
+                    )}
+                    {isSuperChatItem(chatItem) && (
                         <SuperChatMessage chatItem={chatItem} />
-                    ) : null}
-                    {isSuperStickerItem(chatItem) ? (
+                    )}
+                    {isSuperStickerItem(chatItem) && (
                         <SuperChatSticker chatItem={chatItem} />
-                    ) : null}
-                    {isMembershipItem(chatItem) ? (
+                    )}
+                    {isMembershipItem(chatItem) && (
                         <MembershipMessage chatItem={chatItem} />
-                    ) : null}
+                    )}
                 </MessageFlower>
             ))}
         </div>
     );
-}
+};
 
-export default function ChatFlow(): JSX.Element {
+const ChatFlow: React.FC = () => {
     const dispatch = useDispatch();
     const chatItems = useSelector<
         RootState,
@@ -73,4 +73,6 @@ export default function ChatFlow(): JSX.Element {
     }, [dispatch]);
 
     return <ChatFlowLayout chatItems={chatItems} onTimeout={onTimeout} />;
-}
+};
+
+export default ChatFlow;
