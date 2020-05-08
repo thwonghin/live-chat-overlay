@@ -11,12 +11,14 @@
     },
     "scripts": {
         "lint:fix": "eslint src --ext ts,tsx --quiet --fix && stylelint src/**/*.scss --fix",
+        "clean": "rm -rf dist .storybook/dist config/dist",
         "build": "tsc -p config && webpack --config config/dist/webpack.config.js",
         "build:prod": "yarn build --env production",
         "build:release": "yarn build --env release",
         "watch": "yarn build --env development --watch",
         "format": "prettier src/**/*.ts src/**/*.tsx --write",
-        "version:set": "dot-json dist/manifest.json version"
+        "version:set": "dot-json dist/manifest.json version",
+        "storybook": "tsc -p config && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && start-storybook -c .storybook/dist/"
     },
     "devDependencies": {
         "@babel/core": "^7.9.6",
@@ -27,6 +29,7 @@
         "@babel/runtime": "^7.9.6",
         "@commitlint/cli": "^8.3.5",
         "@commitlint/config-conventional": "^8.3.4",
+        "@storybook/react": "^5.3.18",
         "@types/copy-webpack-plugin": "^5.0.0",
         "@types/cssnano": "^4.0.0",
         "@types/firefox-webext-browser": "^70.0.1",

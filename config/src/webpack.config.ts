@@ -13,12 +13,13 @@ const rootDir = path.resolve(__dirname, '../..');
 const srcDir = path.resolve(rootDir, 'src');
 const distDir = path.resolve(rootDir, 'dist');
 
-type WebpackEnv = 'production' | 'development' | 'release';
+type WebpackEnv = 'production' | 'development' | 'release' | 'storybook';
 
 export default (webpackEnv: WebpackEnv): webpack.Configuration => {
     function getMode(): 'production' | 'development' | 'none' {
         switch (webpackEnv) {
             case 'development':
+            case 'storybook':
                 return 'development';
             case 'production':
             case 'release':
@@ -53,7 +54,9 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
                 {
                     test: /\.s[ac]ss$/i,
                     use: [
-                        MiniCssExtractPlugin.loader,
+                        webpackEnv === 'storybook'
+                            ? 'style-loader'
+                            : MiniCssExtractPlugin.loader,
                         {
                             loader: 'css-loader',
                             options: {
