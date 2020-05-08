@@ -4,6 +4,8 @@ import classes from './index.scss';
 import { useSettings } from '../../../hooks/use-settings';
 import { MembershipItem } from '../../../../services/chat-event/models';
 
+import AuthorChip from '../author-chip';
+
 interface Props {
     chatItem: MembershipItem;
 }
@@ -27,16 +29,11 @@ export default function MembershipMessage({ chatItem }: Props): JSX.Element {
                     messageSettings.numberOfLines === 2 ? 'column' : 'row',
             }}
         >
-            <div className={classes.author}>
-                <img
-                    className={classes['author-avator']}
-                    src={chatItem.avatarUrl}
-                    alt={chatItem.authorName}
-                />
-                <span className={classes['author-name']}>
-                    {chatItem.authorName}
-                </span>
-            </div>
+            <AuthorChip
+                avatarUrl={chatItem.avatarUrl}
+                name={chatItem.authorName}
+                isNameHidden={false}
+            />
             {chatItem.message ? (
                 <span
                     className={classes.message}

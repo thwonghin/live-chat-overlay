@@ -4,6 +4,8 @@ import classes from './index.scss';
 import { useSettings } from '../../../hooks/use-settings';
 import { SuperStickerItem } from '../../../../services/chat-event/models';
 
+import AuthorChip from '../author-chip';
+
 interface Props {
     chatItem: SuperStickerItem;
 }
@@ -26,19 +28,12 @@ export default function SuperChatChat({ chatItem }: Props): JSX.Element {
                 WebkitTextStrokeWidth: `${messageSettings.strokeWidth}em`,
             }}
         >
-            <div className={classes.author}>
-                <img
-                    className={classes['author-avator']}
-                    src={chatItem.avatarUrl}
-                    alt={chatItem.authorName}
-                />
-                <span className={classes['author-name']}>
-                    {chatItem.authorName}
-                </span>
-                <span className={classes.donation}>
-                    {chatItem.donationAmount}
-                </span>
-            </div>
+            <AuthorChip
+                avatarUrl={chatItem.avatarUrl}
+                name={chatItem.authorName}
+                donationAmount={chatItem.donationAmount}
+                isNameHidden={false}
+            />
             <span className={classes.message}>
                 <img
                     src={`https:${chatItem.stickerUrl}`}
