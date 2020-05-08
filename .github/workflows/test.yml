@@ -28,3 +28,15 @@ jobs:
       - name: Build
         run: |
           yarn build:prod
+  commitlint:
+    name: Commit Lint
+    runs-on: ubuntu-18.04
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout Code with All Commits
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Run commitlint
+        uses: wagoid/commitlint-github-action@v1
