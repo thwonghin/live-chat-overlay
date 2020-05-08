@@ -24,12 +24,15 @@ export function initLiveChat(): () => void {
     reactContainer.style.top = '0';
     reactContainer.style.left = '0';
 
-    ReactDOM.createRoot(reactContainer).render(
-        <Provider store={store}>
-            <ChatEventObserverProvider>
-                <App />
-            </ChatEventObserverProvider>
-        </Provider>,
+    ReactDOM.render(
+        <React.StrictMode>
+            <Provider store={store}>
+                <ChatEventObserverProvider>
+                    <App />
+                </ChatEventObserverProvider>
+            </Provider>
+        </React.StrictMode>,
+        reactContainer,
     );
     videoPlayerContainer.appendChild(reactContainer);
 
