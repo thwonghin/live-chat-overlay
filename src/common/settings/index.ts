@@ -19,7 +19,6 @@ const defaultSettings: Settings = {
         member: {
             ...commonMsgSettings,
             color: '#2ba640',
-            authorDisplay: 'avatar-only',
         },
         you: commonMsgSettings,
         moderator: {
