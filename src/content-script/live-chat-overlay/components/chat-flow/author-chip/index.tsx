@@ -1,28 +1,41 @@
 import React from 'react';
 
 import classes from './index.scss';
+import { MessageSettings } from '../../../../../common/settings/types';
 
 interface Props {
     avatarUrl: string;
     name: string;
-    isNameHidden: boolean;
+    authorDisplaySetting: MessageSettings['authorDisplay'];
     donationAmount?: string;
 }
 
-export default function AuthorChip({
+const AuthorChip: React.FC<Props> = ({
     avatarUrl,
     name,
-    isNameHidden,
+    authorDisplaySetting,
     donationAmount,
-}: Props): JSX.Element {
+}) => {
+    const isAvatorShown =
+        authorDisplaySetting === 'all' ||
+        authorDisplaySetting === 'avatar-only';
+    const isNameShown =
+        authorDisplaySetting === 'all' || authorDisplaySetting === 'name-only';
+
+    if (!isAvatorShown && !isNameShown && !donationAmount) {
+        return null;
+    }
+
     return (
         <div className={classes.author}>
-            <img
-                className={classes['author-avator']}
-                src={avatarUrl}
-                alt={name}
-            />
-            {isNameHidden && (
+            {isAvatorShown && (
+                <img
+                    className={classes['author-avator']}
+                    src={avatarUrl}
+                    alt={name}
+                />
+            )}
+            {isNameShown && (
                 <span className={classes['author-name']}>{name}</span>
             )}
             {!!donationAmount && (
@@ -30,4 +43,6 @@ export default function AuthorChip({
             )}
         </div>
     );
-}
+};
+
+export default AuthorChip;

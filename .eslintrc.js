@@ -24,5 +24,6 @@ module.exports = {
         'import/prefer-default-export': 'off',
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
+        'react/prop-types': 'off',
     },
 };

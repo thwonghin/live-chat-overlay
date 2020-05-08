@@ -8,6 +8,7 @@ const commonMsgSettings: MessageSettings = {
     strokeColor: 'black',
     strokeWidth: 0.03,
     numberOfLines: 1,
+    authorDisplay: 'none',
 };
 
 const defaultSettings: Settings = {
@@ -18,29 +19,35 @@ const defaultSettings: Settings = {
         member: {
             ...commonMsgSettings,
             color: '#2ba640',
+            authorDisplay: 'avatar-only',
         },
         you: commonMsgSettings,
         moderator: {
             ...commonMsgSettings,
             color: '#5e84f1',
+            authorDisplay: 'all',
         },
         owner: {
             ...commonMsgSettings,
             color: 'white',
             bgColor: '#ffd600',
+            authorDisplay: 'all',
         },
         verified: {
             ...commonMsgSettings,
             color: '#E9E9E9',
             bgColor: '#606060',
+            authorDisplay: 'all',
         },
         membership: {
             ...commonMsgSettings,
             numberOfLines: 1,
+            authorDisplay: 'all',
         },
         'super-chat': {
             ...commonMsgSettings,
             numberOfLines: 2,
+            authorDisplay: 'all',
         },
     },
 };

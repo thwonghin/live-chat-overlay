@@ -4,16 +4,23 @@ import classes from './index.scss';
 import { NormalChatItem } from '../../../../services/chat-event/models';
 import { useSettings } from '../../../hooks/use-settings';
 
+import AuthorChip from '../author-chip';
+
 interface Props {
     chatItem: NormalChatItem;
 }
 
-export default function NormalChatMessage({ chatItem }: Props): JSX.Element {
+const NormalChatMessage: React.FC<Props> = ({ chatItem }) => {
     const settings = useSettings();
     const messageSettings = settings.messageSettings[chatItem.authorType];
 
     return (
         <div className={classes.container}>
+            <AuthorChip
+                avatarUrl={chatItem.avatarUrl}
+                name={chatItem.authorName}
+                authorDisplaySetting={messageSettings.authorDisplay}
+            />
             <span
                 className={classes.message}
                 style={{
@@ -29,4 +36,6 @@ export default function NormalChatMessage({ chatItem }: Props): JSX.Element {
             />
         </div>
     );
-}
+};
+
+export default NormalChatMessage;

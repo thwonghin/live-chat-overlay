@@ -6,10 +6,12 @@ import { useHandleChatEventOnPlayerStateChange } from './hooks/use-handle-chat-e
 
 import ChatFlow from './components/chat-flow';
 
-export default function App(): JSX.Element {
+const App: React.FC = () => {
     useInitChatEventObserver();
     useResetChatEventsOnPlayerRectChange();
     useHandleChatEventOnPlayerStateChange();
 
     return <ChatFlow />;
-}
+};
+
+export default App;

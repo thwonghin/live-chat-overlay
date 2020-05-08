@@ -10,7 +10,7 @@ interface Props {
     chatItem: SuperChatItem;
 }
 
-export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
+const SuperChatMessage: React.FC<Props> = ({ chatItem }) => {
     const settings = useSettings();
     const messageSettings = settings.messageSettings['super-chat'];
     const actualNumberOfLines = chatItem.message
@@ -39,15 +39,17 @@ export default function SuperChatMessage({ chatItem }: Props): JSX.Element {
                 avatarUrl={chatItem.avatarUrl}
                 name={chatItem.authorName}
                 donationAmount={chatItem.donationAmount}
-                isNameHidden={false}
+                authorDisplaySetting={messageSettings.authorDisplay}
             />
-            {chatItem.message ? (
+            {!!chatItem.message && (
                 <span
                     className={classes.message}
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{ __html: chatItem.message }}
                 />
-            ) : null}
+            )}
         </div>
     );
-}
+};
+
+export default SuperChatMessage;

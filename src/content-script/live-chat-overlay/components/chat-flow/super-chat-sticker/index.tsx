@@ -10,7 +10,7 @@ interface Props {
     chatItem: SuperStickerItem;
 }
 
-export default function SuperChatChat({ chatItem }: Props): JSX.Element {
+const SuperChatSticker: React.FC<Props> = ({ chatItem }) => {
     const settings = useSettings();
     const messageSettings = settings.messageSettings['super-chat'];
     const imageSize = `${0.8 * messageSettings.numberOfLines}em`;
@@ -32,7 +32,7 @@ export default function SuperChatChat({ chatItem }: Props): JSX.Element {
                 avatarUrl={chatItem.avatarUrl}
                 name={chatItem.authorName}
                 donationAmount={chatItem.donationAmount}
-                isNameHidden={false}
+                authorDisplaySetting={messageSettings.authorDisplay}
             />
             <span className={classes.message}>
                 <img
@@ -46,4 +46,6 @@ export default function SuperChatChat({ chatItem }: Props): JSX.Element {
             </span>
         </div>
     );
-}
+};
+
+export default SuperChatSticker;

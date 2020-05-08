@@ -10,7 +10,7 @@ interface Props {
     chatItem: MembershipItem;
 }
 
-export default function MembershipMessage({ chatItem }: Props): JSX.Element {
+const MembershipMessage: React.FC<Props> = ({ chatItem }) => {
     const settings = useSettings();
     const messageSettings = settings.messageSettings.membership;
 
@@ -32,15 +32,17 @@ export default function MembershipMessage({ chatItem }: Props): JSX.Element {
             <AuthorChip
                 avatarUrl={chatItem.avatarUrl}
                 name={chatItem.authorName}
-                isNameHidden={false}
+                authorDisplaySetting={messageSettings.authorDisplay}
             />
-            {chatItem.message ? (
+            {!!chatItem.message && (
                 <span
                     className={classes.message}
                     // eslint-disable-next-line react/no-danger
                     dangerouslySetInnerHTML={{ __html: chatItem.message }}
                 />
-            ) : null}
+            )}
         </div>
     );
-}
+};
+
+export default MembershipMessage;

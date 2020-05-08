@@ -19,11 +19,7 @@ interface Props {
     onTimeout: (chatItem: UiChatItem) => void;
 }
 
-export default function MessageFlower({
-    children,
-    chatItem,
-    onTimeout,
-}: Props): JSX.Element {
+const MessageFlower: React.FC<Props> = ({ children, chatItem, onTimeout }) => {
     const [isFlowing, setIsFlowing] = useState(false);
 
     const ref = useRef(null);
@@ -74,4 +70,6 @@ export default function MessageFlower({
             {children}
         </div>
     );
-}
+};
+
+export default MessageFlower;
