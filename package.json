@@ -90,7 +90,7 @@
         "core-js": "3",
         "lodash-es": "^4.17.15",
         "react": "^0.0.0-experimental-e5d06e34b",
-        "react-dom": "^0.0.0-experimental-e5d06e34b",
+        "react-dom": "^0.14.1",
         "react-redux": "^7.2.0",
         "regenerator-runtime": "^0.13.5"
     },
