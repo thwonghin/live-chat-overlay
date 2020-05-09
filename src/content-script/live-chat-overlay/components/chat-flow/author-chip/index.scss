@@ -1,3 +1,7 @@
+.mr {
+    margin-right: 10px;
+}
+
 .author {
     display: flex;
     align-items: center;
@@ -7,12 +11,10 @@
 .author-avator {
     width: 0.6em;
     height: 0.6em;
-    margin-right: 10px;
     border-radius: 0.3em;
 }
 
 .author-name {
-    margin-right: 10px;
     font-size: 0.6em;
 }
 
