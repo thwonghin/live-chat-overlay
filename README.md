@@ -6,7 +6,7 @@ Inspired by [Youtube Live Chat Flow](https://github.com/fiahfy/youtube-live-chat
 
 ## Install
 
-Go to [Chrome Web Store] to install with your browser (Google Chrome / Microsoft Edge).
+Go to [Chrome Web Store](https://chrome.google.com/webstore/detail/live-chat-overlay/ahaklfidpffmhjhlkgakjgbkppdoaemo) to install with your browser (Google Chrome / Microsoft Edge).
 
 ## Screenshot
 
