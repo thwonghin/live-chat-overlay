@@ -4,7 +4,8 @@ import { settingsStorage } from '../../../../common/settings';
 import { ChatItem } from '../../../services/chat-event/models';
 import { getVideoPlayerEle } from '../../../utils';
 import { State, UiChatItem } from './types';
-import { estimateMsgWidth, getPosition, serializePosition } from './helpers';
+import { getPosition, serializePosition } from './helpers';
+import { estimateMsgWidth } from './width-estimate';
 import {
     getMessageSettings,
     isSuperChatItem,
@@ -22,14 +23,17 @@ const chatEventsSlice = createSlice({
     reducers: {
         addItem(state, action: PayloadAction<ChatItem>): State {
             const addTimestamp = Date.now();
-            const messageSettings = getMessageSettings(action.payload);
+            const settings = settingsStorage.get();
+            const messageSettings = getMessageSettings(
+                action.payload,
+                settings,
+            );
             const estimatedMsgWidth = estimateMsgWidth(
                 action.payload,
                 messageSettings,
             );
             const playerEle = getVideoPlayerEle();
             const rect = playerEle?.getBoundingClientRect();
-            const settings = settingsStorage.get();
             const position = getPosition({
                 state,
                 addTimestamp,

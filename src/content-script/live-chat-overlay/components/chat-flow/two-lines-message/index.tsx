@@ -1,23 +1,39 @@
 import React from 'react';
 
 import classes from './index.scss';
-import { useSettings } from '../../../hooks/use-settings';
-import { SuperChatItem } from '../../../../services/chat-event/models';
+import {
+    NormalChatItem,
+    MembershipItem,
+    SuperChatItem,
+} from '../../../../services/chat-event/models';
+import {
+    isNormalChatItem,
+    isSuperChatItem,
+} from '../../../../services/chat-event/utils';
 
 import AuthorChip from '../author-chip';
+import { MessageSettings } from '../../../../../common/settings/types';
 
 interface Props {
-    chatItem: SuperChatItem;
+    chatItem: NormalChatItem | MembershipItem | SuperChatItem;
+    messageSettings: MessageSettings;
 }
 
-const SuperChatMessage: React.FC<Props> = ({ chatItem }) => {
-    const settings = useSettings();
-    const messageSettings = settings.messageSettings['super-chat'];
+const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
     const actualNumberOfLines = chatItem.message
         ? messageSettings.numberOfLines
         : 1;
 
     const flexDirection = actualNumberOfLines === 2 ? 'column' : 'row';
+
+    const bgColor = isNormalChatItem(chatItem)
+        ? messageSettings.bgColor
+        : chatItem.color;
+
+    const donationAmount = isSuperChatItem(chatItem)
+        ? chatItem.donationAmount
+        : undefined;
+
     return (
         <div
             className={classes.container}
@@ -26,7 +42,7 @@ const SuperChatMessage: React.FC<Props> = ({ chatItem }) => {
                 color: messageSettings.color,
                 fontWeight: messageSettings.weight,
                 opacity: messageSettings.opacity,
-                backgroundColor: chatItem.color,
+                backgroundColor: bgColor,
                 WebkitTextStrokeColor: messageSettings.strokeColor,
                 WebkitTextStrokeWidth: `${messageSettings.strokeWidth}em`,
                 flexDirection,
@@ -38,7 +54,7 @@ const SuperChatMessage: React.FC<Props> = ({ chatItem }) => {
             <AuthorChip
                 avatarUrl={chatItem.avatarUrl}
                 name={chatItem.authorName}
-                donationAmount={chatItem.donationAmount}
+                donationAmount={donationAmount}
                 authorDisplaySetting={messageSettings.authorDisplay}
             />
             {!!chatItem.message && (
@@ -52,4 +68,4 @@ const SuperChatMessage: React.FC<Props> = ({ chatItem }) => {
     );
 };
 
-export default SuperChatMessage;
+export default TwoLinesMessage;

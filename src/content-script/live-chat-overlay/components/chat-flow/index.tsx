@@ -10,20 +10,26 @@ import {
     isSuperChatItem,
     isSuperStickerItem,
     isMembershipItem,
+    getMessageSettings,
 } from '../../../services/chat-event/utils';
 
 import MessageFlower from './message-flower';
-import NormalChatMessage from './normal-chat-message';
-import SuperChatMessage from './super-chat-message';
+import TwoLinesMessage from './two-lines-message';
 import SuperChatSticker from './super-chat-sticker';
-import MembershipMessage from './membership-message';
+import { useSettings } from '../../hooks/use-settings';
+import { Settings } from '../../../../common/settings/types';
 
 interface Props {
+    settings: Settings;
     chatItems: UiChatItem[];
     onTimeout: (chatItem: UiChatItem) => void;
 }
 
-const ChatFlowLayout: React.FC<Props> = ({ chatItems, onTimeout }) => {
+const ChatFlowLayout: React.FC<Props> = ({
+    chatItems,
+    onTimeout,
+    settings,
+}) => {
     return (
         <div className={classes.container}>
             {chatItems.map((chatItem) => (
@@ -32,17 +38,41 @@ const ChatFlowLayout: React.FC<Props> = ({ chatItems, onTimeout }) => {
                     key={chatItem.id}
                     chatItem={chatItem}
                 >
+                    {isSuperStickerItem(chatItem) && (
+                        <SuperChatSticker
+                            chatItem={chatItem}
+                            messageSettings={getMessageSettings(
+                                chatItem,
+                                settings,
+                            )}
+                        />
+                    )}
                     {isNormalChatItem(chatItem) && (
-                        <NormalChatMessage chatItem={chatItem} />
+                        <TwoLinesMessage
+                            chatItem={chatItem}
+                            messageSettings={getMessageSettings(
+                                chatItem,
+                                settings,
+                            )}
+                        />
                     )}
                     {isSuperChatItem(chatItem) && (
-                        <SuperChatMessage chatItem={chatItem} />
-                    )}
-                    {isSuperStickerItem(chatItem) && (
-                        <SuperChatSticker chatItem={chatItem} />
+                        <TwoLinesMessage
+                            chatItem={chatItem}
+                            messageSettings={getMessageSettings(
+                                chatItem,
+                                settings,
+                            )}
+                        />
                     )}
                     {isMembershipItem(chatItem) && (
-                        <MembershipMessage chatItem={chatItem} />
+                        <TwoLinesMessage
+                            chatItem={chatItem}
+                            messageSettings={getMessageSettings(
+                                chatItem,
+                                settings,
+                            )}
+                        />
                     )}
                 </MessageFlower>
             ))}
@@ -51,6 +81,8 @@ const ChatFlowLayout: React.FC<Props> = ({ chatItems, onTimeout }) => {
 };
 
 const ChatFlow: React.FC = () => {
+    const settings = useSettings();
+
     const dispatch = useDispatch();
     const chatItems = useSelector<
         RootState,
@@ -72,7 +104,13 @@ const ChatFlow: React.FC = () => {
         return (): void => clearInterval(intervalId);
     }, [dispatch]);
 
-    return <ChatFlowLayout chatItems={chatItems} onTimeout={onTimeout} />;
+    return (
+        <ChatFlowLayout
+            chatItems={chatItems}
+            onTimeout={onTimeout}
+            settings={settings}
+        />
+    );
 };
 
 export default ChatFlow;

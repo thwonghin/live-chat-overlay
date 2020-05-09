@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 
 import classes from './index.scss';
 import { MessageSettings } from '../../../../../common/settings/types';
@@ -30,13 +31,21 @@ const AuthorChip: React.FC<Props> = ({
         <div className={classes.author}>
             {isAvatorShown && (
                 <img
-                    className={classes['author-avator']}
+                    className={cn(classes['author-avator'], {
+                        [classes.mr]: isNameShown || !!donationAmount,
+                    })}
                     src={avatarUrl}
                     alt={name}
                 />
             )}
             {isNameShown && (
-                <span className={classes['author-name']}>{name}</span>
+                <span
+                    className={cn(classes['author-name'], {
+                        [classes.mr]: !!donationAmount,
+                    })}
+                >
+                    {name}
+                </span>
             )}
             {!!donationAmount && (
                 <span className={classes.donation}>{donationAmount}</span>
