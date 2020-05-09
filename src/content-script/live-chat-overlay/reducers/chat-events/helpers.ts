@@ -1,53 +1,8 @@
 import { last } from 'lodash-es';
 
 import { Position, State } from './types';
-import { ChatItem } from '../../../services/chat-event/models';
-import {
-    isSuperChatItem,
-    isMembershipItem,
-    isSuperStickerItem,
-} from '../../../services/chat-event/utils';
+
 import { MessageSettings } from '../../../../common/settings/types';
-
-function estimateHtmlWidth(html: string): number {
-    const ele = document.createElement('div');
-    ele.innerHTML = html;
-
-    const text = ele.textContent;
-    const nodes = ele.childNodes;
-
-    return text ? text.length + nodes.length - 1 : nodes.length;
-}
-
-export function estimateMsgWidth(
-    chatItem: ChatItem,
-    messageSettings: MessageSettings,
-): number {
-    if (isMembershipItem(chatItem)) {
-        const authorWidth = 2 + chatItem.authorName.length;
-        const messageWidth = estimateHtmlWidth(chatItem.message);
-        if (messageSettings.numberOfLines === 2) {
-            return Math.max(authorWidth, messageWidth);
-        }
-        return authorWidth + messageWidth;
-    }
-    if (isSuperChatItem(chatItem)) {
-        const authorWidth =
-            2 + chatItem.authorName.length + 1 + chatItem.donationAmount.length;
-        const messageWidth = estimateHtmlWidth(chatItem.message ?? '');
-        if (messageSettings.numberOfLines === 2 && chatItem.message) {
-            return Math.max(authorWidth, messageWidth);
-        }
-        return authorWidth + messageWidth;
-    }
-    if (isSuperStickerItem(chatItem)) {
-        const authorWidth =
-            2 + chatItem.authorName.length + 1 + chatItem.donationAmount.length;
-        return authorWidth + 1 + messageSettings.numberOfLines;
-    }
-
-    return estimateHtmlWidth(chatItem.message ?? '');
-}
 
 export function serializePosition(position: Position): string {
     return `${position.layerNumber}.${position.lineNumber}`;
