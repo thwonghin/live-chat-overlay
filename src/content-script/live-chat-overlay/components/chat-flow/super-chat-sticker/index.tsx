@@ -1,18 +1,17 @@
 import React from 'react';
 
 import classes from './index.scss';
-import { useSettings } from '../../../hooks/use-settings';
 import { SuperStickerItem } from '../../../../services/chat-event/models';
 
 import AuthorChip from '../author-chip';
+import { MessageSettings } from '../../../../../common/settings/types';
 
 interface Props {
     chatItem: SuperStickerItem;
+    messageSettings: MessageSettings;
 }
 
-const SuperChatSticker: React.FC<Props> = ({ chatItem }) => {
-    const settings = useSettings();
-    const messageSettings = settings.messageSettings['super-chat'];
+const SuperChatSticker: React.FC<Props> = ({ chatItem, messageSettings }) => {
     const imageSize = `${0.8 * messageSettings.numberOfLines}em`;
 
     return (
