@@ -35,7 +35,7 @@ const SuperChatSticker: React.FC<Props> = ({ chatItem, messageSettings }) => {
             />
             <span className={classes.message}>
                 <img
-                    src={`https:${chatItem.stickerUrl}`}
+                    src={chatItem.stickerUrl}
                     alt={chatItem.message}
                     style={{
                         width: imageSize,
