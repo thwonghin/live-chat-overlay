@@ -121,3 +121,78 @@ export const OneLineNormalMessage: React.FC = () => (
         />
     </Container>
 );
+
+export const TwoLinesSuperChatMessageWithoutAuthorDisplay: React.FC = () => (
+    <Container>
+        <TwoLinesMessage
+            chatItem={superChatItem}
+            messageSettings={{
+                ...messageSettings,
+                authorDisplay: 'none',
+            }}
+        />
+    </Container>
+);
+
+export const OneLineSuperChatMessageWithoutAuthorDisplay: React.FC = () => (
+    <Container>
+        <TwoLinesMessage
+            chatItem={superChatItem}
+            messageSettings={{
+                ...messageSettings,
+                numberOfLines: 1,
+                authorDisplay: 'none',
+            }}
+        />
+    </Container>
+);
+
+export const TwoLinesMembershipMessageWithoutAuthorDisplay: React.FC = () => (
+    <Container>
+        <TwoLinesMessage
+            chatItem={membershipItem}
+            messageSettings={{
+                ...messageSettings,
+                authorDisplay: 'none',
+            }}
+        />
+    </Container>
+);
+
+export const OneLineMembershipMessageWithoutAuthorDisplay: React.FC = () => (
+    <Container>
+        <TwoLinesMessage
+            chatItem={membershipItem}
+            messageSettings={{
+                ...messageSettings,
+                numberOfLines: 1,
+                authorDisplay: 'none',
+            }}
+        />
+    </Container>
+);
+
+export const TwoLinesNormalMessageWithoutAuthorDisplay: React.FC = () => (
+    <Container>
+        <TwoLinesMessage
+            chatItem={normalMessageItem}
+            messageSettings={{
+                ...messageSettings,
+                authorDisplay: 'none',
+            }}
+        />
+    </Container>
+);
+
+export const OneLineNormalMessageWithoutAuthorDisplay: React.FC = () => (
+    <Container>
+        <TwoLinesMessage
+            chatItem={normalMessageItem}
+            messageSettings={{
+                ...messageSettings,
+                numberOfLines: 1,
+                authorDisplay: 'none',
+            }}
+        />
+    </Container>
+);

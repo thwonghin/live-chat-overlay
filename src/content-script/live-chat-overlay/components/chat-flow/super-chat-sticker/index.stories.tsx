@@ -57,3 +57,28 @@ export const OneLineSuperChatSticker: React.FC = () => (
         />
     </Container>
 );
+
+export const TwoLinesSuperChatStickerWithoutAuthorDisplay: React.FC = () => (
+    <Container>
+        <SuperChatSticker
+            chatItem={superStickerItem}
+            messageSettings={{
+                ...messageSettings,
+                authorDisplay: 'none',
+            }}
+        />
+    </Container>
+);
+
+export const OneLineSuperChatStickerWithoutAuthorDisplay: React.FC = () => (
+    <Container>
+        <SuperChatSticker
+            chatItem={superStickerItem}
+            messageSettings={{
+                ...messageSettings,
+                numberOfLines: 1,
+                authorDisplay: 'none',
+            }}
+        />
+    </Container>
+);
