@@ -25,5 +25,6 @@ module.exports = {
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         'react/prop-types': 'off',
+        '@typescript-eslint/unbound-method': 'off',
     },
 };

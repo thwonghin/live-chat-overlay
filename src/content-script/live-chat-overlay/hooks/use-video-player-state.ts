@@ -15,7 +15,7 @@ export function useVideoPlayerState(): PlayerState {
     const handleStateChange = useCallback(() => {
         setIsSeeking(videoEle?.seeking ?? false);
         setIsPaused(videoEle?.paused ?? false);
-    }, [videoEle]);
+    }, [videoEle?.seeking, videoEle?.paused]);
 
     useEffect(() => {
         videoEle?.addEventListener('seeking', handleStateChange);
@@ -31,7 +31,12 @@ export function useVideoPlayerState(): PlayerState {
             videoEle?.removeEventListener('playing', handleStateChange);
             videoEle?.removeEventListener('seeked', handleStateChange);
         };
-    }, [videoEle, handleStateChange]);
+    }, [
+        videoEle,
+        videoEle?.addEventListener,
+        videoEle?.removeEventListener,
+        handleStateChange,
+    ]);
 
     return {
         isSeeking,
