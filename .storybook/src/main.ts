@@ -7,6 +7,7 @@ export default {
     webpackFinal: (config: any) => ({
         ...config,
         resolve: {
+            plugins: custom.resolve?.plugins,
             extensions: [
                 ...(config?.resolve?.extensions ?? []),
                 ...(custom.resolve?.extensions ?? []),
