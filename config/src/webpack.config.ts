@@ -5,6 +5,7 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { TypedCssModulesPlugin } from 'typed-css-modules-webpack-plugin';
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import postcssPresetEnv from 'postcss-preset-env';
 import cssNano from 'cssnano';
 import stylelint from 'stylelint';
@@ -12,6 +13,7 @@ import stylelint from 'stylelint';
 const rootDir = path.resolve(__dirname, '../..');
 const srcDir = path.resolve(rootDir, 'src');
 const distDir = path.resolve(rootDir, 'dist');
+const tsconfigPath = path.resolve(rootDir, 'tsconfig.json');
 
 type WebpackEnv = 'production' | 'development' | 'release' | 'storybook';
 
@@ -36,10 +38,11 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
         mode,
         stats: mode === 'production' ? 'errors-only' : 'normal',
         resolve: {
+            plugins: [new TsconfigPathsPlugin({ configFile: tsconfigPath })],
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
         },
         entry: {
-            'content-script': path.resolve(srcDir, 'content-script/index.ts'),
+            'content-script': path.resolve(srcDir, 'content-script.ts'),
         },
         output: {
             path: distDir,
@@ -86,16 +89,16 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
             ...(shouldSkipPreChecking
                 ? []
                 : [
-                      new TypedCssModulesPlugin({
-                          globPattern: 'src/**/*.scss',
-                      }),
-                      new ForkTsCheckerWebpackPlugin({
-                          tsconfig: path.resolve(rootDir, 'tsconfig.json'),
-                          async: false,
-                          useTypescriptIncrementalApi: true,
-                          eslint: true,
-                      }),
-                  ]),
+                    new TypedCssModulesPlugin({
+                        globPattern: 'src/**/*.scss',
+                    }),
+                    new ForkTsCheckerWebpackPlugin({
+                        tsconfig: tsconfigPath,
+                        async: false,
+                        useTypescriptIncrementalApi: true,
+                        eslint: true,
+                    }),
+                ]),
             new CopyWebpackPlugin([
                 {
                     from:
