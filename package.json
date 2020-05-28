@@ -11,7 +11,7 @@
     },
     "scripts": {
         "lint:fix": "eslint src --ext ts,tsx --quiet --fix && stylelint src/**/*.scss --fix",
-        "clean": "rm -rf dist .storybook/dist config/dist",
+        "clean": "rm -rf dist .storybook/dist config/dist config/tsconfig.tsbuildinfo",
         "build": "tsc -p config && webpack --config config/dist/webpack.config.js",
         "build:prod": "yarn build --env production",
         "build:release": "yarn build --env release",
