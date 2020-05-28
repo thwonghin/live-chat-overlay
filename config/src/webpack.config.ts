@@ -89,26 +89,28 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
             ...(shouldSkipPreChecking
                 ? []
                 : [
-                    new TypedCssModulesPlugin({
-                        globPattern: 'src/**/*.scss',
-                    }),
-                    new ForkTsCheckerWebpackPlugin({
-                        tsconfig: tsconfigPath,
-                        async: false,
-                        useTypescriptIncrementalApi: true,
-                        eslint: true,
-                    }),
-                ]),
-            new CopyWebpackPlugin([
-                {
-                    from:
-                        'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
-                },
-                {
-                    from: 'public/*',
-                    flatten: true,
-                },
-            ]),
+                      new TypedCssModulesPlugin({
+                          globPattern: 'src/**/*.scss',
+                      }),
+                      new ForkTsCheckerWebpackPlugin({
+                          tsconfig: tsconfigPath,
+                          async: false,
+                          useTypescriptIncrementalApi: true,
+                          eslint: true,
+                      }),
+                  ]),
+            new CopyWebpackPlugin({
+                patterns: [
+                    {
+                        from:
+                            'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
+                    },
+                    {
+                        from: 'public/*',
+                        flatten: true,
+                    },
+                ],
+            }),
             new MiniCssExtractPlugin({
                 filename: '[name].css',
             }),
