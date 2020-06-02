@@ -1,8 +1,10 @@
 import React from 'react';
 import { getLiveChatEle } from '@/youtube-dom-utils';
-import { ChatEventDomObserver } from '@/services/chat-event';
+import { ChatEventDomObserver } from '@/services/chat-event/dom-observer';
 
-export const ChatEventObserverContext = React.createContext<ChatEventDomObserver>(
+export const ChatEventObserverContext = React.createContext<
+    ChatEventDomObserver
+>(
     new ChatEventDomObserver({
         containerEle: getLiveChatEle()!,
     }),
