@@ -14,7 +14,7 @@ const observerConfig: MutationObserverInit = {
     childList: true,
 };
 
-export class ChatEventObserver {
+export class ChatEventDomObserver {
     private containerEle: HTMLElement;
 
     private observer: MutationObserver;

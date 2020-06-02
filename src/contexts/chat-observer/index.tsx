@@ -1,9 +1,9 @@
 import React from 'react';
 import { getLiveChatEle } from '@/youtube-dom-utils';
-import { ChatEventObserver } from '@/services/chat-event';
+import { ChatEventDomObserver } from '@/services/chat-event';
 
-export const ChatEventObserverContext = React.createContext<ChatEventObserver>(
-    new ChatEventObserver({
+export const ChatEventObserverContext = React.createContext<ChatEventDomObserver>(
+    new ChatEventDomObserver({
         containerEle: getLiveChatEle()!,
     }),
 );
@@ -18,7 +18,7 @@ const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
         throw new Error('Live chat ele not found');
     }
 
-    const observer = new ChatEventObserver({
+    const observer = new ChatEventDomObserver({
         containerEle: liveChatEle,
     });
 
