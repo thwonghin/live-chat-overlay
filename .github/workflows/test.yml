@@ -25,6 +25,9 @@ jobs:
       - name: Check Dependency Vulnerabilities
         run: |
           yarn audit
+      - name: Lint & Test
+        run: |
+          yarn lint:test && yarn test:unit --ci
       - name: Build
         run: |
           yarn build:prod
