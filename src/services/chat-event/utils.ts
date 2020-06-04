@@ -36,18 +36,14 @@ function getNormalChatItemFromEle(element: HTMLElement): NormalChatItem {
     const { id } = element;
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const authorType = element.getAttribute('author-type') || 'guest';
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const message = element.querySelector('#message')?.innerHTML!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const avatarUrl = element
-        .querySelector('#author-photo > img')
-        ?.getAttribute('src')!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const timestamp = element.querySelector('#timestamp')?.textContent!;
+    const message = element.querySelector('#message')?.innerHTML ?? '';
+    const avatarUrl =
+        element.querySelector('#author-photo > img')?.getAttribute('src') ?? '';
+    const timestamp = element.querySelector('#timestamp')?.textContent ?? '';
 
     const authorChip = element.querySelector('yt-live-chat-author-chip');
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const authorName = authorChip?.querySelector('#author-name')?.textContent!;
+    const authorName =
+        authorChip?.querySelector('#author-name')?.textContent ?? '';
     const authorBadge =
         authorChip
             ?.querySelector(
@@ -70,18 +66,13 @@ function getNormalChatItemFromEle(element: HTMLElement): NormalChatItem {
 function getSuperChatItemFromEle(element: HTMLElement): SuperChatItem {
     const { id } = element;
     const message = element.querySelector('#message')?.innerHTML ?? undefined;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const avatarUrl = element
-        .querySelector('#author-photo > img')
-        ?.getAttribute('src')!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const timestamp = element.querySelector('#timestamp')?.textContent!;
+    const avatarUrl =
+        element.querySelector('#author-photo > img')?.getAttribute('src') ?? '';
+    const timestamp = element.querySelector('#timestamp')?.textContent ?? '';
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const authorName = element.querySelector('#author-name')?.textContent!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const donationAmount = element.querySelector('#purchase-amount')
-        ?.innerHTML!;
+    const authorName = element.querySelector('#author-name')?.textContent ?? '';
+    const donationAmount =
+        element.querySelector('#purchase-amount')?.innerHTML ?? '';
     const color = getComputedStyle(element).getPropertyValue(
         '--yt-live-chat-paid-message-primary-color',
     );
@@ -104,18 +95,13 @@ function getSuperStickerItemFromEle(element: HTMLElement): SuperStickerItem {
     const message = sticker?.getAttribute('alt') ?? undefined;
     const stickerUrl = sticker?.getAttribute('src') ?? '';
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const avatarUrl = element
-        .querySelector('#author-photo > img')
-        ?.getAttribute('src')!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const timestamp = element.querySelector('#timestamp')?.textContent!;
+    const avatarUrl =
+        element.querySelector('#author-photo > img')?.getAttribute('src') ?? '';
+    const timestamp = element.querySelector('#timestamp')?.textContent ?? '';
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const authorName = element.querySelector('#author-name')?.textContent!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const donationAmount = element.querySelector('#purchase-amount-chip')
-        ?.innerHTML!;
+    const authorName = element.querySelector('#author-name')?.textContent ?? '';
+    const donationAmount =
+        element.querySelector('#purchase-amount-chip')?.innerHTML ?? '';
     const color = getComputedStyle(element).getPropertyValue(
         '--yt-live-chat-paid-sticker-background-color',
     );
@@ -135,18 +121,14 @@ function getSuperStickerItemFromEle(element: HTMLElement): SuperStickerItem {
 
 function getMembershipItemFromEle(element: HTMLElement): MembershipItem {
     const { id } = element;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const message = element.querySelector('#header-subtext')?.innerHTML!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const avatarUrl = element
-        .querySelector('#author-photo > img')
-        ?.getAttribute('src')!;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const timestamp = element.querySelector('#timestamp')?.textContent!;
+    const message = element.querySelector('#header-subtext')?.innerHTML ?? '';
+    const avatarUrl =
+        element.querySelector('#author-photo > img')?.getAttribute('src') ?? '';
+    const timestamp = element.querySelector('#timestamp')?.textContent ?? '';
 
     const authorChip = element.querySelector('yt-live-chat-author-chip');
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const authorName = authorChip?.querySelector('#author-name')?.textContent!;
+    const authorName =
+        authorChip?.querySelector('#author-name')?.textContent ?? '';
     const authorBadge =
         authorChip
             ?.querySelector('yt-live-chat-author-badge-renderer img')

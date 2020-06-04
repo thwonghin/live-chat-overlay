@@ -26,5 +26,11 @@ module.exports = {
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         'react/prop-types': 'off',
         '@typescript-eslint/unbound-method': 'off',
+        '@typescript-eslint/no-misused-promises': [
+            'error',
+            {
+                checksVoidReturn: false,
+            },
+        ],
     },
 };
