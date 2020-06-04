@@ -1,3 +1,8 @@
+export interface CustomEventDetail {
+    response: string;
+    url: string;
+}
+
 function initInterceptor(extensionId: string): void {
     const originalSend = window.XMLHttpRequest.prototype.send;
     const XHR_READY_STATE_DONE = 4;
@@ -7,15 +12,18 @@ function initInterceptor(extensionId: string): void {
 
         this.addEventListener(
             'readystatechange',
-            function onReadyStateChange() {
+            function onReadyStateChange(): void {
                 if (this.readyState !== XHR_READY_STATE_DONE) {
                     return;
                 }
 
-                const event = new CustomEvent<Response>(
+                const event = new CustomEvent<CustomEventDetail>(
                     `${extensionId}_chat_message`,
                     {
-                        detail: this.response,
+                        detail: {
+                            response: this.response as string,
+                            url: this.responseURL,
+                        },
                     },
                 );
 
