@@ -14,6 +14,4 @@ async function init(): Promise<void> {
     window.addEventListener('unload', cleanup);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    init();
-});
+document.addEventListener('DOMContentLoaded', init);
