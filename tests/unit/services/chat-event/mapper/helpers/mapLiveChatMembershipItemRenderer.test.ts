@@ -111,7 +111,7 @@ function getFixture(): LiveChatMembershipItemRenderer {
     };
 }
 
-describe('mapLiveChatTextMessageRenderer', () => {
+describe('mapLiveChatMembershipItemRenderer', () => {
     it('should map member type chat correctly', () => {
         const result = mapLiveChatMembershipItemRenderer(getFixture());
 

@@ -194,10 +194,35 @@ export interface LiveChatMembershipItemRenderer {
     contextMenuAccessibility: ContextMenuAccessibility;
 }
 
+export interface Sticker {
+    thumbnails: Thumbnail[];
+    accessibility: Accessibility;
+}
+
+export interface LiveChatPaidStickerRenderer {
+    id: string;
+    contextMenuEndpoint: ContextMenuEndpoint;
+    contextMenuAccessibility: ContextMenuAccessibility;
+    timestampUsec: string;
+    authorPhoto: AuthorPhoto;
+    authorName: AuthorName;
+    authorExternalChannelId: string;
+    timestampText: TimestampText;
+    sticker: Sticker;
+    moneyChipBackgroundColor: number;
+    moneyChipTextColor: number;
+    purchaseAmountText: PurchaseAmountText;
+    stickerDisplayWidth: number;
+    stickerDisplayHeight: number;
+    backgroundColor: number;
+    authorNameTextColor: number;
+}
+
 export interface Item {
     liveChatTextMessageRenderer?: LiveChatTextMessageRenderer;
     liveChatPaidMessageRenderer?: LiveChatPaidMessageRenderer;
     liveChatMembershipItemRenderer?: LiveChatMembershipItemRenderer;
+    liveChatPaidStickerRenderer?: LiveChatPaidStickerRenderer;
 }
 
 export interface AddChatItemAction {

@@ -5,6 +5,7 @@ import {
     SuperChatItem,
     NormalChatItem,
     MembershipItem,
+    SuperStickerItem,
 } from '@/services/chat-event/models-new';
 import { AddChatItemAction } from '@/services/chat-event/live-chat-response';
 
@@ -49,7 +50,91 @@ const membershipItem: MembershipItem = {
     chatType: 'membership',
 };
 
+const superStickerItem: SuperStickerItem = {
+    id: 'super-chat-sticker',
+    stickers: [],
+    avatars,
+    timestampInUs: 1591425506771,
+    donationAmount: 'HK$ 100.00',
+    authorName,
+    color: 'red',
+    chatType: 'super-sticker',
+};
+
 const sampleActions: AddChatItemAction[] = [
+    {
+        clientId: 'client-id',
+        item: {
+            liveChatPaidStickerRenderer: {
+                id: 'random-id',
+                timestampUsec: '1591023793124462',
+                authorName: {
+                    simpleText: 'Sample Author',
+                },
+                authorPhoto: {
+                    thumbnails: [
+                        {
+                            url: 'https://sample-author-avatar/small.jpg',
+                            width: 32,
+                            height: 32,
+                        },
+                        {
+                            url: 'https://sample-author-avatar/large.jpg',
+                            width: 64,
+                            height: 64,
+                        },
+                    ],
+                },
+                sticker: {
+                    thumbnails: [
+                        {
+                            url: 'https://sample-sticker/small.jpg',
+                            width: 32,
+                            height: 32,
+                        },
+                        {
+                            url: 'https://sample-sticker/large.jpg',
+                            width: 64,
+                            height: 64,
+                        },
+                    ],
+                    accessibility: {
+                        accessibilityData: {
+                            label: 'sticker label',
+                        },
+                    },
+                },
+                moneyChipBackgroundColor: 4291821568,
+                moneyChipTextColor: 4291821568,
+                stickerDisplayHeight: 200,
+                stickerDisplayWidth: 200,
+                purchaseAmountText: {
+                    simpleText: 'HK$1,500.00',
+                },
+                backgroundColor: 4291821568,
+                authorExternalChannelId: 'channel-id',
+                authorNameTextColor: 3019898879,
+                contextMenuEndpoint: {
+                    commandMetadata: {
+                        webCommandMetadata: {
+                            ignoreNavigation: true,
+                        },
+                    },
+                    liveChatItemContextMenuEndpoint: {
+                        params: 'some-endpoint',
+                    },
+                },
+                contextMenuAccessibility: {
+                    accessibilityData: {
+                        label: 'More option on comment',
+                    },
+                },
+                timestampText: {
+                    simpleText: '0:40',
+                },
+            },
+        },
+    },
     {
         clientId: 'client-id',
     },
@@ -388,11 +473,16 @@ describe('mapAddChatItemActions', () => {
             normalMessageItem,
         );
 
+        jest.spyOn(helpers, 'mapLiveChatPaidStickerRenderer').mockReturnValue(
+            superStickerItem,
+        );
+
         result = mapAddChatItemActions(sampleActions, 10000);
     });
 
     it('should return correct result', () => {
         expect(result).toEqual([
+            superStickerItem,
             superChatItem,
             membershipItem,
             normalMessageItem,
@@ -400,18 +490,23 @@ describe('mapAddChatItemActions', () => {
     });
 
     it('should call mapper with correct params', () => {
+        expect(helpers.mapLiveChatPaidStickerRenderer).toHaveBeenCalledWith(
+            sampleActions[0].item?.liveChatPaidStickerRenderer ?? {},
+            10000,
+        );
+
         expect(helpers.mapLiveChatPaidMessageItemRenderer).toHaveBeenCalledWith(
-            sampleActions[1].item?.liveChatPaidMessageRenderer,
+            sampleActions[2].item?.liveChatPaidMessageRenderer ?? {},
             10000,
         );
 
         expect(helpers.mapLiveChatMembershipItemRenderer).toHaveBeenCalledWith(
-            sampleActions[2].item?.liveChatMembershipItemRenderer,
+            sampleActions[3].item?.liveChatMembershipItemRenderer ?? {},
             10000,
         );
 
         expect(helpers.mapLiveChatTextMessageRenderer).toHaveBeenCalledWith(
-            sampleActions[3].item?.liveChatTextMessageRenderer,
+            sampleActions[4].item?.liveChatTextMessageRenderer ?? {},
             10000,
         );
     });

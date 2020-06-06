@@ -15,13 +15,18 @@ const avatars = [
     },
 ];
 const authorName = 'Author Name';
-const stickerUrl = 'https://placekitten.com/200/200';
+const stickers = [
+    {
+        url: 'https://placekitten.com/200/200',
+        height: 200,
+        width: 200,
+    },
+];
 
 const superStickerItem: SuperStickerItem = {
     id: 'super-chat-sticker',
-    messageParts: [{ text: 'This is a test message' }],
+    stickers,
     avatars,
-    stickerUrl,
     timestampInUs: 1591425506771,
     donationAmount: 'HK$ 100.00',
     authorName,

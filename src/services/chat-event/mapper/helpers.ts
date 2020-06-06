@@ -113,6 +113,23 @@ export function mapLiveChatPaidMessageItemRenderer(
     };
 }
 
+export function mapLiveChatPaidStickerRenderer(
+    renderer: liveChatResponse.LiveChatPaidStickerRenderer,
+    videoTimestampInMs?: number,
+): chatModel.SuperStickerItem {
+    return {
+        id: renderer.id,
+        avatars: renderer.authorPhoto.thumbnails,
+        timestampInUs: Number(renderer.timestampUsec),
+        videoTimestampInMs,
+        authorName: renderer.authorName.simpleText,
+        chatType: 'super-sticker',
+        donationAmount: renderer.purchaseAmountText.simpleText,
+        color: colorFromDecimal(renderer.backgroundColor),
+        stickers: renderer.sticker.thumbnails,
+    };
+}
+
 export function mapLiveChatTextMessageRenderer(
     renderer: liveChatResponse.LiveChatTextMessageRenderer,
     videoTimestampInMs?: number,

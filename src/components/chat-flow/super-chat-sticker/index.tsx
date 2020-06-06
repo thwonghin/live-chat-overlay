@@ -12,7 +12,7 @@ interface Props {
 }
 
 const SuperChatSticker: React.FC<Props> = ({ chatItem, messageSettings }) => {
-    // const imageSize = `${0.8 * messageSettings.numberOfLines}em`;
+    const imageSize = `${0.8 * messageSettings.numberOfLines}em`;
 
     return (
         <div
@@ -34,13 +34,13 @@ const SuperChatSticker: React.FC<Props> = ({ chatItem, messageSettings }) => {
                 authorDisplaySetting={messageSettings.authorDisplay}
             />
             <span className={classes.message}>
-                {/* <img
-                    src={chatItem.stickerUrl}
+                <img
+                    src={chatItem.stickers[0].url}
                     style={{
                         width: imageSize,
                         height: imageSize,
                     }}
-                /> */}
+                />
             </span>
         </div>
     );

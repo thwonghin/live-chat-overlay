@@ -7,7 +7,6 @@ interface Props {
 
 const EmojiPartRenderer: React.FC<Props> = ({ emojiPart }) => {
     return (
-        // eslint-disable-next-line jsx-a11y/alt-text
         <img
             src={emojiPart.thumbnails[0].url}
             height={emojiPart.thumbnails[0].height}

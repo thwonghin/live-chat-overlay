@@ -37,8 +37,11 @@ export type SuperChatItem = Omit<
     chatType: 'super-chat';
 };
 
-export type SuperStickerItem = Omit<SuperChatItem, 'chatType'> & {
-    stickerUrl: string;
+export type SuperStickerItem = Omit<
+    SuperChatItem,
+    'chatType' | 'messageParts'
+> & {
+    stickers: Thumbnail[];
     chatType: 'super-sticker';
 };
 
