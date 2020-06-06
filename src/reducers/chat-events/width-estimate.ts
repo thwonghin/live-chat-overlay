@@ -1,20 +1,30 @@
-import { ChatItem, SuperStickerItem } from '@/services/chat-event/models';
+import { sum } from 'lodash-es';
+import {
+    ChatItem,
+    SuperStickerItem,
+    MessagePart,
+} from '@/services/chat-event/models-new';
 import {
     isSuperChatItem,
     isSuperStickerItem,
-} from '@/services/chat-event/utils';
+    isTextMessagePart,
+    isEmojiMessagePart,
+} from '@/services/chat-event/mapper';
 import { MessageSettings } from '@/services/settings/types';
+import { assertNever } from '@/utils';
 
-function estimateHtmlWidth(html: string): number {
-    const ele = document.createElement('div');
-    ele.innerHTML = html;
-
-    const text = ele.textContent;
-    const nodes = ele.childNodes;
-
-    const numberOfImgNodes = text ? nodes.length - 1 : nodes.length;
-
-    return (text ?? '').length + numberOfImgNodes;
+function estimateMessagePartsWidth(msgParts: MessagePart[]): number {
+    return sum(
+        msgParts.map((part) => {
+            if (isTextMessagePart(part)) {
+                return part.text.length;
+            }
+            if (isEmojiMessagePart(part)) {
+                return 1;
+            }
+            return assertNever(part);
+        }),
+    );
 }
 
 function estimateAuthorChipWidth(
@@ -57,7 +67,7 @@ function estimateTwoLinesItemWidth(
     const authorWidth = estimateAuthorChipWidth(chatItem, messageSettings);
     const authorMargin = authorWidth === 0 ? 0 : 1;
 
-    const messageWidth = estimateHtmlWidth(chatItem.message ?? '');
+    const messageWidth = estimateMessagePartsWidth(chatItem.messageParts);
 
     if (messageSettings.numberOfLines === 2) {
         // Author and Message is shown in two different lines

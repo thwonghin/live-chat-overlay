@@ -16,7 +16,6 @@ function initInterceptor(extensionId: string): void {
                 if (this.readyState !== XHR_READY_STATE_DONE) {
                     return;
                 }
-
                 const event = new CustomEvent<CustomEventDetail>(
                     `${extensionId}_chat_message`,
                     {

@@ -4,11 +4,15 @@ import {
     NormalChatItem,
     MembershipItem,
     SuperChatItem,
-} from '@/services/chat-event/models';
-import { isNormalChatItem, isSuperChatItem } from '@/services/chat-event/utils';
+} from '@/services/chat-event/models-new';
+import {
+    isNormalChatItem,
+    isSuperChatItem,
+} from '@/services/chat-event/mapper';
 import { MessageSettings } from '@/services/settings/types';
 import classes from './index.scss';
 
+import MessagePartsRenderer from '../message-parts-renderer';
 import AuthorChip from '../author-chip';
 
 interface Props {
@@ -17,9 +21,8 @@ interface Props {
 }
 
 const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
-    const actualNumberOfLines = chatItem.message
-        ? messageSettings.numberOfLines
-        : 1;
+    const actualNumberOfLines =
+        chatItem.messageParts.length > 0 ? messageSettings.numberOfLines : 1;
 
     const flexDirection = actualNumberOfLines === 2 ? 'column' : 'row';
 
@@ -49,18 +52,15 @@ const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
             }}
         >
             <AuthorChip
-                avatarUrl={chatItem.avatarUrl}
+                avatars={chatItem.avatars}
                 name={chatItem.authorName}
                 donationAmount={donationAmount}
                 authorDisplaySetting={messageSettings.authorDisplay}
             />
-            {!!chatItem.message && (
-                <span
-                    className={classes.message}
-                    // eslint-disable-next-line react/no-danger
-                    dangerouslySetInnerHTML={{ __html: chatItem.message }}
-                />
-            )}
+            <MessagePartsRenderer
+                className={classes.message}
+                messageParts={chatItem.messageParts}
+            />
         </div>
     );
 };

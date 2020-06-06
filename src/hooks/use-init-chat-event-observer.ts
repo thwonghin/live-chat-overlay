@@ -15,6 +15,6 @@ export function useInitChatEventObserver(): void {
 
         chatEventObserver.start();
 
-        return (): void => chatEventObserver.cleanup();
+        // return (): void => chatEventObserver.cleanup();
     }, [dispatch, chatEventObserver]);
 }

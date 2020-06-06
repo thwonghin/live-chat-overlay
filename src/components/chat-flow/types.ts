@@ -1,4 +1,4 @@
-import { ChatItem } from '@/services/chat-event/models';
+import { ChatItem } from '@/services/chat-event/models-new';
 
 interface Position {
     lineNumber: number;
@@ -11,3 +11,9 @@ export type UiChatItem = ChatItem & {
     estimatedMsgWidth: number;
     numberOfLines: number;
 };
+
+export interface Thumbnail {
+    url: string;
+    width: number;
+    height: number;
+}

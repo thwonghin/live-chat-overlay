@@ -127,7 +127,7 @@ export interface LiveChatTextMessageRenderer {
     authorBadges?: AuthorBadge[];
     authorExternalChannelId: string;
     contextMenuAccessibility: ContextMenuAccessibility;
-    timestampText: TimestampText;
+    timestampText?: TimestampText;
 }
 
 interface Thumbnail4 {
@@ -188,13 +188,13 @@ interface LiveChatPaidMessageRenderer {
     timestampText: TimestampText2;
 }
 
-interface Item {
+export interface Item {
     liveChatTextMessageRenderer: LiveChatTextMessageRenderer;
     liveChatPaidMessageRenderer: LiveChatPaidMessageRenderer;
 }
 
 interface AddChatItemAction {
-    item: Item;
+    item?: Item;
     clientId: string;
 }
 
@@ -309,24 +309,49 @@ interface AddLiveChatTickerItemAction {
     durationSec: string;
 }
 
-interface Action {
-    addChatItemAction: AddChatItemAction;
+export interface Action {
+    addChatItemAction?: AddChatItemAction;
     addLiveChatTickerItemAction: AddLiveChatTickerItemAction;
 }
 
-interface LiveChatContinuation {
+export interface ReplayAction {
+    replayChatItemAction?: {
+        actions: Action[];
+    };
+}
+
+interface LiveLiveChatContinuation {
     continuations: Continuation[];
     actions: Action[];
 }
 
-interface ContinuationContents {
-    liveChatContinuation: LiveChatContinuation;
+interface ReplayLiveChatContinuation {
+    continuations: Continuation[];
+    actions: ReplayAction[];
 }
 
-interface Response {
-    continuationContents: ContinuationContents;
+interface LiveContinuationContents {
+    liveChatContinuation: LiveLiveChatContinuation;
 }
 
-export interface RootObject {
-    response: Response;
+interface ReplayContinuationContents {
+    liveChatContinuation: ReplayLiveChatContinuation;
 }
+
+interface LiveResponse {
+    continuationContents: LiveContinuationContents;
+}
+
+interface ReplayResponse {
+    continuationContents: ReplayContinuationContents;
+}
+
+export interface LiveRootObject {
+    response: LiveResponse;
+}
+
+export interface ReplayRootObject {
+    response: ReplayResponse;
+}
+
+export type RootObject = LiveRootObject | ReplayRootObject;

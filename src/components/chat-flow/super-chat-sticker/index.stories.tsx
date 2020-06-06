@@ -1,20 +1,27 @@
 import React from 'react';
 
-import { SuperStickerItem } from '@/services/chat-event/models';
+import { SuperStickerItem } from '@/services/chat-event/models-new';
 import { MessageSettings } from '@/services/settings/types';
 
 import SuperChatSticker from '.';
 
 export default { title: 'SuperChatSticker' };
 
-const avatarUrl = 'https://placekitten.com/50/50';
+const avatars = [
+    {
+        url: 'https://placekitten.com/50/50',
+        height: 50,
+        width: 50,
+    },
+];
 const authorName = 'Author Name';
 const stickerUrl = 'https://placekitten.com/200/200';
 
 const superStickerItem: SuperStickerItem = {
     id: 'super-chat-sticker',
-    message: 'This is a test message',
-    avatarUrl,
+    authorBadges: [],
+    messageParts: [{ text: 'This is a test message' }],
+    avatars,
     stickerUrl,
     timestamp: '12:00 PM',
     donationAmount: 'HK$ 100.00',

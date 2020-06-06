@@ -10,7 +10,7 @@ import {
     isSuperStickerItem,
     isMembershipItem,
     getMessageSettings,
-} from '@/services/chat-event/utils';
+} from '@/services/chat-event/mapper';
 import { Settings } from '@/services/settings/types';
 
 import classes from './index.scss';

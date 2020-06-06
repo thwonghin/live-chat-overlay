@@ -25,6 +25,28 @@ export function isLiveStream(): boolean {
     return !!getLiveChatEle();
 }
 
+export async function waitForPlayerReady(): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (getVideoPlayerEle()) {
+            resolve();
+            return;
+        }
+
+        let retryTimeInMs = 0;
+        const interval = setInterval(() => {
+            if (getVideoPlayerEle()) {
+                resolve();
+                clearInterval(interval);
+            } else {
+                retryTimeInMs += 100;
+                if (retryTimeInMs >= 600000) {
+                    reject(new Error('Player not found.'));
+                }
+            }
+        }, 100);
+    });
+}
+
 export async function waitForChatReady(): Promise<void> {
     return new Promise((resolve, reject) => {
         if (isLiveStream()) {
@@ -51,7 +73,7 @@ export async function waitForChatReady(): Promise<void> {
                 reject(new Error('Chat not found.'));
                 observer.disconnect();
             }
-        }, 60000);
+        }, 600000);
     });
 }
 

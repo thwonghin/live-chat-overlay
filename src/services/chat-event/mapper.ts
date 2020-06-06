@@ -1,4 +1,5 @@
 import { assertNever } from '@/utils';
+import { Settings, MessageSettings } from '@/services/settings/types';
 import * as liveChatResponse from './live-chat-response';
 import * as chatModel from './models-new';
 
@@ -72,7 +73,7 @@ export function mapLiveChatTextMessageRenderer(
         id: renderer.id,
         messageParts: renderer.message.runs.map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
-        timestamp: renderer.timestampText.simpleText,
+        timestamp: renderer.timestampUsec,
         authorName: renderer.authorName.simpleText,
         authorType: getAuthorTypeFromBadges(renderer.authorBadges),
         chatType: 'normal',
@@ -89,4 +90,67 @@ export function mapLiveChatTextMessageRenderer(
                   .flat()
             : [],
     };
+}
+
+export function mapActions(
+    actions: liveChatResponse.Action[],
+): chatModel.NormalChatItem[] {
+    return actions
+        .map((v) => v.addChatItemAction?.item?.liveChatTextMessageRenderer)
+        .flat()
+        .filter((v): v is NonNullable<typeof v> => !!v)
+        .map(mapLiveChatTextMessageRenderer);
+}
+
+export function isNormalChatItem(
+    chatItem: chatModel.ChatItem,
+): chatItem is chatModel.NormalChatItem {
+    return chatItem.chatType === 'normal';
+}
+
+export function isSuperChatItem(
+    chatItem: chatModel.ChatItem,
+): chatItem is chatModel.SuperChatItem {
+    return chatItem.chatType === 'super-chat';
+}
+
+export function isSuperStickerItem(
+    chatItem: chatModel.ChatItem,
+): chatItem is chatModel.SuperStickerItem {
+    return chatItem.chatType === 'super-sticker';
+}
+
+export function isMembershipItem(
+    chatItem: chatModel.ChatItem,
+): chatItem is chatModel.MembershipItem {
+    return chatItem.chatType === 'membership';
+}
+
+export function getMessageSettings(
+    chatItem: chatModel.ChatItem,
+    settings: Settings,
+): MessageSettings {
+    const { messageSettings } = settings;
+    if (isNormalChatItem(chatItem)) {
+        return messageSettings[chatItem.authorType];
+    }
+    if (isMembershipItem(chatItem)) {
+        return messageSettings.membership;
+    }
+    if (isSuperChatItem(chatItem) || isSuperStickerItem(chatItem)) {
+        return messageSettings['super-chat'];
+    }
+    throw new Error('Unknow chat item');
+}
+
+export function isTextMessagePart(
+    part: chatModel.MessagePart,
+): part is chatModel.TextPart {
+    return 'text' in part;
+}
+
+export function isEmojiMessagePart(
+    part: chatModel.MessagePart,
+): part is chatModel.EmojiPart {
+    return 'shortcuts' in part;
 }

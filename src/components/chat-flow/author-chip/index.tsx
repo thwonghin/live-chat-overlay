@@ -1,18 +1,19 @@
 import React from 'react';
 import cn from 'classnames';
 
+import { Thumbnail } from '@/services/chat-event/models-new';
 import { MessageSettings } from '@/services/settings/types';
 import classes from './index.scss';
 
 interface Props {
-    avatarUrl: string;
+    avatars: Thumbnail[];
     name: string;
     authorDisplaySetting: MessageSettings['authorDisplay'];
     donationAmount?: string;
 }
 
 const AuthorChip: React.FC<Props> = ({
-    avatarUrl,
+    avatars,
     name,
     authorDisplaySetting,
     donationAmount,
@@ -34,7 +35,9 @@ const AuthorChip: React.FC<Props> = ({
                     className={cn(classes['author-avator'], {
                         [classes.mr]: isNameShown || !!donationAmount,
                     })}
-                    src={avatarUrl}
+                    src={avatars[0].url}
+                    width={avatars[0].width}
+                    height={avatars[0].height}
                     alt={name}
                 />
             )}

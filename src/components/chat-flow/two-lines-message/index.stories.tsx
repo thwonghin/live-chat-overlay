@@ -4,19 +4,26 @@ import {
     SuperChatItem,
     MembershipItem,
     NormalChatItem,
-} from '@/services/chat-event/models';
+} from '@/services/chat-event/models-new';
 import { MessageSettings } from '@/services/settings/types';
 import TwoLinesMessage from '.';
 
 export default { title: 'TwoLinesMessage' };
 
-const avatarUrl = 'https://placekitten.com/50/50';
+const avatars = [
+    {
+        url: 'https://placekitten.com/50/50',
+        height: 50,
+        width: 50,
+    },
+];
 const authorName = 'Author Name';
 
 const superChatItem: SuperChatItem = {
     id: 'super-chat-message',
-    message: 'This is a super chat message',
-    avatarUrl,
+    authorBadges: [],
+    messageParts: [{ text: 'This is a super chat message' }],
+    avatars,
     timestamp: '12:00 PM',
     donationAmount: 'HK$ 100.00',
     authorName,
@@ -26,8 +33,9 @@ const superChatItem: SuperChatItem = {
 
 const membershipItem: MembershipItem = {
     id: 'membership',
-    message: 'Someone becomes a member.',
-    avatarUrl,
+    authorBadges: [],
+    messageParts: [{ text: 'Someone becomes a member.' }],
+    avatars,
     timestamp: '12:00 PM',
     authorName,
     color: 'green',
@@ -36,8 +44,9 @@ const membershipItem: MembershipItem = {
 
 const normalMessageItem: NormalChatItem = {
     id: 'super-chat-sticker',
-    message: 'This is a normal message',
-    avatarUrl,
+    authorBadges: [],
+    messageParts: [{ text: 'This is a normal message' }],
+    avatars,
     timestamp: '12:00 PM',
     authorName,
     chatType: 'normal',

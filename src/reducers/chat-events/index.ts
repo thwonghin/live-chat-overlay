@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { settingsStorage } from '@/services/settings';
-import { ChatItem } from '@/services/chat-event/models';
+import { ChatItem } from '@/services/chat-event/models-new';
 import {
     getMessageSettings,
     isSuperChatItem,
-} from '@/services/chat-event/utils';
+} from '@/services/chat-event/mapper';
 import { getVideoPlayerEle } from '@/youtube-dom-utils';
 import { UiChatItem } from '@/components/chat-flow/types';
 
@@ -54,7 +54,8 @@ const chatEventsSlice = createSlice({
             }
 
             const actualNumberOfLines =
-                isSuperChatItem(action.payload) && !action.payload.message
+                isSuperChatItem(action.payload) &&
+                action.payload.messageParts.length === 0
                     ? 1
                     : messageSettings.numberOfLines;
 
