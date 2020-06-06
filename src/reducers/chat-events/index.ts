@@ -5,8 +5,7 @@ import { ChatItem } from '@/services/chat-event/models';
 import {
     getMessageSettings,
     isSuperChatItem,
-} from '@/services/chat-event/utils';
-import { getVideoPlayerEle } from '@/youtube-dom-utils';
+} from '@/services/chat-event/mapper';
 import { UiChatItem } from '@/components/chat-flow/types';
 
 import { State } from './types';
@@ -23,19 +22,21 @@ const chatEventsSlice = createSlice({
     name: 'chat-events',
     initialState,
     reducers: {
-        addItem(state, action: PayloadAction<ChatItem>): State {
+        addItem(
+            state,
+            action: PayloadAction<{
+                chatItem: ChatItem;
+                playerRect: { width: number; height: number };
+            }>,
+        ): State {
+            const { chatItem, playerRect } = action.payload;
             const addTimestamp = Date.now();
             const settings = settingsStorage.get();
-            const messageSettings = getMessageSettings(
-                action.payload,
-                settings,
-            );
+            const messageSettings = getMessageSettings(chatItem, settings);
             const estimatedMsgWidth = estimateMsgWidth(
-                action.payload,
+                chatItem,
                 messageSettings,
             );
-            const playerEle = getVideoPlayerEle();
-            const rect = playerEle?.getBoundingClientRect();
             const position = getPosition({
                 state,
                 addTimestamp,
@@ -43,8 +44,8 @@ const chatEventsSlice = createSlice({
                 estimatedMsgWidth,
                 maxLineNumber: settings.numberOfLines,
                 flowTimeInSec: settings.flowTimeInSec,
-                containerWidth: rect?.width ?? 0,
-                lineHeight: (rect?.height ?? 0) / settings.numberOfLines,
+                containerWidth: playerRect.width,
+                lineHeight: playerRect.height / settings.numberOfLines,
             });
 
             // Ignore message if overflow
@@ -54,7 +55,7 @@ const chatEventsSlice = createSlice({
             }
 
             const actualNumberOfLines =
-                isSuperChatItem(action.payload) && !action.payload.message
+                isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
                     ? 1
                     : messageSettings.numberOfLines;
 
@@ -68,7 +69,7 @@ const chatEventsSlice = createSlice({
                     : serializedPosition;
 
             const uiChatItem: UiChatItem = {
-                ...action.payload,
+                ...chatItem,
                 numberOfLines: actualNumberOfLines,
                 addTimestamp,
                 estimatedMsgWidth,

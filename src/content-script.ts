@@ -1,17 +1,23 @@
 import './common';
 
 import { initLiveChat } from './app/live-chat-overlay';
-import { waitForChatReady } from './youtube-dom-utils';
+import { isInsideLiveChatFrame, waitForPlayerReady } from './youtube-utils';
+import { attachXhrInterceptor } from './services/xhr-interceptor';
 
 async function init(): Promise<void> {
-    await waitForChatReady();
+    const detechXhrInterceptor = attachXhrInterceptor();
+    await waitForPlayerReady();
+
     const cleanupLiveChat = initLiveChat();
 
     function cleanup(): void {
         cleanupLiveChat();
+        detechXhrInterceptor();
     }
 
     window.addEventListener('unload', cleanup);
 }
 
-document.addEventListener('DOMContentLoaded', init);
+if (isInsideLiveChatFrame()) {
+    document.addEventListener('DOMContentLoaded', init);
+}

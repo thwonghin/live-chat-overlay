@@ -7,16 +7,27 @@ import SuperChatSticker from '.';
 
 export default { title: 'SuperChatSticker' };
 
-const avatarUrl = 'https://placekitten.com/50/50';
+const avatars = [
+    {
+        url: 'https://placekitten.com/50/50',
+        height: 50,
+        width: 50,
+    },
+];
 const authorName = 'Author Name';
-const stickerUrl = 'https://placekitten.com/200/200';
+const stickers = [
+    {
+        url: 'https://placekitten.com/200/200',
+        height: 200,
+        width: 200,
+    },
+];
 
 const superStickerItem: SuperStickerItem = {
     id: 'super-chat-sticker',
-    message: 'This is a test message',
-    avatarUrl,
-    stickerUrl,
-    timestamp: '12:00 PM',
+    stickers,
+    avatars,
+    timestampInUs: 1591425506771,
     donationAmount: 'HK$ 100.00',
     authorName,
     color: 'red',

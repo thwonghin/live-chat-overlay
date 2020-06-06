@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-
-import { getVideoPlayerEle } from '@/youtube-dom-utils';
-import { useRect, RectResult } from './use-rect';
+import { useContext } from 'react';
+import { RectResult } from '@/hooks/use-rect';
+import { PlayerRectContext } from '@/contexts/player-rect';
 
 export function useVideoPlayerRect(): RectResult {
-    const playerRef = useMemo(() => ({ current: getVideoPlayerEle() }), []);
-    return useRect(playerRef);
+    const playerRect = useContext(PlayerRectContext);
+
+    return playerRect;
 }

@@ -96,7 +96,7 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
                       }),
                       new ForkTsCheckerWebpackPlugin({
                           tsconfig: tsconfigPath,
-                          async: false,
+                          async: true,
                           useTypescriptIncrementalApi: true,
                           eslint: true,
                       }),

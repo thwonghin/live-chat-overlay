@@ -1,26 +1,19 @@
 import React from 'react';
-import { getLiveChatEle } from '@/youtube-dom-utils';
-import { ChatEventObserver } from '@/services/chat-event';
+import { ChatEventResponseObserver } from '@/services/chat-event/response-observer';
+import { getVideoEle } from '@/youtube-utils';
 
-export const ChatEventObserverContext = React.createContext<ChatEventObserver>(
-    new ChatEventObserver({
-        containerEle: getLiveChatEle()!,
-    }),
-);
+export const ChatEventObserverContext = React.createContext<
+    ChatEventResponseObserver
+>(new ChatEventResponseObserver(() => 0));
 
 interface Props {
     children: React.ReactNode;
 }
 
 const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
-    const liveChatEle = getLiveChatEle();
-    if (!liveChatEle) {
-        throw new Error('Live chat ele not found');
-    }
-
-    const observer = new ChatEventObserver({
-        containerEle: liveChatEle,
-    });
+    const observer = new ChatEventResponseObserver(
+        () => getVideoEle()?.currentTime ?? 0,
+    );
 
     return (
         <ChatEventObserverContext.Provider value={observer}>

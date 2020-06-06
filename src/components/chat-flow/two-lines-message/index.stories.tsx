@@ -10,14 +10,20 @@ import TwoLinesMessage from '.';
 
 export default { title: 'TwoLinesMessage' };
 
-const avatarUrl = 'https://placekitten.com/50/50';
+const avatars = [
+    {
+        url: 'https://placekitten.com/50/50',
+        height: 50,
+        width: 50,
+    },
+];
 const authorName = 'Author Name';
 
 const superChatItem: SuperChatItem = {
     id: 'super-chat-message',
-    message: 'This is a super chat message',
-    avatarUrl,
-    timestamp: '12:00 PM',
+    messageParts: [{ text: 'This is a super chat message' }],
+    avatars,
+    timestampInUs: 1591425506771,
     donationAmount: 'HK$ 100.00',
     authorName,
     color: 'red',
@@ -26,19 +32,20 @@ const superChatItem: SuperChatItem = {
 
 const membershipItem: MembershipItem = {
     id: 'membership',
-    message: 'Someone becomes a member.',
-    avatarUrl,
-    timestamp: '12:00 PM',
+    authorBadges: [],
+    messageParts: [{ text: 'Someone becomes a member.' }],
+    avatars,
+    timestampInUs: 1591425506771,
     authorName,
-    color: 'green',
     chatType: 'membership',
 };
 
 const normalMessageItem: NormalChatItem = {
     id: 'super-chat-sticker',
-    message: 'This is a normal message',
-    avatarUrl,
-    timestamp: '12:00 PM',
+    authorBadges: [],
+    messageParts: [{ text: 'This is a normal message' }],
+    avatars,
+    timestampInUs: 1591425506771,
     authorName,
     chatType: 'normal',
     authorType: 'owner',

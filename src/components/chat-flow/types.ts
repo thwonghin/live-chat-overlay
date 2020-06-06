@@ -11,3 +11,9 @@ export type UiChatItem = ChatItem & {
     estimatedMsgWidth: number;
     numberOfLines: number;
 };
+
+export interface Thumbnail {
+    url: string;
+    width: number;
+    height: number;
+}

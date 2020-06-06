@@ -25,6 +25,28 @@ export function isLiveStream(): boolean {
     return !!getLiveChatEle();
 }
 
+export async function waitForPlayerReady(): Promise<void> {
+    return new Promise((resolve, reject) => {
+        if (getVideoPlayerEle()) {
+            resolve();
+            return;
+        }
+
+        let retryTimeInMs = 0;
+        const interval = setInterval(() => {
+            if (getVideoPlayerEle()) {
+                resolve();
+                clearInterval(interval);
+            } else {
+                retryTimeInMs += 100;
+                if (retryTimeInMs >= 600000) {
+                    reject(new Error('Player not found.'));
+                }
+            }
+        }, 100);
+    });
+}
+
 export async function waitForChatReady(): Promise<void> {
     return new Promise((resolve, reject) => {
         if (isLiveStream()) {
@@ -51,7 +73,7 @@ export async function waitForChatReady(): Promise<void> {
                 reject(new Error('Chat not found.'));
                 observer.disconnect();
             }
-        }, 60000);
+        }, 600000);
     });
 }
 
@@ -68,4 +90,8 @@ export function injectStyles(): void {
     link.href = path;
 
     window.parent.document.head.appendChild(link);
+}
+
+export function isInsideLiveChatFrame(): boolean {
+    return window.location.href.startsWith('https://www.youtube.com/live_chat');
 }

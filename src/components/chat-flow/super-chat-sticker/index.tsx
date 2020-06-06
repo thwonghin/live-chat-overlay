@@ -28,15 +28,14 @@ const SuperChatSticker: React.FC<Props> = ({ chatItem, messageSettings }) => {
             }}
         >
             <AuthorChip
-                avatarUrl={chatItem.avatarUrl}
+                avatars={chatItem.avatars}
                 name={chatItem.authorName}
                 donationAmount={chatItem.donationAmount}
                 authorDisplaySetting={messageSettings.authorDisplay}
             />
             <span className={classes.message}>
                 <img
-                    src={chatItem.stickerUrl}
-                    alt={chatItem.message}
+                    src={chatItem.stickers[0].url}
                     style={{
                         width: imageSize,
                         height: imageSize,

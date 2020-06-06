@@ -1,16 +1,17 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { RootState } from '@/reducers';
 import { chatEventsActions } from '@/reducers/chat-events';
 import { useSettings } from '@/hooks/use-settings';
+import { useInterval } from '@/hooks/use-interval';
 import {
     isNormalChatItem,
     isSuperChatItem,
     isSuperStickerItem,
     isMembershipItem,
     getMessageSettings,
-} from '@/services/chat-event/utils';
+} from '@/services/chat-event/mapper';
 import { Settings } from '@/services/settings/types';
 
 import classes from './index.scss';
@@ -96,13 +97,11 @@ const ChatFlow: React.FC = () => {
         [dispatch],
     );
 
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            dispatch(chatEventsActions.cleanup());
-        }, 1000);
-
-        return (): void => clearInterval(intervalId);
+    const cleanup = useCallback(() => {
+        dispatch(chatEventsActions.cleanup());
     }, [dispatch]);
+
+    useInterval(cleanup, 1000);
 
     return (
         <ChatFlowLayout
