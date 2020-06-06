@@ -17,7 +17,7 @@ type ChatEventCallback = (chatItem: ChatItem) => void;
 
 const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
-const TIME_DELAY_IN_USEC = 10 * 1000 * 1000;
+const TIME_DELAY_IN_USEC = 8 * 1000 * 1000;
 
 export class ChatEventResponseObserver {
     private listeners: Record<ChatEvent, ChatEventCallback[]> = {
@@ -29,6 +29,12 @@ export class ChatEventResponseObserver {
     private queue: ChatItem[] = [];
 
     private dequeueTimeout = -1;
+
+    private getCurrentPlayerTime: () => number;
+
+    constructor(getCurrentPlayerTime: () => number) {
+        this.getCurrentPlayerTime = getCurrentPlayerTime;
+    }
 
     private onChatMessage = (e: Event): void => {
         if (!this.isObserving) {
@@ -46,24 +52,31 @@ export class ChatEventResponseObserver {
 
         const response = JSON.parse(customEvent.detail.response) as RootObject;
 
-        const actions = isReplay
+        const chatItems = isReplay
             ? (response as ReplayRootObject).response.continuationContents.liveChatContinuation.actions
-                  .map((a) => a.replayChatItemAction?.actions)
-                  .filter((a): a is NonNullable<typeof a> => !!a)
+                  .map((a) => a.replayChatItemAction)
+                  .filter((a): a is Required<NonNullable<typeof a>> => !!a)
+                  .map((a) =>
+                      mapActions(a.actions, Number(a.videoOffsetTimeMsec)),
+                  )
                   .flat()
-            : (response as LiveRootObject).response.continuationContents
-                  .liveChatContinuation.actions;
-        const chatItems = mapActions(actions);
+            : mapActions(
+                  (response as LiveRootObject).response.continuationContents
+                      .liveChatContinuation.actions,
+              );
 
         this.queue.push(...chatItems);
     };
 
     private handleQueue = (): void => {
         const currentTimeInUsec = Date.now() * 1000;
+        const currentPlayerTime = this.getCurrentPlayerTime() * 1000;
+
         this.queue = this.queue.filter((chatItem) => {
-            const shouldDispatch =
-                Number(chatItem.timestamp) <
-                currentTimeInUsec - TIME_DELAY_IN_USEC;
+            const shouldDispatch = chatItem.videoTimestampInMs
+                ? currentPlayerTime > chatItem.videoTimestampInMs
+                : chatItem.timestampInUs <
+                  currentTimeInUsec - TIME_DELAY_IN_USEC;
 
             if (shouldDispatch) {
                 this.listeners.add.forEach((listener) => listener(chatItem));

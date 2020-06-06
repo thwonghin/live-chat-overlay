@@ -317,6 +317,7 @@ export interface Action {
 export interface ReplayAction {
     replayChatItemAction?: {
         actions: Action[];
+        videoOffsetTimeMsec: string;
     };
 }
 

@@ -37,7 +37,6 @@ export function useVideoPlayerState(): PlayerState {
         videoEle?.removeEventListener,
         handleStateChange,
     ]);
-
     return {
         isSeeking,
         isPaused,

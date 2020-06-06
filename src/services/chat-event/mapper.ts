@@ -68,12 +68,14 @@ function getAuthorTypeFromBadges(
 
 export function mapLiveChatTextMessageRenderer(
     renderer: liveChatResponse.LiveChatTextMessageRenderer,
+    videoTimestampInMs?: number,
 ): chatModel.NormalChatItem {
     return {
         id: renderer.id,
         messageParts: renderer.message.runs.map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
-        timestamp: renderer.timestampUsec,
+        timestampInUs: Number(renderer.timestampUsec),
+        videoTimestampInMs,
         authorName: renderer.authorName.simpleText,
         authorType: getAuthorTypeFromBadges(renderer.authorBadges),
         chatType: 'normal',
@@ -94,12 +96,13 @@ export function mapLiveChatTextMessageRenderer(
 
 export function mapActions(
     actions: liveChatResponse.Action[],
+    videoTimestampInMs?: number,
 ): chatModel.NormalChatItem[] {
     return actions
         .map((v) => v.addChatItemAction?.item?.liveChatTextMessageRenderer)
         .flat()
         .filter((v): v is NonNullable<typeof v> => !!v)
-        .map(mapLiveChatTextMessageRenderer);
+        .map((v) => mapLiveChatTextMessageRenderer(v, videoTimestampInMs));
 }
 
 export function isNormalChatItem(

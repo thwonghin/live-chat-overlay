@@ -23,7 +23,7 @@ const superStickerItem: SuperStickerItem = {
     messageParts: [{ text: 'This is a test message' }],
     avatars,
     stickerUrl,
-    timestamp: '12:00 PM',
+    timestampInUs: 1591425506771,
     donationAmount: 'HK$ 100.00',
     authorName,
     color: 'red',

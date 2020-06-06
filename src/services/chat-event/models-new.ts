@@ -20,7 +20,8 @@ export interface NormalChatItem {
     id: string;
     messageParts: MessagePart[];
     avatars: Thumbnail[];
-    timestamp: string;
+    timestampInUs: number;
+    videoTimestampInMs?: number;
     authorName: string;
     authorBadges: string[];
     authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you' | 'verified';
