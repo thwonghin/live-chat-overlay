@@ -46,7 +46,6 @@
         "@types/react-redux": "^7.1.9",
         "@types/stylelint": "^9.10.1",
         "@types/terser-webpack-plugin": "^3.0.0",
-        "@types/uuid": "^8.0.0",
         "@types/webpack": "^4.41.13",
         "@typescript-eslint/eslint-plugin": "^3.1.0",
         "babel-loader": "^8.1.0",
@@ -114,8 +113,7 @@
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-redux": "^7.2.0",
-        "regenerator-runtime": "^0.13.5",
-        "uuid": "^8.1.0"
+        "regenerator-runtime": "^0.13.5"
     },
     "resolutions": {
         "yargs-parser": "18.1.3"
