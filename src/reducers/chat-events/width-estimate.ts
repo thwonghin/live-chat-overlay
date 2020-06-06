@@ -3,7 +3,10 @@ import {
     ChatItem,
     SuperStickerItem,
     MessagePart,
-} from '@/services/chat-event/models-new';
+    NormalChatItem,
+    MembershipItem,
+    SuperChatItem,
+} from '@/services/chat-event/models';
 import {
     isSuperChatItem,
     isSuperStickerItem,
@@ -61,7 +64,7 @@ function estimateAuthorChipWidth(
 }
 
 function estimateTwoLinesItemWidth(
-    chatItem: ChatItem,
+    chatItem: NormalChatItem | SuperChatItem | MembershipItem,
     messageSettings: MessageSettings,
 ): number {
     const authorWidth = estimateAuthorChipWidth(chatItem, messageSettings);

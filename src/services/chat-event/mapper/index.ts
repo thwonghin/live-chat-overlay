@@ -7,7 +7,7 @@ import {
     mapLiveChatPaidStickerRenderer,
 } from './helpers';
 import * as liveChatResponse from '../live-chat-response';
-import * as chatModel from '../models-new';
+import * as chatModel from '../models';
 
 export function mapAddChatItemActions(
     addChatItemActions: liveChatResponse.AddChatItemAction[],

@@ -1,4 +1,4 @@
-import { ChatItem } from '@/services/chat-event/models-new';
+import { ChatItem } from '@/services/chat-event/models';
 
 interface Position {
     lineNumber: number;

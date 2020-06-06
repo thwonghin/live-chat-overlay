@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextPart } from '@/services/chat-event/models-new';
+import { TextPart } from '@/services/chat-event/models';
 
 interface Props {
     textPart: TextPart;

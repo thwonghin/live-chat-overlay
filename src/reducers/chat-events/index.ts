@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { settingsStorage } from '@/services/settings';
-import { ChatItem } from '@/services/chat-event/models-new';
+import { ChatItem } from '@/services/chat-event/models';
 import {
     getMessageSettings,
     isSuperChatItem,

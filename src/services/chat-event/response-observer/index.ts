@@ -4,7 +4,7 @@ import {
     mapChatItemsFromLiveResponse,
     isTimeToDispatch,
 } from './helpers';
-import { ChatItem } from '../models-new';
+import { ChatItem } from '../models';
 import {
     RootObject,
     ReplayRootObject,

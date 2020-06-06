@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { Thumbnail } from '@/services/chat-event/models-new';
+import { Thumbnail } from '@/services/chat-event/models';
 import { MessageSettings } from '@/services/settings/types';
 import classes from './index.scss';
 

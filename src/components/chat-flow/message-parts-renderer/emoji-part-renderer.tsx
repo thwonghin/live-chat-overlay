@@ -1,5 +1,5 @@
 import React from 'react';
-import { EmojiPart } from '@/services/chat-event/models-new';
+import { EmojiPart } from '@/services/chat-event/models';
 
 interface Props {
     emojiPart: EmojiPart;

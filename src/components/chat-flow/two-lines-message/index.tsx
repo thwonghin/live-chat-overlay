@@ -4,7 +4,7 @@ import {
     NormalChatItem,
     MembershipItem,
     SuperChatItem,
-} from '@/services/chat-event/models-new';
+} from '@/services/chat-event/models';
 import {
     isNormalChatItem,
     isSuperChatItem,

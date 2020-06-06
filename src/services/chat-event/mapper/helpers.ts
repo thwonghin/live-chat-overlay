@@ -1,6 +1,6 @@
 import { assertNever, colorFromDecimal } from '@/utils';
 import * as liveChatResponse from '../live-chat-response';
-import * as chatModel from '../models-new';
+import * as chatModel from '../models';
 
 function getAuthorTypeFromBadges(
     authorBadges?: liveChatResponse.AuthorBadge[],

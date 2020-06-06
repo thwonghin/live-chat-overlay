@@ -1,7 +1,7 @@
 import { isNonNullable } from '@/utils';
 import { mapAddChatItemActions } from '../mapper';
 import { ReplayRootObject, LiveRootObject } from '../live-chat-response';
-import { ChatItem } from '../models-new';
+import { ChatItem } from '../models';
 
 export function mapChatItemsFromReplayResponse(
     rootObj: ReplayRootObject,

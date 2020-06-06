@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessagePart } from '@/services/chat-event/models-new';
+import { MessagePart } from '@/services/chat-event/models';
 import {
     isEmojiMessagePart,
     isTextMessagePart,

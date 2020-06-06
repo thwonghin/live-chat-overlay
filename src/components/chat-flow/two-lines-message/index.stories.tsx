@@ -4,7 +4,7 @@ import {
     SuperChatItem,
     MembershipItem,
     NormalChatItem,
-} from '@/services/chat-event/models-new';
+} from '@/services/chat-event/models';
 import { MessageSettings } from '@/services/settings/types';
 import TwoLinesMessage from '.';
 

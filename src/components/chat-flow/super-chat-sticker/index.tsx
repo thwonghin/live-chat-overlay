@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SuperStickerItem } from '@/services/chat-event/models-new';
+import { SuperStickerItem } from '@/services/chat-event/models';
 import { MessageSettings } from '@/services/settings/types';
 
 import classes from './index.scss';

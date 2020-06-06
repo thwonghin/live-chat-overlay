@@ -6,7 +6,7 @@ import {
     NormalChatItem,
     MembershipItem,
     SuperStickerItem,
-} from '@/services/chat-event/models-new';
+} from '@/services/chat-event/models';
 import { AddChatItemAction } from '@/services/chat-event/live-chat-response';
 
 const avatars = [
