@@ -5,7 +5,7 @@ import { useVideoPlayerState } from './use-video-player-state';
 
 export function useHandleChatEventOnPlayerStateChange(): void {
     const chatEventObserver = useContext(ChatEventObserverContext);
-    const { isPaused } = useVideoPlayerState();
+    const { isPaused, isSeeking } = useVideoPlayerState();
 
     useEffect(() => {
         if (isPaused) {
@@ -14,4 +14,10 @@ export function useHandleChatEventOnPlayerStateChange(): void {
             chatEventObserver.resume();
         }
     }, [isPaused, chatEventObserver]);
+
+    useEffect(() => {
+        if (isSeeking) {
+            chatEventObserver.reset();
+        }
+    }, [isSeeking, chatEventObserver]);
 }
