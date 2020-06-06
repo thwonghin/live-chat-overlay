@@ -1,5 +1,4 @@
 import React, {
-    useEffect,
     useMemo,
     useRef,
     useState,
@@ -10,6 +9,7 @@ import React, {
 import { useRect } from '@/hooks/use-rect';
 import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
 import { useSettings } from '@/hooks/use-settings';
+import { useInterval } from '@/hooks/use-interval';
 import classes from './index.scss';
 
 import { UiChatItem } from '../types';
@@ -59,10 +59,7 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onTimeout }) => {
         onTimeout(chatItem);
     }, [onTimeout, chatItem]);
 
-    useEffect(() => {
-        const id = setTimeout(onTimeoutCallback, timeout);
-        return (): void => clearTimeout(id);
-    }, [onTimeoutCallback, timeout]);
+    useInterval(onTimeoutCallback, timeout);
 
     useLayoutEffect(() => setIsFlowing(true), []);
 

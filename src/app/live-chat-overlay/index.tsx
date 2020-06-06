@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
+import { PlayerRectProvider } from '@/contexts/player-rect';
 import { ChatEventObserverProvider } from '@/contexts/chat-observer';
 
 import { store } from '@/reducers';
@@ -27,9 +28,11 @@ export function initLiveChat(): () => void {
     ReactDOM.render(
         <React.StrictMode>
             <Provider store={store}>
-                <ChatEventObserverProvider>
-                    <App />
-                </ChatEventObserverProvider>
+                <PlayerRectProvider>
+                    <ChatEventObserverProvider>
+                        <App />
+                    </ChatEventObserverProvider>
+                </PlayerRectProvider>
             </Provider>
         </React.StrictMode>,
         reactContainer,

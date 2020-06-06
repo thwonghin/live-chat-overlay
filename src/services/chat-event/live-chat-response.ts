@@ -274,19 +274,19 @@ interface Action {
 
 export interface ReplayAction {
     replayChatItemAction?: {
-        actions: Action[];
+        actions?: Action[];
         videoOffsetTimeMsec: string;
     };
 }
 
 interface LiveLiveChatContinuation {
     continuations: Continuation[];
-    actions: Action[];
+    actions?: Action[];
 }
 
 interface ReplayLiveChatContinuation {
     continuations: Continuation[];
-    actions: ReplayAction[];
+    actions?: ReplayAction[];
 }
 
 interface LiveContinuationContents {

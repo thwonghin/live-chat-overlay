@@ -30,9 +30,13 @@ export class ChatEventResponseObserver {
 
     private isObserving = false;
 
-    private queue: ChatItem[] = [];
+    private xhrEventProcessQueue: CustomEventDetail[] = [];
 
-    private dequeueTimeout = -1;
+    private xhrEventProcessInterval = -1;
+
+    private chatItemProcessQueue: ChatItem[] = [];
+
+    private chatItemProcessInterval = -1;
 
     private getCurrentPlayerTime: () => number;
 
@@ -50,50 +54,68 @@ export class ChatEventResponseObserver {
             return;
         }
 
-        const isReplay = customEvent.detail.url.startsWith(
-            GET_LIVE_CHAT_REPLAY_URL,
-        );
+        this.xhrEventProcessQueue.push(customEvent.detail);
+    };
 
-        const response = JSON.parse(customEvent.detail.response) as RootObject;
+    private processXhrEvent = (): void => {
+        const xhrEvent = this.xhrEventProcessQueue.shift();
+
+        if (!xhrEvent) {
+            return;
+        }
+
+        const isReplay = xhrEvent.url.startsWith(GET_LIVE_CHAT_REPLAY_URL);
+
+        const response = JSON.parse(xhrEvent.response) as RootObject;
 
         const chatItems = isReplay
             ? mapChatItemsFromReplayResponse(response as ReplayRootObject)
             : mapChatItemsFromLiveResponse(response as LiveRootObject);
 
-        this.queue.push(...chatItems);
+        this.chatItemProcessQueue.push(...chatItems);
     };
 
-    private handleQueue = (): void => {
+    private processChatItem = (): void => {
         const currentTimeInUsec = Date.now() * 1000;
         const currentPlayerTimeInMsc = this.getCurrentPlayerTime() * 1000;
 
-        this.queue = this.queue.filter((chatItem) => {
-            const shouldDispatch = isTimeToDispatch({
-                chatItem,
-                currentTimeInUsec,
-                currentPlayerTimeInMsc,
-                currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
-            });
+        const chatItem = this.chatItemProcessQueue[0];
 
-            if (shouldDispatch) {
-                this.listeners.add.forEach((listener) => listener(chatItem));
-            }
+        if (!chatItem) {
+            return;
+        }
 
-            return !shouldDispatch;
+        const shouldDispatch = isTimeToDispatch({
+            chatItem,
+            currentTimeInUsec,
+            currentPlayerTimeInMsc,
+            currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
         });
 
-        this.dequeueTimeout = window.setTimeout(this.handleQueue, 100);
+        if (shouldDispatch) {
+            this.chatItemProcessQueue.shift();
+            this.listeners.add.forEach((listener) => listener(chatItem));
+        }
     };
 
     public start(): void {
+        this.isObserving = true;
         window.addEventListener(CHAT_EVENT_NAME, this.onChatMessage);
-        this.handleQueue();
+        this.xhrEventProcessInterval = window.setInterval(
+            this.processXhrEvent,
+            100,
+        );
+        this.chatItemProcessInterval = window.setInterval(
+            this.processChatItem,
+            100,
+        );
     }
 
     public stop(): void {
         this.isObserving = false;
         window.removeEventListener(CHAT_EVENT_NAME, this.onChatMessage);
-        clearTimeout(this.dequeueTimeout);
+        window.clearInterval(this.xhrEventProcessInterval);
+        window.clearInterval(this.chatItemProcessInterval);
     }
 
     public pause(): void {
@@ -105,7 +127,8 @@ export class ChatEventResponseObserver {
     }
 
     public reset(): void {
-        this.queue = [];
+        this.chatItemProcessQueue = [];
+        this.xhrEventProcessQueue = [];
     }
 
     public addEventListener(
