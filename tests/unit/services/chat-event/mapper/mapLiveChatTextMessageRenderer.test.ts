@@ -153,7 +153,7 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            timestamp: '1:00',
+            timestampInUs: 1500000000000000,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'member',
@@ -202,7 +202,7 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            timestamp: '1:00',
+            timestampInUs: 1500000000000000,
             authorName: 'Sample Author',
             authorBadges: [],
             authorType: 'guest',
@@ -263,10 +263,59 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            timestamp: '1:00',
+            timestampInUs: 1500000000000000,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'moderator',
+            chatType: 'normal',
+        });
+    });
+
+    it('should map with videoTimestamp corretly', () => {
+        const fixture = getFixture();
+
+        const result = mapLiveChatTextMessageRenderer(fixture, 100000000);
+
+        expect(result).toEqual({
+            id: 'random-id',
+            messageParts: [
+                {
+                    text: 'Test Message',
+                },
+                {
+                    thumbnails: [
+                        {
+                            url: 'https://sample-image',
+                            width: 24,
+                            height: 24,
+                        },
+                        {
+                            url: 'https://sample-image-larger',
+                            width: 48,
+                            height: 48,
+                        },
+                    ],
+                    shortcuts: [':text-emoji:'],
+                    id: 'sample-emoji-id',
+                },
+            ],
+            avatars: [
+                {
+                    url: 'https://sample-author-avatar/small.jpg',
+                    width: 32,
+                    height: 32,
+                },
+                {
+                    url: 'https://sample-author-avatar/large.jpg',
+                    width: 64,
+                    height: 64,
+                },
+            ],
+            timestampInUs: 1500000000000000,
+            videoTimestampInMs: 100000000,
+            authorName: 'Sample Author',
+            authorBadges: ['https://badge-url', 'https://badge-url-2'],
+            authorType: 'member',
             chatType: 'normal',
         });
     });
