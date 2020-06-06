@@ -1,5 +1,5 @@
 import { LiveChatTextMessageRenderer } from '@/services/chat-event/live-chat-response';
-import { mapLiveChatTextMessageRenderer } from '@/services/chat-event/mapper';
+import { mapLiveChatTextMessageRenderer } from '@/services/chat-event/mapper/helpers';
 
 function getFixture(): LiveChatTextMessageRenderer {
     return {

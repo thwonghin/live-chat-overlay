@@ -28,7 +28,10 @@ export interface NormalChatItem {
     chatType: 'normal';
 }
 
-export type SuperChatItem = Omit<NormalChatItem, 'authorType' | 'chatType'> & {
+export type SuperChatItem = Omit<
+    NormalChatItem,
+    'authorType' | 'chatType' | 'authorBadges'
+> & {
     donationAmount: string;
     color: string;
     chatType: 'super-chat';

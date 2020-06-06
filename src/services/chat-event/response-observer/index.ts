@@ -1,11 +1,15 @@
-import { ChatItem } from './models-new';
-import { CustomEventDetail } from '../xhr-interceptor';
-import { mapActions } from './mapper';
+import { CustomEventDetail } from '@/services/xhr-interceptor';
+import {
+    mapChatItemsFromReplayResponse,
+    mapChatItemsFromLiveResponse,
+    isTimeToDispatch,
+} from './helpers';
+import { ChatItem } from '../models-new';
 import {
     RootObject,
     ReplayRootObject,
     LiveRootObject,
-} from './live-chat-response';
+} from '../live-chat-response';
 
 const GET_LIVE_CHAT_URL = 'https://www.youtube.com/live_chat';
 const GET_LIVE_CHAT_REPLAY_URL =
@@ -53,30 +57,23 @@ export class ChatEventResponseObserver {
         const response = JSON.parse(customEvent.detail.response) as RootObject;
 
         const chatItems = isReplay
-            ? (response as ReplayRootObject).response.continuationContents.liveChatContinuation.actions
-                  .map((a) => a.replayChatItemAction)
-                  .filter((a): a is Required<NonNullable<typeof a>> => !!a)
-                  .map((a) =>
-                      mapActions(a.actions, Number(a.videoOffsetTimeMsec)),
-                  )
-                  .flat()
-            : mapActions(
-                  (response as LiveRootObject).response.continuationContents
-                      .liveChatContinuation.actions,
-              );
+            ? mapChatItemsFromReplayResponse(response as ReplayRootObject)
+            : mapChatItemsFromLiveResponse(response as LiveRootObject);
 
         this.queue.push(...chatItems);
     };
 
     private handleQueue = (): void => {
         const currentTimeInUsec = Date.now() * 1000;
-        const currentPlayerTime = this.getCurrentPlayerTime() * 1000;
+        const currentPlayerTimeInMsc = this.getCurrentPlayerTime() * 1000;
 
         this.queue = this.queue.filter((chatItem) => {
-            const shouldDispatch = chatItem.videoTimestampInMs
-                ? currentPlayerTime > chatItem.videoTimestampInMs
-                : chatItem.timestampInUs <
-                  currentTimeInUsec - TIME_DELAY_IN_USEC;
+            const shouldDispatch = isTimeToDispatch({
+                chatItem,
+                currentTimeInUsec,
+                currentPlayerTimeInMsc,
+                currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
+            });
 
             if (shouldDispatch) {
                 this.listeners.add.forEach((listener) => listener(chatItem));

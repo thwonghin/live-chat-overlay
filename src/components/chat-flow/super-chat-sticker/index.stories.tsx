@@ -19,7 +19,6 @@ const stickerUrl = 'https://placekitten.com/200/200';
 
 const superStickerItem: SuperStickerItem = {
     id: 'super-chat-sticker',
-    authorBadges: [],
     messageParts: [{ text: 'This is a test message' }],
     avatars,
     stickerUrl,

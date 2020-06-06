@@ -169,7 +169,7 @@ interface TimestampText2 {
     simpleText: string;
 }
 
-interface LiveChatPaidMessageRenderer {
+export interface LiveChatPaidMessageRenderer {
     id: string;
     timestampUsec: string;
     authorName: AuthorName;
@@ -189,23 +189,17 @@ interface LiveChatPaidMessageRenderer {
 }
 
 export interface Item {
-    liveChatTextMessageRenderer: LiveChatTextMessageRenderer;
-    liveChatPaidMessageRenderer: LiveChatPaidMessageRenderer;
+    liveChatTextMessageRenderer?: LiveChatTextMessageRenderer;
+    liveChatPaidMessageRenderer?: LiveChatPaidMessageRenderer;
 }
 
-interface AddChatItemAction {
+export interface AddChatItemAction {
     item?: Item;
     clientId: string;
 }
 
 interface Amount {
     simpleText: string;
-}
-
-interface Thumbnail5 {
-    url: string;
-    width: number;
-    height: number;
 }
 
 interface WebCommandMetadata4 {
@@ -216,66 +210,8 @@ interface CommandMetadata4 {
     webCommandMetadata: WebCommandMetadata4;
 }
 
-interface Thumbnail6 {
-    url: string;
-    width: number;
-    height: number;
-}
-
-interface PurchaseAmountText2 {
-    simpleText: string;
-}
-
-interface WebCommandMetadata5 {
-    ignoreNavigation: boolean;
-}
-
-interface CommandMetadata5 {
-    webCommandMetadata: WebCommandMetadata5;
-}
-
-interface LiveChatItemContextMenuEndpoint3 {
-    params: string;
-}
-
-interface ContextMenuEndpoint3 {
-    commandMetadata: CommandMetadata5;
-    liveChatItemContextMenuEndpoint: LiveChatItemContextMenuEndpoint3;
-}
-
-interface AccessibilityData5 {
-    label: string;
-}
-
-interface ContextMenuAccessibility3 {
-    accessibilityData: AccessibilityData5;
-}
-
-interface TimestampText3 {
-    simpleText: string;
-}
-
-interface LiveChatPaidMessageRenderer2 {
-    id: string;
-    timestampUsec: string;
-    authorName: AuthorName;
-    authorPhoto: AuthorPhoto;
-    purchaseAmountText: PurchaseAmountText2;
-    message: Message;
-    headerBackgroundColor: number;
-    headerTextColor: number;
-    bodyBackgroundColor: number;
-    bodyTextColor: number;
-    authorExternalChannelId: string;
-    authorNameTextColor: number;
-    contextMenuEndpoint: ContextMenuEndpoint3;
-    timestampColor: number;
-    contextMenuAccessibility: ContextMenuAccessibility3;
-    timestampText: TimestampText3;
-}
-
 interface Renderer {
-    liveChatPaidMessageRenderer: LiveChatPaidMessageRenderer2;
+    liveChatPaidMessageRenderer: LiveChatPaidMessageRenderer;
 }
 
 interface ShowLiveChatItemEndpoint {
@@ -287,7 +223,7 @@ interface ShowItemEndpoint {
     showLiveChatItemEndpoint: ShowLiveChatItemEndpoint;
 }
 
-interface LiveChatTickerPaidMessageItemRenderer {
+export interface LiveChatTickerPaidMessageItemRenderer {
     id: string;
     amount: Amount;
     amountTextColor: number;
@@ -300,18 +236,8 @@ interface LiveChatTickerPaidMessageItemRenderer {
     fullDurationSec: number;
 }
 
-interface Item2 {
-    liveChatTickerPaidMessageItemRenderer: LiveChatTickerPaidMessageItemRenderer;
-}
-
-interface AddLiveChatTickerItemAction {
-    item: Item2;
-    durationSec: string;
-}
-
-export interface Action {
+interface Action {
     addChatItemAction?: AddChatItemAction;
-    addLiveChatTickerItemAction: AddLiveChatTickerItemAction;
 }
 
 export interface ReplayAction {

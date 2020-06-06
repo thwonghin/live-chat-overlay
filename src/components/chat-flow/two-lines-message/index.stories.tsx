@@ -21,7 +21,6 @@ const authorName = 'Author Name';
 
 const superChatItem: SuperChatItem = {
     id: 'super-chat-message',
-    authorBadges: [],
     messageParts: [{ text: 'This is a super chat message' }],
     avatars,
     timestampInUs: 1591425506771,
