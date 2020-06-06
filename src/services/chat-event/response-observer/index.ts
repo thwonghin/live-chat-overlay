@@ -3,6 +3,7 @@ import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
     isTimeToDispatch,
+    controlFlow,
 } from './helpers';
 import { ChatItem } from '../models';
 import {
@@ -17,11 +18,13 @@ const GET_LIVE_CHAT_REPLAY_URL =
 
 type ChatEvent = 'add';
 
-type ChatEventCallback = (chatItem: ChatItem) => void;
+type ChatEventCallback = (chatItem: ChatItem[]) => void;
 
 const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
 const TIME_DELAY_IN_USEC = 8 * 1000 * 1000;
+
+const MAX_NUM_CHAT_PER_PROCESS = 3;
 
 export class ChatEventResponseObserver {
     private listeners: Record<ChatEvent, ChatEventCallback[]> = {
@@ -79,22 +82,33 @@ export class ChatEventResponseObserver {
         const currentTimeInUsec = Date.now() * 1000;
         const currentPlayerTimeInMsc = this.getCurrentPlayerTime() * 1000;
 
-        const chatItem = this.chatItemProcessQueue[0];
-
-        if (!chatItem) {
-            return;
+        let lastIndex = 0;
+        for (
+            lastIndex = 0;
+            lastIndex < this.chatItemProcessQueue.length;
+            lastIndex += 1
+        ) {
+            if (
+                !this.chatItemProcessQueue[lastIndex] ||
+                !isTimeToDispatch({
+                    chatItem: this.chatItemProcessQueue[lastIndex],
+                    currentTimeInUsec,
+                    currentPlayerTimeInMsc,
+                    currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
+                })
+            ) {
+                break;
+            }
         }
 
-        const shouldDispatch = isTimeToDispatch({
-            chatItem,
-            currentTimeInUsec,
-            currentPlayerTimeInMsc,
-            currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
-        });
+        const dispatchingItems = this.chatItemProcessQueue.splice(0, lastIndex);
+        const controlledItems = controlFlow(
+            dispatchingItems,
+            MAX_NUM_CHAT_PER_PROCESS,
+        );
 
-        if (shouldDispatch) {
-            this.chatItemProcessQueue.shift();
-            this.listeners.add.forEach((listener) => listener(chatItem));
+        if (controlledItems.length > 0) {
+            this.listeners.add.forEach((listener) => listener(controlledItems));
         }
     };
 
@@ -103,7 +117,7 @@ export class ChatEventResponseObserver {
         window.addEventListener(CHAT_EVENT_NAME, this.onChatMessage);
         this.xhrEventProcessInterval = window.setInterval(
             this.processXhrEvent,
-            100,
+            500,
         );
         this.chatItemProcessInterval = window.setInterval(
             this.processChatItem,

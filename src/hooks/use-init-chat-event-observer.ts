@@ -11,13 +11,15 @@ export function useInitChatEventObserver(): void {
     const { width, height } = useVideoPlayerRect();
 
     useEffect(() => {
-        chatEventObserver.addEventListener('add', (chatItem) => {
-            dispatch(
-                chatEventsActions.addItem({
-                    chatItem,
-                    playerRect: { width, height },
-                }),
-            );
+        chatEventObserver.addEventListener('add', (chatItems) => {
+            chatItems.forEach((chatItem) => {
+                dispatch(
+                    chatEventsActions.addItem({
+                        chatItem,
+                        playerRect: { width, height },
+                    }),
+                );
+            });
         });
 
         chatEventObserver.start();

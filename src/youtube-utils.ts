@@ -91,3 +91,7 @@ export function injectStyles(): void {
 
     window.parent.document.head.appendChild(link);
 }
+
+export function isInsideLiveChatFrame(): boolean {
+    return window.location.href.startsWith('https://www.youtube.com/live_chat');
+}

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { getVideoPlayerEle } from '@/youtube-dom-utils';
+import { getVideoPlayerEle } from '@/youtube-utils';
 import { useRect, RectResult } from '@/hooks/use-rect';
 
 export function useVideoPlayerRect(): RectResult {

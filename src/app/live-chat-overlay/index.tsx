@@ -6,7 +6,7 @@ import { PlayerRectProvider } from '@/contexts/player-rect';
 import { ChatEventObserverProvider } from '@/contexts/chat-observer';
 
 import { store } from '@/reducers';
-import { getVideoPlayerContainer, injectStyles } from '@/youtube-dom-utils';
+import { getVideoPlayerContainer, injectStyles } from '@/youtube-utils';
 import App from './app';
 
 const REACT_CONTAINER = 'react-container';

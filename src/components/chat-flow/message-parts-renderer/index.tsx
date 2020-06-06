@@ -5,7 +5,6 @@ import {
     isTextMessagePart,
 } from '@/services/chat-event/mapper';
 import { assertNever } from '@/utils';
-import * as uuid from 'uuid';
 
 import TextPartRenderer from './text-part-renderer';
 import EmojiPartRenderer from './emoji-part-renderer';
@@ -18,14 +17,14 @@ interface Props {
 const MessagePartsRenderer: React.FC<Props> = ({ messageParts, className }) => {
     return (
         <span className={className}>
-            {messageParts.map((part) => {
+            {messageParts.map((part, index) => {
                 if (isTextMessagePart(part)) {
-                    return <TextPartRenderer key={uuid.v4()} textPart={part} />;
+                    // eslint-disable-next-line react/no-array-index-key
+                    return <TextPartRenderer key={index} textPart={part} />;
                 }
                 if (isEmojiMessagePart(part)) {
-                    return (
-                        <EmojiPartRenderer key={uuid.v4()} emojiPart={part} />
-                    );
+                    // eslint-disable-next-line react/no-array-index-key
+                    return <EmojiPartRenderer key={index} emojiPart={part} />;
                 }
                 return assertNever(part);
             })}

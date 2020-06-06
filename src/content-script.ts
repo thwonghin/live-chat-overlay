@@ -1,7 +1,7 @@
 import './common';
 
 import { initLiveChat } from './app/live-chat-overlay';
-import { waitForPlayerReady } from './youtube-dom-utils';
+import { isInsideLiveChatFrame, waitForPlayerReady } from './youtube-utils';
 import { attachXhrInterceptor } from './services/xhr-interceptor';
 
 async function init(): Promise<void> {
@@ -18,4 +18,6 @@ async function init(): Promise<void> {
     window.addEventListener('unload', cleanup);
 }
 
-document.addEventListener('DOMContentLoaded', init);
+if (isInsideLiveChatFrame()) {
+    document.addEventListener('DOMContentLoaded', init);
+}

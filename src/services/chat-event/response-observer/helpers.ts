@@ -1,5 +1,10 @@
+import { random } from 'lodash-es';
 import { isNonNullable } from '@/utils';
-import { mapAddChatItemActions } from '../mapper';
+import {
+    mapAddChatItemActions,
+    isNormalChatItem,
+    isMembershipItem,
+} from '../mapper';
 import { ReplayRootObject, LiveRootObject } from '../live-chat-response';
 import { ChatItem } from '../models';
 
@@ -54,4 +59,41 @@ export function isTimeToDispatch({
     return chatItem.videoTimestampInMs
         ? currentPlayerTimeInMsc > chatItem.videoTimestampInMs
         : chatItem.timestampInUs < currentTimeInUsec - currentTimeDelayInUsec;
+}
+
+function randomPickByLengthLimit(totalLength: number, numOfSlots: number) {
+    return random(0, totalLength) <= numOfSlots;
+}
+
+export function controlFlow(
+    chatItems: ChatItem[],
+    maxNumOfChat: number,
+): ChatItem[] {
+    let numOfSlots = maxNumOfChat;
+
+    const fistFiltered = chatItems.filter((chatItem, index, array) => {
+        if (array.length <= maxNumOfChat) {
+            return true;
+        }
+
+        if (
+            isNormalChatItem(chatItem) &&
+            chatItem.authorType !== 'guest' &&
+            chatItem.authorType !== 'member'
+        ) {
+            numOfSlots -= 1;
+            return true;
+        }
+
+        if (!isNormalChatItem(chatItem) && !isMembershipItem(chatItem)) {
+            numOfSlots -= 1;
+            return true;
+        }
+
+        return randomPickByLengthLimit(array.length, numOfSlots);
+    });
+
+    return fistFiltered.filter((chatItem, index, array) => {
+        return randomPickByLengthLimit(array.length, maxNumOfChat);
+    });
 }

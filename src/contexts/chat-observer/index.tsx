@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChatEventResponseObserver } from '@/services/chat-event/response-observer';
-import { getVideoEle } from '@/youtube-dom-utils';
+import { getVideoEle } from '@/youtube-utils';
 
 export const ChatEventObserverContext = React.createContext<
     ChatEventResponseObserver
