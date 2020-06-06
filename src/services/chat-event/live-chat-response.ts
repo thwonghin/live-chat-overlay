@@ -59,12 +59,12 @@ interface AuthorPhoto {
     thumbnails: Thumbnail[];
 }
 
-interface WebCommandMetadata2 {
+interface WebCommandMetadata {
     ignoreNavigation: boolean;
 }
 
-interface CommandMetadata2 {
-    webCommandMetadata: WebCommandMetadata2;
+interface CommandMetadata {
+    webCommandMetadata: WebCommandMetadata;
 }
 
 interface LiveChatItemContextMenuEndpoint {
@@ -72,30 +72,18 @@ interface LiveChatItemContextMenuEndpoint {
 }
 
 interface ContextMenuEndpoint {
-    commandMetadata: CommandMetadata2;
+    commandMetadata: CommandMetadata;
     liveChatItemContextMenuEndpoint: LiveChatItemContextMenuEndpoint;
 }
 
-interface Thumbnail3 {
-    url: string;
-}
-
 interface CustomThumbnail {
-    thumbnails: Thumbnail3[];
-}
-
-interface AccessibilityData2 {
-    label: string;
-}
-
-interface Accessibility2 {
-    accessibilityData: AccessibilityData2;
+    thumbnails: { url: string }[];
 }
 
 export interface LiveChatAuthorBadgeRenderer {
     customThumbnail?: CustomThumbnail;
     tooltip: string;
-    accessibility: Accessibility2;
+    accessibility: Accessibility;
     icon?: {
         iconType: string;
     };
@@ -105,12 +93,8 @@ export interface AuthorBadge {
     liveChatAuthorBadgeRenderer: LiveChatAuthorBadgeRenderer;
 }
 
-interface AccessibilityData3 {
-    label: string;
-}
-
 interface ContextMenuAccessibility {
-    accessibilityData: AccessibilityData3;
+    accessibilityData: AccessibilityData;
 }
 
 interface TimestampText {
@@ -134,35 +118,6 @@ interface PurchaseAmountText {
     simpleText: string;
 }
 
-interface WebCommandMetadata3 {
-    ignoreNavigation: boolean;
-}
-
-interface CommandMetadata3 {
-    webCommandMetadata: WebCommandMetadata3;
-}
-
-interface LiveChatItemContextMenuEndpoint2 {
-    params: string;
-}
-
-interface ContextMenuEndpoint2 {
-    commandMetadata: CommandMetadata3;
-    liveChatItemContextMenuEndpoint: LiveChatItemContextMenuEndpoint2;
-}
-
-interface AccessibilityData4 {
-    label: string;
-}
-
-interface ContextMenuAccessibility2 {
-    accessibilityData: AccessibilityData4;
-}
-
-interface TimestampText2 {
-    simpleText: string;
-}
-
 export interface LiveChatPaidMessageRenderer {
     id: string;
     timestampUsec: string;
@@ -176,10 +131,10 @@ export interface LiveChatPaidMessageRenderer {
     bodyTextColor: number;
     authorExternalChannelId: string;
     authorNameTextColor: number;
-    contextMenuEndpoint: ContextMenuEndpoint2;
+    contextMenuEndpoint: ContextMenuEndpoint;
     timestampColor: number;
-    contextMenuAccessibility: ContextMenuAccessibility2;
-    timestampText: TimestampText2;
+    contextMenuAccessibility: ContextMenuAccessibility;
+    timestampText: TimestampText;
 }
 
 export interface LiveChatMembershipItemRenderer {
@@ -234,14 +189,6 @@ interface Amount {
     simpleText: string;
 }
 
-interface WebCommandMetadata4 {
-    ignoreNavigation: boolean;
-}
-
-interface CommandMetadata4 {
-    webCommandMetadata: WebCommandMetadata4;
-}
-
 interface Renderer {
     liveChatPaidMessageRenderer: LiveChatPaidMessageRenderer;
 }
@@ -251,7 +198,7 @@ interface ShowLiveChatItemEndpoint {
 }
 
 interface ShowItemEndpoint {
-    commandMetadata: CommandMetadata4;
+    commandMetadata: CommandMetadata;
     showLiveChatItemEndpoint: ShowLiveChatItemEndpoint;
 }
 
