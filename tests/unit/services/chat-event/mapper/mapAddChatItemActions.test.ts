@@ -4,6 +4,7 @@ import {
     ChatItem,
     SuperChatItem,
     NormalChatItem,
+    MembershipItem,
 } from '@/services/chat-event/models-new';
 import { AddChatItemAction } from '@/services/chat-event/live-chat-response';
 
@@ -36,6 +37,16 @@ const superChatItem: SuperChatItem = {
     authorName,
     color: 'red',
     chatType: 'super-chat',
+};
+
+const membershipItem: MembershipItem = {
+    id: 'membership',
+    authorBadges: [],
+    messageParts: [{ text: 'Someone becomes a member.' }],
+    avatars,
+    timestampInUs: 1591425506771,
+    authorName,
+    chatType: 'membership',
 };
 
 const sampleActions: AddChatItemAction[] = [
@@ -126,6 +137,118 @@ const sampleActions: AddChatItemAction[] = [
                 },
                 timestampText: {
                     simpleText: '0:40',
+                },
+            },
+        },
+    },
+    {
+        clientId: 'client-id',
+        item: {
+            liveChatMembershipItemRenderer: {
+                id: 'random-id',
+                timestampUsec: '1500000000000000',
+                authorExternalChannelId: 'channel-id',
+                headerSubtext: {
+                    runs: [
+                        {
+                            text: 'Test Message',
+                        },
+                        {
+                            emoji: {
+                                emojiId: 'sample-emoji-id',
+                                shortcuts: [':text-emoji:'],
+                                searchTerms: ['text-emoji', 'emoji'],
+                                image: {
+                                    thumbnails: [
+                                        {
+                                            url: 'https://sample-image',
+                                            width: 24,
+                                            height: 24,
+                                        },
+                                        {
+                                            url: 'https://sample-image-larger',
+                                            width: 48,
+                                            height: 48,
+                                        },
+                                    ],
+                                    accessibility: {
+                                        accessibilityData: {
+                                            label: ':text-emoji:',
+                                        },
+                                    },
+                                },
+                                isCustomEmoji: true,
+                            },
+                        },
+                    ],
+                },
+                authorName: {
+                    simpleText: 'Sample Author',
+                },
+                authorPhoto: {
+                    thumbnails: [
+                        {
+                            url: 'https://sample-author-avatar/small.jpg',
+                            width: 32,
+                            height: 32,
+                        },
+                        {
+                            url: 'https://sample-author-avatar/large.jpg',
+                            width: 64,
+                            height: 64,
+                        },
+                    ],
+                },
+                contextMenuEndpoint: {
+                    commandMetadata: {
+                        webCommandMetadata: {
+                            ignoreNavigation: true,
+                        },
+                    },
+                    liveChatItemContextMenuEndpoint: {
+                        params: 'some-endpoint',
+                    },
+                },
+                authorBadges: [
+                    {
+                        liveChatAuthorBadgeRenderer: {
+                            customThumbnail: {
+                                thumbnails: [
+                                    {
+                                        url: 'https://badge-url',
+                                    },
+                                ],
+                            },
+                            tooltip: 'Member (1 year)',
+                            accessibility: {
+                                accessibilityData: {
+                                    label: 'Member (1 year)',
+                                },
+                            },
+                        },
+                    },
+                    {
+                        liveChatAuthorBadgeRenderer: {
+                            customThumbnail: {
+                                thumbnails: [
+                                    {
+                                        url: 'https://badge-url-2',
+                                    },
+                                ],
+                            },
+                            tooltip: 'Moderator',
+                            accessibility: {
+                                accessibilityData: {
+                                    label: 'Moderator (1 year)',
+                                },
+                            },
+                        },
+                    },
+                ],
+                contextMenuAccessibility: {
+                    accessibilityData: {
+                        label: 'More option on comment',
+                    },
                 },
             },
         },
@@ -247,7 +370,7 @@ const sampleActions: AddChatItemAction[] = [
     },
 ];
 
-describe('mapActions', () => {
+describe('mapAddChatItemActions', () => {
     let result: ChatItem[];
 
     beforeAll(() => {
@@ -255,6 +378,11 @@ describe('mapActions', () => {
             helpers,
             'mapLiveChatPaidMessageItemRenderer',
         ).mockReturnValue(superChatItem);
+
+        jest.spyOn(
+            helpers,
+            'mapLiveChatMembershipItemRenderer',
+        ).mockReturnValue(membershipItem);
 
         jest.spyOn(helpers, 'mapLiveChatTextMessageRenderer').mockReturnValue(
             normalMessageItem,
@@ -264,7 +392,11 @@ describe('mapActions', () => {
     });
 
     it('should return correct result', () => {
-        expect(result).toEqual([superChatItem, normalMessageItem]);
+        expect(result).toEqual([
+            superChatItem,
+            membershipItem,
+            normalMessageItem,
+        ]);
     });
 
     it('should call mapper with correct params', () => {
@@ -273,8 +405,13 @@ describe('mapActions', () => {
             10000,
         );
 
+        expect(helpers.mapLiveChatMembershipItemRenderer).toHaveBeenCalledWith(
+            sampleActions[2].item?.liveChatMembershipItemRenderer,
+            10000,
+        );
+
         expect(helpers.mapLiveChatTextMessageRenderer).toHaveBeenCalledWith(
-            sampleActions[2].item?.liveChatTextMessageRenderer,
+            sampleActions[3].item?.liveChatTextMessageRenderer,
             10000,
         );
     });

@@ -8,6 +8,7 @@ import {
 import {
     isNormalChatItem,
     isSuperChatItem,
+    isMembershipItem,
 } from '@/services/chat-event/mapper';
 import { MessageSettings } from '@/services/settings/types';
 import classes from './index.scss';
@@ -26,9 +27,10 @@ const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
 
     const flexDirection = actualNumberOfLines === 2 ? 'column' : 'row';
 
-    const bgColor = isNormalChatItem(chatItem)
-        ? messageSettings.bgColor
-        : chatItem.color;
+    const bgColor =
+        isNormalChatItem(chatItem) || isMembershipItem(chatItem)
+            ? messageSettings.bgColor
+            : chatItem.color;
 
     const donationAmount = isSuperChatItem(chatItem)
         ? chatItem.donationAmount

@@ -3,6 +3,7 @@ import { isNonNullable } from '@/utils';
 import {
     mapLiveChatTextMessageRenderer,
     mapLiveChatPaidMessageItemRenderer,
+    mapLiveChatMembershipItemRenderer,
 } from './helpers';
 import * as liveChatResponse from '../live-chat-response';
 import * as chatModel from '../models-new';
@@ -16,6 +17,12 @@ export function mapAddChatItemActions(
             if (action.item?.liveChatPaidMessageRenderer) {
                 return mapLiveChatPaidMessageItemRenderer(
                     action.item.liveChatPaidMessageRenderer,
+                    videoTimestampInMs,
+                );
+            }
+            if (action.item?.liveChatMembershipItemRenderer) {
+                return mapLiveChatMembershipItemRenderer(
+                    action.item.liveChatMembershipItemRenderer,
                     videoTimestampInMs,
                 );
             }

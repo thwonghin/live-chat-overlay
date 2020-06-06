@@ -40,6 +40,7 @@ const defaultSettings: Settings = {
         },
         membership: {
             ...commonMsgSettings,
+            bgColor: '#2ba640',
             numberOfLines: 1,
             authorDisplay: 'all',
         },

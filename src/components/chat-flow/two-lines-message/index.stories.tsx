@@ -37,7 +37,6 @@ const membershipItem: MembershipItem = {
     avatars,
     timestampInUs: 1591425506771,
     authorName,
-    color: 'green',
     chatType: 'membership',
 };
 

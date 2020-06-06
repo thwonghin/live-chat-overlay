@@ -43,7 +43,6 @@ export type SuperStickerItem = Omit<SuperChatItem, 'chatType'> & {
 };
 
 export type MembershipItem = Omit<NormalChatItem, 'authorType' | 'chatType'> & {
-    color: string;
     chatType: 'membership';
 };
 

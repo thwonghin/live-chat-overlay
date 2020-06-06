@@ -130,12 +130,6 @@ export interface LiveChatTextMessageRenderer {
     timestampText?: TimestampText;
 }
 
-interface Thumbnail4 {
-    url: string;
-    width: number;
-    height: number;
-}
-
 interface PurchaseAmountText {
     simpleText: string;
 }
@@ -175,7 +169,7 @@ export interface LiveChatPaidMessageRenderer {
     authorName: AuthorName;
     authorPhoto: AuthorPhoto;
     purchaseAmountText: PurchaseAmountText;
-    message: Message;
+    message?: Message;
     headerBackgroundColor: number;
     headerTextColor: number;
     bodyBackgroundColor: number;
@@ -188,9 +182,22 @@ export interface LiveChatPaidMessageRenderer {
     timestampText: TimestampText2;
 }
 
+export interface LiveChatMembershipItemRenderer {
+    id: string;
+    timestampUsec: string;
+    authorExternalChannelId: string;
+    headerSubtext: Message;
+    authorName: AuthorName;
+    authorPhoto: AuthorPhoto;
+    authorBadges: AuthorBadge[];
+    contextMenuEndpoint: ContextMenuEndpoint;
+    contextMenuAccessibility: ContextMenuAccessibility;
+}
+
 export interface Item {
     liveChatTextMessageRenderer?: LiveChatTextMessageRenderer;
     liveChatPaidMessageRenderer?: LiveChatPaidMessageRenderer;
+    liveChatMembershipItemRenderer?: LiveChatMembershipItemRenderer;
 }
 
 export interface AddChatItemAction {

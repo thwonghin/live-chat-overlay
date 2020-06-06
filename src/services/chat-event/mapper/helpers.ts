@@ -65,13 +65,44 @@ function mapMessagePart(
     return assertNever(messageRun);
 }
 
+function mapAuthorBadges(
+    rendererAuthorBadges?: liveChatResponse.AuthorBadge[],
+): string[] {
+    if (!rendererAuthorBadges) {
+        return [];
+    }
+    return rendererAuthorBadges
+        .filter((v) => !!v.liveChatAuthorBadgeRenderer.customThumbnail)
+        .flatMap((v) =>
+            v.liveChatAuthorBadgeRenderer.customThumbnail!.thumbnails.flatMap(
+                (_) => _.url,
+            ),
+        );
+}
+
+export function mapLiveChatMembershipItemRenderer(
+    renderer: liveChatResponse.LiveChatMembershipItemRenderer,
+    videoTimestampInMs?: number,
+): chatModel.MembershipItem {
+    return {
+        id: renderer.id,
+        messageParts: (renderer.headerSubtext?.runs ?? []).map(mapMessagePart),
+        avatars: renderer.authorPhoto.thumbnails,
+        timestampInUs: Number(renderer.timestampUsec),
+        videoTimestampInMs,
+        authorName: renderer.authorName.simpleText,
+        chatType: 'membership',
+        authorBadges: mapAuthorBadges(renderer.authorBadges),
+    };
+}
+
 export function mapLiveChatPaidMessageItemRenderer(
     renderer: liveChatResponse.LiveChatPaidMessageRenderer,
     videoTimestampInMs?: number,
 ): chatModel.SuperChatItem {
     return {
         id: renderer.id,
-        messageParts: renderer.message.runs.map(mapMessagePart),
+        messageParts: (renderer.message?.runs ?? []).map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
         timestampInUs: Number(renderer.timestampUsec),
         videoTimestampInMs,
@@ -95,17 +126,6 @@ export function mapLiveChatTextMessageRenderer(
         authorName: renderer.authorName.simpleText,
         authorType: getAuthorTypeFromBadges(renderer.authorBadges),
         chatType: 'normal',
-        authorBadges: renderer.authorBadges
-            ? renderer.authorBadges
-                  .filter(
-                      (v) => !!v.liveChatAuthorBadgeRenderer.customThumbnail,
-                  )
-                  .map((v) =>
-                      v.liveChatAuthorBadgeRenderer
-                          .customThumbnail!.thumbnails.map((_) => _.url)
-                          .flat(),
-                  )
-                  .flat()
-            : [],
+        authorBadges: mapAuthorBadges(renderer.authorBadges),
     };
 }

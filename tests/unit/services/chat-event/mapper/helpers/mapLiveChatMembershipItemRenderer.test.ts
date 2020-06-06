@@ -1,31 +1,12 @@
-import { LiveChatPaidMessageRenderer } from '@/services/chat-event/live-chat-response';
-import { mapLiveChatPaidMessageItemRenderer } from '@/services/chat-event/mapper/helpers';
+import { LiveChatMembershipItemRenderer } from '@/services/chat-event/live-chat-response';
+import { mapLiveChatMembershipItemRenderer } from '@/services/chat-event/mapper/helpers';
 
-function getFixture(): LiveChatPaidMessageRenderer {
+function getFixture(): LiveChatMembershipItemRenderer {
     return {
         id: 'random-id',
-        timestampUsec: '1591023793124462',
-        authorName: {
-            simpleText: 'Sample Author',
-        },
-        authorPhoto: {
-            thumbnails: [
-                {
-                    url: 'https://sample-author-avatar/small.jpg',
-                    width: 32,
-                    height: 32,
-                },
-                {
-                    url: 'https://sample-author-avatar/large.jpg',
-                    width: 64,
-                    height: 64,
-                },
-            ],
-        },
-        purchaseAmountText: {
-            simpleText: 'HK$1,500.00',
-        },
-        message: {
+        timestampUsec: '1500000000000000',
+        authorExternalChannelId: 'channel-id',
+        headerSubtext: {
             runs: [
                 {
                     text: 'Test Message',
@@ -59,12 +40,23 @@ function getFixture(): LiveChatPaidMessageRenderer {
                 },
             ],
         },
-        headerBackgroundColor: 4291821568,
-        headerTextColor: 4294967295,
-        bodyBackgroundColor: 4293271831,
-        bodyTextColor: 4294967295,
-        authorExternalChannelId: 'channel-id',
-        authorNameTextColor: 3019898879,
+        authorName: {
+            simpleText: 'Sample Author',
+        },
+        authorPhoto: {
+            thumbnails: [
+                {
+                    url: 'https://sample-author-avatar/small.jpg',
+                    width: 32,
+                    height: 32,
+                },
+                {
+                    url: 'https://sample-author-avatar/large.jpg',
+                    width: 64,
+                    height: 64,
+                },
+            ],
+        },
         contextMenuEndpoint: {
             commandMetadata: {
                 webCommandMetadata: {
@@ -75,21 +67,53 @@ function getFixture(): LiveChatPaidMessageRenderer {
                 params: 'some-endpoint',
             },
         },
-        timestampColor: 2164260863,
+        authorBadges: [
+            {
+                liveChatAuthorBadgeRenderer: {
+                    customThumbnail: {
+                        thumbnails: [
+                            {
+                                url: 'https://badge-url',
+                            },
+                        ],
+                    },
+                    tooltip: 'Member (1 year)',
+                    accessibility: {
+                        accessibilityData: {
+                            label: 'Member (1 year)',
+                        },
+                    },
+                },
+            },
+            {
+                liveChatAuthorBadgeRenderer: {
+                    customThumbnail: {
+                        thumbnails: [
+                            {
+                                url: 'https://badge-url-2',
+                            },
+                        ],
+                    },
+                    tooltip: 'Moderator',
+                    accessibility: {
+                        accessibilityData: {
+                            label: 'Moderator (1 year)',
+                        },
+                    },
+                },
+            },
+        ],
         contextMenuAccessibility: {
             accessibilityData: {
                 label: 'More option on comment',
             },
         },
-        timestampText: {
-            simpleText: '0:40',
-        },
     };
 }
 
-describe('mapLiveChatPaidMessageItemRenderer', () => {
-    it('should map to correct result', () => {
-        const result = mapLiveChatPaidMessageItemRenderer(getFixture());
+describe('mapLiveChatTextMessageRenderer', () => {
+    it('should map member type chat correctly', () => {
+        const result = mapLiveChatMembershipItemRenderer(getFixture());
 
         expect(result).toEqual({
             id: 'random-id',
@@ -126,19 +150,17 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1591023793124462,
+            timestampInUs: 1500000000000000,
             authorName: 'Sample Author',
-            chatType: 'super-chat',
-            color: 'rgba(230,33,23,1)',
-            donationAmount: 'HK$1,500.00',
+            authorBadges: ['https://badge-url', 'https://badge-url-2'],
+            chatType: 'membership',
         });
     });
 
     it('should map with videoTimestamp corretly', () => {
-        const result = mapLiveChatPaidMessageItemRenderer(
-            getFixture(),
-            100000000,
-        );
+        const fixture = getFixture();
+
+        const result = mapLiveChatMembershipItemRenderer(fixture, 100000000);
 
         expect(result).toEqual({
             id: 'random-id',
@@ -175,40 +197,11 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1591023793124462,
+            timestampInUs: 1500000000000000,
             videoTimestampInMs: 100000000,
             authorName: 'Sample Author',
-            chatType: 'super-chat',
-            color: 'rgba(230,33,23,1)',
-            donationAmount: 'HK$1,500.00',
-        });
-    });
-
-    it('should handle empty message corretly', () => {
-        const sample = getFixture();
-        sample.message = undefined;
-        const result = mapLiveChatPaidMessageItemRenderer(sample);
-
-        expect(result).toEqual({
-            id: 'random-id',
-            messageParts: [],
-            avatars: [
-                {
-                    url: 'https://sample-author-avatar/small.jpg',
-                    width: 32,
-                    height: 32,
-                },
-                {
-                    url: 'https://sample-author-avatar/large.jpg',
-                    width: 64,
-                    height: 64,
-                },
-            ],
-            timestampInUs: 1591023793124462,
-            authorName: 'Sample Author',
-            chatType: 'super-chat',
-            color: 'rgba(230,33,23,1)',
-            donationAmount: 'HK$1,500.00',
+            authorBadges: ['https://badge-url', 'https://badge-url-2'],
+            chatType: 'membership',
         });
     });
 });
