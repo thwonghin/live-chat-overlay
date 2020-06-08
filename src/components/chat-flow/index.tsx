@@ -5,6 +5,7 @@ import { RootState } from '@/reducers';
 import { chatEventsActions } from '@/reducers/chat-events';
 import { useSettings } from '@/hooks/use-settings';
 import { useInterval } from '@/hooks/use-interval';
+import { useKeyboardToggle } from '@/hooks/use-keyboard-toggle';
 import {
     isNormalChatItem,
     isSuperChatItem,
@@ -25,12 +26,14 @@ interface Props {
     settings: Settings;
     chatItems: UiChatItem[];
     onTimeout: (chatItem: UiChatItem) => void;
+    isDebugActive: boolean;
 }
 
 const ChatFlowLayout: React.FC<Props> = ({
     chatItems,
     onTimeout,
     settings,
+    isDebugActive,
 }) => {
     return (
         <div className={classes.container}>
@@ -78,13 +81,22 @@ const ChatFlowLayout: React.FC<Props> = ({
                     )}
                 </MessageFlower>
             ))}
-            <DebugOverlay />
+            {isDebugActive && <DebugOverlay />}
         </div>
     );
 };
 
+const dKey = 68;
+
 const ChatFlow: React.FC = () => {
     const settings = useSettings();
+
+    const { isActive: isDebugActive } = useKeyboardToggle({
+        shouldAlt: true,
+        shouldCtrl: true,
+        key: dKey,
+        attached: window.parent.document.body,
+    });
 
     const dispatch = useDispatch();
     const chatItems = useSelector<
@@ -110,6 +122,7 @@ const ChatFlow: React.FC = () => {
             chatItems={chatItems}
             onTimeout={onTimeout}
             settings={settings}
+            isDebugActive={isDebugActive}
         />
     );
 };
