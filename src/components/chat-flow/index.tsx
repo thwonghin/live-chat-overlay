@@ -19,6 +19,7 @@ import MessageFlower from './message-flower';
 import TwoLinesMessage from './two-lines-message';
 import SuperChatSticker from './super-chat-sticker';
 import { UiChatItem } from './types';
+import DebugOverlay from './debug-overlay';
 
 interface Props {
     settings: Settings;
@@ -77,6 +78,7 @@ const ChatFlowLayout: React.FC<Props> = ({
                     )}
                 </MessageFlower>
             ))}
+            <DebugOverlay />
         </div>
     );
 };
