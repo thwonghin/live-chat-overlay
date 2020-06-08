@@ -7,7 +7,7 @@
     "author": "Hin Wong <thwong.henry@gmail.com>",
     "license": "MIT",
     "engines": {
-        "node": ">=14.3.0"
+        "node": ">=14.4.0"
     },
     "scripts": {
         "test:unit": "jest tests/unit",
