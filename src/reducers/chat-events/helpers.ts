@@ -4,11 +4,11 @@ import { MessageSettings } from '@/services/settings/types';
 import { Position, State } from './types';
 
 export function serializePosition(position: Position): string {
-    return `${position.layerNumber}.${position.lineNumber}`;
+    return `${position.layerNumber}-${position.lineNumber}`;
 }
 
 export function deserializePosition(serializedPosition: string): Position {
-    const [layerNumber, lineNumber] = serializedPosition.split(',');
+    const [layerNumber, lineNumber] = serializedPosition.split('-');
     return {
         layerNumber: Number(layerNumber),
         lineNumber: Number(lineNumber),
@@ -23,7 +23,7 @@ interface GetPositionParams {
     addTimestamp: number;
     flowTimeInSec: number;
     containerWidth: number;
-    lineHeight: number;
+    charWidth: number;
 }
 
 const maxLayers = 3;
@@ -36,7 +36,7 @@ export function getPosition({
     addTimestamp,
     flowTimeInSec,
     containerWidth,
-    lineHeight,
+    charWidth,
 }: GetPositionParams): Position | null {
     for (let layerNumber = 0; layerNumber < maxLayers; layerNumber += 1) {
         for (
@@ -57,14 +57,14 @@ export function getPosition({
 
             const lastMsgFlowedTime =
                 (addTimestamp - lastMessage?.addTimestamp) / 1000;
-            const lastMsgWidth = lastMessage?.estimatedMsgWidth * lineHeight;
+            const lastMsgWidth = lastMessage?.estimatedMsgWidth * charWidth;
             const lastMsgSpeed =
                 (containerWidth + lastMsgWidth) / flowTimeInSec;
             const lastMsgPos = lastMsgSpeed * lastMsgFlowedTime - lastMsgWidth;
 
             const remainingTime = flowTimeInSec - lastMsgFlowedTime;
 
-            const estimatedEleWidth = estimatedMsgWidth * lineHeight;
+            const estimatedEleWidth = estimatedMsgWidth * charWidth;
             const speed = (containerWidth + estimatedEleWidth) / flowTimeInSec;
 
             if (speed * remainingTime < containerWidth && lastMsgPos > 0) {
