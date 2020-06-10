@@ -4,12 +4,12 @@ import React, {
     useState,
     useLayoutEffect,
     useCallback,
+    useEffect,
 } from 'react';
 
 import { useRect } from '@/hooks/use-rect';
 import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
 import { useSettings } from '@/hooks/use-settings';
-import { useInterval } from '@/hooks/use-interval';
 import classes from './index.scss';
 
 import { UiChatItem } from '../types';
@@ -23,7 +23,7 @@ interface Props {
 const MessageFlower: React.FC<Props> = ({ children, chatItem, onTimeout }) => {
     const [isFlowing, setIsFlowing] = useState(false);
 
-    const ref = useRef(null);
+    const ref = useRef<HTMLDivElement>(null);
     const rect = useRect(ref);
     const settings = useSettings();
     const timeout = settings.flowTimeInSec * 1000;
@@ -59,7 +59,12 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onTimeout }) => {
         onTimeout(chatItem);
     }, [onTimeout, chatItem]);
 
-    useInterval(onTimeoutCallback, timeout);
+    useEffect(() => {
+        if (!ref.current) {
+            return;
+        }
+        ref.current.addEventListener('transitionend', onTimeoutCallback);
+    }, [onTimeoutCallback]);
 
     useLayoutEffect(() => setIsFlowing(true), []);
 
