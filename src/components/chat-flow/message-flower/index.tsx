@@ -60,10 +60,16 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onTimeout }) => {
     }, [onTimeout, chatItem]);
 
     useEffect(() => {
-        if (!ref.current) {
-            return;
+        const containerDom = ref.current;
+        if (containerDom) {
+            containerDom.addEventListener('transitionend', onTimeoutCallback);
         }
-        ref.current.addEventListener('transitionend', onTimeoutCallback);
+
+        return () =>
+            containerDom?.removeEventListener(
+                'transitionend',
+                onTimeoutCallback,
+            );
     }, [onTimeoutCallback]);
 
     useLayoutEffect(() => setIsFlowing(true), []);
