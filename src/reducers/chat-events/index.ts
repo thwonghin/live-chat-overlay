@@ -45,7 +45,7 @@ const chatEventsSlice = createSlice({
                 maxLineNumber: settings.numberOfLines,
                 flowTimeInSec: settings.flowTimeInSec,
                 containerWidth: playerRect.width,
-                lineHeight: playerRect.height / settings.numberOfLines,
+                charWidth: playerRect.height / settings.numberOfLines,
             });
 
             // Ignore message if overflow
