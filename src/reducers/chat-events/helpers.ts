@@ -4,11 +4,11 @@ import { MessageSettings } from '@/services/settings/types';
 import { Position, State } from './types';
 
 export function serializePosition(position: Position): string {
-    return `${position.layerNumber}-${position.lineNumber}`;
+    return `${position.layerNumber}.${position.lineNumber}`;
 }
 
 export function deserializePosition(serializedPosition: string): Position {
-    const [layerNumber, lineNumber] = serializedPosition.split('-');
+    const [layerNumber, lineNumber] = serializedPosition.split(',');
     return {
         layerNumber: Number(layerNumber),
         lineNumber: Number(lineNumber),
