@@ -33,10 +33,18 @@ function roundBenchmark(benchmark: Benchmark): RoundedBenchmark {
     };
 }
 
-function renderBenchmark(benchmark: RoundedBenchmark): string[] {
+function renderBenchmark(
+    benchmark: RoundedBenchmark,
+): { key: string; text: string }[] {
     return [
-        `min: ${benchmark.min}, max: ${benchmark.max}`,
-        `avg: ${benchmark.avg}, count: ${benchmark.count}`,
+        {
+            key: 'min-max',
+            text: `min: ${benchmark.min}, max: ${benchmark.max}`,
+        },
+        {
+            key: 'avg',
+            text: `avg: ${benchmark.avg}, count: ${benchmark.count}`,
+        },
     ];
 }
 
@@ -79,9 +87,13 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                         <p className={classes['debug-text']}>
                             Process response benchmark (μs):
                         </p>
-                        {renderBenchmark(processXhrBenchmark).map((value) => (
-                            <p className={classes['debug-text']}>{value}</p>
-                        ))}
+                        {renderBenchmark(processXhrBenchmark).map(
+                            ({ key, text }) => (
+                                <p className={classes['debug-text']} key={key}>
+                                    {text}
+                                </p>
+                            ),
+                        )}
                     </>
                 )}
                 {processChatEventBenchmark.count !== 0 && (
@@ -90,8 +102,10 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                             Process chat event benchmark (μs):
                         </p>
                         {renderBenchmark(processChatEventBenchmark).map(
-                            (value) => (
-                                <p className={classes['debug-text']}>{value}</p>
+                            ({ key, text }) => (
+                                <p className={classes['debug-text']} key={key}>
+                                    {text}
+                                </p>
                             ),
                         )}
                     </>
