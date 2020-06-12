@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/thwonghin/live-chat-overlay/compare/v1.1.0...v1.2.0) (2020-06-12)
+
+
+### Features
+
+* init debug mode ([#117](https://github.com/thwonghin/live-chat-overlay/issues/117)) ([4fd6f23](https://github.com/thwonghin/live-chat-overlay/commit/4fd6f23e89b177204d2446148b528a7783c7e9b5))
+
+
+### Bug Fixes
+
+* chat event dispatcher ([#119](https://github.com/thwonghin/live-chat-overlay/issues/119)) ([8f5675d](https://github.com/thwonghin/live-chat-overlay/commit/8f5675d04f6196e0453241ab47d8a859b2a4eb61))
+
 ## [1.1.0](https://github.com/thwonghin/live-chat-overlay/compare/v1.0.5...v1.1.0) (2020-06-06)
 
 
