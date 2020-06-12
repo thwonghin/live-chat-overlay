@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
+import { useKeyboardEvent } from './use-keyboard-event';
 
 interface UseKeyboardToggleParams {
     shouldAlt: boolean;
@@ -19,23 +20,18 @@ export function useKeyboardToggle({
 }: UseKeyboardToggleParams): UseKeyboardToggleResult {
     const [isActive, setIsActive] = useState(false);
 
-    useEffect(() => {
-        const handleKeyDown = (ev: KeyboardEvent) => {
-            if (shouldAlt && !ev.altKey) {
-                return;
-            }
-            if (shouldCtrl && !ev.ctrlKey) {
-                return;
-            }
-            if (key !== ev.keyCode) {
-                return;
-            }
-            setIsActive((value) => !value);
-        };
-        attached.addEventListener('keydown', handleKeyDown);
+    const toggleActive = useCallback(
+        () => setIsActive((prevIsActive) => !prevIsActive),
+        [],
+    );
 
-        return () => attached.removeEventListener('keydown', handleKeyDown);
-    }, [attached, key, shouldAlt, shouldCtrl]);
+    useKeyboardEvent({
+        shouldAlt,
+        shouldCtrl,
+        key,
+        attached,
+        onChange: toggleActive,
+    });
 
     return {
         isActive,
