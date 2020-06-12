@@ -17,10 +17,10 @@ import { UiChatItem } from '../types';
 interface Props {
     children: React.ReactNode;
     chatItem: UiChatItem;
-    onTimeout: (chatItem: UiChatItem) => void;
+    onDone: (chatItem: UiChatItem) => void;
 }
 
-const MessageFlower: React.FC<Props> = ({ children, chatItem, onTimeout }) => {
+const MessageFlower: React.FC<Props> = ({ children, chatItem, onDone }) => {
     const [isFlowing, setIsFlowing] = useState(false);
 
     const ref = useRef(null);
@@ -56,8 +56,8 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onTimeout }) => {
     );
 
     const onTimeoutCallback = useCallback(() => {
-        onTimeout(chatItem);
-    }, [onTimeout, chatItem]);
+        onDone(chatItem);
+    }, [onDone, chatItem]);
 
     useInterval(onTimeoutCallback, timeout);
 

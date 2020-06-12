@@ -25,13 +25,13 @@ import DebugOverlay from './debug-overlay';
 interface Props {
     settings: Settings;
     chatItems: UiChatItem[];
-    onTimeout: (chatItem: UiChatItem) => void;
+    onDone: (chatItem: UiChatItem) => void;
     isDebugActive: boolean;
 }
 
 const ChatFlowLayout: React.FC<Props> = ({
     chatItems,
-    onTimeout,
+    onDone,
     settings,
     isDebugActive,
 }) => {
@@ -39,7 +39,7 @@ const ChatFlowLayout: React.FC<Props> = ({
         <div className={classes.container}>
             {chatItems.map((chatItem) => (
                 <MessageFlower
-                    onTimeout={onTimeout}
+                    onDone={onDone}
                     key={chatItem.id}
                     chatItem={chatItem}
                 >
@@ -101,7 +101,7 @@ const ChatFlow: React.FC = () => {
     >((rootState) => rootState.chatEvents.chatItems, shallowEqual);
 
     const dispatch = useDispatch();
-    const onTimeout = useCallback(
+    const onMsgDone = useCallback(
         (chatItem) => {
             dispatch(chatEventsActions.markAsDone(chatItem));
         },
@@ -117,7 +117,7 @@ const ChatFlow: React.FC = () => {
     return (
         <ChatFlowLayout
             chatItems={chatItems}
-            onTimeout={onTimeout}
+            onDone={onMsgDone}
             settings={settings}
             isDebugActive={isDebugActive}
         />
