@@ -5,7 +5,6 @@ import { RootState } from '@/reducers';
 import { chatEventsActions } from '@/reducers/chat-events';
 import { useSettings } from '@/hooks/use-settings';
 import { useInterval } from '@/hooks/use-interval';
-import { useKeyboardToggle } from '@/hooks/use-keyboard-toggle';
 import {
     isNormalChatItem,
     isSuperChatItem,
@@ -15,6 +14,7 @@ import {
 } from '@/services/chat-event/mapper';
 import { Settings } from '@/services/settings/types';
 
+import { useToggleDebugMode } from './use-toggle-debug-mode';
 import classes from './index.scss';
 import MessageFlower from './message-flower';
 import TwoLinesMessage from './two-lines-message';
@@ -86,24 +86,21 @@ const ChatFlowLayout: React.FC<Props> = ({
     );
 };
 
-const dKey = 68;
-
 const ChatFlow: React.FC = () => {
     const settings = useSettings();
 
-    const { isActive: isDebugActive } = useKeyboardToggle({
-        shouldAlt: true,
-        shouldCtrl: true,
-        key: dKey,
-        attached: window.parent.document.body,
-    });
+    useToggleDebugMode();
 
-    const dispatch = useDispatch();
+    const isDebugActive = useSelector<RootState, boolean>(
+        (rootState) => rootState.debugInfo.isDebugging,
+    );
+
     const chatItems = useSelector<
         RootState,
         RootState['chatEvents']['chatItems']
     >((rootState) => rootState.chatEvents.chatItems, shallowEqual);
 
+    const dispatch = useDispatch();
     const onTimeout = useCallback(
         (chatItem) => {
             dispatch(chatEventsActions.markAsDone(chatItem));

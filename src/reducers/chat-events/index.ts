@@ -126,7 +126,9 @@ const chatEventsSlice = createSlice({
             };
         },
         reset(): State {
-            return initialState;
+            return {
+                ...initialState,
+            };
         },
     },
 });

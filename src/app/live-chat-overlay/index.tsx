@@ -24,6 +24,8 @@ export function initLiveChat(): () => void {
     reactContainer.style.position = 'absolute';
     reactContainer.style.top = '0';
     reactContainer.style.left = '0';
+    reactContainer.style.width = '100%';
+    reactContainer.style.height = '100%';
 
     ReactDOM.render(
         <React.StrictMode>
