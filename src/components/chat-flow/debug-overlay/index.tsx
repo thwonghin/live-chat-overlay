@@ -77,7 +77,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 {processXhrBenchmark.count !== 0 && (
                     <>
                         <p className={classes['debug-text']}>
-                            Process response benchmark:
+                            Process response benchmark (μs):
                         </p>
                         {renderBenchmark(processXhrBenchmark).map((value) => (
                             <p className={classes['debug-text']}>{value}</p>
@@ -87,7 +87,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 {processChatEventBenchmark.count !== 0 && (
                     <>
                         <p className={classes['debug-text']}>
-                            Process chat event benchmark:
+                            Process chat event benchmark (μs):
                         </p>
                         {renderBenchmark(processChatEventBenchmark).map(
                             (value) => (
