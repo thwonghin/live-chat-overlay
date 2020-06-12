@@ -31,7 +31,7 @@ export class ChatEventResponseObserver {
         add: [],
     };
 
-    private isObserving = false;
+    private isObserving = !document.hidden;
 
     private xhrEventProcessQueue: CustomEventDetail[] = [];
 
@@ -48,9 +48,6 @@ export class ChatEventResponseObserver {
     }
 
     private onChatMessage = (e: Event): void => {
-        if (!this.isObserving) {
-            return;
-        }
         const customEvent = e as CustomEvent<CustomEventDetail>;
 
         if (!customEvent.detail.url.startsWith(GET_LIVE_CHAT_URL)) {
@@ -58,6 +55,14 @@ export class ChatEventResponseObserver {
         }
 
         this.xhrEventProcessQueue.push(customEvent.detail);
+    };
+
+    private handleVisibilityChange = (): void => {
+        if (document.hidden) {
+            this.pause();
+        } else {
+            this.resume();
+        }
     };
 
     private processXhrEvent = (): void => {
@@ -107,7 +112,7 @@ export class ChatEventResponseObserver {
             MAX_NUM_CHAT_PER_PROCESS,
         );
 
-        if (controlledItems.length > 0) {
+        if (controlledItems.length > 0 && this.isObserving) {
             this.listeners.add.forEach((listener) => listener(controlledItems));
         }
     };
@@ -115,6 +120,10 @@ export class ChatEventResponseObserver {
     public start(): void {
         this.isObserving = true;
         window.addEventListener(CHAT_EVENT_NAME, this.onChatMessage);
+        document.addEventListener(
+            'visibilitychange',
+            this.handleVisibilityChange,
+        );
         this.xhrEventProcessInterval = window.setInterval(
             this.processXhrEvent,
             500,
@@ -128,17 +137,21 @@ export class ChatEventResponseObserver {
     public stop(): void {
         this.isObserving = false;
         window.removeEventListener(CHAT_EVENT_NAME, this.onChatMessage);
+        document.removeEventListener(
+            'visibilitychange',
+            this.handleVisibilityChange,
+        );
         window.clearInterval(this.xhrEventProcessInterval);
         window.clearInterval(this.chatItemProcessInterval);
     }
 
-    public pause(): void {
+    public pause = (): void => {
         this.isObserving = false;
-    }
+    };
 
-    public resume(): void {
+    public resume = (): void => {
         this.isObserving = true;
-    }
+    };
 
     public reset(): void {
         this.chatItemProcessQueue = [];
