@@ -4,6 +4,7 @@ import {
     mapChatItemsFromLiveResponse,
     isTimeToDispatch,
     controlFlow,
+    benchmark,
 } from './helpers';
 import { ChatItem } from '../models';
 import {
@@ -26,12 +27,21 @@ const TIME_DELAY_IN_USEC = 8 * 1000 * 1000;
 
 const MAX_NUM_CHAT_PER_PROCESS = 3;
 
+type DebugInfo = Partial<{
+    processXhrResponseMs: number;
+    processChatEventMs: number;
+}>;
+
 export class ChatEventResponseObserver {
     private listeners: Record<ChatEvent, ChatEventCallback[]> = {
         add: [],
     };
 
     private isObserving = !document.hidden;
+
+    private isDebugging: boolean;
+
+    private onDebugInfo?: (info: DebugInfo) => void;
 
     private xhrEventProcessQueue: CustomEventDetail[] = [];
 
@@ -43,8 +53,14 @@ export class ChatEventResponseObserver {
 
     private getCurrentPlayerTime: () => number;
 
-    constructor(getCurrentPlayerTime: () => number) {
+    constructor(
+        getCurrentPlayerTime: () => number,
+        isDebugging: boolean,
+        onDebugInfo?: (info: DebugInfo) => void,
+    ) {
         this.getCurrentPlayerTime = getCurrentPlayerTime;
+        this.isDebugging = isDebugging;
+        this.onDebugInfo = onDebugInfo;
     }
 
     private onChatMessage = (e: Event): void => {
@@ -72,48 +88,64 @@ export class ChatEventResponseObserver {
             return;
         }
 
-        const isReplay = xhrEvent.url.startsWith(GET_LIVE_CHAT_REPLAY_URL);
+        const { runtime } = benchmark(() => {
+            const isReplay = xhrEvent.url.startsWith(GET_LIVE_CHAT_REPLAY_URL);
 
-        const response = JSON.parse(xhrEvent.response) as RootObject;
+            const response = JSON.parse(xhrEvent.response) as RootObject;
 
-        const chatItems = isReplay
-            ? mapChatItemsFromReplayResponse(response as ReplayRootObject)
-            : mapChatItemsFromLiveResponse(response as LiveRootObject);
+            const chatItems = isReplay
+                ? mapChatItemsFromReplayResponse(response as ReplayRootObject)
+                : mapChatItemsFromLiveResponse(response as LiveRootObject);
 
-        this.chatItemProcessQueue.push(...chatItems);
+            this.chatItemProcessQueue.push(...chatItems);
+        }, this.isDebugging);
+
+        if (this.isDebugging) {
+            this.onDebugInfo?.({
+                processXhrResponseMs: runtime,
+            });
+        }
     };
 
     private processChatItem = (): void => {
-        const currentTimeInUsec = Date.now() * 1000;
-        const currentPlayerTimeInMsc = this.getCurrentPlayerTime() * 1000;
+        const { result, runtime } = benchmark(() => {
+            const currentTimeInUsec = Date.now() * 1000;
+            const currentPlayerTimeInMsc = this.getCurrentPlayerTime() * 1000;
 
-        let lastIndex = 0;
-        for (
-            lastIndex = 0;
-            lastIndex < this.chatItemProcessQueue.length;
-            lastIndex += 1
-        ) {
-            if (
-                !this.chatItemProcessQueue[lastIndex] ||
-                !isTimeToDispatch({
-                    chatItem: this.chatItemProcessQueue[lastIndex],
-                    currentTimeInUsec,
-                    currentPlayerTimeInMsc,
-                    currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
-                })
+            let lastIndex = 0;
+            for (
+                lastIndex = 0;
+                lastIndex < this.chatItemProcessQueue.length;
+                lastIndex += 1
             ) {
-                break;
+                if (
+                    !this.chatItemProcessQueue[lastIndex] ||
+                    !isTimeToDispatch({
+                        chatItem: this.chatItemProcessQueue[lastIndex],
+                        currentTimeInUsec,
+                        currentPlayerTimeInMsc,
+                        currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
+                    })
+                ) {
+                    break;
+                }
             }
+
+            const dispatchingItems = this.chatItemProcessQueue.splice(
+                0,
+                lastIndex,
+            );
+            return controlFlow(dispatchingItems, MAX_NUM_CHAT_PER_PROCESS);
+        }, this.isDebugging);
+
+        if (this.isDebugging) {
+            this.onDebugInfo?.({
+                processChatEventMs: runtime,
+            });
         }
 
-        const dispatchingItems = this.chatItemProcessQueue.splice(0, lastIndex);
-        const controlledItems = controlFlow(
-            dispatchingItems,
-            MAX_NUM_CHAT_PER_PROCESS,
-        );
-
-        if (controlledItems.length > 0 && this.isObserving) {
-            this.listeners.add.forEach((listener) => listener(controlledItems));
+        if (result.length > 0 && this.isObserving) {
+            this.listeners.add.forEach((listener) => listener(result));
         }
     };
 
