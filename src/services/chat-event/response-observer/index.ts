@@ -17,9 +17,10 @@ const GET_LIVE_CHAT_URL = 'https://www.youtube.com/live_chat';
 const GET_LIVE_CHAT_REPLAY_URL =
     'https://www.youtube.com/live_chat_replay/get_live_chat_replay';
 
-type ChatEvent = 'add';
-
-type ChatEventCallback = (chatItem: ChatItem[]) => void;
+interface EventMap {
+    add: ChatItem[];
+    debug: DebugInfo;
+}
 
 const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
@@ -27,21 +28,22 @@ const TIME_DELAY_IN_USEC = 8 * 1000 * 1000;
 
 const MAX_NUM_CHAT_PER_PROCESS = 3;
 
-type DebugInfo = Partial<{
+export type DebugInfo = Partial<{
     processXhrResponseMs: number;
     processChatEventMs: number;
 }>;
 
 export class ChatEventResponseObserver {
-    private listeners: Record<ChatEvent, ChatEventCallback[]> = {
+    private listeners: {
+        [Key in keyof EventMap]: ((data: EventMap[Key]) => void)[];
+    } = {
         add: [],
+        debug: [],
     };
 
     private isObserving = !document.hidden;
 
-    private isDebugging: boolean;
-
-    private onDebugInfo?: (info: DebugInfo) => void;
+    private isDebugging = false;
 
     private xhrEventProcessQueue: CustomEventDetail[] = [];
 
@@ -53,14 +55,8 @@ export class ChatEventResponseObserver {
 
     private getCurrentPlayerTime: () => number;
 
-    constructor(
-        getCurrentPlayerTime: () => number,
-        isDebugging: boolean,
-        onDebugInfo?: (info: DebugInfo) => void,
-    ) {
+    constructor(getCurrentPlayerTime: () => number) {
         this.getCurrentPlayerTime = getCurrentPlayerTime;
-        this.isDebugging = isDebugging;
-        this.onDebugInfo = onDebugInfo;
     }
 
     private onChatMessage = (e: Event): void => {
@@ -101,9 +97,11 @@ export class ChatEventResponseObserver {
         }, this.isDebugging);
 
         if (this.isDebugging) {
-            this.onDebugInfo?.({
-                processXhrResponseMs: runtime,
-            });
+            this.listeners.debug.forEach((listener) =>
+                listener({
+                    processXhrResponseMs: runtime,
+                }),
+            );
         }
     };
 
@@ -139,9 +137,11 @@ export class ChatEventResponseObserver {
         }, this.isDebugging);
 
         if (this.isDebugging) {
-            this.onDebugInfo?.({
-                processChatEventMs: runtime,
-            });
+            this.listeners.debug.forEach((listener) =>
+                listener({
+                    processXhrResponseMs: runtime,
+                }),
+            );
         }
 
         if (result.length > 0 && this.isObserving) {
@@ -190,20 +190,29 @@ export class ChatEventResponseObserver {
         this.xhrEventProcessQueue = [];
     }
 
-    public addEventListener(
-        event: ChatEvent,
-        callback: ChatEventCallback,
-    ): void {
-        this.listeners[event] = this.listeners[event].concat(callback);
+    public startDebug(): void {
+        this.isDebugging = true;
     }
 
-    public removeEventListener(
-        event: ChatEvent,
-        callback: ChatEventCallback,
+    public stopDebug(): void {
+        this.isDebugging = false;
+    }
+
+    public addEventListener<K extends keyof EventMap>(
+        event: K,
+        callback: (data: EventMap[K]) => void,
     ): void {
-        this.listeners[event] = this.listeners[event].filter(
-            (eventListener) => eventListener !== callback,
-        );
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.listeners[event].push(callback as any);
+    }
+
+    public removeEventListener<K extends keyof EventMap>(
+        event: K,
+        callback: (data: EventMap[K]) => void,
+    ): void {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const found = this.listeners[event].indexOf(callback as any);
+        this.listeners[event].splice(found, 1);
     }
 
     public cleanup(): void {
