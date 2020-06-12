@@ -139,7 +139,7 @@ export class ChatEventResponseObserver {
         if (this.isDebugging) {
             this.listeners.debug.forEach((listener) =>
                 listener({
-                    processXhrResponseMs: runtime,
+                    processChatEventMs: runtime,
                 }),
             );
         }
