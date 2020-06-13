@@ -52,12 +52,16 @@ interface DebugOverlayLayoutProps {
     chatEventDebugInfo: ChatEventDebugInfo;
     processXhrBenchmark: RoundedBenchmark;
     processChatEventBenchmark: RoundedBenchmark;
+    processXhrQueueLength: number;
+    processChatEventQueueLength: number;
 }
 
 export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
     chatEventDebugInfo,
     processChatEventBenchmark,
     processXhrBenchmark,
+    processXhrQueueLength,
+    processChatEventQueueLength,
 }) => {
     return (
         <>
@@ -82,6 +86,9 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 ))}
             </div>
             <div className={classes['benchmark-container']}>
+                <p className={classes['debug-text']}>
+                    {`Response Process Queue Length ${processXhrQueueLength}`}
+                </p>
                 {processXhrBenchmark.count !== 0 && (
                     <>
                         <p className={classes['debug-text']}>
@@ -96,6 +103,10 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                         )}
                     </>
                 )}
+                <br />
+                <p className={classes['debug-text']}>
+                    {`Response Chat Event Queue Length ${processChatEventQueueLength}`}
+                </p>
                 {processChatEventBenchmark.count !== 0 && (
                     <>
                         <p className={classes['debug-text']}>
@@ -155,12 +166,20 @@ const DebugOverlay: React.FC = () => {
             roundBenchmark(rootState.debugInfo.processChatEventBenchmark),
         shallowEqual,
     );
+    const processXhrQueueLength = useSelector<RootState, number>(
+        (rootState) => rootState.debugInfo.processXhrQueueLength,
+    );
+    const processChatEventQueueLength = useSelector<RootState, number>(
+        (rootState) => rootState.debugInfo.processChatEventQueueLength,
+    );
 
     return (
         <DebugOverlayLayout
             chatEventDebugInfo={chatEventDebugInfo}
             processChatEventBenchmark={processChatEventBenchmark}
             processXhrBenchmark={processXhrBenchmark}
+            processXhrQueueLength={processXhrQueueLength}
+            processChatEventQueueLength={processChatEventQueueLength}
         />
     );
 };
