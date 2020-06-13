@@ -34,6 +34,8 @@ export const DebugOverlay: React.FC = () => {
                     avg: '150.00',
                     count: 10,
                 }}
+                processChatEventQueueLength={100}
+                processXhrQueueLength={100}
             />
         </div>
     );

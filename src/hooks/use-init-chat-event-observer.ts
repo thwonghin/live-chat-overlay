@@ -50,6 +50,20 @@ export function useInitChatEventObserver(): void {
                     ),
                 );
             }
+            if (debugInfo.processChatEventQueueLength) {
+                dispatch(
+                    debugInfoActions.updateProcessChatEventQueueLength(
+                        debugInfo.processChatEventQueueLength,
+                    ),
+                );
+            }
+            if (debugInfo.processXhrQueueLength) {
+                dispatch(
+                    debugInfoActions.updateProcessXhrQueueLength(
+                        debugInfo.processXhrQueueLength,
+                    ),
+                );
+            }
         }
 
         chatEventObserver.addEventListener('debug', handleDebugInfo);

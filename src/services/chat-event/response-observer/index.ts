@@ -31,6 +31,8 @@ const MAX_NUM_CHAT_PER_PROCESS = 3;
 export type DebugInfo = Partial<{
     processXhrResponseMs: number;
     processChatEventMs: number;
+    processXhrQueueLength: number;
+    processChatEventQueueLength: number;
 }>;
 
 export class ChatEventResponseObserver {
@@ -59,6 +61,12 @@ export class ChatEventResponseObserver {
         this.getCurrentPlayerTime = getCurrentPlayerTime;
     }
 
+    private emitDebugInfoEvent(debugInfo: DebugInfo) {
+        if (this.isDebugging) {
+            this.listeners.debug.forEach((listener) => listener(debugInfo));
+        }
+    }
+
     private onChatMessage = (e: Event): void => {
         const customEvent = e as CustomEvent<CustomEventDetail>;
 
@@ -67,6 +75,9 @@ export class ChatEventResponseObserver {
         }
 
         this.xhrEventProcessQueue.push(customEvent.detail);
+        this.emitDebugInfoEvent({
+            processXhrQueueLength: this.xhrEventProcessQueue.length,
+        });
     };
 
     private handleVisibilityChange = (): void => {
@@ -96,13 +107,11 @@ export class ChatEventResponseObserver {
             this.chatItemProcessQueue.push(...chatItems);
         }, this.isDebugging);
 
-        if (this.isDebugging) {
-            this.listeners.debug.forEach((listener) =>
-                listener({
-                    processXhrResponseMs: runtime,
-                }),
-            );
-        }
+        this.emitDebugInfoEvent({
+            processXhrResponseMs: runtime,
+            processXhrQueueLength: this.xhrEventProcessQueue.length,
+            processChatEventQueueLength: this.chatItemProcessQueue.length,
+        });
     };
 
     private processChatItem = (): void => {
@@ -136,13 +145,10 @@ export class ChatEventResponseObserver {
             return controlFlow(dispatchingItems, MAX_NUM_CHAT_PER_PROCESS);
         }, this.isDebugging);
 
-        if (this.isDebugging) {
-            this.listeners.debug.forEach((listener) =>
-                listener({
-                    processChatEventMs: runtime,
-                }),
-            );
-        }
+        this.emitDebugInfoEvent({
+            processChatEventMs: runtime,
+            processChatEventQueueLength: this.chatItemProcessQueue.length,
+        });
 
         if (result.length > 0 && this.isObserving) {
             this.listeners.add.forEach((listener) => listener(result));
@@ -188,10 +194,19 @@ export class ChatEventResponseObserver {
     public reset(): void {
         this.chatItemProcessQueue = [];
         this.xhrEventProcessQueue = [];
+
+        this.emitDebugInfoEvent({
+            processXhrQueueLength: 0,
+            processChatEventQueueLength: 0,
+        });
     }
 
     public startDebug(): void {
         this.isDebugging = true;
+        this.emitDebugInfoEvent({
+            processXhrQueueLength: this.xhrEventProcessQueue.length,
+            processChatEventQueueLength: this.chatItemProcessQueue.length,
+        });
     }
 
     public stopDebug(): void {

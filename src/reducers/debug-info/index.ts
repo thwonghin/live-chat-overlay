@@ -17,6 +17,8 @@ const initialState: State = {
         avg: 0,
         count: 0,
     },
+    processXhrQueueLength: 0,
+    processChatEventQueueLength: 0,
 };
 
 const debugInfoSlice = createSlice({
@@ -51,6 +53,21 @@ const debugInfoSlice = createSlice({
                     state.processChatEventBenchmark,
                     action.payload * 1000,
                 ),
+            };
+        },
+        updateProcessXhrQueueLength(state, action: PayloadAction<number>) {
+            return {
+                ...state,
+                processXhrQueueLength: action.payload,
+            };
+        },
+        updateProcessChatEventQueueLength(
+            state,
+            action: PayloadAction<number>,
+        ) {
+            return {
+                ...state,
+                processChatEventQueueLength: action.payload,
             };
         },
         resetMetrics(state) {
