@@ -1,4 +1,4 @@
-import configFunc from '../../config/dist/webpack.config';
+import configFunc from '../../webpack/dist/webpack.config';
 
 const custom = configFunc('storybook');
 
