@@ -95,10 +95,16 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
                           globPattern: 'src/**/*.scss',
                       }),
                       new ForkTsCheckerWebpackPlugin({
-                          tsconfig: tsconfigPath,
                           async: true,
-                          useTypescriptIncrementalApi: true,
-                          eslint: true,
+                          typescript: {
+                              enabled: true,
+                              configFile: tsconfigPath,
+                              mode: 'write-references',
+                          },
+                          eslint: {
+                              enabled: true,
+                              files: ['./src/**/*.ts', './src/**/*.tsx'],
+                          },
                       }),
                   ]),
             new CopyWebpackPlugin({
