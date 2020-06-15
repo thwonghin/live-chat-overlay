@@ -14,14 +14,14 @@
         "lint": "eslint --quiet --ext .ts src tests",
         "lint:test": "eslint --quiet --ext .ts tests",
         "lint:fix": "eslint src --ext ts,tsx --quiet --fix && stylelint src/**/*.scss --fix",
-        "clean": "rm -rf dist .storybook/dist config/dist config/tsconfig.tsbuildinfo",
-        "build": "tsc -p config && webpack --config config/dist/webpack.config.js",
+        "clean": "rm -rf dist .storybook/dist webpack/dist webpack/tsconfig.tsbuildinfo",
+        "build": "tsc -p webpack && webpack --config webpack/dist/webpack.config.js",
         "build:prod": "yarn build --env production",
         "build:release": "yarn build --env release",
         "watch": "yarn build --env development --watch",
         "format": "prettier src/**/*.ts src/**/*.tsx --write",
         "version:set": "dot-json dist/manifest.json version",
-        "storybook": "tsc -p config && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && start-storybook -c .storybook/dist/"
+        "storybook": "tsc -p webpack && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && start-storybook -c .storybook/dist/"
     },
     "devDependencies": {
         "@babel/core": "^7.10.2",
