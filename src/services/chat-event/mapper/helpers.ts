@@ -74,6 +74,7 @@ function mapAuthorBadges(
     return rendererAuthorBadges
         .filter((v) => !!v.liveChatAuthorBadgeRenderer.customThumbnail)
         .flatMap((v) =>
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             v.liveChatAuthorBadgeRenderer.customThumbnail!.thumbnails.flatMap(
                 (_) => _.url,
             ),
