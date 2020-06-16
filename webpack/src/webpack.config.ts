@@ -114,8 +114,8 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
                             'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
                     },
                     {
-                        from: 'public/*',
-                        flatten: true,
+                        context: 'public',
+                        from: '**/*',
                     },
                 ],
             }),
