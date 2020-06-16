@@ -60,12 +60,13 @@ export class SettingsStorage {
 
     static listeners: Listener[] = [];
 
-    static get(): Settings {
+    static get settings(): Settings {
         return this.currentSettings;
     }
 
-    static set(settings: Settings): void {
-        this.currentSettings = settings;
+    static set settings(value: Settings) {
+        this.currentSettings = value;
+        this.listeners.forEach((listener) => listener(this.currentSettings));
     }
 
     static addEventListener(event: 'change', listener: Listener): void {

@@ -31,7 +31,7 @@ const chatEventsSlice = createSlice({
         ): State {
             const { chatItem, playerRect } = action.payload;
             const addTimestamp = Date.now();
-            const settings = SettingsStorage.get();
+            const { settings } = SettingsStorage;
             const messageSettings = getMessageSettings(chatItem, settings);
             const estimatedMsgWidth = estimateMsgWidth(
                 chatItem,

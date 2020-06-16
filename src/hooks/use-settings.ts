@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { cloneDeep } from 'lodash-es';
 import { SettingsStorage } from '@/services/settings';
 import { Settings } from '@/services/settings/types';
 
@@ -8,11 +9,11 @@ interface UseSettingsResult {
 }
 
 export function useSettings(): UseSettingsResult {
-    const [settings, setSettings] = useState(SettingsStorage.get());
+    const [settings, setSettings] = useState(SettingsStorage.settings);
 
     useEffect(() => {
         function handleSettingsChange(newSettings: Settings): void {
-            setSettings(newSettings);
+            setSettings(cloneDeep(newSettings));
         }
 
         SettingsStorage.addEventListener('change', handleSettingsChange);
@@ -22,7 +23,7 @@ export function useSettings(): UseSettingsResult {
     }, []);
 
     const updateSettings = useCallback((newSettings: Settings): void => {
-        SettingsStorage.set(newSettings);
+        SettingsStorage.settings = newSettings;
     }, []);
 
     return {

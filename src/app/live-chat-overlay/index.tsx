@@ -9,9 +9,9 @@ import { store } from '@/reducers';
 import { getVideoPlayerContainer, injectStyles } from '@/youtube-utils';
 import App from './app';
 
-const REACT_CONTAINER = 'react-container';
+const REACT_CONTAINER = 'live-chat-overlay-app-container';
 
-export function initLiveChat(): () => void {
+export function injectLiveChatOverlay(): () => void {
     const videoPlayerContainer = getVideoPlayerContainer();
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');

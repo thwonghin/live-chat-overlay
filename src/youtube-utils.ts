@@ -10,6 +10,12 @@ export function getVideoPlayerEle(): HTMLElement | null {
     );
 }
 
+export function getRightControlEle(): HTMLElement | null {
+    return window.parent.document.querySelector(
+        '#ytd-player .ytp-right-controls',
+    );
+}
+
 export function getVideoEle(): HTMLVideoElement | null {
     return window.parent.document.querySelector(
         '#ytd-player .html5-video-player video',
