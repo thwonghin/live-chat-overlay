@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/thwonghin/live-chat-overlay/compare/v1.2.0...v1.3.0) (2020-06-16)
+
+
+### Features
+
+* display process queue length in debug mode ([#125](https://github.com/thwonghin/live-chat-overlay/issues/125)) ([7907991](https://github.com/thwonghin/live-chat-overlay/commit/7907991393224b932fa0f8c96ab7932c9c49fa9d))
+* i18n ([#137](https://github.com/thwonghin/live-chat-overlay/issues/137)) ([8a8d5ca](https://github.com/thwonghin/live-chat-overlay/commit/8a8d5caa41a533dd94029de79ecfe58dff2fa045))
+* simple benchmark in debug mode ([#122](https://github.com/thwonghin/live-chat-overlay/issues/122)) ([6b2b55c](https://github.com/thwonghin/live-chat-overlay/commit/6b2b55ce176fb68f6199af3a5e035ac26a30fbc9))
+* toggle btn to show chat flow ([#136](https://github.com/thwonghin/live-chat-overlay/issues/136)) ([e82d437](https://github.com/thwonghin/live-chat-overlay/commit/e82d437ed400d70caa6e1875e23240b40c51e8a0))
+
+
+### Bug Fixes
+
+* missing key for render benchmark ([#123](https://github.com/thwonghin/live-chat-overlay/issues/123)) ([f0f2114](https://github.com/thwonghin/live-chat-overlay/commit/f0f21149c092398912fe946226612e9fa3407adb))
+
 ## [1.2.0](https://github.com/thwonghin/live-chat-overlay/compare/v1.1.0...v1.2.0) (2020-06-12)
 
 
