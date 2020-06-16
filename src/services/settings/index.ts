@@ -12,6 +12,7 @@ const commonMsgSettings: MessageSettings = {
 };
 
 const defaultSettings: Settings = {
+    isEnabled: true,
     numberOfLines: 15,
     flowTimeInSec: 10,
     messageSettings: {
