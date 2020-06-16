@@ -1,0 +1,14 @@
+{
+    "extensionName": {
+        "message": "Live Chat Overlay"
+    },
+    "extensionDescription": {
+        "message": "Display live chat to livestream video on Youtube"
+    },
+    "toggleButtonHideTitle": {
+        "message": "Hide Chat"
+    },
+    "toggleButtonShowTitle": {
+        "message": "Show Chat"
+    }
+}
