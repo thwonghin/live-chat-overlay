@@ -28,7 +28,6 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onDone }) => {
     const timeout = useMemo(() => settings.flowTimeInSec * 1000, [
         settings.flowTimeInSec,
     ]);
-    const isEnabled = useMemo(() => settings.isEnabled, [settings.isEnabled]);
 
     const videoPlayerRect = useVideoPlayerRect();
     const containerWidth = videoPlayerRect.width;
@@ -43,14 +42,12 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onDone }) => {
             left: containerWidth || 99999,
             top: chatItem.position.lineNumber * lineHeight,
             fontSize: lineHeight,
-            visibility: isEnabled ? 'visible' : 'hidden',
             transform: isFlowing
                 ? `translate3d(-${containerWidth + rect.width}px, 0, 0)`
                 : 'translate3d(0, 0, 0)',
         }),
         [
             timeout,
-            isEnabled,
             containerWidth,
             chatItem.position.lineNumber,
             lineHeight,
