@@ -20,6 +20,7 @@ type MessageSettingsKeys =
     | 'super-chat';
 
 export interface Settings {
+    isEnabled: boolean;
     numberOfLines: number;
     flowTimeInSec: number;
     messageSettings: Record<MessageSettingsKeys, MessageSettings>;

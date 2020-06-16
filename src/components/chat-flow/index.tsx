@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { RootState } from '@/reducers';
@@ -35,59 +35,68 @@ const ChatFlowLayout: React.FC<Props> = ({
     settings,
     isDebugActive,
 }) => {
+    const style = useMemo<React.CSSProperties>(
+        () => ({
+            visibility: settings.isEnabled ? 'visible' : 'hidden',
+        }),
+        [settings.isEnabled],
+    );
+
     return (
         <div className={classes.container}>
-            {chatItems.map((chatItem) => (
-                <MessageFlower
-                    onDone={onDone}
-                    key={chatItem.id}
-                    chatItem={chatItem}
-                >
-                    {isSuperStickerItem(chatItem) && (
-                        <SuperChatSticker
-                            chatItem={chatItem}
-                            messageSettings={getMessageSettings(
-                                chatItem,
-                                settings,
-                            )}
-                        />
-                    )}
-                    {isNormalChatItem(chatItem) && (
-                        <TwoLinesMessage
-                            chatItem={chatItem}
-                            messageSettings={getMessageSettings(
-                                chatItem,
-                                settings,
-                            )}
-                        />
-                    )}
-                    {isSuperChatItem(chatItem) && (
-                        <TwoLinesMessage
-                            chatItem={chatItem}
-                            messageSettings={getMessageSettings(
-                                chatItem,
-                                settings,
-                            )}
-                        />
-                    )}
-                    {isMembershipItem(chatItem) && (
-                        <TwoLinesMessage
-                            chatItem={chatItem}
-                            messageSettings={getMessageSettings(
-                                chatItem,
-                                settings,
-                            )}
-                        />
-                    )}
-                </MessageFlower>
-            ))}
+            <div style={style}>
+                {chatItems.map((chatItem) => (
+                    <MessageFlower
+                        onDone={onDone}
+                        key={chatItem.id}
+                        chatItem={chatItem}
+                    >
+                        {isSuperStickerItem(chatItem) && (
+                            <SuperChatSticker
+                                chatItem={chatItem}
+                                messageSettings={getMessageSettings(
+                                    chatItem,
+                                    settings,
+                                )}
+                            />
+                        )}
+                        {isNormalChatItem(chatItem) && (
+                            <TwoLinesMessage
+                                chatItem={chatItem}
+                                messageSettings={getMessageSettings(
+                                    chatItem,
+                                    settings,
+                                )}
+                            />
+                        )}
+                        {isSuperChatItem(chatItem) && (
+                            <TwoLinesMessage
+                                chatItem={chatItem}
+                                messageSettings={getMessageSettings(
+                                    chatItem,
+                                    settings,
+                                )}
+                            />
+                        )}
+                        {isMembershipItem(chatItem) && (
+                            <TwoLinesMessage
+                                chatItem={chatItem}
+                                messageSettings={getMessageSettings(
+                                    chatItem,
+                                    settings,
+                                )}
+                            />
+                        )}
+                    </MessageFlower>
+                ))}
+            </div>
             {isDebugActive && <DebugOverlay />}
         </div>
     );
 };
 
 const ChatFlow: React.FC = () => {
-    const settings = useSettings();
+    const { settings } = useSettings();
 
     useToggleDebugMode();
 
