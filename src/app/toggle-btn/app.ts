@@ -43,8 +43,6 @@ function handleClick(toggleBtn: HTMLButtonElement, event: MouseEvent): void {
 export function createToggleBtn(): HTMLButtonElement {
     const toggleBtnEle = window.parent.document.createElement('button');
 
-    toggleBtnEle.title = 'Test';
-    toggleBtnEle.setAttribute('aira-label', 'test');
     toggleBtnEle.classList.add('ytp-button');
     toggleBtnEle.style.width = `${buttonWidth}px`;
 
