@@ -87,7 +87,7 @@ const ChatFlowLayout: React.FC<Props> = ({
 };
 
 const ChatFlow: React.FC = () => {
-    const settings = useSettings();
+    const { settings } = useSettings();
 
     useToggleDebugMode();
 

@@ -24,7 +24,7 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onDone }) => {
 
     const ref = useRef<HTMLDivElement>(null);
     const rect = useRect(ref);
-    const settings = useSettings();
+    const { settings } = useSettings();
     const timeout = settings.flowTimeInSec * 1000;
 
     const videoPlayerRect = useVideoPlayerRect();

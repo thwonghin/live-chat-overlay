@@ -52,8 +52,29 @@ const defaultSettings: Settings = {
     },
 };
 
-export const settingsStorage = {
-    get(): Settings {
-        return defaultSettings;
-    },
-};
+type Listener = (settings: Settings) => void;
+
+export class SettingsStorage {
+    static currentSettings = defaultSettings;
+
+    static listeners: Listener[] = [];
+
+    static get(): Settings {
+        return this.currentSettings;
+    }
+
+    static set(settings: Settings): void {
+        this.currentSettings = settings;
+    }
+
+    static addEventListener(event: 'change', listener: Listener): void {
+        this.listeners.push(listener);
+    }
+
+    static removeEventListener(event: 'change', listener: Listener): void {
+        const index = this.listeners.indexOf(listener);
+        if (index > -1) {
+            this.listeners.splice(index, 1);
+        }
+    }
+}

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { settingsStorage } from '@/services/settings';
+import { SettingsStorage } from '@/services/settings';
 import { ChatItem } from '@/services/chat-event/models';
 import {
     getMessageSettings,
@@ -31,7 +31,7 @@ const chatEventsSlice = createSlice({
         ): State {
             const { chatItem, playerRect } = action.payload;
             const addTimestamp = Date.now();
-            const settings = settingsStorage.get();
+            const settings = SettingsStorage.get();
             const messageSettings = getMessageSettings(chatItem, settings);
             const estimatedMsgWidth = estimateMsgWidth(
                 chatItem,
