@@ -41,7 +41,7 @@
         "@types/lodash-es": "^4.17.3",
         "@types/mini-css-extract-plugin": "^0.9.1",
         "@types/node": "^14.0.13",
-        "@types/react": "^16.9.36",
+        "@types/react": "^16.9.38",
         "@types/react-dom": "^16.9.8",
         "@types/react-redux": "^7.1.9",
         "@types/stylelint": "^9.10.1",
@@ -59,11 +59,11 @@
         "eslint-config-prettier": "^6.11.0",
         "eslint-plugin-import": "^2.21.2",
         "eslint-plugin-jest": "^23.13.2",
-        "eslint-plugin-jsx-a11y": "^6.2.3",
+        "eslint-plugin-jsx-a11y": "^6.3.0",
         "eslint-plugin-prettier": "^3.1.4",
         "eslint-plugin-react": "^7.20.0",
         "eslint-plugin-react-hooks": "^4.0.4",
-        "fork-ts-checker-webpack-plugin": "^5.0.1",
+        "fork-ts-checker-webpack-plugin": "^5.0.3",
         "husky": "^4.2.5",
         "jest": "^26.0.1",
         "mini-css-extract-plugin": "^0.9.0",
@@ -73,20 +73,20 @@
         "sass": "^1.26.8",
         "sass-loader": "^8.0.2",
         "style-loader": "^1.2.1",
-        "stylelint": "^13.6.0",
+        "stylelint": "^13.6.1",
         "stylelint-config-rational-order": "^0.1.2",
         "stylelint-config-recommended-scss": "^4.2.0",
         "stylelint-config-sass-guidelines": "^7.0.0",
         "stylelint-order": "^4.1.0",
-        "stylelint-scss": "^3.17.2",
-        "terser-webpack-plugin": "^3.0.5",
+        "stylelint-scss": "^3.18.0",
+        "terser-webpack-plugin": "^3.0.6",
         "ts-jest": "^26.1.0",
         "tsconfig-paths-webpack-plugin": "^3.2.0",
         "typed-css-modules-webpack-plugin": "^0.1.3",
         "typescript": "^3.9.5",
         "webextension-polyfill": "^0.6.0",
         "webpack": "^4.43.0",
-        "webpack-cli": "^3.3.11"
+        "webpack-cli": "^3.3.12"
     },
     "browserslist": {
         "production": [
@@ -117,7 +117,7 @@
     },
     "resolutions": {
         "yargs-parser": "18.1.3",
-        "@types/react": "^16.9.36",
+        "@types/react": "^16.9.38",
         "@types/react-dom": "^16.9.8"
     }
 }
