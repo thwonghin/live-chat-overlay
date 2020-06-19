@@ -45,6 +45,8 @@ export class ChatEventResponseObserver {
 
     private isObserving = !document.hidden;
 
+    private isStarted = false;
+
     private isDebugging = false;
 
     private xhrEventProcessQueue: CustomEventDetail[] = [];
@@ -156,6 +158,10 @@ export class ChatEventResponseObserver {
     };
 
     public start(): void {
+        if (this.isStarted) {
+            return;
+        }
+        this.isStarted = true;
         this.isObserving = true;
         window.addEventListener(CHAT_EVENT_NAME, this.onChatMessage);
         document.addEventListener(
@@ -173,6 +179,10 @@ export class ChatEventResponseObserver {
     }
 
     public stop(): void {
+        if (!this.isStarted) {
+            return;
+        }
+        this.isStarted = false;
         this.isObserving = false;
         window.removeEventListener(CHAT_EVENT_NAME, this.onChatMessage);
         document.removeEventListener(

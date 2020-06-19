@@ -83,6 +83,6 @@ export function useInitChatEventObserver(): void {
     useEffect(() => {
         chatEventObserver.start();
 
-        return (): void => chatEventObserver.cleanup();
+        return (): void => chatEventObserver.stop();
     }, [chatEventObserver]);
 }
