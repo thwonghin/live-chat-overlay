@@ -30,6 +30,12 @@ const chatEventsSlice = createSlice({
             }>,
         ): State {
             const { chatItem, playerRect } = action.payload;
+
+            // Avoid duplicate chat item for some reason
+            if (state.chatItemStateById[chatItem.id]) {
+                return state;
+            }
+
             const addTimestamp = Date.now();
             const { settings } = SettingsStorage;
             const messageSettings = getMessageSettings(chatItem, settings);
