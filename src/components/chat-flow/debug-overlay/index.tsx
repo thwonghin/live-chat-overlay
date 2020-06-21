@@ -151,8 +151,9 @@ const DebugOverlay: React.FC = () => {
                     count,
                 })),
             })),
-            doneItemsCount: Object.values(state.chatEvents.doneItemsIdMap)
-                .length,
+            doneItemsCount: Object.values(
+                state.chatEvents.chatItemStateById,
+            ).filter((chatItemState) => chatItemState === 'finished').length,
         }),
         shallowEqual,
     );
