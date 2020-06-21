@@ -14,7 +14,7 @@ import { estimateMsgWidth } from './width-estimate';
 
 const initialState: State = {
     chatItems: [],
-    doneItemsIdMap: {},
+    chatItemStateById: {},
     chatItemsByPosition: {},
 };
 
@@ -89,7 +89,10 @@ const chatEventsSlice = createSlice({
 
             return {
                 chatItems: state.chatItems.concat(uiChatItem),
-                doneItemsIdMap: state.doneItemsIdMap,
+                chatItemStateById: {
+                    ...state.chatItemStateById,
+                    [uiChatItem.id]: 'added',
+                },
                 chatItemsByPosition: {
                     ...state.chatItemsByPosition,
                     [serializedPosition]: position1Items,
@@ -104,9 +107,9 @@ const chatEventsSlice = createSlice({
 
             return {
                 chatItems: state.chatItems,
-                doneItemsIdMap: {
-                    ...state.doneItemsIdMap,
-                    [action.payload.id]: true,
+                chatItemStateById: {
+                    ...state.chatItemStateById,
+                    [action.payload.id]: 'finished',
                 },
                 chatItemsByPosition: {
                     ...state.chatItemsByPosition,
@@ -117,11 +120,16 @@ const chatEventsSlice = createSlice({
             };
         },
         cleanup(state): State {
+            const filtered = state.chatItems.filter(
+                (item) => state.chatItemStateById[item.id] !== 'finished',
+            );
+            const newChatItemStateById = Object.fromEntries(
+                filtered.map(({ id }) => [id, state.chatItemStateById[id]]),
+            );
+
             return {
-                chatItems: state.chatItems.filter(
-                    (item) => !state.doneItemsIdMap[item.id],
-                ),
-                doneItemsIdMap: {},
+                chatItems: filtered,
+                chatItemStateById: newChatItemStateById,
                 chatItemsByPosition: state.chatItemsByPosition,
             };
         },

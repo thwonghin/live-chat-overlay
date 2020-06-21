@@ -5,8 +5,10 @@ export interface Position {
     layerNumber: number;
 }
 
+export type ChatItemState = 'added' | 'finished';
+
 export interface State {
     chatItems: UiChatItem[];
-    doneItemsIdMap: Record<string, boolean>;
+    chatItemStateById: Record<string, ChatItemState>;
     chatItemsByPosition: Record<string, UiChatItem[]>;
 }
