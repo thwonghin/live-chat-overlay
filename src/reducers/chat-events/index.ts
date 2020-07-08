@@ -83,7 +83,10 @@ const chatEventsSlice = createSlice({
             };
 
             if (actualNumberOfLines === 2) {
-                newChatItemsByLineNumber[lineNumber + 1].concat(uiChatItem);
+                if (!newChatItemsByLineNumber[lineNumber + 1]) {
+                    newChatItemsByLineNumber[lineNumber + 1] = [];
+                }
+                newChatItemsByLineNumber[lineNumber + 1].push(uiChatItem);
             }
 
             return {
