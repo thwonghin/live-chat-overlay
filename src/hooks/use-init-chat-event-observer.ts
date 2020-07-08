@@ -5,6 +5,7 @@ import { getVideoEle } from '@/youtube-utils';
 import { useInterval } from '@/hooks/use-interval';
 import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
 import { useSettings } from '@/hooks/use-settings';
+import { useDocumentVisible } from '@/hooks/use-document-visible';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
 import { chatEventsActions } from '@/reducers/chat-events';
 import { debugInfoActions } from '@/reducers/debug-info';
@@ -17,6 +18,7 @@ export function useInitChatEventObserver(): void {
     const settings = useSettings();
     const chatEventObserver = useContext(ChatEventObserverContext);
     const store = useStore<RootState>();
+    const isDocumentVisible = useDocumentVisible(window.parent.document);
     const isDebugging = useSelector<RootState, boolean>(
         (rootState) => rootState.debugInfo.isDebugging,
     );
@@ -32,6 +34,12 @@ export function useInitChatEventObserver(): void {
                     (getVideoEle()?.currentTime ?? 0) * 1000,
                 chatDisplayTimeInMs: settings.settings.flowTimeInSec * 1000,
             });
+        }
+
+        if (!isDocumentVisible) {
+            // Still dequeue in background to avoid overflow
+            dequeue();
+            return;
         }
 
         const chatItem = isFull
@@ -57,6 +65,7 @@ export function useInitChatEventObserver(): void {
         height,
         chatEventObserver,
         settings.settings.flowTimeInSec,
+        isDocumentVisible,
     ]);
 
     useInterval(processChatItem, 300);
