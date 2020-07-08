@@ -118,7 +118,7 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
                         from: '**/*',
                     },
                 ],
-            }) as webpack.Plugin,
+            }),
             new MiniCssExtractPlugin({
                 filename: '[name].css',
             }),
