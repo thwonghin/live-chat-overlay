@@ -9,13 +9,14 @@ import {
 import { UiChatItem } from '@/components/chat-flow/types';
 
 import { State } from './types';
-import { getPosition, serializePosition } from './helpers';
+import { getLineNumber } from './helpers';
 import { estimateMsgWidth } from './width-estimate';
 
 const initialState: State = {
+    isFull: false,
     chatItems: [],
     chatItemStateById: {},
-    chatItemsByPosition: {},
+    chatItemsByLineNumber: {},
 };
 
 const chatEventsSlice = createSlice({
@@ -43,7 +44,7 @@ const chatEventsSlice = createSlice({
                 chatItem,
                 messageSettings,
             );
-            const position = getPosition({
+            const lineNumber = getLineNumber({
                 state,
                 addTimestamp,
                 messageSettings,
@@ -54,10 +55,11 @@ const chatEventsSlice = createSlice({
                 charWidth: playerRect.height / settings.numberOfLines,
             });
 
-            // Ignore message if overflow
-            // TODO: Better handling e.g. Slow mode
-            if (!position) {
-                return state;
+            if (lineNumber === null) {
+                return {
+                    ...state,
+                    isFull: true,
+                };
             }
 
             const actualNumberOfLines =
@@ -65,62 +67,50 @@ const chatEventsSlice = createSlice({
                     ? 1
                     : messageSettings.numberOfLines;
 
-            const serializedPosition = serializePosition(position);
-            const serializedPosition2 =
-                actualNumberOfLines === 2
-                    ? serializePosition({
-                          ...position,
-                          lineNumber: position.lineNumber + 1,
-                      })
-                    : serializedPosition;
-
             const uiChatItem: UiChatItem = {
                 ...chatItem,
                 numberOfLines: actualNumberOfLines,
                 addTimestamp,
                 estimatedMsgWidth,
-                position,
+                lineNumber,
             };
 
-            const position1Items = (
-                state.chatItemsByPosition[serializedPosition] ?? []
-            ).concat(uiChatItem);
+            const newChatItemsByLineNumber = {
+                ...state.chatItemsByLineNumber,
+                [lineNumber]: (
+                    state.chatItemsByLineNumber[lineNumber] ?? []
+                ).concat(uiChatItem),
+            };
 
-            const position2Items =
-                serializedPosition2 !== serializedPosition
-                    ? (
-                          state.chatItemsByPosition[serializedPosition2] ?? []
-                      ).concat(uiChatItem)
-                    : position1Items;
+            if (actualNumberOfLines === 2) {
+                newChatItemsByLineNumber[lineNumber + 1].concat(uiChatItem);
+            }
 
             return {
+                ...state,
+                isFull: false,
                 chatItems: state.chatItems.concat(uiChatItem),
                 chatItemStateById: {
                     ...state.chatItemStateById,
                     [uiChatItem.id]: 'added',
                 },
-                chatItemsByPosition: {
-                    ...state.chatItemsByPosition,
-                    [serializedPosition]: position1Items,
-                    [serializedPosition2]: position2Items,
-                },
+                chatItemsByLineNumber: newChatItemsByLineNumber,
             };
         },
         markAsDone(state, action: PayloadAction<UiChatItem>): State {
-            const serializedPosition = serializePosition(
-                action.payload.position,
-            );
-
             return {
+                ...state,
                 chatItems: state.chatItems,
                 chatItemStateById: {
                     ...state.chatItemStateById,
                     [action.payload.id]: 'finished',
                 },
-                chatItemsByPosition: {
-                    ...state.chatItemsByPosition,
-                    [serializedPosition]: (
-                        state.chatItemsByPosition[serializedPosition] ?? []
+                chatItemsByLineNumber: {
+                    ...state.chatItemsByLineNumber,
+                    [action.payload.lineNumber]: (
+                        state.chatItemsByLineNumber[
+                            action.payload.lineNumber
+                        ] ?? []
                     ).filter((chatItem) => chatItem.id !== action.payload.id),
                 },
             };
@@ -134,9 +124,9 @@ const chatEventsSlice = createSlice({
             );
 
             return {
+                ...state,
                 chatItems: filtered,
                 chatItemStateById: newChatItemStateById,
-                chatItemsByPosition: state.chatItemsByPosition,
             };
         },
         reset(): State {

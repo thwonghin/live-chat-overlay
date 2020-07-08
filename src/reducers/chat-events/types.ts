@@ -1,14 +1,10 @@
 import { UiChatItem } from '@/components/chat-flow/types';
 
-export interface Position {
-    lineNumber: number;
-    layerNumber: number;
-}
-
 export type ChatItemState = 'added' | 'finished';
 
 export interface State {
+    isFull: boolean;
     chatItems: UiChatItem[];
     chatItemStateById: Record<string, ChatItemState>;
-    chatItemsByPosition: Record<string, UiChatItem[]>;
+    chatItemsByLineNumber: Record<number, UiChatItem[]>;
 }

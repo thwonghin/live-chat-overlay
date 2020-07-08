@@ -1,19 +1,7 @@
 import { last } from 'lodash-es';
 
 import { MessageSettings } from '@/services/settings/types';
-import { Position, State } from './types';
-
-export function serializePosition(position: Position): string {
-    return `${position.layerNumber}-${position.lineNumber}`;
-}
-
-export function deserializePosition(serializedPosition: string): Position {
-    const [layerNumber, lineNumber] = serializedPosition.split('-');
-    return {
-        layerNumber: Number(layerNumber),
-        lineNumber: Number(lineNumber),
-    };
-}
+import { State } from './types';
 
 interface GetPositionParams {
     state: State;
@@ -26,9 +14,7 @@ interface GetPositionParams {
     charWidth: number;
 }
 
-const maxLayers = 3;
-
-export function getPosition({
+export function getLineNumber({
     state,
     estimatedMsgWidth,
     messageSettings,
@@ -37,39 +23,34 @@ export function getPosition({
     flowTimeInSec,
     containerWidth,
     charWidth,
-}: GetPositionParams): Position | null {
-    for (let layerNumber = 0; layerNumber < maxLayers; layerNumber += 1) {
-        for (
-            let lineNumber = 0;
-            lineNumber < maxLineNumber - messageSettings.numberOfLines - 1;
-            lineNumber += 1
-        ) {
-            const position: Position = { lineNumber, layerNumber };
-            const messages =
-                state.chatItemsByPosition[serializePosition(position)];
+}: GetPositionParams): number | null {
+    for (
+        let lineNumber = 0;
+        lineNumber < maxLineNumber - messageSettings.numberOfLines - 1;
+        lineNumber += 1
+    ) {
+        const messages = state.chatItemsByLineNumber[lineNumber];
 
-            if (!messages || messages.length === 0) {
-                return position;
-            }
+        if (!messages || messages.length === 0) {
+            return lineNumber;
+        }
 
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            const lastMessage = last(messages)!;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const lastMessage = last(messages)!;
 
-            const lastMsgFlowedTime =
-                (addTimestamp - lastMessage?.addTimestamp) / 1000;
-            const lastMsgWidth = lastMessage?.estimatedMsgWidth * charWidth;
-            const lastMsgSpeed =
-                (containerWidth + lastMsgWidth) / flowTimeInSec;
-            const lastMsgPos = lastMsgSpeed * lastMsgFlowedTime - lastMsgWidth;
+        const lastMsgFlowedTime =
+            (addTimestamp - lastMessage?.addTimestamp) / 1000;
+        const lastMsgWidth = lastMessage?.estimatedMsgWidth * charWidth;
+        const lastMsgSpeed = (containerWidth + lastMsgWidth) / flowTimeInSec;
+        const lastMsgPos = lastMsgSpeed * lastMsgFlowedTime - lastMsgWidth;
 
-            const remainingTime = flowTimeInSec - lastMsgFlowedTime;
+        const remainingTime = flowTimeInSec - lastMsgFlowedTime;
 
-            const estimatedEleWidth = estimatedMsgWidth * charWidth;
-            const speed = (containerWidth + estimatedEleWidth) / flowTimeInSec;
+        const estimatedEleWidth = estimatedMsgWidth * charWidth;
+        const speed = (containerWidth + estimatedEleWidth) / flowTimeInSec;
 
-            if (speed * remainingTime < containerWidth && lastMsgPos > 0) {
-                return position;
-            }
+        if (speed * remainingTime < containerWidth && lastMsgPos > 0) {
+            return lineNumber;
         }
     }
 

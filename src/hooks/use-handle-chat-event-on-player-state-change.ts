@@ -9,9 +9,10 @@ export function useHandleChatEventOnPlayerStateChange(): void {
 
     useEffect(() => {
         if (isPaused) {
-            chatEventObserver.pause();
+            chatEventObserver.stop();
+            chatEventObserver.reset();
         } else {
-            chatEventObserver.resume();
+            chatEventObserver.start();
         }
     }, [isPaused, chatEventObserver]);
 

@@ -40,7 +40,7 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onDone }) => {
         () => ({
             transitionDuration: `${timeout}ms`,
             left: containerWidth || 99999,
-            top: chatItem.position.lineNumber * lineHeight,
+            top: chatItem.lineNumber * lineHeight,
             fontSize: lineHeight,
             transform: isFlowing
                 ? `translate3d(-${containerWidth + rect.width}px, 0, 0)`
@@ -49,7 +49,7 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onDone }) => {
         [
             timeout,
             containerWidth,
-            chatItem.position.lineNumber,
+            chatItem.lineNumber,
             lineHeight,
             isFlowing,
             rect.width,
