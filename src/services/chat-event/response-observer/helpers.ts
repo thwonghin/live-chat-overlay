@@ -1,4 +1,4 @@
-import { inRange } from 'lodash-es';
+import { inRange, first } from 'lodash-es';
 import { isNonNullable } from '@/utils';
 import { mapAddChatItemActions } from '../mapper';
 import { ReplayRootObject, LiveRootObject } from '../live-chat-response';
@@ -36,6 +36,16 @@ export function mapChatItemsFromLiveResponse(
         )
             .map((v) => v.addChatItemAction)
             .filter(isNonNullable),
+    );
+}
+
+export function getTimeoutMs(rootObj: LiveRootObject): number | null {
+    return (
+        first(
+            rootObj.response.continuationContents.liveChatContinuation.continuations
+                .map((value) => value.timedContinuationData)
+                .filter((v): v is NonNullable<typeof v> => !!v),
+        )?.timeoutMs ?? null
     );
 }
 
@@ -82,10 +92,10 @@ export function isOutdated({
     }
 
     // is live
-    return inRange(
-        currentTimeInUsec + currentTimeDelayInUsec,
-        chatItem.timestampInUs - chatDisplayTimeInMs * 0.3,
-        chatItem.timestampInUs + chatDisplayTimeInMs,
+    return !inRange(
+        currentTimeInUsec - currentTimeDelayInUsec,
+        chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.3,
+        chatItem.timestampInUs + chatDisplayTimeInMs * 1000,
     );
 }
 
