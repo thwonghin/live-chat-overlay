@@ -1,4 +1,4 @@
-import { random } from 'lodash-es';
+import { inRange, first } from 'lodash-es';
 import { isNonNullable } from '@/utils';
 import {
     mapAddChatItemActions,
@@ -43,6 +43,16 @@ export function mapChatItemsFromLiveResponse(
     );
 }
 
+export function getTimeoutMs(rootObj: LiveRootObject): number | null {
+    return (
+        first(
+            rootObj.response.continuationContents.liveChatContinuation.continuations
+                .map((value) => value.timedContinuationData)
+                .filter((v): v is NonNullable<typeof v> => !!v),
+        )?.timeoutMs ?? null
+    );
+}
+
 interface IsTimeToDispatchParams {
     currentTimeInUsec: number;
     currentTimeDelayInUsec: number;
@@ -61,41 +71,45 @@ export function isTimeToDispatch({
         : chatItem.timestampInUs < currentTimeInUsec - currentTimeDelayInUsec;
 }
 
-function randomPickByLengthLimit(totalLength: number, numOfSlots: number) {
-    return random(0, totalLength) <= numOfSlots;
+interface IsOutdatedParams {
+    currentTimeInUsec: number;
+    currentTimeDelayInUsec: number;
+    currentPlayerTimeInMsc: number;
+    chatDisplayTimeInMs: number;
+    chatItem: ChatItem;
 }
 
-export function controlFlow(
-    chatItems: ChatItem[],
-    maxNumOfChat: number,
-): ChatItem[] {
-    let numOfSlots = maxNumOfChat;
+export function isOutdated({
+    currentPlayerTimeInMsc,
+    currentTimeInUsec,
+    currentTimeDelayInUsec,
+    chatDisplayTimeInMs,
+    chatItem,
+}: IsOutdatedParams): boolean {
+    if (chatItem.videoTimestampInMs) {
+        // not live
+        return !inRange(
+            chatItem.videoTimestampInMs,
+            currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.3,
+            currentPlayerTimeInMsc + chatDisplayTimeInMs,
+        );
+    }
 
-    const fistFiltered = chatItems.filter((chatItem, index, array) => {
-        if (array.length <= maxNumOfChat) {
-            return true;
-        }
+    // is live
+    return !inRange(
+        currentTimeInUsec - currentTimeDelayInUsec,
+        chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.3,
+        chatItem.timestampInUs + chatDisplayTimeInMs * 1000,
+    );
+}
 
-        if (
-            isNormalChatItem(chatItem) &&
-            chatItem.authorType !== 'guest' &&
-            chatItem.authorType !== 'member'
-        ) {
-            numOfSlots -= 1;
-            return true;
-        }
-
-        if (!isNormalChatItem(chatItem) && !isMembershipItem(chatItem)) {
-            numOfSlots -= 1;
-            return true;
-        }
-
-        return randomPickByLengthLimit(array.length, numOfSlots);
-    });
-
-    return fistFiltered.filter((chatItem, index, array) => {
-        return randomPickByLengthLimit(array.length, maxNumOfChat);
-    });
+export function isRemovable(chatItem: ChatItem): boolean {
+    const removableAuthorType = ['guest', 'member'];
+    return (
+        (isNormalChatItem(chatItem) &&
+            removableAuthorType.includes(chatItem.authorType)) ||
+        isMembershipItem(chatItem)
+    );
 }
 
 interface BenchmarkResult<T> {

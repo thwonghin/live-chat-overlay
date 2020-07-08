@@ -8,15 +8,10 @@ export const DebugOverlay: React.FC = () => {
         <div style={{ width: 800, height: 800, position: 'relative' }}>
             <DebugOverlayLayout
                 chatEventDebugInfo={{
-                    messageByPosition: [
+                    messageByLineNumber: [
                         {
                             row: 1,
-                            counts: [
-                                {
-                                    count: 1,
-                                    layer: 1,
-                                },
-                            ],
+                            count: 1,
                         },
                     ],
                     doneItemsCount: 100,
@@ -36,6 +31,7 @@ export const DebugOverlay: React.FC = () => {
                 }}
                 processChatEventQueueLength={100}
                 processXhrQueueLength={100}
+                outdatedRemovedChatEventCount={100}
             />
         </div>
     );

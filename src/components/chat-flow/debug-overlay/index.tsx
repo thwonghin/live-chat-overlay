@@ -1,18 +1,16 @@
 import React from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
-import { groupBy, sortBy } from 'lodash-es';
 
 import { RootState } from '@/reducers';
-import { deserializePosition } from '@/reducers/chat-events/helpers';
 import { Benchmark } from '@/reducers/debug-info/types';
 
 import classes from './index.scss';
 
 interface ChatEventDebugInfo {
     messagesCount: number;
-    messageByPosition: {
+    messageByLineNumber: {
         row: number;
-        counts: { layer: number; count: number }[];
+        count: number;
     }[];
     doneItemsCount: number;
 }
@@ -54,6 +52,7 @@ interface DebugOverlayLayoutProps {
     processChatEventBenchmark: RoundedBenchmark;
     processXhrQueueLength: number;
     processChatEventQueueLength: number;
+    outdatedRemovedChatEventCount: number;
 }
 
 export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
@@ -62,6 +61,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
     processXhrBenchmark,
     processXhrQueueLength,
     processChatEventQueueLength,
+    outdatedRemovedChatEventCount,
 }) => {
     return (
         <>
@@ -72,22 +72,22 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 <p className={classes['debug-text']}>
                     {`Done Items Count: ${chatEventDebugInfo.doneItemsCount}`}
                 </p>
-                {chatEventDebugInfo.messageByPosition.length > 0 && (
+                {chatEventDebugInfo.messageByLineNumber.length > 0 && (
                     <p className={classes['debug-text']}>
                         Message Count By Position:
                     </p>
                 )}
-                {chatEventDebugInfo.messageByPosition.map(({ row, counts }) => (
-                    <p className={classes['debug-text']} key={row}>
-                        {`${row + 1} | ${counts
-                            .map(({ layer, count }) => `${layer + 1}: ${count}`)
-                            .join(', ')}`}
-                    </p>
-                ))}
+                {chatEventDebugInfo.messageByLineNumber.map(
+                    ({ row, count }) => (
+                        <p className={classes['debug-text']} key={row}>
+                            {`${row + 1}: ${count}`}
+                        </p>
+                    ),
+                )}
             </div>
             <div className={classes['benchmark-container']}>
                 <p className={classes['debug-text']}>
-                    {`Response Process Queue Length ${processXhrQueueLength}`}
+                    {`Response Process Queue Length: ${processXhrQueueLength}`}
                 </p>
                 {processXhrBenchmark.count !== 0 && (
                     <>
@@ -105,7 +105,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 )}
                 <br />
                 <p className={classes['debug-text']}>
-                    {`Response Chat Event Queue Length ${processChatEventQueueLength}`}
+                    {`Response Chat Event Queue Length: ${processChatEventQueueLength}`}
                 </p>
                 {processChatEventBenchmark.count !== 0 && (
                     <>
@@ -121,6 +121,10 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                         )}
                     </>
                 )}
+                <br />
+                <p className={classes['debug-text']}>
+                    {`Removed Outdated Chat Event: ${outdatedRemovedChatEventCount}`}
+                </p>
             </div>
         </>
     );
@@ -130,27 +134,14 @@ const DebugOverlay: React.FC = () => {
     const chatEventDebugInfo = useSelector<RootState, ChatEventDebugInfo>(
         (state) => ({
             messagesCount: state.chatEvents.chatItems.length,
-            messageByPosition: Object.entries(
-                groupBy(
-                    Object.entries(state.chatEvents.chatItemsByPosition).map(
-                        ([key, value]) => {
-                            const position = deserializePosition(key);
-                            return {
-                                row: position.lineNumber,
-                                layer: position.layerNumber,
-                                count: value.length,
-                            };
-                        },
-                    ),
-                    ({ row }) => row,
-                ),
-            ).map(([row, value]) => ({
-                row: Number(row),
-                counts: sortBy(value, 'layer').map(({ layer, count }) => ({
-                    layer,
-                    count,
-                })),
-            })),
+            messageByLineNumber: Object.entries(
+                state.chatEvents.chatItemsByLineNumber,
+            ).map(([key, value]) => {
+                return {
+                    row: Number(key),
+                    count: (value ?? []).length,
+                };
+            }),
             doneItemsCount: Object.values(
                 state.chatEvents.chatItemStateById,
             ).filter((chatItemState) => chatItemState === 'finished').length,
@@ -173,6 +164,9 @@ const DebugOverlay: React.FC = () => {
     const processChatEventQueueLength = useSelector<RootState, number>(
         (rootState) => rootState.debugInfo.processChatEventQueueLength,
     );
+    const outdatedRemovedChatEventCount = useSelector<RootState, number>(
+        (rootState) => rootState.debugInfo.outdatedRemovedChatEventCount,
+    );
 
     return (
         <DebugOverlayLayout
@@ -181,6 +175,7 @@ const DebugOverlay: React.FC = () => {
             processXhrBenchmark={processXhrBenchmark}
             processXhrQueueLength={processXhrQueueLength}
             processChatEventQueueLength={processChatEventQueueLength}
+            outdatedRemovedChatEventCount={outdatedRemovedChatEventCount}
         />
     );
 };

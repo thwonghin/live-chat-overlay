@@ -7,9 +7,15 @@ interface PlayerSeekContinuationData {
     continuation: string;
 }
 
+interface TimedContinuationData {
+    continuation: string;
+    timeoutMs: number;
+}
+
 interface Continuation {
     liveChatReplayContinuationData: LiveChatReplayContinuationData;
     playerSeekContinuationData: PlayerSeekContinuationData;
+    timedContinuationData?: TimedContinuationData;
 }
 
 interface Thumbnail {

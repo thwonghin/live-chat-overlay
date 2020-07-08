@@ -3,9 +3,10 @@ import React, {
     useRef,
     useState,
     useLayoutEffect,
-    useEffect,
+    useCallback,
 } from 'react';
 
+import { useTimeout } from '@/hooks/use-timeout';
 import { useRect } from '@/hooks/use-rect';
 import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
 import { useSettings } from '@/hooks/use-settings';
@@ -40,7 +41,7 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onDone }) => {
         () => ({
             transitionDuration: `${timeout}ms`,
             left: containerWidth || 99999,
-            top: chatItem.position.lineNumber * lineHeight,
+            top: chatItem.lineNumber * lineHeight,
             fontSize: lineHeight,
             transform: isFlowing
                 ? `translate3d(-${containerWidth + rect.width}px, 0, 0)`
@@ -49,28 +50,19 @@ const MessageFlower: React.FC<Props> = ({ children, chatItem, onDone }) => {
         [
             timeout,
             containerWidth,
-            chatItem.position.lineNumber,
+            chatItem.lineNumber,
             lineHeight,
             isFlowing,
             rect.width,
         ],
     );
 
-    useEffect(() => {
-        const containerRef = ref.current;
+    const onMessageDone = useCallback(() => onDone(chatItem), [
+        onDone,
+        chatItem,
+    ]);
 
-        function handleTransitionEnd() {
-            onDone(chatItem);
-        }
-
-        containerRef?.addEventListener('transitionend', handleTransitionEnd);
-
-        return () =>
-            containerRef?.removeEventListener(
-                'transitionend',
-                handleTransitionEnd,
-            );
-    }, [chatItem, onDone]);
+    useTimeout(onMessageDone, timeout);
 
     useLayoutEffect(() => setIsFlowing(true), []);
 

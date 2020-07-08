@@ -2,8 +2,10 @@ import { CustomEventDetail } from '@/services/xhr-interceptor';
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
+    getTimeoutMs,
     isTimeToDispatch,
-    controlFlow,
+    isOutdated,
+    isRemovable,
     benchmark,
 } from './helpers';
 import { ChatItem } from '../models';
@@ -18,32 +20,25 @@ const GET_LIVE_CHAT_REPLAY_URL =
     'https://www.youtube.com/live_chat_replay/get_live_chat_replay';
 
 interface EventMap {
-    add: ChatItem[];
     debug: DebugInfo;
 }
 
 const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
-
-const TIME_DELAY_IN_USEC = 8 * 1000 * 1000;
-
-const MAX_NUM_CHAT_PER_PROCESS = 3;
 
 export type DebugInfo = Partial<{
     processXhrResponseMs: number;
     processChatEventMs: number;
     processXhrQueueLength: number;
     processChatEventQueueLength: number;
+    outdatedChatEventCount: number;
 }>;
 
 export class ChatEventResponseObserver {
     private listeners: {
         [Key in keyof EventMap]: ((data: EventMap[Key]) => void)[];
     } = {
-        add: [],
         debug: [],
     };
-
-    private isObserving = !document.hidden;
 
     private isStarted = false;
 
@@ -55,13 +50,7 @@ export class ChatEventResponseObserver {
 
     private chatItemProcessQueue: ChatItem[] = [];
 
-    private chatItemProcessInterval = -1;
-
-    private getCurrentPlayerTime: () => number;
-
-    constructor(getCurrentPlayerTime: () => number) {
-        this.getCurrentPlayerTime = getCurrentPlayerTime;
-    }
+    private currentLiveDelayInUs = 0;
 
     private emitDebugInfoEvent(debugInfo: DebugInfo) {
         if (this.isDebugging) {
@@ -82,14 +71,6 @@ export class ChatEventResponseObserver {
         });
     };
 
-    private handleVisibilityChange = (): void => {
-        if (document.hidden) {
-            this.pause();
-        } else {
-            this.resume();
-        }
-    };
-
     private processXhrEvent = (): void => {
         const xhrEvent = this.xhrEventProcessQueue.shift();
 
@@ -106,6 +87,10 @@ export class ChatEventResponseObserver {
                 ? mapChatItemsFromReplayResponse(response as ReplayRootObject)
                 : mapChatItemsFromLiveResponse(response as LiveRootObject);
 
+            this.currentLiveDelayInUs = isReplay
+                ? 0
+                : (getTimeoutMs(response as LiveRootObject) ?? 0) * 1000;
+
             this.chatItemProcessQueue.push(...chatItems);
         }, this.isDebugging);
 
@@ -116,65 +101,84 @@ export class ChatEventResponseObserver {
         });
     };
 
-    private processChatItem = (): void => {
-        const { result, runtime } = benchmark(() => {
-            const currentTimeInUsec = Date.now() * 1000;
-            const currentPlayerTimeInMsc = this.getCurrentPlayerTime() * 1000;
+    private cleanOutdatedChatItems(params: {
+        currentTimeInUsec: number;
+        currentPlayerTimeInMsc: number;
+        chatDisplayTimeInMs: number;
+    }): void {
+        let count = 0;
 
-            let lastIndex = 0;
-            for (
-                lastIndex = 0;
-                lastIndex < this.chatItemProcessQueue.length;
-                lastIndex += 1
-            ) {
-                if (
-                    !this.chatItemProcessQueue[lastIndex] ||
-                    !isTimeToDispatch({
-                        chatItem: this.chatItemProcessQueue[lastIndex],
-                        currentTimeInUsec,
-                        currentPlayerTimeInMsc,
-                        currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
-                    })
-                ) {
-                    break;
+        this.chatItemProcessQueue = this.chatItemProcessQueue.filter(
+            (chatItem) => {
+                const isOutdatedChatItem = isOutdated({
+                    ...params,
+                    chatItem,
+                    currentTimeDelayInUsec: this.currentLiveDelayInUs,
+                });
+
+                const isRemovableChatItem = isRemovable(chatItem);
+
+                if (isOutdatedChatItem && isRemovableChatItem) {
+                    count += 1;
                 }
-            }
+                return !(isOutdatedChatItem && isRemovableChatItem);
+            },
+        );
 
-            const dispatchingItems = this.chatItemProcessQueue.splice(
-                0,
-                lastIndex,
-            );
-            return controlFlow(dispatchingItems, MAX_NUM_CHAT_PER_PROCESS);
+        this.emitDebugInfoEvent({
+            outdatedChatEventCount: count,
+        });
+    }
+
+    public dequeueChatItem(params: {
+        currentPlayerTimeInMsc: number;
+        chatDisplayTimeInMs: number;
+    }): ChatItem | undefined {
+        const currentTimeInUsec = Date.now() * 1000;
+        this.cleanOutdatedChatItems({
+            ...params,
+            currentTimeInUsec,
+        });
+
+        if (!this.chatItemProcessQueue[0]) {
+            return undefined;
+        }
+
+        const { result: isTime, runtime } = benchmark(() => {
+            return isTimeToDispatch({
+                chatItem: this.chatItemProcessQueue[0],
+                currentTimeInUsec,
+                currentPlayerTimeInMsc: params.currentPlayerTimeInMsc,
+                currentTimeDelayInUsec: this.currentLiveDelayInUs,
+            });
         }, this.isDebugging);
 
+        if (!isTime) {
+            this.emitDebugInfoEvent({
+                processChatEventMs: runtime,
+                processChatEventQueueLength: this.chatItemProcessQueue.length,
+            });
+            return undefined;
+        }
+
+        const chatItem = this.chatItemProcessQueue.shift();
         this.emitDebugInfoEvent({
             processChatEventMs: runtime,
             processChatEventQueueLength: this.chatItemProcessQueue.length,
         });
 
-        if (result.length > 0 && this.isObserving) {
-            this.listeners.add.forEach((listener) => listener(result));
-        }
-    };
+        return chatItem;
+    }
 
     public start(): void {
         if (this.isStarted) {
             return;
         }
         this.isStarted = true;
-        this.isObserving = true;
         window.addEventListener(CHAT_EVENT_NAME, this.onChatMessage);
-        document.addEventListener(
-            'visibilitychange',
-            this.handleVisibilityChange,
-        );
         this.xhrEventProcessInterval = window.setInterval(
             this.processXhrEvent,
             500,
-        );
-        this.chatItemProcessInterval = window.setInterval(
-            this.processChatItem,
-            100,
         );
     }
 
@@ -183,23 +187,9 @@ export class ChatEventResponseObserver {
             return;
         }
         this.isStarted = false;
-        this.isObserving = false;
         window.removeEventListener(CHAT_EVENT_NAME, this.onChatMessage);
-        document.removeEventListener(
-            'visibilitychange',
-            this.handleVisibilityChange,
-        );
         window.clearInterval(this.xhrEventProcessInterval);
-        window.clearInterval(this.chatItemProcessInterval);
     }
-
-    public pause = (): void => {
-        this.isObserving = false;
-    };
-
-    public resume = (): void => {
-        this.isObserving = true;
-    };
 
     public reset(): void {
         this.chatItemProcessQueue = [];
@@ -243,6 +233,6 @@ export class ChatEventResponseObserver {
     public cleanup(): void {
         this.stop();
         this.reset();
-        this.listeners.add = [];
+        this.listeners.debug = [];
     }
 }
