@@ -139,7 +139,7 @@ const DebugOverlay: React.FC = () => {
             ).map(([key, value]) => {
                 return {
                     row: Number(key),
-                    count: value.length,
+                    count: (value ?? []).length,
                 };
             }),
             doneItemsCount: Object.values(

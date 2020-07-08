@@ -75,20 +75,6 @@ const chatEventsSlice = createSlice({
                 lineNumber,
             };
 
-            const newChatItemsByLineNumber = {
-                ...state.chatItemsByLineNumber,
-                [lineNumber]: (
-                    state.chatItemsByLineNumber[lineNumber] ?? []
-                ).concat(uiChatItem),
-            };
-
-            if (actualNumberOfLines === 2) {
-                if (!newChatItemsByLineNumber[lineNumber + 1]) {
-                    newChatItemsByLineNumber[lineNumber + 1] = [];
-                }
-                newChatItemsByLineNumber[lineNumber + 1].push(uiChatItem);
-            }
-
             return {
                 ...state,
                 isFull: false,
@@ -97,7 +83,19 @@ const chatEventsSlice = createSlice({
                     ...state.chatItemStateById,
                     [uiChatItem.id]: 'added',
                 },
-                chatItemsByLineNumber: newChatItemsByLineNumber,
+                chatItemsByLineNumber: {
+                    ...state.chatItemsByLineNumber,
+                    [lineNumber]: (
+                        state.chatItemsByLineNumber[lineNumber] ?? []
+                    ).concat(uiChatItem),
+                    [lineNumber + 1]:
+                        actualNumberOfLines === 2
+                            ? (
+                                  state.chatItemsByLineNumber[lineNumber + 1] ??
+                                  []
+                              ).concat(uiChatItem)
+                            : state.chatItemsByLineNumber[lineNumber + 1],
+                },
             };
         },
         markAsDone(state, action: PayloadAction<UiChatItem>): State {
