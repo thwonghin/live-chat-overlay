@@ -5,6 +5,7 @@ import {
     getTimeoutMs,
     isTimeToDispatch,
     isOutdated,
+    isRemovable,
     benchmark,
 } from './helpers';
 import { ChatItem } from '../models';
@@ -115,10 +116,12 @@ export class ChatEventResponseObserver {
                     currentTimeDelayInUsec: this.currentLiveDelayInUs,
                 });
 
-                if (isOutdatedChatItem) {
+                const isRemovableChatItem = isRemovable(chatItem);
+
+                if (isOutdatedChatItem && isRemovableChatItem) {
                     count += 1;
                 }
-                return !isOutdatedChatItem;
+                return !(isOutdatedChatItem && isRemovableChatItem);
             },
         );
 

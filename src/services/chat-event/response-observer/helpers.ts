@@ -1,6 +1,10 @@
 import { inRange, first } from 'lodash-es';
 import { isNonNullable } from '@/utils';
-import { mapAddChatItemActions } from '../mapper';
+import {
+    mapAddChatItemActions,
+    isNormalChatItem,
+    isMembershipItem,
+} from '../mapper';
 import { ReplayRootObject, LiveRootObject } from '../live-chat-response';
 import { ChatItem } from '../models';
 
@@ -96,6 +100,15 @@ export function isOutdated({
         currentTimeInUsec - currentTimeDelayInUsec,
         chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.3,
         chatItem.timestampInUs + chatDisplayTimeInMs * 1000,
+    );
+}
+
+export function isRemovable(chatItem: ChatItem): boolean {
+    const removableAuthorType = ['guest', 'member'];
+    return (
+        (isNormalChatItem(chatItem) &&
+            removableAuthorType.includes(chatItem.authorType)) ||
+        isMembershipItem(chatItem)
     );
 }
 

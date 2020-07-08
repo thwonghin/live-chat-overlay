@@ -59,7 +59,7 @@ export function useInitChatEventObserver(): void {
         settings.settings.flowTimeInSec,
     ]);
 
-    useInterval(processChatItem, 500);
+    useInterval(processChatItem, 300);
 
     useEffect(() => {
         function handleDebugInfo(debugInfo: DebugInfo) {
