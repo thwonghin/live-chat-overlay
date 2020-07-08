@@ -3,6 +3,7 @@ import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
     isTimeToDispatch,
+    isOutdated,
     benchmark,
 } from './helpers';
 import { ChatItem } from '../models';
@@ -29,6 +30,7 @@ export type DebugInfo = Partial<{
     processChatEventMs: number;
     processXhrQueueLength: number;
     processChatEventQueueLength: number;
+    outdatedChatEventCount: number;
 }>;
 
 export class ChatEventResponseObserver {
@@ -47,8 +49,6 @@ export class ChatEventResponseObserver {
     private xhrEventProcessInterval = -1;
 
     private chatItemProcessQueue: ChatItem[] = [];
-
-    private chatItemProcessInterval = -1;
 
     private emitDebugInfoEvent(debugInfo: DebugInfo) {
         if (this.isDebugging) {
@@ -95,19 +95,52 @@ export class ChatEventResponseObserver {
         });
     };
 
-    public dequeueChatItem(
-        currentPlayerTimeInMsc: number,
-    ): ChatItem | undefined {
+    private cleanOutdatedChatItems(params: {
+        currentTimeInUsec: number;
+        currentPlayerTimeInMsc: number;
+        chatDisplayTimeInMs: number;
+    }): void {
+        let count = 0;
+
+        this.chatItemProcessQueue = this.chatItemProcessQueue.filter(
+            (chatItem) => {
+                const isOutdatedChatItem = isOutdated({
+                    ...params,
+                    chatItem,
+                    currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
+                });
+
+                if (isOutdatedChatItem) {
+                    count += 1;
+                }
+                return !isOutdatedChatItem;
+            },
+        );
+
+        this.emitDebugInfoEvent({
+            outdatedChatEventCount: count,
+        });
+    }
+
+    public dequeueChatItem(params: {
+        currentPlayerTimeInMsc: number;
+        chatDisplayTimeInMs: number;
+    }): ChatItem | undefined {
+        const currentTimeInUsec = Date.now() * 1000;
+        this.cleanOutdatedChatItems({
+            ...params,
+            currentTimeInUsec,
+        });
+
         if (!this.chatItemProcessQueue[0]) {
             return undefined;
         }
 
-        const currentTimeInUsec = Date.now() * 1000;
         const { result: isTime, runtime } = benchmark(() => {
             return isTimeToDispatch({
                 chatItem: this.chatItemProcessQueue[0],
                 currentTimeInUsec,
-                currentPlayerTimeInMsc,
+                currentPlayerTimeInMsc: params.currentPlayerTimeInMsc,
                 currentTimeDelayInUsec: TIME_DELAY_IN_USEC,
             });
         }, this.isDebugging);
@@ -148,7 +181,6 @@ export class ChatEventResponseObserver {
         this.isStarted = false;
         window.removeEventListener(CHAT_EVENT_NAME, this.onChatMessage);
         window.clearInterval(this.xhrEventProcessInterval);
-        window.clearInterval(this.chatItemProcessInterval);
     }
 
     public reset(): void {

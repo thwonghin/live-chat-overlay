@@ -19,6 +19,7 @@ const initialState: State = {
     },
     processXhrQueueLength: 0,
     processChatEventQueueLength: 0,
+    outdatedRemovedChatEventCount: 0,
 };
 
 const debugInfoSlice = createSlice({
@@ -68,6 +69,13 @@ const debugInfoSlice = createSlice({
             return {
                 ...state,
                 processChatEventQueueLength: action.payload,
+            };
+        },
+        addOutdatedRemovedChatEventCount(state, action: PayloadAction<number>) {
+            return {
+                ...state,
+                outdatedRemovedChatEventCount:
+                    state.outdatedRemovedChatEventCount + action.payload,
             };
         },
         resetMetrics(state) {

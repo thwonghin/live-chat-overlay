@@ -11,4 +11,5 @@ export interface State {
     processChatEventBenchmark: Benchmark;
     processXhrQueueLength: number;
     processChatEventQueueLength: number;
+    outdatedRemovedChatEventCount: number;
 }

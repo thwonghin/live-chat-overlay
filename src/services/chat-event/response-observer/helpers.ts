@@ -1,3 +1,4 @@
+import { inRange } from 'lodash-es';
 import { isNonNullable } from '@/utils';
 import { mapAddChatItemActions } from '../mapper';
 import { ReplayRootObject, LiveRootObject } from '../live-chat-response';
@@ -54,6 +55,38 @@ export function isTimeToDispatch({
     return chatItem.videoTimestampInMs
         ? currentPlayerTimeInMsc > chatItem.videoTimestampInMs
         : chatItem.timestampInUs < currentTimeInUsec - currentTimeDelayInUsec;
+}
+
+interface IsOutdatedParams {
+    currentTimeInUsec: number;
+    currentTimeDelayInUsec: number;
+    currentPlayerTimeInMsc: number;
+    chatDisplayTimeInMs: number;
+    chatItem: ChatItem;
+}
+
+export function isOutdated({
+    currentPlayerTimeInMsc,
+    currentTimeInUsec,
+    currentTimeDelayInUsec,
+    chatDisplayTimeInMs,
+    chatItem,
+}: IsOutdatedParams): boolean {
+    if (chatItem.videoTimestampInMs) {
+        // not live
+        return !inRange(
+            chatItem.videoTimestampInMs,
+            currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.3,
+            currentPlayerTimeInMsc + chatDisplayTimeInMs,
+        );
+    }
+
+    // is live
+    return inRange(
+        currentTimeInUsec + currentTimeDelayInUsec,
+        chatItem.timestampInUs - chatDisplayTimeInMs * 0.3,
+        chatItem.timestampInUs + chatDisplayTimeInMs,
+    );
 }
 
 interface BenchmarkResult<T> {

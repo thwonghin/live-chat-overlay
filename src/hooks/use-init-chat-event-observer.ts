@@ -4,6 +4,7 @@ import { useDispatch, useSelector, useStore } from 'react-redux';
 import { getVideoEle } from '@/youtube-utils';
 import { useInterval } from '@/hooks/use-interval';
 import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
+import { useSettings } from '@/hooks/use-settings';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
 import { chatEventsActions } from '@/reducers/chat-events';
 import { debugInfoActions } from '@/reducers/debug-info';
@@ -13,6 +14,7 @@ import { ChatItem } from '@/services/chat-event/models';
 
 export function useInitChatEventObserver(): void {
     const dispatch = useDispatch();
+    const settings = useSettings();
     const chatEventObserver = useContext(ChatEventObserverContext);
     const store = useStore<RootState>();
     const isDebugging = useSelector<RootState, boolean>(
@@ -24,14 +26,17 @@ export function useInitChatEventObserver(): void {
     const processChatItem = useCallback(() => {
         const { isFull } = store.getState().chatEvents;
 
+        function dequeue(): ChatItem | undefined {
+            return chatEventObserver.dequeueChatItem({
+                currentPlayerTimeInMsc:
+                    (getVideoEle()?.currentTime ?? 0) * 1000,
+                chatDisplayTimeInMs: settings.settings.flowTimeInSec * 1000,
+            });
+        }
+
         const chatItem = isFull
-            ? chatItemBufferRef.current ??
-              chatEventObserver.dequeueChatItem(
-                  (getVideoEle()?.currentTime ?? 0) * 1000,
-              )
-            : chatEventObserver.dequeueChatItem(
-                  (getVideoEle()?.currentTime ?? 0) * 1000,
-              );
+            ? chatItemBufferRef.current ?? dequeue()
+            : dequeue();
 
         if (!chatItem) {
             return;
@@ -45,9 +50,16 @@ export function useInitChatEventObserver(): void {
                 playerRect: { width, height },
             }),
         );
-    }, [chatEventObserver, dispatch, height, width, store]);
+    }, [
+        store,
+        dispatch,
+        width,
+        height,
+        chatEventObserver,
+        settings.settings.flowTimeInSec,
+    ]);
 
-    useInterval(processChatItem, 100);
+    useInterval(processChatItem, 500);
 
     useEffect(() => {
         function handleDebugInfo(debugInfo: DebugInfo) {
@@ -76,6 +88,13 @@ export function useInitChatEventObserver(): void {
                 dispatch(
                     debugInfoActions.updateProcessXhrQueueLength(
                         debugInfo.processXhrQueueLength,
+                    ),
+                );
+            }
+            if (debugInfo.outdatedChatEventCount) {
+                dispatch(
+                    debugInfoActions.addOutdatedRemovedChatEventCount(
+                        debugInfo.outdatedChatEventCount,
                     ),
                 );
             }

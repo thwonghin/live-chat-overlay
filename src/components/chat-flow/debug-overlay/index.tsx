@@ -52,6 +52,7 @@ interface DebugOverlayLayoutProps {
     processChatEventBenchmark: RoundedBenchmark;
     processXhrQueueLength: number;
     processChatEventQueueLength: number;
+    outdatedRemovedChatEventCount: number;
 }
 
 export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
@@ -60,6 +61,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
     processXhrBenchmark,
     processXhrQueueLength,
     processChatEventQueueLength,
+    outdatedRemovedChatEventCount,
 }) => {
     return (
         <>
@@ -85,7 +87,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
             </div>
             <div className={classes['benchmark-container']}>
                 <p className={classes['debug-text']}>
-                    {`Response Process Queue Length ${processXhrQueueLength}`}
+                    {`Response Process Queue Length: ${processXhrQueueLength}`}
                 </p>
                 {processXhrBenchmark.count !== 0 && (
                     <>
@@ -103,7 +105,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 )}
                 <br />
                 <p className={classes['debug-text']}>
-                    {`Response Chat Event Queue Length ${processChatEventQueueLength}`}
+                    {`Response Chat Event Queue Length: ${processChatEventQueueLength}`}
                 </p>
                 {processChatEventBenchmark.count !== 0 && (
                     <>
@@ -119,6 +121,10 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                         )}
                     </>
                 )}
+                <br />
+                <p className={classes['debug-text']}>
+                    {`Removed Outdated Chat Event: ${outdatedRemovedChatEventCount}`}
+                </p>
             </div>
         </>
     );
@@ -158,6 +164,9 @@ const DebugOverlay: React.FC = () => {
     const processChatEventQueueLength = useSelector<RootState, number>(
         (rootState) => rootState.debugInfo.processChatEventQueueLength,
     );
+    const outdatedRemovedChatEventCount = useSelector<RootState, number>(
+        (rootState) => rootState.debugInfo.outdatedRemovedChatEventCount,
+    );
 
     return (
         <DebugOverlayLayout
@@ -166,6 +175,7 @@ const DebugOverlay: React.FC = () => {
             processXhrBenchmark={processXhrBenchmark}
             processXhrQueueLength={processXhrQueueLength}
             processChatEventQueueLength={processChatEventQueueLength}
+            outdatedRemovedChatEventCount={outdatedRemovedChatEventCount}
         />
     );
 };
