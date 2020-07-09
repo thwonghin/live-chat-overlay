@@ -6,6 +6,7 @@ import { useInterval } from '@/hooks/use-interval';
 import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
 import { useSettings } from '@/hooks/use-settings';
 import { useDocumentVisible } from '@/hooks/use-document-visible';
+import { useVideoPlayerState } from '@/hooks/use-video-player-state';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
 import { chatEventsActions } from '@/reducers/chat-events';
 import { debugInfoActions } from '@/reducers/debug-info';
@@ -17,6 +18,7 @@ export function useInitChatEventObserver(): void {
     const dispatch = useDispatch();
     const settings = useSettings();
     const chatEventObserver = useContext(ChatEventObserverContext);
+    const { isPaused, isSeeking } = useVideoPlayerState();
     const store = useStore<RootState>();
     const isDocumentVisible = useDocumentVisible(window.parent.document);
     const isDebugging = useSelector<RootState, boolean>(
@@ -36,7 +38,7 @@ export function useInitChatEventObserver(): void {
             });
         }
 
-        if (!isDocumentVisible) {
+        if (!isDocumentVisible || isPaused) {
             // Still dequeue in background to avoid overflow
             dequeue();
             return;
@@ -66,6 +68,7 @@ export function useInitChatEventObserver(): void {
         chatEventObserver,
         settings.settings.flowTimeInSec,
         isDocumentVisible,
+        isPaused,
     ]);
 
     useInterval(processChatItem, 300);
@@ -114,6 +117,20 @@ export function useInitChatEventObserver(): void {
         return () =>
             chatEventObserver.removeEventListener('debug', handleDebugInfo);
     }, [chatEventObserver, dispatch]);
+
+    useEffect(() => {
+        if (isPaused) {
+            chatEventObserver.stop();
+        } else {
+            chatEventObserver.start();
+        }
+    }, [isPaused, chatEventObserver]);
+
+    useEffect(() => {
+        if (isSeeking) {
+            chatEventObserver.reset();
+        }
+    }, [isSeeking, chatEventObserver]);
 
     useEffect(() => {
         if (isDebugging) {
