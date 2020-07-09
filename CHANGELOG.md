@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.3](https://github.com/thwonghin/live-chat-overlay/compare/v1.3.2...v1.3.3) (2020-07-09)
+
+
+### Bug Fixes
+
+* cleanup two-lines items logic ([#184](https://github.com/thwonghin/live-chat-overlay/issues/184)) ([42bd930](https://github.com/thwonghin/live-chat-overlay/commit/42bd9309f775ab93629e5bcbaedf1a4c5081d910))
+* handle player state change ([#183](https://github.com/thwonghin/live-chat-overlay/issues/183)) ([9eac7b6](https://github.com/thwonghin/live-chat-overlay/commit/9eac7b674588a726c962b8d8bfe90b1caa1d0d93))
+* relax outdated condition ([#185](https://github.com/thwonghin/live-chat-overlay/issues/185)) ([6b57c04](https://github.com/thwonghin/live-chat-overlay/commit/6b57c046ccf9f742f78f644c9ce1e50b443f8813))
+
 ### [1.3.2](https://github.com/thwonghin/live-chat-overlay/compare/v1.3.1...v1.3.2) (2020-07-08)
 
 
