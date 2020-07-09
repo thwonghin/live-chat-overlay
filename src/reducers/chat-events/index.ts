@@ -99,20 +99,33 @@ const chatEventsSlice = createSlice({
             };
         },
         markAsDone(state, action: PayloadAction<UiChatItem>): State {
+            const doneChatItem = action.payload;
+
             return {
                 ...state,
                 chatItems: state.chatItems,
                 chatItemStateById: {
                     ...state.chatItemStateById,
-                    [action.payload.id]: 'finished',
+                    [doneChatItem.id]: 'finished',
                 },
                 chatItemsByLineNumber: {
                     ...state.chatItemsByLineNumber,
-                    [action.payload.lineNumber]: (
-                        state.chatItemsByLineNumber[
-                            action.payload.lineNumber
-                        ] ?? []
-                    ).filter((chatItem) => chatItem.id !== action.payload.id),
+                    [doneChatItem.lineNumber]: (
+                        state.chatItemsByLineNumber[doneChatItem.lineNumber] ??
+                        []
+                    ).filter((chatItem) => chatItem.id !== doneChatItem.id),
+                    [doneChatItem.lineNumber + 1]:
+                        doneChatItem.numberOfLines === 2
+                            ? (
+                                  state.chatItemsByLineNumber[
+                                      doneChatItem.lineNumber + 1
+                                  ] ?? []
+                              ).filter(
+                                  (chatItem) => chatItem.id !== doneChatItem.id,
+                              )
+                            : state.chatItemsByLineNumber[
+                                  doneChatItem.lineNumber + 1
+                              ],
                 },
             };
         },
