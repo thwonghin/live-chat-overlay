@@ -90,16 +90,16 @@ export function isOutdated({
         // not live
         return !inRange(
             chatItem.videoTimestampInMs,
-            currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.3,
-            currentPlayerTimeInMsc + chatDisplayTimeInMs,
+            currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.5,
+            currentPlayerTimeInMsc + chatDisplayTimeInMs * 2,
         );
     }
 
     // is live
     return !inRange(
         currentTimeInUsec - currentTimeDelayInUsec,
-        chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.3,
-        chatItem.timestampInUs + chatDisplayTimeInMs * 1000,
+        chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.5,
+        chatItem.timestampInUs + chatDisplayTimeInMs * 1000 * 2,
     );
 }
 
