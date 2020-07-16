@@ -21,6 +21,7 @@ const authorName = 'Author Name';
 const normalMessageItem: NormalChatItem = {
     id: 'super-chat-sticker',
     authorBadges: [],
+    liveDelayInMs: 1000,
     messageParts: [{ text: 'This is a normal message' }],
     avatars,
     timestampInUs: 1591425506771,
@@ -31,6 +32,7 @@ const normalMessageItem: NormalChatItem = {
 
 const superChatItem: SuperChatItem = {
     id: 'super-chat-message',
+    liveDelayInMs: 1000,
     messageParts: [{ text: 'This is a super chat message' }],
     avatars,
     timestampInUs: 1591425506771,
@@ -42,6 +44,7 @@ const superChatItem: SuperChatItem = {
 
 const membershipItem: MembershipItem = {
     id: 'membership',
+    liveDelayInMs: 1000,
     authorBadges: [],
     messageParts: [{ text: 'Someone becomes a member.' }],
     avatars,
@@ -52,6 +55,7 @@ const membershipItem: MembershipItem = {
 
 const superStickerItem: SuperStickerItem = {
     id: 'super-chat-sticker',
+    liveDelayInMs: 1000,
     stickers: [],
     avatars,
     timestampInUs: 1591425506771,
@@ -477,7 +481,11 @@ describe('mapAddChatItemActions', () => {
             superStickerItem,
         );
 
-        result = mapAddChatItemActions(sampleActions, 10000);
+        result = mapAddChatItemActions({
+            addChatItemActions: sampleActions,
+            liveDelayInMs: 1000,
+            videoTimestampInMs: 10000,
+        });
     });
 
     it('should return correct result', () => {
@@ -490,24 +498,32 @@ describe('mapAddChatItemActions', () => {
     });
 
     it('should call mapper with correct params', () => {
-        expect(helpers.mapLiveChatPaidStickerRenderer).toHaveBeenCalledWith(
-            sampleActions[0].item?.liveChatPaidStickerRenderer ?? {},
-            10000,
-        );
+        expect(helpers.mapLiveChatPaidStickerRenderer).toHaveBeenCalledWith({
+            renderer: sampleActions[0].item?.liveChatPaidStickerRenderer ?? {},
+            liveDelayInMs: 1000,
+            videoTimestampInMs: 10000,
+        });
 
         expect(helpers.mapLiveChatPaidMessageItemRenderer).toHaveBeenCalledWith(
-            sampleActions[2].item?.liveChatPaidMessageRenderer ?? {},
-            10000,
+            {
+                renderer:
+                    sampleActions[2].item?.liveChatPaidMessageRenderer ?? {},
+                liveDelayInMs: 1000,
+                videoTimestampInMs: 10000,
+            },
         );
 
-        expect(helpers.mapLiveChatMembershipItemRenderer).toHaveBeenCalledWith(
-            sampleActions[3].item?.liveChatMembershipItemRenderer ?? {},
-            10000,
-        );
+        expect(helpers.mapLiveChatMembershipItemRenderer).toHaveBeenCalledWith({
+            renderer:
+                sampleActions[3].item?.liveChatMembershipItemRenderer ?? {},
+            liveDelayInMs: 1000,
+            videoTimestampInMs: 10000,
+        });
 
-        expect(helpers.mapLiveChatTextMessageRenderer).toHaveBeenCalledWith(
-            sampleActions[4].item?.liveChatTextMessageRenderer ?? {},
-            10000,
-        );
+        expect(helpers.mapLiveChatTextMessageRenderer).toHaveBeenCalledWith({
+            renderer: sampleActions[4].item?.liveChatTextMessageRenderer ?? {},
+            liveDelayInMs: 1000,
+            videoTimestampInMs: 10000,
+        });
     });
 });

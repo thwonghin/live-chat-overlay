@@ -89,10 +89,14 @@ function getFixture(): LiveChatPaidMessageRenderer {
 
 describe('mapLiveChatPaidMessageItemRenderer', () => {
     it('should map to correct result', () => {
-        const result = mapLiveChatPaidMessageItemRenderer(getFixture());
+        const result = mapLiveChatPaidMessageItemRenderer({
+            renderer: getFixture(),
+            liveDelayInMs: 1000,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 1000,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -135,13 +139,15 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
     });
 
     it('should map with videoTimestamp corretly', () => {
-        const result = mapLiveChatPaidMessageItemRenderer(
-            getFixture(),
-            100000000,
-        );
+        const result = mapLiveChatPaidMessageItemRenderer({
+            renderer: getFixture(),
+            videoTimestampInMs: 100000000,
+            liveDelayInMs: 0,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 0,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -187,10 +193,14 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
     it('should handle empty message corretly', () => {
         const sample = getFixture();
         sample.message = undefined;
-        const result = mapLiveChatPaidMessageItemRenderer(sample);
+        const result = mapLiveChatPaidMessageItemRenderer({
+            renderer: sample,
+            liveDelayInMs: 0,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 0,
             messageParts: [],
             avatars: [
                 {

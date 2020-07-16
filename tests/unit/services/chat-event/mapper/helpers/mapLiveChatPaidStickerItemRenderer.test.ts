@@ -74,10 +74,14 @@ function getFixture(): LiveChatPaidStickerRenderer {
 
 describe('mapLiveChatPaidStickerRenderer', () => {
     it('should map to correct result', () => {
-        const result = mapLiveChatPaidStickerRenderer(getFixture());
+        const result = mapLiveChatPaidStickerRenderer({
+            renderer: getFixture(),
+            liveDelayInMs: 1000,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 1000,
             stickers: [
                 {
                     url: 'https://sample-sticker/small.jpg',
@@ -111,10 +115,15 @@ describe('mapLiveChatPaidStickerRenderer', () => {
     });
 
     it('should map with videoTimestamp corretly', () => {
-        const result = mapLiveChatPaidStickerRenderer(getFixture(), 100000000);
+        const result = mapLiveChatPaidStickerRenderer({
+            renderer: getFixture(),
+            videoTimestampInMs: 100000000,
+            liveDelayInMs: 0,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 0,
             stickers: [
                 {
                     url: 'https://sample-sticker/small.jpg',
