@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/thwonghin/live-chat-overlay/compare/v1.3.3...v1.4.0) (2020-07-16)
+
+
+### Features
+
+* display chat items from init data ([a555533](https://github.com/thwonghin/live-chat-overlay/commit/a55553326b488850face67e02dab0d0e16ba4adf))
+* init response observer with init data ([7f79085](https://github.com/thwonghin/live-chat-overlay/commit/7f790850cbb69265262f4e96901bb64b2a957514))
+
+
+### Bug Fixes
+
+* live delay not consistent ([#201](https://github.com/thwonghin/live-chat-overlay/issues/201)) ([0ba4aca](https://github.com/thwonghin/live-chat-overlay/commit/0ba4aca89fb4718305d85f6a858e529dd92fe378))
+* replay with init data ([b8c3a57](https://github.com/thwonghin/live-chat-overlay/commit/b8c3a5747038cdbb40b94247f8ab991eb9d64ec6))
+* type error intests ([0c44b72](https://github.com/thwonghin/live-chat-overlay/commit/0c44b72ec896d6b26a3595bfb3ce860ad10e0420))
+
 ### [1.3.3](https://github.com/thwonghin/live-chat-overlay/compare/v1.3.2...v1.3.3) (2020-07-09)
 
 
