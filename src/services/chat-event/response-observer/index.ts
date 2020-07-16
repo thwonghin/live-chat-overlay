@@ -2,7 +2,6 @@ import { CustomEventDetail } from '@/services/xhr-interceptor';
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
-    getTimeoutMs,
     isTimeToDispatch,
     isOutdated,
     isRemovable,
@@ -50,8 +49,6 @@ export class ChatEventResponseObserver {
 
     private chatItemProcessQueue: ChatItem[] = [];
 
-    private currentLiveDelayInUs = 0;
-
     private emitDebugInfoEvent(debugInfo: DebugInfo) {
         if (this.isDebugging) {
             this.listeners.debug.forEach((listener) => listener(debugInfo));
@@ -87,10 +84,6 @@ export class ChatEventResponseObserver {
                 ? mapChatItemsFromReplayResponse(response as ReplayRootObject)
                 : mapChatItemsFromLiveResponse(response as LiveRootObject);
 
-            this.currentLiveDelayInUs = isReplay
-                ? 0
-                : (getTimeoutMs(response as LiveRootObject) ?? 0) * 1000;
-
             this.chatItemProcessQueue.push(...chatItems);
         }, this.isDebugging);
 
@@ -113,7 +106,6 @@ export class ChatEventResponseObserver {
                 const isOutdatedChatItem = isOutdated({
                     ...params,
                     chatItem,
-                    currentTimeDelayInUsec: this.currentLiveDelayInUs,
                 });
 
                 const isRemovableChatItem = isRemovable(chatItem);
@@ -149,7 +141,6 @@ export class ChatEventResponseObserver {
                 chatItem: this.chatItemProcessQueue[0],
                 currentTimeInUsec,
                 currentPlayerTimeInMsc: params.currentPlayerTimeInMsc,
-                currentTimeDelayInUsec: this.currentLiveDelayInUs,
             });
         }, this.isDebugging);
 

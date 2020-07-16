@@ -9,35 +9,46 @@ import {
 import * as liveChatResponse from '../live-chat-response';
 import * as chatModel from '../models';
 
-export function mapAddChatItemActions(
-    addChatItemActions: liveChatResponse.AddChatItemAction[],
-    videoTimestampInMs?: number,
-): chatModel.ChatItem[] {
+interface MapAddChatItemActionsParams {
+    addChatItemActions: liveChatResponse.AddChatItemAction[];
+    liveDelayInMs: number;
+    videoTimestampInMs?: number;
+}
+
+export function mapAddChatItemActions({
+    addChatItemActions,
+    liveDelayInMs,
+    videoTimestampInMs,
+}: MapAddChatItemActionsParams): chatModel.ChatItem[] {
     return addChatItemActions
         .map((action) => {
             if (action.item?.liveChatPaidMessageRenderer) {
-                return mapLiveChatPaidMessageItemRenderer(
-                    action.item.liveChatPaidMessageRenderer,
+                return mapLiveChatPaidMessageItemRenderer({
+                    renderer: action.item.liveChatPaidMessageRenderer,
+                    liveDelayInMs,
                     videoTimestampInMs,
-                );
+                });
             }
             if (action.item?.liveChatPaidStickerRenderer) {
-                return mapLiveChatPaidStickerRenderer(
-                    action.item.liveChatPaidStickerRenderer,
+                return mapLiveChatPaidStickerRenderer({
+                    renderer: action.item.liveChatPaidStickerRenderer,
+                    liveDelayInMs,
                     videoTimestampInMs,
-                );
+                });
             }
             if (action.item?.liveChatMembershipItemRenderer) {
-                return mapLiveChatMembershipItemRenderer(
-                    action.item.liveChatMembershipItemRenderer,
+                return mapLiveChatMembershipItemRenderer({
+                    renderer: action.item.liveChatMembershipItemRenderer,
+                    liveDelayInMs,
                     videoTimestampInMs,
-                );
+                });
             }
             if (action.item?.liveChatTextMessageRenderer) {
-                return mapLiveChatTextMessageRenderer(
-                    action.item.liveChatTextMessageRenderer,
+                return mapLiveChatTextMessageRenderer({
+                    renderer: action.item.liveChatTextMessageRenderer,
+                    liveDelayInMs,
                     videoTimestampInMs,
-                );
+                });
             }
             return null;
         })

@@ -116,10 +116,14 @@ function getFixture(): LiveChatTextMessageRenderer {
 
 describe('mapLiveChatTextMessageRenderer', () => {
     it('should map member type chat correctly', () => {
-        const result = mapLiveChatTextMessageRenderer(getFixture());
+        const result = mapLiveChatTextMessageRenderer({
+            renderer: getFixture(),
+            liveDelayInMs: 1000,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 1000,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -165,10 +169,14 @@ describe('mapLiveChatTextMessageRenderer', () => {
         const fixture = getFixture();
         fixture.authorBadges = undefined;
 
-        const result = mapLiveChatTextMessageRenderer(fixture);
+        const result = mapLiveChatTextMessageRenderer({
+            renderer: fixture,
+            liveDelayInMs: 1000,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 1000,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -212,7 +220,7 @@ describe('mapLiveChatTextMessageRenderer', () => {
 
     it('should map moderator type chat correctly', () => {
         const fixture = getFixture();
-        fixture.authorBadges!.push({
+        fixture.authorBadges?.push({
             liveChatAuthorBadgeRenderer: {
                 tooltip: 'Moderator1',
                 accessibility: {
@@ -226,10 +234,14 @@ describe('mapLiveChatTextMessageRenderer', () => {
             },
         });
 
-        const result = mapLiveChatTextMessageRenderer(fixture);
+        const result = mapLiveChatTextMessageRenderer({
+            renderer: fixture,
+            liveDelayInMs: 1000,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 1000,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -274,10 +286,15 @@ describe('mapLiveChatTextMessageRenderer', () => {
     it('should map with videoTimestamp corretly', () => {
         const fixture = getFixture();
 
-        const result = mapLiveChatTextMessageRenderer(fixture, 100000000);
+        const result = mapLiveChatTextMessageRenderer({
+            renderer: fixture,
+            videoTimestampInMs: 100000000,
+            liveDelayInMs: 0,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 0,
             messageParts: [
                 {
                     text: 'Test Message',

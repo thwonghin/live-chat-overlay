@@ -81,32 +81,48 @@ function mapAuthorBadges(
         );
 }
 
-export function mapLiveChatMembershipItemRenderer(
-    renderer: liveChatResponse.LiveChatMembershipItemRenderer,
-    videoTimestampInMs?: number,
-): chatModel.MembershipItem {
+interface MapLiveChatMembershipItemRendererParams {
+    renderer: liveChatResponse.LiveChatMembershipItemRenderer;
+    liveDelayInMs: number;
+    videoTimestampInMs?: number;
+}
+
+export function mapLiveChatMembershipItemRenderer({
+    renderer,
+    liveDelayInMs,
+    videoTimestampInMs,
+}: MapLiveChatMembershipItemRendererParams): chatModel.MembershipItem {
     return {
         id: renderer.id,
         messageParts: (renderer.headerSubtext?.runs ?? []).map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
         timestampInUs: Number(renderer.timestampUsec),
         videoTimestampInMs,
+        liveDelayInMs,
         authorName: renderer.authorName.simpleText,
         chatType: 'membership',
         authorBadges: mapAuthorBadges(renderer.authorBadges),
     };
 }
 
-export function mapLiveChatPaidMessageItemRenderer(
-    renderer: liveChatResponse.LiveChatPaidMessageRenderer,
-    videoTimestampInMs?: number,
-): chatModel.SuperChatItem {
+interface MapLiveChatPaidMessageItemRendererParams {
+    renderer: liveChatResponse.LiveChatPaidMessageRenderer;
+    liveDelayInMs: number;
+    videoTimestampInMs?: number;
+}
+
+export function mapLiveChatPaidMessageItemRenderer({
+    renderer,
+    liveDelayInMs,
+    videoTimestampInMs,
+}: MapLiveChatPaidMessageItemRendererParams): chatModel.SuperChatItem {
     return {
         id: renderer.id,
         messageParts: (renderer.message?.runs ?? []).map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
         timestampInUs: Number(renderer.timestampUsec),
         videoTimestampInMs,
+        liveDelayInMs,
         authorName: renderer.authorName.simpleText,
         chatType: 'super-chat',
         donationAmount: renderer.purchaseAmountText.simpleText,
@@ -114,15 +130,23 @@ export function mapLiveChatPaidMessageItemRenderer(
     };
 }
 
-export function mapLiveChatPaidStickerRenderer(
-    renderer: liveChatResponse.LiveChatPaidStickerRenderer,
-    videoTimestampInMs?: number,
-): chatModel.SuperStickerItem {
+interface MapLiveChatPaidStickerRendererParams {
+    renderer: liveChatResponse.LiveChatPaidStickerRenderer;
+    liveDelayInMs: number;
+    videoTimestampInMs?: number;
+}
+
+export function mapLiveChatPaidStickerRenderer({
+    renderer,
+    liveDelayInMs,
+    videoTimestampInMs,
+}: MapLiveChatPaidStickerRendererParams): chatModel.SuperStickerItem {
     return {
         id: renderer.id,
         avatars: renderer.authorPhoto.thumbnails,
         timestampInUs: Number(renderer.timestampUsec),
         videoTimestampInMs,
+        liveDelayInMs,
         authorName: renderer.authorName.simpleText,
         chatType: 'super-sticker',
         donationAmount: renderer.purchaseAmountText.simpleText,
@@ -131,16 +155,24 @@ export function mapLiveChatPaidStickerRenderer(
     };
 }
 
-export function mapLiveChatTextMessageRenderer(
-    renderer: liveChatResponse.LiveChatTextMessageRenderer,
-    videoTimestampInMs?: number,
-): chatModel.NormalChatItem {
+interface MapLiveChatTextMessageRendererParams {
+    renderer: liveChatResponse.LiveChatTextMessageRenderer;
+    liveDelayInMs: number;
+    videoTimestampInMs?: number;
+}
+
+export function mapLiveChatTextMessageRenderer({
+    renderer,
+    liveDelayInMs,
+    videoTimestampInMs,
+}: MapLiveChatTextMessageRendererParams): chatModel.NormalChatItem {
     return {
         id: renderer.id,
         messageParts: renderer.message.runs.map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
         timestampInUs: Number(renderer.timestampUsec),
         videoTimestampInMs,
+        liveDelayInMs,
         authorName: renderer.authorName.simpleText,
         authorType: getAuthorTypeFromBadges(renderer.authorBadges),
         chatType: 'normal',

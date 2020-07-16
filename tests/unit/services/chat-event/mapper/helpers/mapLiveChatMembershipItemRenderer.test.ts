@@ -113,10 +113,14 @@ function getFixture(): LiveChatMembershipItemRenderer {
 
 describe('mapLiveChatMembershipItemRenderer', () => {
     it('should map member type chat correctly', () => {
-        const result = mapLiveChatMembershipItemRenderer(getFixture());
+        const result = mapLiveChatMembershipItemRenderer({
+            renderer: getFixture(),
+            liveDelayInMs: 1000,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 1000,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -158,12 +162,15 @@ describe('mapLiveChatMembershipItemRenderer', () => {
     });
 
     it('should map with videoTimestamp corretly', () => {
-        const fixture = getFixture();
-
-        const result = mapLiveChatMembershipItemRenderer(fixture, 100000000);
+        const result = mapLiveChatMembershipItemRenderer({
+            renderer: getFixture(),
+            videoTimestampInMs: 100000000,
+            liveDelayInMs: 0,
+        });
 
         expect(result).toEqual({
             id: 'random-id',
+            liveDelayInMs: 0,
             messageParts: [
                 {
                     text: 'Test Message',

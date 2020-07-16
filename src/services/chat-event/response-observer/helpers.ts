@@ -21,29 +21,17 @@ export function mapChatItemsFromReplayResponse(
                 .map((action) => action.addChatItemAction)
                 .filter(isNonNullable);
 
-            const items = mapAddChatItemActions(
+            const items = mapAddChatItemActions({
                 addChatItemActions,
-                Number(a.videoOffsetTimeMsec),
-            );
+                liveDelayInMs: 0,
+                videoTimestampInMs: Number(a.videoOffsetTimeMsec),
+            });
 
             return items;
         });
 }
 
-export function mapChatItemsFromLiveResponse(
-    rootObj: LiveRootObject,
-): ChatItem[] {
-    return mapAddChatItemActions(
-        (
-            rootObj.response.continuationContents.liveChatContinuation
-                .actions ?? []
-        )
-            .map((v) => v.addChatItemAction)
-            .filter(isNonNullable),
-    );
-}
-
-export function getTimeoutMs(rootObj: LiveRootObject): number | null {
+function getTimeoutMs(rootObj: LiveRootObject): number | null {
     return (
         first(
             rootObj.response.continuationContents.liveChatContinuation.continuations
@@ -53,9 +41,22 @@ export function getTimeoutMs(rootObj: LiveRootObject): number | null {
     );
 }
 
+export function mapChatItemsFromLiveResponse(
+    rootObj: LiveRootObject,
+): ChatItem[] {
+    return mapAddChatItemActions({
+        addChatItemActions: (
+            rootObj.response.continuationContents.liveChatContinuation
+                .actions ?? []
+        )
+            .map((v) => v.addChatItemAction)
+            .filter(isNonNullable),
+        liveDelayInMs: getTimeoutMs(rootObj) ?? 0,
+    });
+}
+
 interface IsTimeToDispatchParams {
     currentTimeInUsec: number;
-    currentTimeDelayInUsec: number;
     currentPlayerTimeInMsc: number;
     chatItem: ChatItem;
 }
@@ -63,17 +64,16 @@ interface IsTimeToDispatchParams {
 export function isTimeToDispatch({
     currentPlayerTimeInMsc,
     currentTimeInUsec,
-    currentTimeDelayInUsec,
     chatItem,
 }: IsTimeToDispatchParams): boolean {
     return chatItem.videoTimestampInMs
         ? currentPlayerTimeInMsc > chatItem.videoTimestampInMs
-        : chatItem.timestampInUs < currentTimeInUsec - currentTimeDelayInUsec;
+        : chatItem.timestampInUs <
+              currentTimeInUsec - chatItem.liveDelayInMs * 1000;
 }
 
 interface IsOutdatedParams {
     currentTimeInUsec: number;
-    currentTimeDelayInUsec: number;
     currentPlayerTimeInMsc: number;
     chatDisplayTimeInMs: number;
     chatItem: ChatItem;
@@ -82,7 +82,6 @@ interface IsOutdatedParams {
 export function isOutdated({
     currentPlayerTimeInMsc,
     currentTimeInUsec,
-    currentTimeDelayInUsec,
     chatDisplayTimeInMs,
     chatItem,
 }: IsOutdatedParams): boolean {
@@ -97,7 +96,7 @@ export function isOutdated({
 
     // is live
     return !inRange(
-        currentTimeInUsec - currentTimeDelayInUsec,
+        currentTimeInUsec - chatItem.liveDelayInMs * 1000,
         chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.5,
         chatItem.timestampInUs + chatDisplayTimeInMs * 1000 * 2,
     );
