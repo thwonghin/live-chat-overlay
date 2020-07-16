@@ -267,3 +267,7 @@ export interface ReplayRootObject {
 }
 
 export type RootObject = LiveRootObject | ReplayRootObject;
+
+export interface InitData {
+    continuationContents: LiveContinuationContents;
+}

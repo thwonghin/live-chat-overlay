@@ -1,4 +1,10 @@
 import { CustomEventDetail } from '@/services/xhr-interceptor';
+import type {
+    RootObject,
+    ReplayRootObject,
+    LiveRootObject,
+    InitData,
+} from '@/definitions/youtube';
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
@@ -7,12 +13,7 @@ import {
     isRemovable,
     benchmark,
 } from './helpers';
-import { ChatItem } from '../models';
-import {
-    RootObject,
-    ReplayRootObject,
-    LiveRootObject,
-} from '../live-chat-response';
+import type { ChatItem } from '../models';
 
 const GET_LIVE_CHAT_URL = 'https://www.youtube.com/live_chat';
 const GET_LIVE_CHAT_REPLAY_URL =
@@ -48,6 +49,13 @@ export class ChatEventResponseObserver {
     private xhrEventProcessInterval = -1;
 
     private chatItemProcessQueue: ChatItem[] = [];
+
+    private initData?: InitData;
+
+    constructor(initData?: InitData) {
+        this.initData = initData;
+        console.log(this.initData);
+    }
 
     private emitDebugInfoEvent(debugInfo: DebugInfo) {
         if (this.isDebugging) {

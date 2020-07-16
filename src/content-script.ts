@@ -2,14 +2,20 @@ import './common';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
 import { injectToggleBtn } from './app/toggle-btn';
-import { isInsideLiveChatFrame, waitForPlayerReady } from './youtube-utils';
+import {
+    isInsideLiveChatFrame,
+    waitForPlayerReady,
+    getInitData,
+} from './youtube-utils';
 import { attachXhrInterceptor } from './services/xhr-interceptor';
 
 async function init(): Promise<void> {
     const detechXhrInterceptor = attachXhrInterceptor();
     await waitForPlayerReady();
 
-    const cleanupLiveChat = injectLiveChatOverlay();
+    const initData = await getInitData();
+
+    const cleanupLiveChat = injectLiveChatOverlay(initData);
     const cleanupToggleBtn = injectToggleBtn();
 
     function cleanup(): void {

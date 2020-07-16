@@ -1,11 +1,11 @@
 import { inRange, first } from 'lodash-es';
 import { isNonNullable } from '@/utils';
+import type { ReplayRootObject, LiveRootObject } from '@/definitions/youtube';
 import {
     mapAddChatItemActions,
     isNormalChatItem,
     isMembershipItem,
 } from '../mapper';
-import { ReplayRootObject, LiveRootObject } from '../live-chat-response';
 import { ChatItem } from '../models';
 
 export function mapChatItemsFromReplayResponse(
