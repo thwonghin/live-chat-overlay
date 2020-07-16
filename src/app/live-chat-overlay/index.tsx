@@ -32,8 +32,8 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
         <React.StrictMode>
             <Provider store={store}>
                 <PlayerRectProvider>
-                    <ChatEventObserverProvider initData={initData}>
-                        <App />
+                    <ChatEventObserverProvider>
+                        <App initData={initData} />
                     </ChatEventObserverProvider>
                 </PlayerRectProvider>
             </Provider>

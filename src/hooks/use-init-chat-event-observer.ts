@@ -13,8 +13,9 @@ import { debugInfoActions } from '@/reducers/debug-info';
 import { DebugInfo } from '@/services/chat-event/response-observer';
 import { RootState } from '@/reducers';
 import { ChatItem } from '@/services/chat-event/models';
+import { InitData } from '@/definitions/youtube';
 
-export function useInitChatEventObserver(): void {
+export function useInitChatEventObserver(initData: InitData): void {
     const dispatch = useDispatch();
     const settings = useSettings();
     const chatEventObserver = useContext(ChatEventObserverContext);
@@ -131,6 +132,10 @@ export function useInitChatEventObserver(): void {
             chatEventObserver.reset();
         }
     }, [isSeeking, chatEventObserver]);
+
+    useEffect(() => {
+        chatEventObserver.importInitData(initData);
+    }, [initData, chatEventObserver]);
 
     useEffect(() => {
         if (isDebugging) {

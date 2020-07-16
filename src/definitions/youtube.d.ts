@@ -268,6 +268,14 @@ export interface ReplayRootObject {
 
 export type RootObject = LiveRootObject | ReplayRootObject;
 
-export interface InitData {
+export interface LiveInitData {
     continuationContents: LiveContinuationContents;
 }
+
+export interface ReplayInitData {
+    continuationContents: ReplayContinuationContents & {
+        isReplay: true;
+    };
+}
+
+export type InitData = LiveInitData | ReplayInitData;

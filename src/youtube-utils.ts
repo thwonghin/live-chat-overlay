@@ -106,16 +106,28 @@ export function isInsideLiveChatFrame(): boolean {
 }
 
 function dispatchInitData(extensionId: string): void {
-    const event = new CustomEvent<{ data: InitData }>(
-        `${extensionId}_init_data`,
-        {
-            detail: {
-                data: window.ytInitialData as InitData,
-            },
-        },
-    );
+    // window.ytInitialData is mutated, need to get from raw HTML
+    document.querySelectorAll('script').forEach((tag) => {
+        if (
+            !tag.innerHTML.includes(extensionId) &&
+            tag.innerHTML.includes('window["ytInitialData"] =')
+        ) {
+            const innerHTML = tag.innerHTML.trim();
+            const startIndex = innerHTML.indexOf('{"responseContext"');
+            const initData = innerHTML.slice(startIndex, innerHTML.length - 1);
 
-    setTimeout(() => window.dispatchEvent(event), 0);
+            const event = new CustomEvent<{ data: InitData }>(
+                `${extensionId}_init_data`,
+                {
+                    detail: {
+                        data: JSON.parse(initData) as InitData,
+                    },
+                },
+            );
+
+            setTimeout(() => window.dispatchEvent(event), 0);
+        }
+    });
 }
 
 export async function getInitData(): Promise<InitData> {
