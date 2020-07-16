@@ -1,3 +1,5 @@
+import { appendScript, functionToString } from '@/utils';
+
 export interface CustomEventDetail {
     response: string;
     url: string;
@@ -33,15 +35,8 @@ function initInterceptor(extensionId: string): void {
 }
 
 export function attachXhrInterceptor(): () => void {
-    const scriptTag = document.createElement('script');
-    scriptTag.type = 'text/javascript';
-    scriptTag.innerHTML = `(${initInterceptor.toString()})('${
-        browser.runtime.id
-    }')`;
-
-    document.body.appendChild(scriptTag);
-
-    return (): void => {
-        document.body.removeChild(scriptTag);
-    };
+    return appendScript(
+        document,
+        functionToString(initInterceptor, browser.runtime.id),
+    );
 }

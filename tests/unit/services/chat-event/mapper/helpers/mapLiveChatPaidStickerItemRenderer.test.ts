@@ -1,4 +1,4 @@
-import { LiveChatPaidStickerRenderer } from '@/services/chat-event/live-chat-response';
+import type { LiveChatPaidStickerRenderer } from '@/definitions/youtube';
 import { mapLiveChatPaidStickerRenderer } from '@/services/chat-event/mapper/helpers';
 
 function getFixture(): LiveChatPaidStickerRenderer {

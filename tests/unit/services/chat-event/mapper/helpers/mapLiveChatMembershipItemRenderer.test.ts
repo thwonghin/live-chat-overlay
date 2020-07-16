@@ -1,4 +1,4 @@
-import { LiveChatMembershipItemRenderer } from '@/services/chat-event/live-chat-response';
+import type { LiveChatMembershipItemRenderer } from '@/definitions/youtube';
 import { mapLiveChatMembershipItemRenderer } from '@/services/chat-event/mapper/helpers';
 
 function getFixture(): LiveChatMembershipItemRenderer {

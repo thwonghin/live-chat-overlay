@@ -1,19 +1,22 @@
-import { inRange, first } from 'lodash-es';
+import { first } from 'lodash-es';
 import { isNonNullable } from '@/utils';
+import type {
+    ReplayContinuationContents,
+    LiveContinuationContents,
+    ReplayInitData,
+    InitData,
+} from '@/definitions/youtube';
 import {
     mapAddChatItemActions,
     isNormalChatItem,
     isMembershipItem,
 } from '../mapper';
-import { ReplayRootObject, LiveRootObject } from '../live-chat-response';
 import { ChatItem } from '../models';
 
 export function mapChatItemsFromReplayResponse(
-    rootObj: ReplayRootObject,
+    continuationContents: ReplayContinuationContents,
 ): ChatItem[] {
-    return (
-        rootObj.response.continuationContents.liveChatContinuation.actions ?? []
-    )
+    return (continuationContents.liveChatContinuation.actions ?? [])
         .map((a) => a.replayChatItemAction)
         .filter(isNonNullable)
         .flatMap((a) => {
@@ -31,10 +34,12 @@ export function mapChatItemsFromReplayResponse(
         });
 }
 
-function getTimeoutMs(rootObj: LiveRootObject): number | null {
+function getTimeoutMs(
+    continuationContents: LiveContinuationContents,
+): number | null {
     return (
         first(
-            rootObj.response.continuationContents.liveChatContinuation.continuations
+            continuationContents.liveChatContinuation.continuations
                 .map((value) => value.timedContinuationData)
                 .filter((v): v is NonNullable<typeof v> => !!v),
         )?.timeoutMs ?? null
@@ -42,16 +47,15 @@ function getTimeoutMs(rootObj: LiveRootObject): number | null {
 }
 
 export function mapChatItemsFromLiveResponse(
-    rootObj: LiveRootObject,
+    continuationContents: LiveContinuationContents,
 ): ChatItem[] {
     return mapAddChatItemActions({
         addChatItemActions: (
-            rootObj.response.continuationContents.liveChatContinuation
-                .actions ?? []
+            continuationContents.liveChatContinuation.actions ?? []
         )
             .map((v) => v.addChatItemAction)
             .filter(isNonNullable),
-        liveDelayInMs: getTimeoutMs(rootObj) ?? 0,
+        liveDelayInMs: getTimeoutMs(continuationContents) ?? 0,
     });
 }
 
@@ -87,18 +91,16 @@ export function isOutdated({
 }: IsOutdatedParams): boolean {
     if (chatItem.videoTimestampInMs) {
         // not live
-        return !inRange(
-            chatItem.videoTimestampInMs,
-            currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.5,
-            currentPlayerTimeInMsc + chatDisplayTimeInMs * 2,
+        return (
+            chatItem.videoTimestampInMs <
+            currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.5
         );
     }
 
     // is live
-    return !inRange(
-        currentTimeInUsec - chatItem.liveDelayInMs * 1000,
-        chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.5,
-        chatItem.timestampInUs + chatDisplayTimeInMs * 1000 * 2,
+    return (
+        currentTimeInUsec - chatItem.liveDelayInMs * 1000 <
+        chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.5
     );
 }
 
@@ -128,4 +130,10 @@ export function benchmark<T>(
         result,
         runtime: isDebugging ? performance.now() - beforeTime : 0,
     };
+}
+
+export function isReplayInitData(
+    initData: InitData,
+): initData is ReplayInitData {
+    return 'isReplay' in initData.continuationContents.liveChatContinuation;
 }

@@ -1,4 +1,10 @@
 import { CustomEventDetail } from '@/services/xhr-interceptor';
+import type {
+    RootObject,
+    ReplayRootObject,
+    LiveRootObject,
+    InitData,
+} from '@/definitions/youtube';
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
@@ -6,13 +12,9 @@ import {
     isOutdated,
     isRemovable,
     benchmark,
+    isReplayInitData,
 } from './helpers';
-import { ChatItem } from '../models';
-import {
-    RootObject,
-    ReplayRootObject,
-    LiveRootObject,
-} from '../live-chat-response';
+import type { ChatItem } from '../models';
 
 const GET_LIVE_CHAT_URL = 'https://www.youtube.com/live_chat';
 const GET_LIVE_CHAT_REPLAY_URL =
@@ -43,11 +45,26 @@ export class ChatEventResponseObserver {
 
     private isDebugging = false;
 
-    private xhrEventProcessQueue: CustomEventDetail[] = [];
+    private xhrEventProcessQueue: {
+        responseText: string;
+        isReplay: boolean;
+    }[] = [];
 
     private xhrEventProcessInterval = -1;
 
     private chatItemProcessQueue: ChatItem[] = [];
+
+    public importInitData(initData: InitData): void {
+        const chatItems = isReplayInitData(initData)
+            ? mapChatItemsFromReplayResponse(initData.continuationContents)
+            : mapChatItemsFromLiveResponse(initData.continuationContents);
+
+        this.chatItemProcessQueue.push(...chatItems);
+
+        this.emitDebugInfoEvent({
+            processChatEventQueueLength: this.chatItemProcessQueue.length,
+        });
+    }
 
     private emitDebugInfoEvent(debugInfo: DebugInfo) {
         if (this.isDebugging) {
@@ -62,7 +79,13 @@ export class ChatEventResponseObserver {
             return;
         }
 
-        this.xhrEventProcessQueue.push(customEvent.detail);
+        const isReplay = customEvent.detail.url.startsWith(
+            GET_LIVE_CHAT_REPLAY_URL,
+        );
+        this.xhrEventProcessQueue.push({
+            isReplay,
+            responseText: customEvent.detail.response,
+        });
         this.emitDebugInfoEvent({
             processXhrQueueLength: this.xhrEventProcessQueue.length,
         });
@@ -76,13 +99,17 @@ export class ChatEventResponseObserver {
         }
 
         const { runtime } = benchmark(() => {
-            const isReplay = xhrEvent.url.startsWith(GET_LIVE_CHAT_REPLAY_URL);
+            const response = JSON.parse(xhrEvent.responseText) as RootObject;
 
-            const response = JSON.parse(xhrEvent.response) as RootObject;
-
-            const chatItems = isReplay
-                ? mapChatItemsFromReplayResponse(response as ReplayRootObject)
-                : mapChatItemsFromLiveResponse(response as LiveRootObject);
+            const chatItems = xhrEvent.isReplay
+                ? mapChatItemsFromReplayResponse(
+                      (response as ReplayRootObject).response
+                          .continuationContents,
+                  )
+                : mapChatItemsFromLiveResponse(
+                      (response as LiveRootObject).response
+                          .continuationContents,
+                  );
 
             this.chatItemProcessQueue.push(...chatItems);
         }, this.isDebugging);
@@ -219,11 +246,5 @@ export class ChatEventResponseObserver {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const found = this.listeners[event].indexOf(callback as any);
         this.listeners[event].splice(found, 1);
-    }
-
-    public cleanup(): void {
-        this.stop();
-        this.reset();
-        this.listeners.debug = [];
     }
 }

@@ -1,3 +1,6 @@
+import { appendScript, functionToString } from '@/utils';
+import type { InitData } from '@/definitions/youtube';
+
 export function getVideoPlayerContainer(): HTMLElement | null {
     return window.parent.document.querySelector(
         '#ytd-player .html5-video-container',
@@ -100,4 +103,47 @@ export function injectStyles(): void {
 
 export function isInsideLiveChatFrame(): boolean {
     return window.location.href.startsWith('https://www.youtube.com/live_chat');
+}
+
+function dispatchInitData(extensionId: string): void {
+    // window.ytInitialData is mutated, need to get from raw HTML
+    document.querySelectorAll('script').forEach((tag) => {
+        if (
+            !tag.innerHTML.includes(extensionId) &&
+            tag.innerHTML.includes('window["ytInitialData"] =')
+        ) {
+            const innerHTML = tag.innerHTML.trim();
+            const startIndex = innerHTML.indexOf('{"responseContext"');
+            const initData = innerHTML.slice(startIndex, innerHTML.length - 1);
+
+            const event = new CustomEvent<{ data: InitData }>(
+                `${extensionId}_init_data`,
+                {
+                    detail: {
+                        data: JSON.parse(initData) as InitData,
+                    },
+                },
+            );
+
+            setTimeout(() => window.dispatchEvent(event), 0);
+        }
+    });
+}
+
+export async function getInitData(): Promise<InitData> {
+    const extensionId = browser.runtime.id;
+
+    return new Promise((resolve) => {
+        const removeScript = appendScript(
+            document,
+            functionToString(dispatchInitData, browser.runtime.id),
+        );
+
+        window.addEventListener(`${extensionId}_init_data`, (event) => {
+            const customEvent = event as CustomEvent<{ data: InitData }>;
+
+            removeScript();
+            resolve(customEvent.detail.data);
+        });
+    });
 }

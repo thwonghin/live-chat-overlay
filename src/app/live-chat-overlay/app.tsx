@@ -4,10 +4,15 @@ import { useInitChatEventObserver } from '@/hooks/use-init-chat-event-observer';
 import { useResetChatEventsOnPlayerRectChange } from '@/hooks/use-reset-chat-events-on-player-rect-change';
 
 import ChatFlow from '@/components/chat-flow';
+import { InitData } from '@/definitions/youtube';
 
-const App: React.FC = () => {
-    useInitChatEventObserver();
+interface Props {
+    initData: InitData;
+}
+
+const App: React.FC<Props> = ({ initData }) => {
     useResetChatEventsOnPlayerRectChange();
+    useInitChatEventObserver(initData);
 
     return <ChatFlow />;
 };

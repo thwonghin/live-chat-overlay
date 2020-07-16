@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 
 import { PlayerRectProvider } from '@/contexts/player-rect';
 import { ChatEventObserverProvider } from '@/contexts/chat-observer';
+import { InitData } from '@/definitions/youtube';
 
 import { store } from '@/reducers';
 import { getVideoPlayerContainer, injectStyles } from '@/youtube-utils';
@@ -11,7 +12,7 @@ import App from './app';
 
 const REACT_CONTAINER = 'live-chat-overlay-app-container';
 
-export function injectLiveChatOverlay(): () => void {
+export function injectLiveChatOverlay(initData: InitData): () => void {
     const videoPlayerContainer = getVideoPlayerContainer();
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');
@@ -32,7 +33,7 @@ export function injectLiveChatOverlay(): () => void {
             <Provider store={store}>
                 <PlayerRectProvider>
                     <ChatEventObserverProvider>
-                        <App />
+                        <App initData={initData} />
                     </ChatEventObserverProvider>
                 </PlayerRectProvider>
             </Provider>

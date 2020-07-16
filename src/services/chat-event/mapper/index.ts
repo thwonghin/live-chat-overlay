@@ -1,12 +1,12 @@
 import { Settings, MessageSettings } from '@/services/settings/types';
 import { isNonNullable } from '@/utils';
+import type * as liveChatResponse from '@/definitions/youtube';
 import {
     mapLiveChatTextMessageRenderer,
     mapLiveChatPaidMessageItemRenderer,
     mapLiveChatMembershipItemRenderer,
     mapLiveChatPaidStickerRenderer,
 } from './helpers';
-import * as liveChatResponse from '../live-chat-response';
 import * as chatModel from '../models';
 
 interface MapAddChatItemActionsParams {
