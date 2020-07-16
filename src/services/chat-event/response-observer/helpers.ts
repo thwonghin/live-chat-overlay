@@ -1,4 +1,4 @@
-import { inRange, first } from 'lodash-es';
+import { first } from 'lodash-es';
 import { isNonNullable } from '@/utils';
 import type {
     ReplayContinuationContents,
@@ -91,18 +91,16 @@ export function isOutdated({
 }: IsOutdatedParams): boolean {
     if (chatItem.videoTimestampInMs) {
         // not live
-        return !inRange(
-            chatItem.videoTimestampInMs,
-            currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.5,
-            currentPlayerTimeInMsc + chatDisplayTimeInMs * 2,
+        return (
+            chatItem.videoTimestampInMs <
+            currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.5
         );
     }
 
     // is live
-    return !inRange(
-        currentTimeInUsec - chatItem.liveDelayInMs * 1000,
-        chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.5,
-        chatItem.timestampInUs + chatDisplayTimeInMs * 1000 * 2,
+    return (
+        currentTimeInUsec - chatItem.liveDelayInMs * 1000 <
+        chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.5
     );
 }
 
@@ -137,5 +135,5 @@ export function benchmark<T>(
 export function isReplayInitData(
     initData: InitData,
 ): initData is ReplayInitData {
-    return 'isReplay' in initData.continuationContents;
+    return 'isReplay' in initData.continuationContents.liveChatContinuation;
 }
