@@ -1,4 +1,4 @@
-import { LiveChatTextMessageRenderer } from '@/services/chat-event/live-chat-response';
+import type { LiveChatTextMessageRenderer } from '@/definitions/youtube';
 import { mapLiveChatTextMessageRenderer } from '@/services/chat-event/mapper/helpers';
 
 function getFixture(): LiveChatTextMessageRenderer {

@@ -7,7 +7,7 @@ import {
     MembershipItem,
     SuperStickerItem,
 } from '@/services/chat-event/models';
-import { AddChatItemAction } from '@/services/chat-event/live-chat-response';
+import type { AddChatItemAction } from '@/definitions/youtube';
 
 const avatars = [
     {
