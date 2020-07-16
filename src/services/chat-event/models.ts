@@ -22,6 +22,7 @@ export interface NormalChatItem {
     avatars: Thumbnail[];
     timestampInUs: number;
     videoTimestampInMs?: number;
+    liveDelayInMs: number;
     authorName: string;
     authorBadges: string[];
     authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you' | 'verified';
