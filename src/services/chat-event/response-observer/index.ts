@@ -9,7 +9,8 @@ import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
     isTimeToDispatch,
-    isOutdated,
+    isOutdatedLiveChatItem,
+    isOutdatedReplayChatItem,
     isRemovable,
     benchmark,
     isReplayInitData,
@@ -130,10 +131,19 @@ export class ChatEventResponseObserver {
 
         this.chatItemProcessQueue = this.chatItemProcessQueue.filter(
             (chatItem) => {
-                const isOutdatedChatItem = isOutdated({
-                    ...params,
-                    chatItem,
-                });
+                const isOutdatedChatItem = chatItem.videoTimestampInMs
+                    ? isOutdatedReplayChatItem({
+                          chatDisplayTimeInMs: params.chatDisplayTimeInMs,
+                          currentPlayerTimeInMsc: params.currentPlayerTimeInMsc,
+                          chatItemAtVideoTimestampInMs:
+                              chatItem.videoTimestampInMs,
+                      })
+                    : isOutdatedLiveChatItem({
+                          chatDisplayTimeInMs: params.chatDisplayTimeInMs,
+                          currentTimeInUsec: params.currentTimeInUsec,
+                          liveDelayInMs: chatItem.liveDelayInMs,
+                          chatItemCreateAtTimestampInUs: chatItem.timestampInUs,
+                      });
 
                 const isRemovableChatItem = isRemovable(chatItem);
 

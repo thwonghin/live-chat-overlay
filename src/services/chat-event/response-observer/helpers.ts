@@ -76,31 +76,39 @@ export function isTimeToDispatch({
               currentTimeInUsec - chatItem.liveDelayInMs * 1000;
 }
 
-interface IsOutdatedParams {
-    currentTimeInUsec: number;
+interface IsOutdatedReplayChatItemParams {
     currentPlayerTimeInMsc: number;
     chatDisplayTimeInMs: number;
-    chatItem: ChatItem;
+    chatItemAtVideoTimestampInMs: number;
 }
 
-export function isOutdated({
+export function isOutdatedReplayChatItem({
     currentPlayerTimeInMsc,
+    chatDisplayTimeInMs,
+    chatItemAtVideoTimestampInMs,
+}: IsOutdatedReplayChatItemParams): boolean {
+    return (
+        chatItemAtVideoTimestampInMs <
+        currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.5
+    );
+}
+
+interface IsOutdatedLiveChatItemParams {
+    currentTimeInUsec: number;
+    chatDisplayTimeInMs: number;
+    chatItemCreateAtTimestampInUs: number;
+    liveDelayInMs: number;
+}
+
+export function isOutdatedLiveChatItem({
     currentTimeInUsec,
     chatDisplayTimeInMs,
-    chatItem,
-}: IsOutdatedParams): boolean {
-    if (chatItem.videoTimestampInMs) {
-        // not live
-        return (
-            chatItem.videoTimestampInMs <
-            currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.5
-        );
-    }
-
-    // is live
+    chatItemCreateAtTimestampInUs,
+    liveDelayInMs,
+}: IsOutdatedLiveChatItemParams): boolean {
     return (
-        currentTimeInUsec - chatItem.liveDelayInMs * 1000 <
-        chatItem.timestampInUs - chatDisplayTimeInMs * 1000 * 0.5
+        chatItemCreateAtTimestampInUs + liveDelayInMs * 1000 <
+        currentTimeInUsec - chatDisplayTimeInMs * 1000 * 0.5
     );
 }
 
