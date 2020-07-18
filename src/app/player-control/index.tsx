@@ -6,7 +6,7 @@ import App from './app';
 
 const REACT_CONTAINER = 'live-chat-overlay-toggle-btn';
 
-export function injectToggleBtn(): () => void {
+export function injectPlayerControl(): () => void {
     const rightControlEle = getRightControlEle();
     if (!rightControlEle) {
         throw new Error('Video Player Container not found.');
