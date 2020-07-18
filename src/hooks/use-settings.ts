@@ -5,7 +5,7 @@ import { Settings } from '@/services/settings/types';
 
 interface UseSettingsResult {
     settings: Settings;
-    updateSettings: (settings: Settings) => void;
+    updateSettings: (updateFn: (prevSettings: Settings) => Settings) => void;
 }
 
 export function useSettings(): UseSettingsResult {
@@ -22,9 +22,12 @@ export function useSettings(): UseSettingsResult {
             SettingsStorage.removeEventListener('change', handleSettingsChange);
     }, []);
 
-    const updateSettings = useCallback((newSettings: Settings): void => {
-        SettingsStorage.settings = newSettings;
-    }, []);
+    const updateSettings = useCallback(
+        (updateFn: (prevSettings: Settings) => Settings): void => {
+            SettingsStorage.settings = updateFn(cloneDeep(settings));
+        },
+        [settings],
+    );
 
     return {
         settings,
