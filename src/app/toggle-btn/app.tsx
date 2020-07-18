@@ -1,41 +1,31 @@
-import React, { useMemo, CSSProperties, useCallback } from 'react';
+import React, { useMemo, useCallback, CSSProperties } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
 import { useSettings } from '@/hooks/use-settings';
 
-const buttonWidth = 36;
-const iconWidth = 24;
+const iconToBtnRatio = 2 / 3;
 const faCommentSlashHeight = 640;
 const faCommentHeight = 512;
+const withSlashIconRatio =
+    iconToBtnRatio * (faCommentHeight / faCommentSlashHeight);
 
-const iconPadding =
-    ((iconWidth / faCommentSlashHeight) *
-        (faCommentSlashHeight - faCommentHeight)) /
-    2;
-const buttonPadding = (buttonWidth - iconWidth) / 2;
+const style: CSSProperties = {
+    textAlign: 'center',
+};
 
 const App: React.FC = () => {
     const { settings, updateSettings } = useSettings();
 
-    const style = useMemo<CSSProperties>(() => {
-        const padding = buttonPadding + (settings.isEnabled ? iconPadding : 0);
-        return {
-            width: buttonWidth,
-            paddingLeft: padding,
-            paddingRight: padding,
-        };
-    }, [settings.isEnabled]);
-
-    const icon = useMemo<JSX.Element>(
-        () => (
+    const icon = useMemo<JSX.Element>(() => {
+        const ratio = settings.isEnabled ? withSlashIconRatio : iconToBtnRatio;
+        return (
             <FontAwesomeIcon
-                width="100%"
+                width={`${ratio * 100}%`}
                 height="100%"
                 icon={settings.isEnabled ? faComment : faCommentSlash}
             />
-        ),
-        [settings.isEnabled],
-    );
+        );
+    }, [settings.isEnabled]);
 
     const title = useMemo<string>(
         () =>
@@ -57,10 +47,9 @@ const App: React.FC = () => {
     );
 
     return (
-        // eslint-disable-next-line jsx-a11y/control-has-associated-label
         <button
-            style={style}
             className="ytp-button"
+            style={style}
             title={title}
             onClick={onClick}
             type="button"
