@@ -7,7 +7,7 @@ import { ChatEventObserverProvider } from '@/contexts/chat-observer';
 import { InitData } from '@/definitions/youtube';
 
 import { store } from '@/reducers';
-import { getVideoPlayerContainer, injectStyles } from '@/youtube-utils';
+import { getVideoPlayerContainer } from '@/youtube-utils';
 import App from './app';
 
 const REACT_CONTAINER = 'live-chat-overlay-app-container';
@@ -17,8 +17,6 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');
     }
-
-    injectStyles();
 
     const reactContainer = window.parent.document.createElement('div');
     reactContainer.id = REACT_CONTAINER;
