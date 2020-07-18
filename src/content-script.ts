@@ -9,19 +9,34 @@ import {
 } from './youtube-utils';
 import { attachXhrInterceptor } from './services/xhr-interceptor';
 
-async function init(): Promise<void> {
-    const detechXhrInterceptor = attachXhrInterceptor();
-    await waitForPlayerReady();
+function injectStyles(): () => void {
+    const path = browser.extension.getURL('content-script.css');
 
+    const link = window.parent.document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = path;
+
+    window.parent.document.head.appendChild(link);
+
+    return () => window.parent.document.head.removeChild(link);
+}
+
+async function init(): Promise<void> {
+    const cleanupStyles = injectStyles();
+    const detechXhrInterceptor = attachXhrInterceptor();
     const initData = await getInitData();
 
-    const cleanupLiveChat = injectLiveChatOverlay(initData);
+    await waitForPlayerReady();
+
     const cleanupToggleBtn = injectToggleBtn();
+    const cleanupLiveChat = injectLiveChatOverlay(initData);
 
     function cleanup(): void {
-        cleanupLiveChat();
         cleanupToggleBtn();
+        cleanupLiveChat();
         detechXhrInterceptor();
+        cleanupStyles();
     }
 
     window.addEventListener('unload', cleanup);

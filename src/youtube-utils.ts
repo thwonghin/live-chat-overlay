@@ -86,21 +86,6 @@ export async function waitForChatReady(): Promise<void> {
     });
 }
 
-export function injectStyles(): void {
-    const path = browser.extension.getURL('content-script.css');
-
-    if (window.parent.document.querySelector(`link[href="${path}"]`)) {
-        return;
-    }
-
-    const link = window.parent.document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = path;
-
-    window.parent.document.head.appendChild(link);
-}
-
 export function isInsideLiveChatFrame(): boolean {
     return window.location.href.startsWith('https://www.youtube.com/live_chat');
 }
