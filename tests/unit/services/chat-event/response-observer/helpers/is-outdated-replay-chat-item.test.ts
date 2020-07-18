@@ -1,7 +1,6 @@
 import { isOutdatedReplayChatItem } from '@/services/chat-event/response-observer/helpers';
 
 const chatItemVideoTimestamp = 5000;
-const chatDisplayTime = 10;
 
 interface TestParams {
     currentPlayerTime: number;
@@ -22,7 +21,6 @@ describe('isOutdatedReplayChatItem', () => {
                 isOutdatedReplayChatItem({
                     chatItemAtVideoTimestampInMs: chatItemVideoTimestamp * 1000,
                     currentPlayerTimeInMsc: testParams.currentPlayerTime * 1000,
-                    chatDisplayTimeInMs: chatDisplayTime * 1000,
                 }),
             ).toBe(testParams.expectedResult);
         });

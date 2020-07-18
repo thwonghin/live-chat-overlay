@@ -133,13 +133,11 @@ export class ChatEventResponseObserver {
             (chatItem) => {
                 const isOutdatedChatItem = chatItem.videoTimestampInMs
                     ? isOutdatedReplayChatItem({
-                          chatDisplayTimeInMs: params.chatDisplayTimeInMs,
                           currentPlayerTimeInMsc: params.currentPlayerTimeInMsc,
                           chatItemAtVideoTimestampInMs:
                               chatItem.videoTimestampInMs,
                       })
                     : isOutdatedLiveChatItem({
-                          chatDisplayTimeInMs: params.chatDisplayTimeInMs,
                           currentTimeInUsec: params.currentTimeInUsec,
                           liveDelayInMs: chatItem.liveDelayInMs,
                           chatItemCreateAtTimestampInUs: chatItem.timestampInUs,

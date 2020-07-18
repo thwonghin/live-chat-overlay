@@ -1,7 +1,6 @@
 import { isOutdatedLiveChatItem } from '@/services/chat-event/response-observer/helpers';
 
 const chatItemCreateTimestamp = 5000;
-const chatDisplayTime = 10;
 const liveDelay = 4;
 
 interface TestParams {
@@ -24,7 +23,6 @@ describe('isOutdatedLiveChatItem', () => {
                     chatItemCreateAtTimestampInUs:
                         chatItemCreateTimestamp * 1000 * 1000,
                     currentTimeInUsec: testParams.currentTime * 1000 * 1000,
-                    chatDisplayTimeInMs: chatDisplayTime * 1000,
                     liveDelayInMs: liveDelay * 1000,
                 }),
             ).toBe(testParams.expectedResult);

@@ -40,7 +40,11 @@ function getTimeoutMs(
     return (
         first(
             continuationContents.liveChatContinuation.continuations
-                .map((value) => value.timedContinuationData)
+                .map(
+                    (value) =>
+                        value.timedContinuationData ??
+                        value.invalidationContinuationData,
+                )
                 .filter((v): v is NonNullable<typeof v> => !!v),
         )?.timeoutMs ?? null
     );
@@ -71,44 +75,42 @@ export function isTimeToDispatch({
     chatItem,
 }: IsTimeToDispatchParams): boolean {
     return chatItem.videoTimestampInMs
-        ? currentPlayerTimeInMsc > chatItem.videoTimestampInMs
-        : chatItem.timestampInUs <
-              currentTimeInUsec - chatItem.liveDelayInMs * 1000;
+        ? currentPlayerTimeInMsc >= chatItem.videoTimestampInMs
+        : currentTimeInUsec >=
+              chatItem.timestampInUs + chatItem.liveDelayInMs * 1000;
 }
 
 interface IsOutdatedReplayChatItemParams {
     currentPlayerTimeInMsc: number;
-    chatDisplayTimeInMs: number;
     chatItemAtVideoTimestampInMs: number;
 }
 
+export const MAX_CHAT_DISPLAY_DELAY_IN_SEC = 5;
+
 export function isOutdatedReplayChatItem({
     currentPlayerTimeInMsc,
-    chatDisplayTimeInMs,
     chatItemAtVideoTimestampInMs,
 }: IsOutdatedReplayChatItemParams): boolean {
     return (
         chatItemAtVideoTimestampInMs <
-        currentPlayerTimeInMsc - chatDisplayTimeInMs * 0.5
+        currentPlayerTimeInMsc - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000
     );
 }
 
 interface IsOutdatedLiveChatItemParams {
     currentTimeInUsec: number;
-    chatDisplayTimeInMs: number;
     chatItemCreateAtTimestampInUs: number;
     liveDelayInMs: number;
 }
 
 export function isOutdatedLiveChatItem({
     currentTimeInUsec,
-    chatDisplayTimeInMs,
     chatItemCreateAtTimestampInUs,
     liveDelayInMs,
 }: IsOutdatedLiveChatItemParams): boolean {
     return (
         chatItemCreateAtTimestampInUs + liveDelayInMs * 1000 <
-        currentTimeInUsec - chatDisplayTimeInMs * 1000 * 0.5
+        currentTimeInUsec - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * 1000
     );
 }
 

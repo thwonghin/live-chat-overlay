@@ -7,15 +7,21 @@ interface PlayerSeekContinuationData {
     continuation: string;
 }
 
+interface InvalidationContinuationData {
+    continuation: string;
+    timeoutMs: number;
+}
+
 interface TimedContinuationData {
     continuation: string;
     timeoutMs: number;
 }
 
 interface Continuation {
-    liveChatReplayContinuationData: LiveChatReplayContinuationData;
-    playerSeekContinuationData: PlayerSeekContinuationData;
-    timedContinuationData?: TimedContinuationData;
+    liveChatReplayContinuationData?: LiveChatReplayContinuationData;
+    playerSeekContinuationData?: PlayerSeekContinuationData;
+    timedContinuationData?: TimedContinuationData; // Live
+    invalidationContinuationData?: InvalidationContinuationData; // Member only Live
 }
 
 interface Thumbnail {
