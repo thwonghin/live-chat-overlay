@@ -60,7 +60,7 @@ export function benchmark<T>(
     };
 }
 
-export async function becnhmarkAsync<T>(
+export async function benchmarkAsync<T>(
     callback: () => Promise<T>,
     isDebugging: boolean,
 ): Promise<BenchmarkResult<T>> {

@@ -48,6 +48,7 @@ function renderBenchmark(
 
 interface DebugOverlayLayoutProps {
     chatEventDebugInfo: ChatEventDebugInfo;
+    getEleWidthBenchmark: RoundedBenchmark;
     processXhrBenchmark: RoundedBenchmark;
     processChatEventBenchmark: RoundedBenchmark;
     processXhrQueueLength: number;
@@ -57,6 +58,7 @@ interface DebugOverlayLayoutProps {
 
 export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
     chatEventDebugInfo,
+    getEleWidthBenchmark,
     processChatEventBenchmark,
     processXhrBenchmark,
     processXhrQueueLength,
@@ -86,6 +88,21 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 )}
             </div>
             <div className={classes['benchmark-container']}>
+                {getEleWidthBenchmark.count !== 0 && (
+                    <>
+                        <p className={classes['debug-text']}>
+                            Get element width benchmark (μs):
+                        </p>
+                        {renderBenchmark(getEleWidthBenchmark).map(
+                            ({ key, text }) => (
+                                <p className={classes['debug-text']} key={key}>
+                                    {text}
+                                </p>
+                            ),
+                        )}
+                    </>
+                )}
+                <br />
                 <p className={classes['debug-text']}>
                     {`Response Process Queue Length: ${processXhrQueueLength}`}
                 </p>
@@ -149,6 +166,11 @@ const DebugOverlay: React.FC = () => {
         shallowEqual,
     );
 
+    const getEleWidthBenchmark = useSelector<RootState, RoundedBenchmark>(
+        (rootState) =>
+            roundBenchmark(rootState.debugInfo.getChatItemEleWidthBenchmark),
+        shallowEqual,
+    );
     const processXhrBenchmark = useSelector<RootState, RoundedBenchmark>(
         (rootState) => roundBenchmark(rootState.debugInfo.processXhrBenchmark),
         shallowEqual,
@@ -171,6 +193,7 @@ const DebugOverlay: React.FC = () => {
     return (
         <DebugOverlayLayout
             chatEventDebugInfo={chatEventDebugInfo}
+            getEleWidthBenchmark={getEleWidthBenchmark}
             processChatEventBenchmark={processChatEventBenchmark}
             processXhrBenchmark={processXhrBenchmark}
             processXhrQueueLength={processXhrQueueLength}

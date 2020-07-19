@@ -2,7 +2,7 @@ import React, { useEffect, useContext, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
-import { becnhmarkAsync } from '@/utils';
+import { benchmarkAsync } from '@/utils';
 import { getVideoEle } from '@/youtube-utils';
 import { useInterval } from '@/hooks/use-interval';
 import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
@@ -37,42 +37,34 @@ async function getChatItemRenderedWidth({
     numberOfLines,
     settings,
 }: GetChatItemRenderedWidthParams): Promise<number> {
-    const { result } = await becnhmarkAsync<number>(async () => {
-        const containerEle = window.parent.document.querySelector(
-            `#${CHAT_ITEM_RENDER_ID}`,
-        ) as HTMLElement;
+    const containerEle = window.parent.document.querySelector(
+        `#${CHAT_ITEM_RENDER_ID}`,
+    ) as HTMLElement;
 
-        const tempUiChatItem: UiChatItem = {
-            ...chatItem,
-            numberOfLines,
-            addTimestamp: 0,
-            lineNumber: 0,
-            elementWidth: 0,
-        };
+    const tempUiChatItem: UiChatItem = {
+        ...chatItem,
+        numberOfLines,
+        addTimestamp: 0,
+        lineNumber: 0,
+        elementWidth: 0,
+    };
 
-        await new Promise((resolve) => {
-            ReactDOM.render(
-                <ChatItemRenderer
-                    chatItem={tempUiChatItem}
-                    settings={settings}
-                />,
-                containerEle,
-                resolve,
-            );
-        });
+    await new Promise((resolve) => {
+        ReactDOM.render(
+            <ChatItemRenderer chatItem={tempUiChatItem} settings={settings} />,
+            containerEle,
+            resolve,
+        );
+    });
 
-        const rect = containerEle?.children[0].getBoundingClientRect();
+    const rect = containerEle?.children[0].getBoundingClientRect();
 
-        const width = rect?.width;
-        if (!width) {
-            throw new Error('Unknown error');
-        }
+    const width = rect?.width;
+    if (!width) {
+        throw new Error('Unknown error');
+    }
 
-        ReactDOM.unmountComponentAtNode(containerEle);
-        return width;
-    }, true);
-
-    return result;
+    return width;
 }
 
 export function useInitChatEventObserver(initData: InitData): void {
@@ -127,13 +119,24 @@ export function useInitChatEventObserver(initData: InitData): void {
                 ? 1
                 : messageSettings.numberOfLines;
 
-        const elementWidth = await getChatItemRenderedWidth({
-            chatItem,
-            numberOfLines,
-            settings,
-        });
+        const {
+            result: elementWidth,
+            runtime: getEleWidthRuntime,
+        } = await benchmarkAsync(
+            () =>
+                getChatItemRenderedWidth({
+                    chatItem,
+                    numberOfLines,
+                    settings,
+                }),
+            isDebugging,
+        );
 
         chatItemBufferRef.current = chatItem;
+
+        dispatch(
+            debugInfoActions.addChatItemEleWidthMetric(getEleWidthRuntime),
+        );
 
         dispatch(
             chatEventsActions.addItem({
@@ -147,6 +150,7 @@ export function useInitChatEventObserver(initData: InitData): void {
         store,
         isDocumentVisible,
         isPaused,
+        isDebugging,
         dequeueChatItem,
         settings,
         width,

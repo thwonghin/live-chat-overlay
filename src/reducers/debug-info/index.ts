@@ -5,6 +5,12 @@ import { calculateBenchmark } from './helpers';
 
 const initialState: State = {
     isDebugging: false,
+    getChatItemEleWidthBenchmark: {
+        min: Number.MAX_SAFE_INTEGER,
+        max: 0,
+        avg: 0,
+        count: 0,
+    },
     processXhrBenchmark: {
         min: Number.MAX_SAFE_INTEGER,
         max: 0,
@@ -36,6 +42,15 @@ const debugInfoSlice = createSlice({
             return {
                 ...state,
                 isDebugging: false,
+            };
+        },
+        addChatItemEleWidthMetric(state, action: PayloadAction<number>) {
+            return {
+                ...state,
+                getChatItemEleWidthBenchmark: calculateBenchmark(
+                    state.getChatItemEleWidthBenchmark,
+                    action.payload * 1000,
+                ),
             };
         },
         addProcessXhrMetric(state, action: PayloadAction<number>) {
