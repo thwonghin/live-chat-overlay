@@ -1,3 +1,4 @@
+import { last } from 'lodash-es';
 import type { UiChatItem } from '@/components/chat-flow/types';
 
 interface HasSpaceInLineParams {
@@ -58,8 +59,9 @@ export function getLineNumber({
                 .fill(null)
                 .map((v, index) => index + lineNumber)
                 .every((loopLineNumber) => {
-                    const [lastMessageInLine] =
-                        chatItemsByLineNumber[lineNumber]?.slice(-1) ?? [];
+                    const lastMessageInLine = last(
+                        chatItemsByLineNumber[loopLineNumber],
+                    );
 
                     return (
                         !lastMessageInLine ||
