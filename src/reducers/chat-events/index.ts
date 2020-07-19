@@ -44,15 +44,21 @@ const chatEventsSlice = createSlice({
                 chatItem,
                 messageSettings,
             );
+
+            const actualNumberOfLines =
+                isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
+                    ? 1
+                    : messageSettings.numberOfLines;
+
             const lineNumber = getLineNumber({
-                state,
+                chatItemsByLineNumber: state.chatItemsByLineNumber,
                 addTimestamp,
-                messageSettings,
                 estimatedMsgWidth,
                 maxLineNumber: settings.numberOfLines,
                 flowTimeInSec: settings.flowTimeInSec,
                 containerWidth: playerRect.width,
                 charWidth: playerRect.height / settings.numberOfLines,
+                displayNumberOfLines: actualNumberOfLines,
             });
 
             if (lineNumber === null) {
@@ -61,11 +67,6 @@ const chatEventsSlice = createSlice({
                     isFull: true,
                 };
             }
-
-            const actualNumberOfLines =
-                isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
-                    ? 1
-                    : messageSettings.numberOfLines;
 
             const uiChatItem: UiChatItem = {
                 ...chatItem,
