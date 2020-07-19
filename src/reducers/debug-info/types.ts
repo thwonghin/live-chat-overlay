@@ -7,6 +7,7 @@ export interface Benchmark {
 
 export interface State {
     isDebugging: boolean;
+    getChatItemEleWidthBenchmark: Benchmark;
     processXhrBenchmark: Benchmark;
     processChatEventBenchmark: Benchmark;
     processXhrQueueLength: number;

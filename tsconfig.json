@@ -1,11 +1,8 @@
 {
     "compilerOptions": {
         "target": "es5",
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "downlevelIteration": true,
         "strict": true,
         "module": "esnext",
         "moduleResolution": "node",
@@ -14,12 +11,8 @@
         "esModuleInterop": true,
         "baseUrl": ".",
         "paths": {
-            "@/*": [
-                "src/*"
-            ]
+            "@/*": ["src/*"]
         }
     },
-    "include": [
-        "./src"
-    ]
+    "include": ["./src"]
 }

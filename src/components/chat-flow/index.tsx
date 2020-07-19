@@ -1,24 +1,18 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, CSSProperties } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { RootState } from '@/reducers';
 import { chatEventsActions } from '@/reducers/chat-events';
 import { useSettings } from '@/hooks/use-settings';
 import { useInterval } from '@/hooks/use-interval';
-import {
-    isNormalChatItem,
-    isSuperChatItem,
-    isSuperStickerItem,
-    isMembershipItem,
-    getMessageSettings,
-} from '@/services/chat-event/mapper';
+import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
 import { Settings } from '@/services/settings/types';
+import { CHAT_ITEM_RENDER_ID } from '@/hooks/use-init-chat-event-observer';
 
 import { useToggleDebugMode } from './use-toggle-debug-mode';
 import classes from './index.scss';
 import MessageFlower from './message-flower';
-import TwoLinesMessage from './two-lines-message';
-import SuperChatSticker from './super-chat-sticker';
+import ChatItemRenderer from './chat-item-renderer';
 import { UiChatItem } from './types';
 import DebugOverlay from './debug-overlay';
 
@@ -42,51 +36,37 @@ const ChatFlowLayout: React.FC<Props> = ({
         [settings.isEnabled],
     );
 
+    const videoPlayerRect = useVideoPlayerRect();
+    const containerWidth = videoPlayerRect.width;
+    const lineHeight = useMemo(
+        () => videoPlayerRect.height / settings.totalNumberOfLines,
+        [settings.totalNumberOfLines, videoPlayerRect.height],
+    );
+    const containerStyle = useMemo<CSSProperties>(
+        () => ({
+            fontSize: lineHeight,
+        }),
+        [lineHeight],
+    );
+
     return (
-        <div className={classes.container}>
+        <div className={classes.container} style={containerStyle}>
+            <div
+                className={classes['test-render-container']}
+                id={CHAT_ITEM_RENDER_ID}
+            />
             <div style={style}>
                 {chatItems.map((chatItem) => (
                     <MessageFlower
-                        onDone={onDone}
+                        onDone={() => onDone(chatItem)}
                         key={chatItem.id}
-                        chatItem={chatItem}
+                        top={lineHeight * chatItem.lineNumber}
+                        containerWidth={containerWidth}
                     >
-                        {isSuperStickerItem(chatItem) && (
-                            <SuperChatSticker
-                                chatItem={chatItem}
-                                messageSettings={getMessageSettings(
-                                    chatItem,
-                                    settings,
-                                )}
-                            />
-                        )}
-                        {isNormalChatItem(chatItem) && (
-                            <TwoLinesMessage
-                                chatItem={chatItem}
-                                messageSettings={getMessageSettings(
-                                    chatItem,
-                                    settings,
-                                )}
-                            />
-                        )}
-                        {isSuperChatItem(chatItem) && (
-                            <TwoLinesMessage
-                                chatItem={chatItem}
-                                messageSettings={getMessageSettings(
-                                    chatItem,
-                                    settings,
-                                )}
-                            />
-                        )}
-                        {isMembershipItem(chatItem) && (
-                            <TwoLinesMessage
-                                chatItem={chatItem}
-                                messageSettings={getMessageSettings(
-                                    chatItem,
-                                    settings,
-                                )}
-                            />
-                        )}
+                        <ChatItemRenderer
+                            chatItem={chatItem}
+                            settings={settings}
+                        />
                     </MessageFlower>
                 ))}
             </div>

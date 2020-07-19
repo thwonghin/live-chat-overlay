@@ -1,67 +1,52 @@
 import { last } from 'lodash-es';
-
 import type { UiChatItem } from '@/components/chat-flow/types';
 
 interface HasSpaceInLineParams {
-    chatItemsByLineNumber: Record<number, UiChatItem[]>;
-    estimatedMsgWidth: number;
+    lastMessageInLine: UiChatItem;
+    elementWidth: number;
     addTimestamp: number;
     flowTimeInSec: number;
     containerWidth: number;
-    charWidth: number;
     lineNumber: number;
 }
 
 function hasSpaceInLine({
-    chatItemsByLineNumber,
-    estimatedMsgWidth,
+    lastMessageInLine,
+    elementWidth,
     addTimestamp,
     flowTimeInSec,
     containerWidth,
-    charWidth,
-    lineNumber,
 }: HasSpaceInLineParams): boolean {
-    const messages = chatItemsByLineNumber[lineNumber];
-
-    if (!messages || messages.length === 0) {
-        return true;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const lastMessage = last(messages)!;
-
-    const lastMsgFlowedTime = (addTimestamp - lastMessage?.addTimestamp) / 1000;
-    const lastMsgWidth = lastMessage?.estimatedMsgWidth * charWidth;
+    const lastMsgFlowedTime =
+        (addTimestamp - lastMessageInLine.addTimestamp) / 1000;
+    const lastMsgWidth = lastMessageInLine.elementWidth;
     const lastMsgSpeed = (containerWidth + lastMsgWidth) / flowTimeInSec;
     const lastMsgPos = lastMsgSpeed * lastMsgFlowedTime - lastMsgWidth;
 
     const remainingTime = flowTimeInSec - lastMsgFlowedTime;
 
-    const estimatedEleWidth = estimatedMsgWidth * charWidth;
-    const speed = (containerWidth + estimatedEleWidth) / flowTimeInSec;
+    const speed = (containerWidth + elementWidth) / flowTimeInSec;
 
     return speed * remainingTime < containerWidth && lastMsgPos > 0;
 }
 
 interface GetLineNumberParams {
     chatItemsByLineNumber: Record<number, UiChatItem[]>;
-    estimatedMsgWidth: number;
+    elementWidth: number;
     maxLineNumber: number;
     addTimestamp: number;
     flowTimeInSec: number;
     containerWidth: number;
-    charWidth: number;
     displayNumberOfLines: number;
 }
 
 export function getLineNumber({
     chatItemsByLineNumber,
-    estimatedMsgWidth,
+    elementWidth,
     maxLineNumber,
     addTimestamp,
     flowTimeInSec,
     containerWidth,
-    charWidth,
     displayNumberOfLines,
 }: GetLineNumberParams): number | null {
     for (
@@ -73,17 +58,23 @@ export function getLineNumber({
             Array(displayNumberOfLines)
                 .fill(null)
                 .map((v, index) => index + lineNumber)
-                .every((loopLineNumber) =>
-                    hasSpaceInLine({
-                        chatItemsByLineNumber,
-                        estimatedMsgWidth,
-                        addTimestamp,
-                        flowTimeInSec,
-                        containerWidth,
-                        charWidth,
-                        lineNumber: loopLineNumber,
-                    }),
-                )
+                .every((loopLineNumber) => {
+                    const lastMessageInLine = last(
+                        chatItemsByLineNumber[loopLineNumber],
+                    );
+
+                    return (
+                        !lastMessageInLine ||
+                        hasSpaceInLine({
+                            lastMessageInLine,
+                            elementWidth,
+                            addTimestamp,
+                            flowTimeInSec,
+                            containerWidth,
+                            lineNumber: loopLineNumber,
+                        })
+                    );
+                })
         ) {
             return lineNumber;
         }

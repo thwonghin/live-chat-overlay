@@ -21,7 +21,7 @@ type MessageSettingsKeys =
 
 export interface Settings {
     isEnabled: boolean;
-    numberOfLines: number;
+    totalNumberOfLines: number;
     flowTimeInSec: number;
     messageSettings: Record<MessageSettingsKeys, MessageSettings>;
 }

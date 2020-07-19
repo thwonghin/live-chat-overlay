@@ -40,3 +40,36 @@ export function appendScript(doc: Document, script: string): () => void {
         doc.body.removeChild(scriptTag);
     };
 }
+
+interface BenchmarkResult<T> {
+    result: T;
+    runtime: number;
+}
+
+export function benchmark<T>(
+    callback: () => T,
+    isDebugging: boolean,
+): BenchmarkResult<T> {
+    const beforeTime = isDebugging ? performance.now() : 0;
+
+    const result = callback();
+
+    return {
+        result,
+        runtime: isDebugging ? performance.now() - beforeTime : 0,
+    };
+}
+
+export async function benchmarkAsync<T>(
+    callback: () => Promise<T>,
+    isDebugging: boolean,
+): Promise<BenchmarkResult<T>> {
+    const beforeTime = isDebugging ? performance.now() : 0;
+
+    const result = await callback();
+
+    return {
+        result,
+        runtime: isDebugging ? performance.now() - beforeTime : 0,
+    };
+}

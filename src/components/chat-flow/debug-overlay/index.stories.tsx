@@ -17,6 +17,12 @@ export const DebugOverlay: React.FC = () => {
                     doneItemsCount: 100,
                     messagesCount: 100,
                 }}
+                getEleWidthBenchmark={{
+                    min: '100.00',
+                    max: '200.00',
+                    avg: '150.00',
+                    count: 10,
+                }}
                 processChatEventBenchmark={{
                     min: '100.00',
                     max: '200.00',

@@ -2,15 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { SettingsStorage } from '@/services/settings';
 import { ChatItem } from '@/services/chat-event/models';
-import {
-    getMessageSettings,
-    isSuperChatItem,
-} from '@/services/chat-event/mapper';
 import { UiChatItem } from '@/components/chat-flow/types';
 
 import { State } from './types';
 import { getLineNumber } from './helpers';
-import { estimateMsgWidth } from './width-estimate';
 
 const initialState: State = {
     isFull: false,
@@ -27,10 +22,17 @@ const chatEventsSlice = createSlice({
             state,
             action: PayloadAction<{
                 chatItem: ChatItem;
-                playerRect: { width: number; height: number };
+                playerWidth: number;
+                elementWidth: number;
+                numberOfLines: number;
             }>,
         ): State {
-            const { chatItem, playerRect } = action.payload;
+            const {
+                chatItem,
+                playerWidth,
+                elementWidth,
+                numberOfLines,
+            } = action.payload;
 
             // Avoid duplicate chat item for some reason
             if (state.chatItemStateById[chatItem.id]) {
@@ -39,26 +41,15 @@ const chatEventsSlice = createSlice({
 
             const addTimestamp = Date.now();
             const { settings } = SettingsStorage;
-            const messageSettings = getMessageSettings(chatItem, settings);
-            const estimatedMsgWidth = estimateMsgWidth(
-                chatItem,
-                messageSettings,
-            );
-
-            const actualNumberOfLines =
-                isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
-                    ? 1
-                    : messageSettings.numberOfLines;
 
             const lineNumber = getLineNumber({
                 chatItemsByLineNumber: state.chatItemsByLineNumber,
                 addTimestamp,
-                estimatedMsgWidth,
-                maxLineNumber: settings.numberOfLines,
+                elementWidth,
+                maxLineNumber: settings.totalNumberOfLines,
                 flowTimeInSec: settings.flowTimeInSec,
-                containerWidth: playerRect.width,
-                charWidth: playerRect.height / settings.numberOfLines,
-                displayNumberOfLines: actualNumberOfLines,
+                containerWidth: playerWidth,
+                displayNumberOfLines: numberOfLines,
             });
 
             if (lineNumber === null) {
@@ -70,9 +61,9 @@ const chatEventsSlice = createSlice({
 
             const uiChatItem: UiChatItem = {
                 ...chatItem,
-                numberOfLines: actualNumberOfLines,
+                numberOfLines,
                 addTimestamp,
-                estimatedMsgWidth,
+                elementWidth,
                 lineNumber,
             };
 
@@ -90,7 +81,7 @@ const chatEventsSlice = createSlice({
                         state.chatItemsByLineNumber[lineNumber] ?? []
                     ).concat(uiChatItem),
                     [lineNumber + 1]:
-                        actualNumberOfLines === 2
+                        numberOfLines === 2
                             ? (
                                   state.chatItemsByLineNumber[lineNumber + 1] ??
                                   []
