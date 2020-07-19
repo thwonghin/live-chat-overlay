@@ -5,6 +5,7 @@ import type {
     LiveRootObject,
     InitData,
 } from '@/definitions/youtube';
+import { benchmark } from '@/utils';
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
@@ -12,7 +13,6 @@ import {
     isOutdatedLiveChatItem,
     isOutdatedReplayChatItem,
     isRemovable,
-    benchmark,
     isReplayInitData,
 } from './helpers';
 import type { ChatItem } from '../models';

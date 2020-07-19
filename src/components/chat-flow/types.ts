@@ -3,7 +3,7 @@ import { ChatItem } from '@/services/chat-event/models';
 export type UiChatItem = ChatItem & {
     addTimestamp: number;
     lineNumber: number;
-    estimatedMsgWidth: number;
+    elementWidth: number;
     numberOfLines: number;
 };
 

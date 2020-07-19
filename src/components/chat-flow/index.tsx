@@ -7,6 +7,7 @@ import { useSettings } from '@/hooks/use-settings';
 import { useInterval } from '@/hooks/use-interval';
 import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
 import { Settings } from '@/services/settings/types';
+import { CHAT_ITEM_RENDER_ID } from '@/hooks/use-init-chat-event-observer';
 
 import { useToggleDebugMode } from './use-toggle-debug-mode';
 import classes from './index.scss';
@@ -50,6 +51,14 @@ const ChatFlowLayout: React.FC<Props> = ({
 
     return (
         <div className={classes.container} style={containerStyle}>
+            <div
+                style={{
+                    position: 'absolute',
+                    visibility: 'hidden',
+                    overflowX: 'visible',
+                }}
+                id={CHAT_ITEM_RENDER_ID}
+            />
             <div style={style}>
                 {chatItems.map((chatItem) => (
                     <MessageFlower

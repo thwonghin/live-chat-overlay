@@ -123,25 +123,6 @@ export function isRemovable(chatItem: ChatItem): boolean {
     );
 }
 
-interface BenchmarkResult<T> {
-    result: T;
-    runtime: number;
-}
-
-export function benchmark<T>(
-    callback: () => T,
-    isDebugging: boolean,
-): BenchmarkResult<T> {
-    const beforeTime = isDebugging ? performance.now() : 0;
-
-    const result = callback();
-
-    return {
-        result,
-        runtime: isDebugging ? performance.now() - beforeTime : 0,
-    };
-}
-
 export function isReplayInitData(
     initData: InitData,
 ): initData is ReplayInitData {
