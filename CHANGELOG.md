@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/thwonghin/live-chat-overlay/compare/v1.5.1...v1.6.0) (2020-07-19)
+
+
+### Features
+
+* accurate chat placement ([#213](https://github.com/thwonghin/live-chat-overlay/issues/213)) ([b31b2d7](https://github.com/thwonghin/live-chat-overlay/commit/b31b2d7171c4ce785bdf45cf5d20b28dc58b4ab0))
+
+
+### Bug Fixes
+
+* overlapping two line message ([#212](https://github.com/thwonghin/live-chat-overlay/issues/212)) ([0944753](https://github.com/thwonghin/live-chat-overlay/commit/094475312bd66c6ea229f4e6f8d19641c6460f7b))
+
 ### [1.5.1](https://github.com/thwonghin/live-chat-overlay/compare/v1.5.0...v1.5.1) (2020-07-19)
 
 
