@@ -54,10 +54,10 @@ const chatEventsSlice = createSlice({
                 chatItemsByLineNumber: state.chatItemsByLineNumber,
                 addTimestamp,
                 estimatedMsgWidth,
-                maxLineNumber: settings.numberOfLines,
+                maxLineNumber: settings.totalNumberOfLines,
                 flowTimeInSec: settings.flowTimeInSec,
                 containerWidth: playerRect.width,
-                charWidth: playerRect.height / settings.numberOfLines,
+                charWidth: playerRect.height / settings.totalNumberOfLines,
                 displayNumberOfLines: actualNumberOfLines,
             });
 

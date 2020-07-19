@@ -1,5 +1,3 @@
-import { last } from 'lodash-es';
-
 import type { UiChatItem } from '@/components/chat-flow/types';
 
 interface HasSpaceInLineParams {
@@ -27,8 +25,7 @@ function hasSpaceInLine({
         return true;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const lastMessage = last(messages)!;
+    const [lastMessage] = messages.slice(-1);
 
     const lastMsgFlowedTime = (addTimestamp - lastMessage?.addTimestamp) / 1000;
     const lastMsgWidth = lastMessage?.estimatedMsgWidth * charWidth;
