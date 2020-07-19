@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/thwonghin/live-chat-overlay/compare/v1.5.0...v1.5.1) (2020-07-19)
+
+
+### Bug Fixes
+
+* toggle btn size ([#209](https://github.com/thwonghin/live-chat-overlay/issues/209)) ([e6b5e50](https://github.com/thwonghin/live-chat-overlay/commit/e6b5e5083e1be3e7844327485a76b2ceddc54fe9))
+* tune chat outdate constraint ([#211](https://github.com/thwonghin/live-chat-overlay/issues/211)) ([3a12218](https://github.com/thwonghin/live-chat-overlay/commit/3a12218b9211e76076d041e1a0ffa33e7de28a1c))
+
 ## [1.5.0](https://github.com/thwonghin/live-chat-overlay/compare/v1.3.3...v1.5.0) (2020-07-17)
 
 
