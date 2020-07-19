@@ -52,11 +52,7 @@ const ChatFlowLayout: React.FC<Props> = ({
     return (
         <div className={classes.container} style={containerStyle}>
             <div
-                style={{
-                    position: 'absolute',
-                    visibility: 'hidden',
-                    overflowX: 'visible',
-                }}
+                className={classes['test-render-container']}
                 id={CHAT_ITEM_RENDER_ID}
             />
             <div style={style}>
