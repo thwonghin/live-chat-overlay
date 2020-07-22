@@ -134,9 +134,11 @@ export function useInitChatEventObserver(initData: InitData): void {
 
         chatItemBufferRef.current = chatItem;
 
-        dispatch(
-            debugInfoActions.addChatItemEleWidthMetric(getEleWidthRuntime),
-        );
+        if (isDebugging) {
+            dispatch(
+                debugInfoActions.addChatItemEleWidthMetric(getEleWidthRuntime),
+            );
+        }
 
         dispatch(
             chatEventsActions.addItem({
