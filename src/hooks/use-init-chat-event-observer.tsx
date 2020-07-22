@@ -28,13 +28,11 @@ export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 
 interface GetChatItemRenderedWidthParams {
     chatItem: ChatItem;
-    numberOfLines: number;
     settings: Settings;
 }
 
 async function getChatItemRenderedWidth({
     chatItem,
-    numberOfLines,
     settings,
 }: GetChatItemRenderedWidthParams): Promise<number> {
     const containerEle = window.parent.document.querySelector(
@@ -43,7 +41,7 @@ async function getChatItemRenderedWidth({
 
     const tempUiChatItem: UiChatItem = {
         ...chatItem,
-        numberOfLines,
+        numberOfLines: 0,
         addTimestamp: 0,
         lineNumber: 0,
         elementWidth: 0,
@@ -67,6 +65,20 @@ async function getChatItemRenderedWidth({
     return width;
 }
 
+function getRenderedNumOfLinesForChatItem({
+    settings,
+    chatItem,
+}: {
+    settings: Settings;
+    chatItem: ChatItem;
+}): number {
+    const messageSettings = getMessageSettings(chatItem, settings);
+
+    return isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
+        ? 1
+        : messageSettings.numberOfLines;
+}
+
 export function useInitChatEventObserver(initData: InitData): void {
     const dispatch = useDispatch();
     const { settings } = useSettings();
@@ -77,47 +89,33 @@ export function useInitChatEventObserver(initData: InitData): void {
     const isDebugging = useSelector<RootState, boolean>(
         (rootState) => rootState.debugInfo.isDebugging,
     );
-    const { width } = useVideoPlayerRect();
+    const { width: playerWidth } = useVideoPlayerRect();
     const chatItemBufferRef = useRef<ChatItem>();
 
     const dequeueChatItem = useCallback(
         (): ChatItem | undefined =>
-            chatEventObserver.dequeueChatItem({
-                currentPlayerTimeInMsc:
-                    (getVideoEle()?.currentTime ?? 0) * 1000,
-                chatDisplayTimeInMs: settings.flowTimeInSec * 1000,
-            }),
-        [chatEventObserver, settings.flowTimeInSec],
+            chatEventObserver.dequeueChatItem(
+                (getVideoEle()?.currentTime ?? 0) * 1000,
+            ),
+        [chatEventObserver],
     );
 
     const processChatItem = useCallback(async () => {
         const { isFull } = store.getState().chatEvents;
-
-        if (!isDocumentVisible || isPaused) {
-            // Still dequeue in background to avoid overflow
-            dequeueChatItem();
-            return;
-        }
-
-        const chatItem = isFull
-            ? chatItemBufferRef.current ?? dequeueChatItem()
-            : dequeueChatItem();
 
         // Reset buffer
         if (!isFull) {
             chatItemBufferRef.current = undefined;
         }
 
-        if (!chatItem) {
+        // Try to dequeue in all cases to avoid overflow
+        const chatItem = isFull
+            ? chatItemBufferRef.current ?? dequeueChatItem()
+            : dequeueChatItem();
+
+        if (!chatItem || !isDocumentVisible || isPaused) {
             return;
         }
-
-        const messageSettings = getMessageSettings(chatItem, settings);
-
-        const numberOfLines =
-            isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
-                ? 1
-                : messageSettings.numberOfLines;
 
         const {
             result: elementWidth,
@@ -126,24 +124,29 @@ export function useInitChatEventObserver(initData: InitData): void {
             () =>
                 getChatItemRenderedWidth({
                     chatItem,
-                    numberOfLines,
                     settings,
                 }),
             isDebugging,
         );
 
-        chatItemBufferRef.current = chatItem;
+        if (isDebugging) {
+            dispatch(
+                debugInfoActions.addChatItemEleWidthMetric(getEleWidthRuntime),
+            );
+        }
 
-        dispatch(
-            debugInfoActions.addChatItemEleWidthMetric(getEleWidthRuntime),
-        );
+        // Set buffer for next loop if it is full after dispatch the chat item
+        chatItemBufferRef.current = chatItem;
 
         dispatch(
             chatEventsActions.addItem({
                 chatItem,
-                playerWidth: width,
+                playerWidth,
                 elementWidth,
-                numberOfLines,
+                numberOfLines: getRenderedNumOfLinesForChatItem({
+                    settings,
+                    chatItem,
+                }),
             }),
         );
     }, [
@@ -153,7 +156,7 @@ export function useInitChatEventObserver(initData: InitData): void {
         isDebugging,
         dequeueChatItem,
         settings,
-        width,
+        playerWidth,
         dispatch,
     ]);
 

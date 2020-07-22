@@ -125,7 +125,6 @@ export class ChatEventResponseObserver {
     private cleanOutdatedChatItems(params: {
         currentTimeInUsec: number;
         currentPlayerTimeInMsc: number;
-        chatDisplayTimeInMs: number;
     }): void {
         let count = 0;
 
@@ -157,13 +156,12 @@ export class ChatEventResponseObserver {
         });
     }
 
-    public dequeueChatItem(params: {
-        currentPlayerTimeInMsc: number;
-        chatDisplayTimeInMs: number;
-    }): ChatItem | undefined {
+    public dequeueChatItem(
+        currentPlayerTimeInMsc: number,
+    ): ChatItem | undefined {
         const currentTimeInUsec = Date.now() * 1000;
         this.cleanOutdatedChatItems({
-            ...params,
+            currentPlayerTimeInMsc,
             currentTimeInUsec,
         });
 
@@ -175,7 +173,7 @@ export class ChatEventResponseObserver {
             return isTimeToDispatch({
                 chatItem: this.chatItemProcessQueue[0],
                 currentTimeInUsec,
-                currentPlayerTimeInMsc: params.currentPlayerTimeInMsc,
+                currentPlayerTimeInMsc,
             });
         }, this.isDebugging);
 
