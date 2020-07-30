@@ -85,7 +85,7 @@
         "typed-css-modules-webpack-plugin": "^0.2.0",
         "typescript": "^3.9.7",
         "webextension-polyfill": "^0.6.0",
-        "webpack": "^4.43.0",
+        "webpack": "^4.44.1",
         "webpack-cli": "^3.3.12"
     },
     "browserslist": {
