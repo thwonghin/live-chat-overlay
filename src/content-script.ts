@@ -7,7 +7,7 @@ import {
     waitForPlayerReady,
     getInitData,
 } from './youtube-utils';
-import { attachXhrInterceptor } from './services/xhr-interceptor';
+import { attachFetchInterceptor } from './services/fetch-interceptor';
 
 function injectStyles(): () => void {
     const path = browser.extension.getURL('content-script.css');
@@ -24,7 +24,7 @@ function injectStyles(): () => void {
 
 async function init(): Promise<void> {
     const cleanupStyles = injectStyles();
-    const detechXhrInterceptor = attachXhrInterceptor();
+    const detechFetchInterceptor = attachFetchInterceptor();
     const initData = await getInitData();
 
     await waitForPlayerReady();
@@ -35,7 +35,7 @@ async function init(): Promise<void> {
     function cleanup(): void {
         cleanupToggleBtn();
         cleanupLiveChat();
-        detechXhrInterceptor();
+        detechFetchInterceptor();
         cleanupStyles();
     }
 

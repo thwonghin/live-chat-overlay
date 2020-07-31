@@ -256,23 +256,15 @@ interface ReplayContinuationContents {
     liveChatContinuation: ReplayLiveChatContinuation;
 }
 
-interface LiveResponse {
+export interface LiveResponse {
     continuationContents: LiveContinuationContents;
 }
 
-interface ReplayResponse {
+export interface ReplayResponse {
     continuationContents: ReplayContinuationContents;
 }
 
-export interface LiveRootObject {
-    response: LiveResponse;
-}
-
-export interface ReplayRootObject {
-    response: ReplayResponse;
-}
-
-export type RootObject = LiveRootObject | ReplayRootObject;
+export type YotubeChatResponse = LiveResponse | ReplayResponse;
 
 export interface LiveInitData {
     continuationContents: LiveContinuationContents;

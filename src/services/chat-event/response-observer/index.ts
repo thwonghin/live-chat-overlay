@@ -1,8 +1,8 @@
-import { CustomEventDetail } from '@/services/xhr-interceptor';
+import { CustomEventDetail } from '@/services/fetch-interceptor';
 import type {
-    RootObject,
-    ReplayRootObject,
-    LiveRootObject,
+    YotubeChatResponse,
+    ReplayResponse,
+    LiveResponse,
     InitData,
 } from '@/definitions/youtube';
 import { benchmark } from '@/utils';
@@ -17,9 +17,10 @@ import {
 } from './helpers';
 import type { ChatItem } from '../models';
 
-const GET_LIVE_CHAT_URL = 'https://www.youtube.com/live_chat';
+const GET_LIVE_CHAT_URL =
+    'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat';
 const GET_LIVE_CHAT_REPLAY_URL =
-    'https://www.youtube.com/live_chat_replay/get_live_chat_replay';
+    'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat_replay';
 
 interface EventMap {
     debug: DebugInfo;
@@ -100,16 +101,16 @@ export class ChatEventResponseObserver {
         }
 
         const { runtime } = benchmark(() => {
-            const response = JSON.parse(xhrEvent.responseText) as RootObject;
+            const response = JSON.parse(
+                xhrEvent.responseText,
+            ) as YotubeChatResponse;
 
             const chatItems = xhrEvent.isReplay
                 ? mapChatItemsFromReplayResponse(
-                      (response as ReplayRootObject).response
-                          .continuationContents,
+                      (response as ReplayResponse).continuationContents,
                   )
                 : mapChatItemsFromLiveResponse(
-                      (response as LiveRootObject).response
-                          .continuationContents,
+                      (response as LiveResponse).continuationContents,
                   );
 
             this.chatItemProcessQueue.push(...chatItems);
