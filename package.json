@@ -118,7 +118,8 @@
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-redux": "^7.2.1",
-        "regenerator-runtime": "^0.13.7"
+        "regenerator-runtime": "^0.13.7",
+        "use-debounce": "^3.4.3"
     },
     "resolutions": {
         "yargs-parser": "18.1.3",

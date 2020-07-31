@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { Slider, withStyles } from '@material-ui/core';
 import { isNil } from 'lodash-es';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { useSettings } from '@/hooks/use-settings';
 
@@ -60,7 +61,7 @@ const StyledSlider = withStyles({
 const SpeedSlider: React.FC = () => {
     const { settings, updateSettings } = useSettings();
 
-    const onChange = useCallback<
+    const handleChange = useCallback<
         (event: React.ChangeEvent<unknown>, value: number | number[]) => void
     >(
         (event, afterChangeValue) => {
@@ -81,11 +82,12 @@ const SpeedSlider: React.FC = () => {
         [updateSettings],
     );
 
+    const [debouncedHandleChange] = useDebouncedCallback(handleChange, 500);
+
     return (
         <StyledSlider
-            defaultValue={settings.flowTimeInSec}
-            value={reverse(settings.flowTimeInSec)}
-            onChange={onChange}
+            defaultValue={reverse(settings.flowTimeInSec)}
+            onChange={debouncedHandleChange}
             min={minValue}
             max={maxValue}
             step={0.01}
