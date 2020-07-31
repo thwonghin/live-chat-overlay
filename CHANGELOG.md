@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/thwonghin/live-chat-overlay/compare/v1.6.0...v2.0.0) (2020-07-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* This adapts the change on Youtube calling chat API (new URL & using `fetch` instead of `xhr`)
+
+### Bug Fixes
+
+* metrics for calculate element width ([#221](https://github.com/thwonghin/live-chat-overlay/issues/221)) ([418a5cc](https://github.com/thwonghin/live-chat-overlay/commit/418a5cc075e3ad62465c4210e7c8d2a6a2f1328f))
+* new api url & fetch interceptor([#246](https://github.com/thwonghin/live-chat-overlay/issues/246)) ([49b23a0](https://github.com/thwonghin/live-chat-overlay/commit/49b23a0ff8cef8d2c5ca8c11481bd33579095456))
+
 ## [1.6.0](https://github.com/thwonghin/live-chat-overlay/compare/v1.5.1...v1.6.0) (2020-07-19)
 
 
