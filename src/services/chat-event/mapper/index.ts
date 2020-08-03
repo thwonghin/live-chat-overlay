@@ -1,4 +1,4 @@
-import { Settings, MessageSettings } from '@/services/settings/types';
+import { Settings, MessageSettings } from '@/services/settings-storage/types';
 import { isNonNullable } from '@/utils';
 import type * as liveChatResponse from '@/definitions/youtube';
 import {

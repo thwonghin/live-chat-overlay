@@ -5,7 +5,7 @@ import {
     MembershipItem,
     NormalChatItem,
 } from '@/services/chat-event/models';
-import { MessageSettings } from '@/services/settings/types';
+import { MessageSettings } from '@/services/settings-storage/types';
 import TwoLinesMessage from '.';
 
 export default { title: 'TwoLinesMessage' };

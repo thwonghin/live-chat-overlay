@@ -8,6 +8,7 @@ import {
     getInitData,
 } from './youtube-utils';
 import { attachFetchInterceptor } from './services/fetch-interceptor';
+import { SettingsStorage } from './services/settings-storage';
 
 function injectStyles(): () => void {
     const path = browser.extension.getURL('content-script.css');
@@ -23,6 +24,7 @@ function injectStyles(): () => void {
 }
 
 async function init(): Promise<void> {
+    await SettingsStorage.init();
     const cleanupStyles = injectStyles();
     const detechFetchInterceptor = attachFetchInterceptor();
     const initData = await getInitData();

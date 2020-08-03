@@ -10,7 +10,7 @@ import {
     isSuperChatItem,
     isMembershipItem,
 } from '@/services/chat-event/mapper';
-import { MessageSettings } from '@/services/settings/types';
+import { MessageSettings } from '@/services/settings-storage/types';
 import classes from './index.scss';
 
 import MessagePartsRenderer from '../message-parts-renderer';

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Settings } from '@/services/settings/types';
+import type { Settings } from '@/services/settings-storage/types';
 import {
     isNormalChatItem,
     isSuperChatItem,
