@@ -1,5 +1,6 @@
 import { defaultsDeep } from 'lodash-es';
-import { Settings, MessageSettings } from './types';
+import { catchWithFallback } from '@/utils';
+import type { Settings, MessageSettings } from './types';
 
 const SETTINGS_STORAGE_KEY = 'live-chat-overlay-settings';
 
@@ -59,26 +60,29 @@ const defaultSettings: Settings = {
 type Listener = (settings: Settings) => void;
 
 export class SettingsStorage {
-    static isInited = false;
+    static isInitiated = false;
 
     static currentSettings: Settings;
 
     static listeners: Listener[] = [];
 
     static async init(): Promise<void> {
-        const storedSettings = await browser.storage.local.get(
-            SETTINGS_STORAGE_KEY,
-        );
+        const storedSettings = await catchWithFallback(async () => {
+            const result = await browser.storage.local.get(
+                SETTINGS_STORAGE_KEY,
+            );
+            return result[SETTINGS_STORAGE_KEY] as Settings;
+        }, defaultSettings);
 
         this.currentSettings = defaultsDeep(
-            storedSettings[SETTINGS_STORAGE_KEY],
+            storedSettings,
             defaultSettings,
         ) as Settings;
-        this.isInited = true;
+        this.isInitiated = true;
     }
 
     static assertInitiated(): void {
-        if (!SettingsStorage.isInited) {
+        if (!SettingsStorage.isInitiated) {
             throw new Error('Storage is not init!');
         }
     }

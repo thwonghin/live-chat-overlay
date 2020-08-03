@@ -73,3 +73,14 @@ export async function benchmarkAsync<T>(
         runtime: isDebugging ? performance.now() - beforeTime : 0,
     };
 }
+
+export async function catchWithFallback<T>(
+    func: () => Promise<T>,
+    fallbackValue: T,
+): Promise<T> {
+    try {
+        return await func();
+    } catch (error) {
+        return fallbackValue;
+    }
+}
