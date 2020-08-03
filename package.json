@@ -109,14 +109,17 @@
         "@fortawesome/fontawesome-svg-core": "^1.2.30",
         "@fortawesome/free-solid-svg-icons": "^5.14.0",
         "@fortawesome/react-fontawesome": "^0.1.11",
+        "@material-ui/core": "^4.11.0",
         "@reduxjs/toolkit": "^1.4.0",
         "classnames": "^2.2.6",
         "core-js": "3",
+        "jss": "^10.3.0",
         "lodash-es": "^4.17.15",
         "react": "^16.13.1",
         "react-dom": "^16.13.1",
         "react-redux": "^7.2.1",
-        "regenerator-runtime": "^0.13.7"
+        "regenerator-runtime": "^0.13.7",
+        "use-debounce": "^3.4.3"
     },
     "resolutions": {
         "yargs-parser": "18.1.3",

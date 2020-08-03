@@ -13,7 +13,7 @@ const style: CSSProperties = {
     textAlign: 'center',
 };
 
-const App: React.FC = () => {
+const ToggleBtn: React.FC = () => {
     const { settings, updateSettings } = useSettings();
 
     const icon = useMemo<JSX.Element>(() => {
@@ -59,4 +59,4 @@ const App: React.FC = () => {
     );
 };
 
-export default App;
+export default ToggleBtn;
