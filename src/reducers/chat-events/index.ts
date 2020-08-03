@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { SettingsStorage } from '@/services/settings';
+import { SettingsStorage } from '@/services/settings-storage';
 import { ChatItem } from '@/services/chat-event/models';
 import { UiChatItem } from '@/components/chat-flow/types';
 

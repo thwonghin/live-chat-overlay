@@ -1,4 +1,7 @@
+import { defaultsDeep } from 'lodash-es';
 import { Settings, MessageSettings } from './types';
+
+const SETTINGS_STORAGE_KEY = 'live-chat-overlay-settings';
 
 const commonMsgSettings: MessageSettings = {
     color: 'white',
@@ -56,24 +59,53 @@ const defaultSettings: Settings = {
 type Listener = (settings: Settings) => void;
 
 export class SettingsStorage {
-    static currentSettings = defaultSettings;
+    static isInited = false;
+
+    static currentSettings: Settings;
 
     static listeners: Listener[] = [];
 
+    static async init(): Promise<void> {
+        const storedSettings = await browser.storage.local.get(
+            SETTINGS_STORAGE_KEY,
+        );
+
+        this.currentSettings = defaultsDeep(
+            storedSettings[SETTINGS_STORAGE_KEY],
+            defaultSettings,
+        ) as Settings;
+        this.isInited = true;
+    }
+
+    static assertInitiated(): void {
+        if (!SettingsStorage.isInited) {
+            throw new Error('Storage is not init!');
+        }
+    }
+
     static get settings(): Settings {
+        this.assertInitiated();
         return this.currentSettings;
     }
 
     static set settings(value: Settings) {
+        this.assertInitiated();
         this.currentSettings = value;
-        this.listeners.forEach((listener) => listener(this.currentSettings));
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        browser.storage.local.set({
+            [SETTINGS_STORAGE_KEY]: value,
+        });
+        this.listeners.forEach((listener) => listener(value));
     }
 
     static addEventListener(event: 'change', listener: Listener): void {
+        this.assertInitiated();
         this.listeners.push(listener);
     }
 
     static removeEventListener(event: 'change', listener: Listener): void {
+        this.assertInitiated();
         const index = this.listeners.indexOf(listener);
         if (index > -1) {
             this.listeners.splice(index, 1);

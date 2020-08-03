@@ -6,7 +6,7 @@ import { chatEventsActions } from '@/reducers/chat-events';
 import { useSettings } from '@/hooks/use-settings';
 import { useInterval } from '@/hooks/use-interval';
 import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
-import { Settings } from '@/services/settings/types';
+import { Settings } from '@/services/settings-storage/types';
 import { CHAT_ITEM_RENDER_ID } from '@/hooks/use-init-chat-event-observer';
 
 import { useToggleDebugMode } from './use-toggle-debug-mode';

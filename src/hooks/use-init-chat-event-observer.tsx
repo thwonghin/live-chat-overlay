@@ -17,7 +17,7 @@ import type { RootState } from '@/reducers';
 import type { ChatItem } from '@/services/chat-event/models';
 import type { InitData } from '@/definitions/youtube';
 import type { UiChatItem } from '@/components/chat-flow/types';
-import type { Settings } from '@/services/settings/types';
+import type { Settings } from '@/services/settings-storage/types';
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
 import {
     getMessageSettings,

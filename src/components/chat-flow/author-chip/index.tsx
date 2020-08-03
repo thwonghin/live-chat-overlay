@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 
 import { Thumbnail } from '@/services/chat-event/models';
-import { MessageSettings } from '@/services/settings/types';
+import { MessageSettings } from '@/services/settings-storage/types';
 import classes from './index.scss';
 
 interface Props {
