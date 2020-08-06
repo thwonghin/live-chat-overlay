@@ -6,11 +6,7 @@ import type {
     ReplayInitData,
     InitData,
 } from '@/definitions/youtube';
-import {
-    mapAddChatItemActions,
-    isNormalChatItem,
-    isMembershipItem,
-} from '../mapper';
+import { mapAddChatItemActions, isNormalChatItem } from '../mapper';
 import { ChatItem } from '../models';
 
 export function mapChatItemsFromReplayResponse(
@@ -83,17 +79,30 @@ export function isTimeToDispatch({
 interface IsOutdatedReplayChatItemParams {
     currentPlayerTimeInMsc: number;
     chatItemAtVideoTimestampInMs: number;
+    factor: number;
 }
 
 export const MAX_CHAT_DISPLAY_DELAY_IN_SEC = 5;
 
+export function getOutdatedFactor(chatItem: ChatItem): number {
+    const removableAuthorType = ['guest', 'member'];
+    if (
+        isNormalChatItem(chatItem) &&
+        removableAuthorType.includes(chatItem.authorType)
+    ) {
+        return 1;
+    }
+    return 3;
+}
+
 export function isOutdatedReplayChatItem({
     currentPlayerTimeInMsc,
     chatItemAtVideoTimestampInMs,
+    factor,
 }: IsOutdatedReplayChatItemParams): boolean {
     return (
         chatItemAtVideoTimestampInMs <
-        currentPlayerTimeInMsc - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000
+        currentPlayerTimeInMsc - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * factor
     );
 }
 
@@ -101,25 +110,18 @@ interface IsOutdatedLiveChatItemParams {
     currentTimeInUsec: number;
     chatItemCreateAtTimestampInUs: number;
     liveDelayInMs: number;
+    factor: number;
 }
 
 export function isOutdatedLiveChatItem({
     currentTimeInUsec,
     chatItemCreateAtTimestampInUs,
     liveDelayInMs,
+    factor,
 }: IsOutdatedLiveChatItemParams): boolean {
     return (
         chatItemCreateAtTimestampInUs + liveDelayInMs * 1000 <
-        currentTimeInUsec - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * 1000
-    );
-}
-
-export function isRemovable(chatItem: ChatItem): boolean {
-    const removableAuthorType = ['guest', 'member'];
-    return (
-        (isNormalChatItem(chatItem) &&
-            removableAuthorType.includes(chatItem.authorType)) ||
-        isMembershipItem(chatItem)
+        currentTimeInUsec - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * 1000 * factor
     );
 }
 
