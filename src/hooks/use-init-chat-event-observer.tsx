@@ -201,10 +201,9 @@ export function useInitChatEventObserver(initData: InitData): void {
             }
         }
 
-        chatEventObserver.addEventListener('debug', handleDebugInfo);
+        chatEventObserver.on('debug', handleDebugInfo);
 
-        return () =>
-            chatEventObserver.removeEventListener('debug', handleDebugInfo);
+        return () => chatEventObserver.off('debug', handleDebugInfo);
     }, [chatEventObserver, dispatch]);
 
     useEffect(() => {

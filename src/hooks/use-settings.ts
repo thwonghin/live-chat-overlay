@@ -16,10 +16,9 @@ export function useSettings(): UseSettingsResult {
             setSettings(cloneDeep(newSettings));
         }
 
-        SettingsStorage.addEventListener('change', handleSettingsChange);
+        SettingsStorage.on('change', handleSettingsChange);
 
-        return () =>
-            SettingsStorage.removeEventListener('change', handleSettingsChange);
+        return () => SettingsStorage.off('change', handleSettingsChange);
     }, []);
 
     const updateSettings = useCallback(

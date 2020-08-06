@@ -23,7 +23,8 @@ describe('EventEmitter', () => {
     it('should be able to add multiple listeners to 1 event and trigger them', () => {
         const callback1 = jest.fn();
         const callback2 = jest.fn();
-        eventEmitter.on('start', callback1).on('start', callback2);
+        eventEmitter.on('start', callback1);
+        eventEmitter.on('start', callback2);
 
         eventEmitter.trigger('start', 23);
 
@@ -34,10 +35,9 @@ describe('EventEmitter', () => {
     it('should be able to remove listener and not trigger it', () => {
         const callback1 = jest.fn();
         const callback2 = jest.fn();
-        eventEmitter
-            .on('start', callback1)
-            .on('start', callback2)
-            .off('start', callback1);
+        eventEmitter.on('start', callback1);
+        eventEmitter.on('start', callback2);
+        eventEmitter.off('start', callback1);
 
         eventEmitter.trigger('start', 23);
 
@@ -58,16 +58,14 @@ describe('EventEmitter', () => {
         const callback1 = jest.fn();
         const callback2 = jest.fn();
         const callback3 = jest.fn();
-        eventEmitter
-            .on('start', callback1)
-            .on('start', callback2)
-            .on('start2', callback1)
-            .on('end', callback3);
+        eventEmitter.on('start', callback1);
+        eventEmitter.on('start', callback2);
+        eventEmitter.on('start2', callback1);
+        eventEmitter.on('end', callback3);
 
-        eventEmitter
-            .trigger('start', 23)
-            .trigger('start2', 4)
-            .trigger('end', 'test');
+        eventEmitter.trigger('start', 23);
+        eventEmitter.trigger('start2', 4);
+        eventEmitter.trigger('end', 'test');
 
         expect(callback1).toHaveBeenNthCalledWith(1, 23);
         expect(callback1).toHaveBeenNthCalledWith(2, 4);
