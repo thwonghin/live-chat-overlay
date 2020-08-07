@@ -1,6 +1,8 @@
 import { appendScript, functionToString } from '@/utils';
 import type { InitData } from '@/definitions/youtube';
 
+export const CLASS_BIG_MODE = '.ytp-big-mode';
+
 export function getVideoPlayerContainer(): HTMLElement | null {
     return window.parent.document.querySelector(
         '#ytd-player .html5-video-container',

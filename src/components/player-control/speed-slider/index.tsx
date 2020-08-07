@@ -4,6 +4,7 @@ import { isNil } from 'lodash-es';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { useSettings } from '@/hooks/use-settings';
+import { CLASS_BIG_MODE } from '@/youtube-utils';
 
 const minValue = 3;
 const maxValue = 15;
@@ -12,11 +13,9 @@ function reverse(value: number): number {
     return maxValue - value + minValue;
 }
 
-const bigModeClassName = '.ytp-big-mode';
-
 const StyledSlider = withStyles({
     root: {
-        [`${bigModeClassName} &`]: {
+        [`${CLASS_BIG_MODE} &`]: {
             width: 78,
         },
         marginRight: 8,
@@ -24,7 +23,7 @@ const StyledSlider = withStyles({
         color: '#fff',
     },
     thumb: {
-        [`${bigModeClassName} &`]: {
+        [`${CLASS_BIG_MODE} &`]: {
             width: 18,
             height: 18,
             borderRadius: 9,
@@ -39,7 +38,7 @@ const StyledSlider = withStyles({
         },
     },
     rail: {
-        [`${bigModeClassName} &`]: {
+        [`${CLASS_BIG_MODE} &`]: {
             height: 4,
         },
         height: 3,
@@ -47,7 +46,7 @@ const StyledSlider = withStyles({
         opacity: 0.2,
     },
     track: {
-        [`${bigModeClassName} &`]: {
+        [`${CLASS_BIG_MODE} &`]: {
             height: 4,
         },
         height: 3,
