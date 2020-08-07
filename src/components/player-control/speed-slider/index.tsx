@@ -6,6 +6,8 @@ import { useDebouncedCallback } from 'use-debounce';
 import { useSettings } from '@/hooks/use-settings';
 import { CLASS_BIG_MODE } from '@/youtube-utils';
 
+import classes from './index.scss';
+
 const minValue = 3;
 const maxValue = 15;
 
@@ -21,6 +23,8 @@ const StyledSlider = withStyles({
         marginRight: 8,
         width: 52,
         color: '#fff',
+        willChange: 'width',
+        transition: 'cubic-bezier(0.4,0.0,1,1), width .2s',
     },
     thumb: {
         [`${CLASS_BIG_MODE} &`]: {
@@ -57,7 +61,11 @@ const StyledSlider = withStyles({
     },
 })(Slider);
 
-const SpeedSlider: React.FC = () => {
+interface Props {
+    isHidden: boolean;
+}
+
+const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
     const { settings, updateSettings } = useSettings();
 
     const handleChange = useCallback<
@@ -85,6 +93,10 @@ const SpeedSlider: React.FC = () => {
 
     return (
         <StyledSlider
+            classes={{
+                root: isHidden ? classes['container-hidden'] : undefined,
+                thumb: isHidden ? classes['thumb-hidden'] : undefined,
+            }}
             defaultValue={reverse(settings.flowTimeInSec)}
             onChange={debouncedHandleChange}
             min={minValue}

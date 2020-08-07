@@ -29,7 +29,7 @@ export function injectPlayerControl(): () => void {
     ReactDOM.render(
         <React.StrictMode>
             <StylesProvider jss={jssConfig}>
-                <App />
+                <App containerEle={reactContainer} />
             </StylesProvider>
         </React.StrictMode>,
         reactContainer,

@@ -1,10 +1,7 @@
-.container {
-    width: 52px !important;
+.container-hidden {
+    width: 0 !important;
 }
 
-.thumb {
-    width: 12px;
-    height: 12px;
-    background: #fff;
-    border-radius: 6px;
+.thumb-hidden {
+    display: none !important;
 }
