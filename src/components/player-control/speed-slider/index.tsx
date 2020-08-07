@@ -4,6 +4,9 @@ import { isNil } from 'lodash-es';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { useSettings } from '@/hooks/use-settings';
+import { CLASS_BIG_MODE } from '@/youtube-utils';
+
+import classes from './index.scss';
 
 const minValue = 3;
 const maxValue = 15;
@@ -12,19 +15,19 @@ function reverse(value: number): number {
     return maxValue - value + minValue;
 }
 
-const bigModeClassName = '.ytp-big-mode';
-
 const StyledSlider = withStyles({
     root: {
-        [`${bigModeClassName} &`]: {
+        [`${CLASS_BIG_MODE} &`]: {
             width: 78,
         },
         marginRight: 8,
         width: 52,
         color: '#fff',
+        willChange: 'width',
+        transition: 'cubic-bezier(0.4,0.0,1,1), width .2s',
     },
     thumb: {
-        [`${bigModeClassName} &`]: {
+        [`${CLASS_BIG_MODE} &`]: {
             width: 18,
             height: 18,
             borderRadius: 9,
@@ -39,7 +42,7 @@ const StyledSlider = withStyles({
         },
     },
     rail: {
-        [`${bigModeClassName} &`]: {
+        [`${CLASS_BIG_MODE} &`]: {
             height: 4,
         },
         height: 3,
@@ -47,7 +50,7 @@ const StyledSlider = withStyles({
         opacity: 0.2,
     },
     track: {
-        [`${bigModeClassName} &`]: {
+        [`${CLASS_BIG_MODE} &`]: {
             height: 4,
         },
         height: 3,
@@ -58,7 +61,11 @@ const StyledSlider = withStyles({
     },
 })(Slider);
 
-const SpeedSlider: React.FC = () => {
+interface Props {
+    isHidden: boolean;
+}
+
+const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
     const { settings, updateSettings } = useSettings();
 
     const handleChange = useCallback<
@@ -86,6 +93,10 @@ const SpeedSlider: React.FC = () => {
 
     return (
         <StyledSlider
+            classes={{
+                root: isHidden ? classes['container-hidden'] : undefined,
+                thumb: isHidden ? classes['thumb-hidden'] : undefined,
+            }}
             defaultValue={reverse(settings.flowTimeInSec)}
             onChange={debouncedHandleChange}
             min={minValue}
