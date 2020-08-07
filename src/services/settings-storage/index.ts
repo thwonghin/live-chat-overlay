@@ -1,5 +1,6 @@
 import { defaultsDeep } from 'lodash-es';
 import { catchWithFallback } from '@/utils';
+import { EventEmitter } from '@/utils/event-emitter';
 import type { Settings, MessageSettings } from './types';
 
 const SETTINGS_STORAGE_KEY = 'live-chat-overlay-settings';
@@ -57,14 +58,16 @@ const defaultSettings: Settings = {
     },
 };
 
-type Listener = (settings: Settings) => void;
+type EventMap = {
+    change: Settings;
+};
+
+const eventEmitter = new EventEmitter<EventMap>();
 
 export class SettingsStorage {
     static isInitiated = false;
 
     static currentSettings: Settings;
-
-    static listeners: Listener[] = [];
 
     static async init(): Promise<void> {
         const storedSettings = await catchWithFallback(async () => {
@@ -100,19 +103,12 @@ export class SettingsStorage {
         browser.storage.local.set({
             [SETTINGS_STORAGE_KEY]: value,
         });
-        this.listeners.forEach((listener) => listener(value));
+        eventEmitter.trigger('change', value);
     }
 
-    static addEventListener(event: 'change', listener: Listener): void {
-        this.assertInitiated();
-        this.listeners.push(listener);
-    }
+    static on: typeof eventEmitter['on'] = (...args) =>
+        eventEmitter.on(...args);
 
-    static removeEventListener(event: 'change', listener: Listener): void {
-        this.assertInitiated();
-        const index = this.listeners.indexOf(listener);
-        if (index > -1) {
-            this.listeners.splice(index, 1);
-        }
-    }
+    static off: typeof eventEmitter['off'] = (...args) =>
+        eventEmitter.off(...args);
 }

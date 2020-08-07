@@ -6,6 +6,7 @@ import type {
     InitData,
 } from '@/definitions/youtube';
 import { benchmark } from '@/utils';
+import { EventEmitter } from '@/utils/event-emitter';
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
@@ -22,10 +23,6 @@ const GET_LIVE_CHAT_URL =
 const GET_LIVE_CHAT_REPLAY_URL =
     'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat_replay';
 
-interface EventMap {
-    debug: DebugInfo;
-}
-
 const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
 export type DebugInfo = Partial<{
@@ -36,12 +33,14 @@ export type DebugInfo = Partial<{
     outdatedChatEventCount: number;
 }>;
 
+type EventMap = {
+    debug: DebugInfo;
+};
+
+type ChatEventResponseObserverEventEmitter = EventEmitter<EventMap>;
+
 export class ChatEventResponseObserver {
-    private listeners: {
-        [Key in keyof EventMap]: ((data: EventMap[Key]) => void)[];
-    } = {
-        debug: [],
-    };
+    private eventEmitter: ChatEventResponseObserverEventEmitter;
 
     private isStarted = false;
 
@@ -55,6 +54,16 @@ export class ChatEventResponseObserver {
     private xhrEventProcessInterval = -1;
 
     private chatItemProcessQueue: ChatItem[] = [];
+
+    constructor() {
+        this.eventEmitter = new EventEmitter();
+    }
+
+    public on: ChatEventResponseObserverEventEmitter['on'] = (...args) =>
+        this.eventEmitter.on(...args);
+
+    public off: ChatEventResponseObserverEventEmitter['off'] = (...args) =>
+        this.eventEmitter.off(...args);
 
     public importInitData(initData: InitData): void {
         const chatItems = isReplayInitData(initData)
@@ -70,7 +79,7 @@ export class ChatEventResponseObserver {
 
     private emitDebugInfoEvent(debugInfo: DebugInfo) {
         if (this.isDebugging) {
-            this.listeners.debug.forEach((listener) => listener(debugInfo));
+            this.eventEmitter.trigger('debug', debugInfo);
         }
     }
 
@@ -237,22 +246,5 @@ export class ChatEventResponseObserver {
 
     public stopDebug(): void {
         this.isDebugging = false;
-    }
-
-    public addEventListener<K extends keyof EventMap>(
-        event: K,
-        callback: (data: EventMap[K]) => void,
-    ): void {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.listeners[event].push(callback as any);
-    }
-
-    public removeEventListener<K extends keyof EventMap>(
-        event: K,
-        callback: (data: EventMap[K]) => void,
-    ): void {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const found = this.listeners[event].indexOf(callback as any);
-        this.listeners[event].splice(found, 1);
     }
 }
