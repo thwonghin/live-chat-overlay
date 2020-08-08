@@ -22,7 +22,7 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
 
     const rightControlEle = getRightControlEle();
     if (!rightControlEle) {
-        throw new Error('Video Player Container not found.');
+        throw new Error('Right Player Control not found.');
     }
     rightControlEle.style.display = 'flex';
 
