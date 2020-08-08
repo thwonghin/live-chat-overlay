@@ -21,7 +21,10 @@ const MessageSettingsPopup: React.FC<Props> = ({
         current: playerControlContainer,
     };
 
-    const isClickedOutside = useClickOutside([containerRef, playerControlRef]);
+    const isClickedOutside = useClickOutside({
+        doc: window.parent.document,
+        refs: [containerRef, playerControlRef],
+    });
 
     useEffect(() => {
         if (isClickedOutside) {

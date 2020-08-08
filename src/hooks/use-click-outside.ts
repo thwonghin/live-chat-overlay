@@ -1,7 +1,12 @@
 import type { RefObject } from 'react';
 import { useState, useEffect } from 'react';
 
-export function useClickOutside(refs: RefObject<HTMLElement>[]): boolean {
+interface UseClickOutsideParams {
+    refs: RefObject<HTMLElement>[];
+    doc: Document;
+}
+
+export function useClickOutside({ refs, doc }: UseClickOutsideParams): boolean {
     const [isClickedOutside, setIsClickedOutside] = useState(false);
 
     useEffect(() => {
@@ -17,22 +22,14 @@ export function useClickOutside(refs: RefObject<HTMLElement>[]): boolean {
             );
         }
 
-        if (window.PointerEvent) {
-            document.addEventListener('pointerdown', handleEvent);
-        } else {
-            document.addEventListener('mousedown', handleEvent);
-            document.addEventListener('touchstart', handleEvent);
-        }
+        doc.addEventListener('mousedown', handleEvent);
+        doc.addEventListener('touchstart', handleEvent);
 
         return () => {
-            if (window.PointerEvent) {
-                document.removeEventListener('pointerdown', handleEvent);
-            } else {
-                document.removeEventListener('mousedown', handleEvent);
-                document.removeEventListener('touchstart', handleEvent);
-            }
+            doc.removeEventListener('mousedown', handleEvent);
+            doc.removeEventListener('touchstart', handleEvent);
         };
-    }, [refs]);
+    }, [refs, doc]);
 
     return isClickedOutside;
 }
