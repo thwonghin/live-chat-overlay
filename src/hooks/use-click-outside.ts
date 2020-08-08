@@ -23,11 +23,9 @@ export function useClickOutside({ refs, doc }: UseClickOutsideParams): boolean {
         }
 
         doc.addEventListener('mousedown', handleEvent);
-        doc.addEventListener('touchstart', handleEvent);
 
         return () => {
             doc.removeEventListener('mousedown', handleEvent);
-            doc.removeEventListener('touchstart', handleEvent);
         };
     }, [refs, doc]);
 
