@@ -1,7 +1,8 @@
 import { appendScript, functionToString } from '@/utils';
 import type { InitData } from '@/definitions/youtube';
 
-export const CLASS_BIG_MODE = '.ytp-big-mode';
+export const CLASS_BIG_MODE = 'ytp-big-mode';
+export const CLASS_PLAYER_CTL_BTN = 'ytp-button';
 
 export function getVideoPlayerContainer(): HTMLElement | null {
     return window.parent.document.querySelector(

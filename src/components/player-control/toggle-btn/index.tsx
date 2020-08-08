@@ -2,6 +2,7 @@ import React, { useMemo, useCallback, CSSProperties } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
 import { useSettings } from '@/hooks/use-settings';
+import { CLASS_PLAYER_CTL_BTN } from '@/youtube-utils';
 
 const iconToBtnRatio = 2 / 3;
 const faCommentSlashHeight = 640;
@@ -48,7 +49,7 @@ const ToggleBtn: React.FC = () => {
 
     return (
         <button
-            className="ytp-button"
+            className={CLASS_PLAYER_CTL_BTN}
             style={style}
             title={title}
             onClick={onClick}
