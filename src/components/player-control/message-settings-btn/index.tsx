@@ -21,6 +21,7 @@ const MessageSettingsBtn: React.FC = () => {
         <button
             className={`${CLASS_PLAYER_CTL_BTN} ${classes.btn}`}
             type="button"
+            title={browser.i18n.getMessage('messageSettingsButtonTitle')}
             onClick={handleClick}
         >
             <FontAwesomeIcon

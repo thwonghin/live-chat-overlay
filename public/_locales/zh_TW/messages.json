@@ -10,5 +10,8 @@
     },
     "toggleButtonShowTitle": {
         "message": "顯示評論"
+    },
+    "messageSettingsButtonTitle": {
+        "message": "評論主題設定"
     }
 }

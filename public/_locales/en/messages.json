@@ -10,5 +10,8 @@
     },
     "toggleButtonShowTitle": {
         "message": "Show Chat"
+    },
+    "messageSettingsButtonTitle": {
+        "message": "Message Theme Settings"
     }
 }
