@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import * as jss from 'jss';
 import { StylesProvider, jssPreset } from '@material-ui/core/styles';
 
+import { store } from '@/reducers';
 import { getRightControlEle } from '@/youtube-utils';
 import App from './app';
 
@@ -28,9 +30,11 @@ export function injectPlayerControl(): () => void {
 
     ReactDOM.render(
         <React.StrictMode>
-            <StylesProvider jss={jssConfig}>
-                <App containerEle={reactContainer} />
-            </StylesProvider>
+            <Provider store={store}>
+                <StylesProvider jss={jssConfig}>
+                    <App containerEle={reactContainer} />
+                </StylesProvider>
+            </Provider>
         </React.StrictMode>,
         reactContainer,
     );

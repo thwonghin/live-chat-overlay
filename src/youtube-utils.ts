@@ -3,6 +3,10 @@ import type { InitData } from '@/definitions/youtube';
 
 export const CLASS_BIG_MODE = 'ytp-big-mode';
 export const CLASS_PLAYER_CTL_BTN = 'ytp-button';
+export const CLASS_POPUP = 'ytp-popup';
+export const CLASS_PANEL = 'ytp-panel';
+export const CLASS_PANEL_MENU = 'ytp-panel-menu';
+export const CLASS_MENUITEM = 'ytp-menuitem';
 
 export function getVideoPlayerContainer(): HTMLElement | null {
     return window.parent.document.querySelector(
