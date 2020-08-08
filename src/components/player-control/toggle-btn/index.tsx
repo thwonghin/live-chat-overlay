@@ -1,18 +1,16 @@
-import React, { useMemo, useCallback, CSSProperties } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
 import { useSettings } from '@/hooks/use-settings';
 import { CLASS_PLAYER_CTL_BTN } from '@/youtube-utils';
+
+import classes from './index.scss';
 
 const iconToBtnRatio = 2 / 3;
 const faCommentSlashHeight = 640;
 const faCommentHeight = 512;
 const withSlashIconRatio =
     iconToBtnRatio * (faCommentHeight / faCommentSlashHeight);
-
-const style: CSSProperties = {
-    textAlign: 'center',
-};
 
 const ToggleBtn: React.FC = () => {
     const { settings, updateSettings } = useSettings();
@@ -49,8 +47,7 @@ const ToggleBtn: React.FC = () => {
 
     return (
         <button
-            className={CLASS_PLAYER_CTL_BTN}
-            style={style}
+            className={`${CLASS_PLAYER_CTL_BTN} ${classes.btn}`}
             title={title}
             onClick={onClick}
             type="button"
