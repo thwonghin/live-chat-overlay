@@ -22,6 +22,12 @@ const popupSlice = createSlice({
                 currentPopup: action.payload,
             };
         },
+        hidePopup(state) {
+            return {
+                ...state,
+                currentPopup: null,
+            };
+        },
     },
 });
 

@@ -1,7 +1,6 @@
 import './common';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
-import { injectPlayerControl } from './app/player-control';
 import {
     isInsideLiveChatFrame,
     waitForPlayerReady,
@@ -31,11 +30,9 @@ async function init(): Promise<void> {
 
     await waitForPlayerReady();
 
-    const cleanupPlayerControl = injectPlayerControl();
     const cleanupLiveChat = injectLiveChatOverlay(initData);
 
     function cleanup(): void {
-        cleanupPlayerControl();
         cleanupLiveChat();
         detechFetchInterceptor();
         cleanupStyles();
