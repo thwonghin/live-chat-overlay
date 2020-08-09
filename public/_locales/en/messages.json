@@ -13,5 +13,38 @@
     },
     "messageSettingsButtonTitle": {
         "message": "Message Theme Settings"
+    },
+    "messageSettingsColorInputLabel": {
+        "message": "Text Color"
+    },
+    "messageSettingsBgColorInputLabel": {
+        "message": "Background Color"
+    },
+    "messageSettingsWeightInputLabel": {
+        "message": "Font Weight"
+    },
+    "messageSettingsOpacityInputLabel": {
+        "message": "Opacity"
+    },
+    "messageSettingsStrokeColorInputLabel": {
+        "message": "Stroke Color"
+    },
+    "messageSettingsStrokeWidthInputLabel": {
+        "message": "Stroke Width"
+    },
+    "messageSettingsNumberOfLinesInputLabel": {
+        "message": "Max Line Number"
+    },
+    "messageSettingsDisplayAuthorInputLabel": {
+        "message": "Display Author Method"
+    },
+    "applyButtonText": {
+        "message": "Apply"
+    },
+    "resetButtonText": {
+        "message": "Reset"
+    },
+    "restoreButtonText": {
+        "message": "Restore to Default"
     }
 }

@@ -1,9 +1,16 @@
 import { defaultsDeep } from 'lodash-es';
 import { catchWithFallback } from '@/utils';
 import { EventEmitter } from '@/utils/event-emitter';
-import type { Settings, MessageSettings } from './types';
+import type { Settings, MessageSettings, AuthorDisplayMethod } from './types';
 
 const SETTINGS_STORAGE_KEY = 'live-chat-overlay-settings';
+
+export const authorDisplayMethods: AuthorDisplayMethod[] = [
+    'avatar-only',
+    'name-only',
+    'all',
+    'none',
+];
 
 const commonMsgSettings: MessageSettings = {
     color: 'white',

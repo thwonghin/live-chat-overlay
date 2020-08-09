@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import cn from 'classnames';
 import { CLASS_POPUP, CLASS_PANEL, CLASS_PANEL_MENU } from '@/youtube-utils';
 import { useClickOutside } from '@/hooks/use-click-outside';
+import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 
 import classes from './index.scss';
 
@@ -42,7 +43,9 @@ const MessageSettingsPopup: React.FC<Props> = ({
             ])}
         >
             <div className={CLASS_PANEL}>
-                <div className={CLASS_PANEL_MENU}>Test</div>
+                <div className={CLASS_PANEL_MENU}>
+                    <MessageSettingsInputForm messageSettingsKey="guest" />
+                </div>
             </div>
         </div>
     );

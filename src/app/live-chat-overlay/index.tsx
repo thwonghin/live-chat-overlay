@@ -2,7 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import * as jss from 'jss';
-import { StylesProvider, jssPreset } from '@material-ui/core/styles';
+import {
+    StylesProvider,
+    jssPreset,
+    ThemeProvider,
+} from '@material-ui/core/styles';
 
 import { PlayerRectProvider } from '@/contexts/player-rect';
 import { ChatEventObserverProvider } from '@/contexts/chat-observer';
@@ -14,6 +18,8 @@ import {
     getRightControlEle,
     getVideoPlayerEle,
 } from '@/youtube-utils';
+
+import { theme } from './theme';
 import App from './app';
 
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
@@ -60,11 +66,15 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
                 <PlayerRectProvider>
                     <ChatEventObserverProvider>
                         <StylesProvider jss={jssConfig}>
-                            <App
-                                initData={initData}
-                                playerControlContainer={playerControlContainer}
-                                playerEle={videoPlayerEle}
-                            />
+                            <ThemeProvider theme={theme}>
+                                <App
+                                    initData={initData}
+                                    playerControlContainer={
+                                        playerControlContainer
+                                    }
+                                    playerEle={videoPlayerEle}
+                                />
+                            </ThemeProvider>
                         </StylesProvider>
                     </ChatEventObserverProvider>
                 </PlayerRectProvider>

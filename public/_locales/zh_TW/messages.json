@@ -13,5 +13,38 @@
     },
     "messageSettingsButtonTitle": {
         "message": "評論主題設定"
+    },
+    "messageSettingsColorInputLabel": {
+        "message": "字體顏色"
+    },
+    "messageSettingsBgColorInputLabel": {
+        "message": "背景顏色"
+    },
+    "messageSettingsWeightInputLabel": {
+        "message": "字體粗度"
+    },
+    "messageSettingsOpacityInputLabel": {
+        "message": "透明度"
+    },
+    "messageSettingsStrokeColorInputLabel": {
+        "message": "字體邊緣顏色"
+    },
+    "messageSettingsStrokeWidthInputLabel": {
+        "message": "字體邊緣粗度"
+    },
+    "messageSettingsNumberOfLinesInputLabel": {
+        "message": "最大顯示行數"
+    },
+    "messageSettingsDisplayAuthorInputLabel": {
+        "message": "作者顯示方式"
+    },
+    "applyButtonText": {
+        "message": "套用"
+    },
+    "resetButtonText": {
+        "message": "重置"
+    },
+    "restoreButtonText": {
+        "message": "恢復原始設定"
     }
 }
