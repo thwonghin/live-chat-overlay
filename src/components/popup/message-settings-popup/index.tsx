@@ -1,35 +1,17 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import cn from 'classnames';
 import { CLASS_POPUP, CLASS_PANEL, CLASS_PANEL_MENU } from '@/youtube-utils';
-import { useClickOutside } from '@/hooks/use-click-outside';
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 
 import classes from './index.scss';
 
 interface Props {
     isHidden: boolean;
-    onClickOutside: () => void;
     playerControlContainer: HTMLSpanElement;
 }
 
-const MessageSettingsPopup: React.FC<Props> = ({
-    isHidden,
-    onClickOutside,
-    playerControlContainer,
-}) => {
+const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const playerControlRef = useRef<HTMLElement>(playerControlContainer);
-
-    const isClickedOutside = useClickOutside({
-        doc: window.parent.document,
-        refs: [containerRef, playerControlRef],
-    });
-
-    useEffect(() => {
-        if (isClickedOutside) {
-            onClickOutside();
-        }
-    }, [isClickedOutside, onClickOutside]);
 
     return (
         <div
@@ -42,8 +24,8 @@ const MessageSettingsPopup: React.FC<Props> = ({
                 },
             ])}
         >
-            <div className={CLASS_PANEL}>
-                <div className={CLASS_PANEL_MENU}>
+            <div className={cn([CLASS_PANEL, classes.container])}>
+                <div className={cn([CLASS_PANEL_MENU, classes.container])}>
                     <MessageSettingsInputForm messageSettingsKey="guest" />
                 </div>
             </div>

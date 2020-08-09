@@ -1,0 +1,10 @@
+.container {
+    width: 200px;
+    height: 250px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px;
+}
