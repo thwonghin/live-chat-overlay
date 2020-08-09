@@ -1,12 +1,11 @@
 .container {
     right: 12px;
     bottom: 49px;
+    z-index: 71;
     width: 200px;
     height: 200px;
-    opacity: 1;
-    transition: opacity;
 }
 
 .container-hidden {
-    opacity: 0;
+    display: none;
 }

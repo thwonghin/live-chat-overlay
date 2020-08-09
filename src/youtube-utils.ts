@@ -7,6 +7,7 @@ export const CLASS_POPUP = 'ytp-popup';
 export const CLASS_PANEL = 'ytp-panel';
 export const CLASS_PANEL_MENU = 'ytp-panel-menu';
 export const CLASS_MENUITEM = 'ytp-menuitem';
+export const CLASS_AUTOHIDE = 'ytp-autohide';
 
 export function getVideoPlayerContainer(): HTMLElement | null {
     return window.parent.document.querySelector(
@@ -14,7 +15,7 @@ export function getVideoPlayerContainer(): HTMLElement | null {
     );
 }
 
-export function getVideoPlayerEle(): HTMLElement | null {
+export function getVideoPlayerEle(): HTMLDivElement | null {
     return window.parent.document.querySelector(
         '#ytd-player .html5-video-player',
     );

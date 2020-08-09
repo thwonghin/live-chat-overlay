@@ -1,32 +1,42 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '@/reducers';
 import { popupActions } from '@/reducers/popup';
 import type { PopupType } from '@/reducers/popup/types';
-import { getVideoPlayerEle } from '@/youtube-utils';
+import { useEleClassNames } from '@/hooks/use-ele-class-names';
+import { CLASS_AUTOHIDE } from '@/youtube-utils';
 
 import MessageSettingsPopup from './message-settings-popup';
 
 interface Props {
     playerControlContainer: HTMLSpanElement;
+    playerEle: HTMLDivElement;
 }
 
-const PopupContainer: React.FC<Props> = ({ playerControlContainer }) => {
+const PopupContainer: React.FC<Props> = ({
+    playerControlContainer,
+    playerEle,
+}) => {
     const currentPopup = useSelector<RootState, PopupType | null>(
         (state) => state.popup.currentPopup,
     );
     const dispatch = useDispatch();
-
-    const parentEle = getVideoPlayerEle();
-
-    if (!parentEle) {
-        throw new Error('Video Player Ele not found');
-    }
+    const playerEleClasses = useEleClassNames(playerEle);
+    const isPlayerOverlayHidden = useMemo(
+        () => playerEleClasses.includes(CLASS_AUTOHIDE),
+        [playerEleClasses],
+    );
 
     const handleClickOutside = useCallback(() => {
         dispatch(popupActions.hidePopup());
     }, [dispatch]);
+
+    useEffect(() => {
+        if (isPlayerOverlayHidden) {
+            handleClickOutside();
+        }
+    }, [isPlayerOverlayHidden, handleClickOutside]);
 
     return ReactDOM.createPortal(
         <>
@@ -36,7 +46,7 @@ const PopupContainer: React.FC<Props> = ({ playerControlContainer }) => {
                 playerControlContainer={playerControlContainer}
             />
         </>,
-        parentEle,
+        playerEle,
     );
 };
 

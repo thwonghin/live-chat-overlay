@@ -9,7 +9,11 @@ import { ChatEventObserverProvider } from '@/contexts/chat-observer';
 import { InitData } from '@/definitions/youtube';
 
 import { store } from '@/reducers';
-import { getVideoPlayerContainer, getRightControlEle } from '@/youtube-utils';
+import {
+    getVideoPlayerContainer,
+    getRightControlEle,
+    getVideoPlayerEle,
+} from '@/youtube-utils';
 import App from './app';
 
 const REACT_CONTAINER = 'live-chat-overlay-app-container';
@@ -25,6 +29,11 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
         throw new Error('Right Player Control not found.');
     }
     rightControlEle.style.display = 'flex';
+
+    const videoPlayerEle = getVideoPlayerEle();
+    if (!videoPlayerEle) {
+        throw new Error('Video Player Ele not found');
+    }
 
     const liveChatContainer = window.parent.document.createElement('div');
     liveChatContainer.id = REACT_CONTAINER;
@@ -53,6 +62,7 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
                             <App
                                 initData={initData}
                                 playerControlContainer={playerControlContainer}
+                                playerEle={videoPlayerEle}
                             />
                         </StylesProvider>
                     </ChatEventObserverProvider>

@@ -11,16 +11,24 @@ import { InitData } from '@/definitions/youtube';
 interface Props {
     initData: InitData;
     playerControlContainer: HTMLSpanElement;
+    playerEle: HTMLDivElement;
 }
 
-const App: React.FC<Props> = ({ initData, playerControlContainer }) => {
+const App: React.FC<Props> = ({
+    initData,
+    playerControlContainer,
+    playerEle,
+}) => {
     useResetChatEventsOnPlayerRectChange();
     useInitChatEventObserver(initData);
 
     return (
         <>
             <ChatFlow />
-            <PopupContainer playerControlContainer={playerControlContainer} />
+            <PopupContainer
+                playerControlContainer={playerControlContainer}
+                playerEle={playerEle}
+            />
             <PlayerControl playerControlContainer={playerControlContainer} />
         </>
     );
