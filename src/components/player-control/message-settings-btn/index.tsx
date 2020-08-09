@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 
@@ -23,7 +24,7 @@ const MessageSettingsBtn: React.FC = () => {
 
     return (
         <button
-            className={`${CLASS_PLAYER_CTL_BTN} ${classes.btn}`}
+            className={cn([classes.btn, CLASS_PLAYER_CTL_BTN])}
             type="button"
             title={browser.i18n.getMessage('messageSettingsButtonTitle')}
             onClick={handleClick}

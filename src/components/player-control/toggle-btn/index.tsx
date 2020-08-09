@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback } from 'react';
+import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
 import { useSettings } from '@/hooks/use-settings';
@@ -47,7 +48,7 @@ const ToggleBtn: React.FC = () => {
 
     return (
         <button
-            className={`${CLASS_PLAYER_CTL_BTN} ${classes.btn}`}
+            className={cn([classes.btn, CLASS_PLAYER_CTL_BTN])}
             title={title}
             onClick={onClick}
             type="button"
