@@ -16,7 +16,8 @@ import {
 } from '@/youtube-utils';
 import App from './app';
 
-const REACT_CONTAINER = 'live-chat-overlay-app-container';
+const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
+const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
 export function injectLiveChatOverlay(initData: InitData): () => void {
     const videoPlayerContainer = getVideoPlayerContainer();
@@ -36,7 +37,7 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     }
 
     const liveChatContainer = window.parent.document.createElement('div');
-    liveChatContainer.id = REACT_CONTAINER;
+    liveChatContainer.id = OVERLAY_CONTAINER;
     liveChatContainer.style.position = 'absolute';
     liveChatContainer.style.top = '0';
     liveChatContainer.style.left = '0';
@@ -44,7 +45,7 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     liveChatContainer.style.height = '100%';
 
     const playerControlContainer = window.parent.document.createElement('span');
-    playerControlContainer.id = REACT_CONTAINER;
+    playerControlContainer.id = PLAYER_CONTROL_CONTAINER;
     playerControlContainer.style.display = 'flex';
     playerControlContainer.style.alignItems = 'center';
 

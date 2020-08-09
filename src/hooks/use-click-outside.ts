@@ -14,7 +14,6 @@ export function useClickOutside({ refs, doc }: UseClickOutsideParams): boolean {
             if (!e.target) {
                 return;
             }
-            console.log(e.target);
             setIsClickedOutside(
                 !refs.some(
                     (ref) =>
