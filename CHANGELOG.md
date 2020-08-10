@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/thwonghin/live-chat-overlay/compare/v2.1.1...v2.2.0) (2020-08-10)
+
+
+### Features
+
+* message theme settings ([#272](https://github.com/thwonghin/live-chat-overlay/issues/272)) ([8c0f7e0](https://github.com/thwonghin/live-chat-overlay/commit/8c0f7e0ef5855be4e5778f185b5e6d8aad0d19d2))
+* only display speed slider when hover toggle btn ([#269](https://github.com/thwonghin/live-chat-overlay/issues/269)) ([353abdd](https://github.com/thwonghin/live-chat-overlay/commit/353abdde2c4edef6baa34e25bb921de5204dce9e))
+
 ### [2.1.1](https://github.com/thwonghin/live-chat-overlay/compare/v2.1.0...v2.1.1) (2020-08-06)
 
 
