@@ -47,6 +47,9 @@
     "restoreButtonText": {
         "message": "恢復原始設定"
     },
+    "messageTypeSelectLabel": {
+        "message": "設定評論類型："
+    },
     "moderatorMessageType": {
         "message": "管理員"
     },

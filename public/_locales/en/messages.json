@@ -47,6 +47,9 @@
     "restoreButtonText": {
         "message": "Restore to Default"
     },
+    "messageTypeSelectLabel": {
+        "message": "Message Type Settings:"
+    },
     "moderatorMessageType": {
         "message": "Moderator"
     },

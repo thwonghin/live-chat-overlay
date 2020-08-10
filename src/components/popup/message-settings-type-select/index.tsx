@@ -1,8 +1,10 @@
 import React, { useCallback } from 'react';
-import { Select, MenuItem } from '@material-ui/core';
-import { assertNever } from '@/utils';
+import { Select, FormLabel, MenuItem } from '@material-ui/core';
 
+import { assertNever } from '@/utils';
 import type { MessageSettingsKey } from '@/services/settings-storage/types';
+
+import classes from './index.scss';
 
 function getStringByMessageKey(key: MessageSettingsKey): string {
     switch (key) {
@@ -56,21 +58,26 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
     );
 
     return (
-        <Select
-            color="secondary"
-            onChange={handleChange}
-            value={value}
-            MenuProps={{
-                // Avoid window scrollbar disappeared casuing shift horizontally
-                disableScrollLock: true,
-            }}
-        >
-            {messageSettingsOptions.map((option) => (
-                <MenuItem key={option.key} value={option.key}>
-                    {option.label}
-                </MenuItem>
-            ))}
-        </Select>
+        <div>
+            <FormLabel className={classes.label}>
+                {browser.i18n.getMessage('messageTypeSelectLabel')}
+            </FormLabel>
+            <Select
+                color="secondary"
+                onChange={handleChange}
+                value={value}
+                MenuProps={{
+                    // Avoid window scrollbar disappeared casuing shift horizontally
+                    disableScrollLock: true,
+                }}
+            >
+                {messageSettingsOptions.map((option) => (
+                    <MenuItem key={option.key} value={option.key}>
+                        {option.label}
+                    </MenuItem>
+                ))}
+            </Select>
+        </div>
     );
 };
 
