@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, FormHelperText } from '@material-ui/core';
 import { useFormik } from 'formik';
 
 import type { MessageSettings } from '@/services/settings-storage/types';
@@ -24,6 +24,9 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
 
     return (
         <form onSubmit={formik.handleSubmit} className={classes.container}>
+            <FormHelperText>
+                {browser.i18n.getMessage('colorInputHelperText')}
+            </FormHelperText>
             <div className={classes.row}>
                 <TextField
                     color="secondary"

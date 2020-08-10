@@ -50,6 +50,9 @@
     "messageTypeSelectLabel": {
         "message": "設定評論類型："
     },
+    "colorInputHelperText": {
+        "message": "Please enter HTML colors for color fields."
+    },
     "moderatorMessageType": {
         "message": "管理員"
     },

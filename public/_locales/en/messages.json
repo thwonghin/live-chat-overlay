@@ -50,6 +50,9 @@
     "messageTypeSelectLabel": {
         "message": "Message Type Settings:"
     },
+    "colorInputHelperText": {
+        "message": "Please enter HTML colors for color fields."
+    },
     "moderatorMessageType": {
         "message": "Moderator"
     },
