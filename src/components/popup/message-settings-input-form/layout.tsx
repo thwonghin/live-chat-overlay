@@ -9,11 +9,13 @@ import classes from './index.scss';
 interface Props {
     messageSettings: MessageSettings;
     onSubmit: (value: MessageSettings) => void;
+    isBackgroundColorEditable: boolean;
 }
 
 const MessageSettingsInputFormLayout: React.FC<Props> = ({
     messageSettings,
     onSubmit,
+    isBackgroundColorEditable,
 }) => {
     const formik = useFormik({
         initialValues: messageSettings,
@@ -89,6 +91,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     label={browser.i18n.getMessage(
                         'messageSettingsBgColorInputLabel',
                     )}
+                    disabled={!isBackgroundColorEditable}
                     value={formik.values.bgColor}
                     name="bgColor"
                     type="text"

@@ -61,6 +61,7 @@ const defaultSettings: Settings = {
             ...commonMsgSettings,
             numberOfLines: 2,
             authorDisplay: 'all',
+            bgColor: '',
         },
     },
 };
@@ -88,6 +89,10 @@ export class SettingsStorage {
             storedSettings,
             defaultSettings,
         ) as Settings;
+
+        // Migration: set unsettable super chat bg color to empty string
+        this.currentSettings.messageSettings['super-chat'].bgColor = '';
+
         this.isInitiated = true;
     }
 

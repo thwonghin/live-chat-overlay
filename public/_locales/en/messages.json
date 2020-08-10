@@ -46,5 +46,26 @@
     },
     "restoreButtonText": {
         "message": "Restore to Default"
+    },
+    "moderatorMessageType": {
+        "message": "Moderator"
+    },
+    "memberMessageType": {
+        "message": "Member"
+    },
+    "guestMessageType": {
+        "message": "Guest"
+    },
+    "ownerMessageType": {
+        "message": "Owner"
+    },
+    "verifiedMessageType": {
+        "message": "Verified"
+    },
+    "membershipMessageType": {
+        "message": "New Membership"
+    },
+    "superChatMessageType": {
+        "message": "Super Chat"
     }
 }

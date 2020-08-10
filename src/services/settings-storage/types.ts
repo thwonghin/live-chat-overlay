@@ -11,7 +11,7 @@ export interface MessageSettings {
     authorDisplay: AuthorDisplayMethod;
 }
 
-export type MessageSettingsKeys =
+export type MessageSettingsKey =
     | 'moderator'
     | 'member'
     | 'guest'
@@ -25,5 +25,5 @@ export interface Settings {
     isEnabled: boolean;
     totalNumberOfLines: number;
     flowTimeInSec: number;
-    messageSettings: Record<MessageSettingsKeys, MessageSettings>;
+    messageSettings: Record<MessageSettingsKey, MessageSettings>;
 }

@@ -46,5 +46,26 @@
     },
     "restoreButtonText": {
         "message": "恢復原始設定"
+    },
+    "moderatorMessageType": {
+        "message": "管理員"
+    },
+    "memberMessageType": {
+        "message": "會員"
+    },
+    "guestMessageType": {
+        "message": "非會員"
+    },
+    "ownerMessageType": {
+        "message": "頻道擁有者"
+    },
+    "verifiedMessageType": {
+        "message": "已認證"
+    },
+    "membershipMessageType": {
+        "message": "新會員信息"
+    },
+    "superChatMessageType": {
+        "message": "超級留言"
     }
 }

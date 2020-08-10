@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
 import type {
     MessageSettings,
-    MessageSettingsKeys,
+    MessageSettingsKey,
 } from '@/services/settings-storage/types';
 import { useSettings } from '@/hooks/use-settings';
 
 import Layout from './layout';
 
 interface Props {
-    messageSettingsKey: MessageSettingsKeys;
+    messageSettingsKey: MessageSettingsKey;
 }
 
 const MessageSettingsInputForm: React.FC<Props> = ({ messageSettingsKey }) => {
@@ -29,8 +29,10 @@ const MessageSettingsInputForm: React.FC<Props> = ({ messageSettingsKey }) => {
 
     return (
         <Layout
+            key={messageSettingsKey}
             onSubmit={handleSubmit}
             messageSettings={settings.messageSettings[messageSettingsKey]}
+            isBackgroundColorEditable={messageSettingsKey !== 'super-chat'}
         />
     );
 };
