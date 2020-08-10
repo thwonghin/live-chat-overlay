@@ -57,6 +57,7 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
 
     return (
         <Select
+            color="secondary"
             onChange={handleChange}
             value={value}
             MenuProps={{

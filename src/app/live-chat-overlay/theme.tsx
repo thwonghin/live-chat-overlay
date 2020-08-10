@@ -6,5 +6,15 @@ export const theme = createMuiTheme({
         primary: {
             main: '#FF0000',
         },
+        secondary: {
+            main: '#FF4E45',
+        }
+    },
+    overrides: {
+        MuiInputLabel: {
+            shrink: {
+                transform: 'translate(0, 1.5px)',
+            },
+        },
     },
 });

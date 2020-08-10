@@ -26,6 +26,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
         <form onSubmit={formik.handleSubmit} className={classes.container}>
             <div className={classes.row}>
                 <TextField
+                    color="secondary"
                     label={browser.i18n.getMessage(
                         'messageSettingsColorInputLabel',
                     )}
@@ -38,6 +39,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     }}
                 />
                 <TextField
+                    color="secondary"
                     label={browser.i18n.getMessage(
                         'messageSettingsWeightInputLabel',
                     )}
@@ -57,6 +59,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
             </div>
             <div className={classes.row}>
                 <TextField
+                    color="secondary"
                     label={browser.i18n.getMessage(
                         'messageSettingsStrokeColorInputLabel',
                     )}
@@ -69,6 +72,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     }}
                 />
                 <TextField
+                    color="secondary"
                     label={browser.i18n.getMessage(
                         'messageSettingsStrokeWidthInputLabel',
                     )}
@@ -88,6 +92,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
             </div>
             <div className={classes.row}>
                 <TextField
+                    color="secondary"
                     label={browser.i18n.getMessage(
                         'messageSettingsBgColorInputLabel',
                     )}
@@ -101,6 +106,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     }}
                 />
                 <TextField
+                    color="secondary"
                     label={browser.i18n.getMessage(
                         'messageSettingsOpacityInputLabel',
                     )}
