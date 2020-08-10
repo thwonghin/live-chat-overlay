@@ -1,9 +1,8 @@
 import React from 'react';
-import { TextField, Select, MenuItem, Button } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import { useFormik } from 'formik';
 
 import type { MessageSettings } from '@/services/settings-storage/types';
-import { authorDisplayMethods } from '@/services/settings-storage';
 
 import classes from './index.scss';
 
@@ -117,43 +116,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                 />
             </div>
             <div className={classes.row}>
-                <TextField
-                    label={browser.i18n.getMessage(
-                        'messageSettingsNumberOfLinesInputLabel',
-                    )}
-                    value={formik.values.numberOfLines}
-                    name="numberOfLines"
-                    type="number"
-                    inputProps={{
-                        min: 1,
-                        max: 2,
-                        step: 1,
-                    }}
-                    onChange={formik.handleChange}
-                    style={{
-                        width: '30%',
-                    }}
-                />
-                <Select
-                    label={browser.i18n.getMessage(
-                        'messageSettingsDisplayAuthorInputLabel',
-                    )}
-                    value={formik.values.authorDisplay}
-                    name="authorDisplay"
-                    onChange={formik.handleChange}
-                    style={{
-                        width: '60%',
-                    }}
-                >
-                    {authorDisplayMethods.map((value) => (
-                        <MenuItem value={value} key={value}>
-                            {value}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </div>
-            <div className={classes.row}>
-                <Button type="submit">
+                <Button type="submit" color="primary" variant="contained">
                     {browser.i18n.getMessage('applyButtonText')}
                 </Button>
                 <Button type="button" onClick={formik.handleReset}>
