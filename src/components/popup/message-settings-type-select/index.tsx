@@ -61,6 +61,7 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
             onChange={handleChange}
             value={value}
             MenuProps={{
+                // Avoid window scrollbar disappeared casuing shift horizontally
                 disableScrollLock: true,
             }}
         >

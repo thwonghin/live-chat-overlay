@@ -13,6 +13,7 @@ export const theme = createMuiTheme({
     overrides: {
         MuiInputLabel: {
             shrink: {
+                // Remove scaling after shrink
                 transform: 'translate(0, 1.5px)',
             },
         },
