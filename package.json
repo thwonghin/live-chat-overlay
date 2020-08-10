@@ -51,7 +51,7 @@
         "babel-loader": "^8.1.0",
         "chrome-webstore-upload-cli": "^1.2.0",
         "copy-webpack-plugin": "^6.0.3",
-        "css-loader": "^4.2.0",
+        "css-loader": "^4.2.1",
         "cssnano": "^4.1.10",
         "dot-json": "^1.2.0",
         "eslint": "^7.6.0",
