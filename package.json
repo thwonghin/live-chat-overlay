@@ -74,6 +74,7 @@
         "sass-loader": "^9.0.3",
         "style-loader": "^1.2.1",
         "stylelint": "^13.6.1",
+        "stylelint-config-css-modules": "^2.2.0",
         "stylelint-config-rational-order": "^0.1.2",
         "stylelint-config-recommended-scss": "^4.2.0",
         "stylelint-config-sass-guidelines": "^7.0.0",

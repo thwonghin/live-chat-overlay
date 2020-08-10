@@ -35,8 +35,8 @@ const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
                 },
             ])}
         >
-            <div className={cn([CLASS_PANEL, classes.container])}>
-                <div className={cn([CLASS_PANEL_MENU, classes.container])}>
+            <div className={cn([CLASS_PANEL, classes['nest-container']])}>
+                <div className={cn([CLASS_PANEL_MENU, classes.content])}>
                     <MessageSettingsTypeSelect
                         value={selectedMessageType}
                         onChange={setSelectedMessageType}

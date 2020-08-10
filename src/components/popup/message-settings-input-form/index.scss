@@ -1,10 +1,9 @@
 .container {
-    width: 200px;
-    height: 250px;
+    width: 100%;
 }
 
 .row {
     display: flex;
     justify-content: space-between;
-    padding: 8px;
+    padding: 8px 0;
 }
