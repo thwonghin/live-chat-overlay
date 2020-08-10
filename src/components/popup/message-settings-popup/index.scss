@@ -2,8 +2,8 @@
     right: 12px;
     bottom: 49px;
     z-index: 71;
-    width: 282px;
-    height: 270px;
+    width: 340px;
+    height: 294px;
 
     :global(.ytp-big-mode) & {
         right: 24px;
@@ -19,7 +19,7 @@
 .content {
     width: 100%;
     height: 100%;
-    padding: 16px !important;
+    padding: 16px 16px 0 !important;
 }
 
 .container-hidden {

@@ -17,5 +17,25 @@ export const theme = createMuiTheme({
                 transform: 'translate(0, 1.5px)',
             },
         },
+        MuiFormLabel: {
+            root: {
+                fontSize: '1.2rem',
+            },
+        },
+        MuiInputBase: {
+            root: {
+                fontSize: '1.2rem',
+            },
+        },
+        MuiFormHelperText: {
+            root: {
+                fontSize: '1rem',
+            },
+        },
+        MuiButton: {
+            root: {
+                fontSize: '1rem',
+            },
+        },
     },
 });
