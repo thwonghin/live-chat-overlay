@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, Select, MenuItem, Button, Box } from '@material-ui/core';
+import { TextField, Select, MenuItem, Button } from '@material-ui/core';
 import { useFormik } from 'formik';
 
 import type { MessageSettings } from '@/services/settings-storage/types';
