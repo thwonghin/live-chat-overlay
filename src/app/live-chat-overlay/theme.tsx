@@ -8,7 +8,7 @@ export const theme = createMuiTheme({
         },
         secondary: {
             main: '#FF4E45',
-        }
+        },
     },
     overrides: {
         MuiInputLabel: {
