@@ -1,3 +1,5 @@
+export type AuthorDisplayMethod = 'avatar-only' | 'name-only' | 'all' | 'none';
+
 export interface MessageSettings {
     color: string;
     weight: number;
@@ -6,10 +8,10 @@ export interface MessageSettings {
     strokeColor: string;
     strokeWidth: number;
     numberOfLines: number;
-    authorDisplay: 'avatar-only' | 'name-only' | 'all' | 'none';
+    authorDisplay: AuthorDisplayMethod;
 }
 
-type MessageSettingsKeys =
+export type MessageSettingsKey =
     | 'moderator'
     | 'member'
     | 'guest'
@@ -23,5 +25,5 @@ export interface Settings {
     isEnabled: boolean;
     totalNumberOfLines: number;
     flowTimeInSec: number;
-    messageSettings: Record<MessageSettingsKeys, MessageSettings>;
+    messageSettings: Record<MessageSettingsKey, MessageSettings>;
 }

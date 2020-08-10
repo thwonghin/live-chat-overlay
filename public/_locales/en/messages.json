@@ -10,5 +10,68 @@
     },
     "toggleButtonShowTitle": {
         "message": "Show Chat"
+    },
+    "messageSettingsButtonTitle": {
+        "message": "Message Theme Settings"
+    },
+    "messageSettingsColorInputLabel": {
+        "message": "Text Color"
+    },
+    "messageSettingsBgColorInputLabel": {
+        "message": "Background Color"
+    },
+    "messageSettingsWeightInputLabel": {
+        "message": "Font Weight"
+    },
+    "messageSettingsOpacityInputLabel": {
+        "message": "Opacity"
+    },
+    "messageSettingsStrokeColorInputLabel": {
+        "message": "Stroke Color"
+    },
+    "messageSettingsStrokeWidthInputLabel": {
+        "message": "Stroke Width"
+    },
+    "messageSettingsNumberOfLinesInputLabel": {
+        "message": "Max Line Number"
+    },
+    "messageSettingsDisplayAuthorInputLabel": {
+        "message": "Display Author Method"
+    },
+    "applyButtonText": {
+        "message": "Apply"
+    },
+    "resetButtonText": {
+        "message": "Reset"
+    },
+    "restoreButtonText": {
+        "message": "Restore to Default"
+    },
+    "messageTypeSelectLabel": {
+        "message": "Message Type Settings:"
+    },
+    "colorInputHelperText": {
+        "message": "Please enter HTML colors for color fields."
+    },
+    "moderatorMessageType": {
+        "message": "Moderator"
+    },
+    "memberMessageType": {
+        "message": "Member"
+    },
+    "guestMessageType": {
+        "message": "Guest"
+    },
+    "ownerMessageType": {
+        "message": "Owner"
+    },
+    "verifiedMessageType": {
+        "message": "Verified"
+    },
+    "membershipMessageType": {
+        "message": "New Membership"
+    },
+    "superChatMessageType": {
+        "message": "Super Chat"
     }
 }
