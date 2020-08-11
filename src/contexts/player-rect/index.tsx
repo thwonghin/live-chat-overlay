@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useRef } from 'react';
 
 import { getVideoPlayerEle } from '@/youtube-utils';
 import { useRect, RectResult } from '@/hooks/use-rect';
 
 export function useVideoPlayerRect(): RectResult {
-    const playerRef = useMemo(() => ({ current: getVideoPlayerEle() }), []);
+    const playerRef = useRef(getVideoPlayerEle());
     return useRect(playerRef);
 }
 
@@ -21,7 +21,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-const PlayerRectProvider: React.FC<Props> = ({ children }) => {
+export const PlayerRectProvider: React.FC<Props> = ({ children }) => {
     const rect = useVideoPlayerRect();
 
     return (
@@ -30,5 +30,3 @@ const PlayerRectProvider: React.FC<Props> = ({ children }) => {
         </PlayerRectContext.Provider>
     );
 };
-
-export { PlayerRectProvider };

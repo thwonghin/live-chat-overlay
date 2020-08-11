@@ -8,8 +8,7 @@ import {
     ThemeProvider,
 } from '@material-ui/core/styles';
 
-import { PlayerRectProvider } from '@/contexts/player-rect';
-import { ChatEventObserverProvider } from '@/contexts/chat-observer';
+import * as contexts from '@/contexts';
 import { InitData } from '@/definitions/youtube';
 
 import { store } from '@/reducers';
@@ -63,8 +62,8 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     ReactDOM.render(
         <React.StrictMode>
             <Provider store={store}>
-                <PlayerRectProvider>
-                    <ChatEventObserverProvider>
+                <contexts.playerRect.PlayerRectProvider>
+                    <contexts.chatObserver.ChatEventObserverProvider>
                         <StylesProvider jss={jssConfig}>
                             <ThemeProvider theme={theme}>
                                 <App
@@ -76,8 +75,8 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
                                 />
                             </ThemeProvider>
                         </StylesProvider>
-                    </ChatEventObserverProvider>
-                </PlayerRectProvider>
+                    </contexts.chatObserver.ChatEventObserverProvider>
+                </contexts.playerRect.PlayerRectProvider>
             </Provider>
         </React.StrictMode>,
         liveChatContainer,

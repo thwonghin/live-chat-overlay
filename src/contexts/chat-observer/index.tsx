@@ -9,7 +9,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
+export const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
     const observer = new ChatEventResponseObserver();
 
     return (
@@ -18,5 +18,3 @@ const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
         </ChatEventObserverContext.Provider>
     );
 };
-
-export { ChatEventObserverProvider };
