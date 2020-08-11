@@ -1,8 +1,6 @@
 import React, { useMemo, useRef, useState, useLayoutEffect } from 'react';
 
-import { useTimeout } from '@/hooks/use-timeout';
-import { useRect } from '@/hooks/use-rect';
-import { useSettings } from '@/hooks/use-settings';
+import { useTimeout, useRect, useSettings } from '@/hooks';
 import classes from './index.scss';
 
 interface Props {

@@ -3,7 +3,7 @@ import React, { useMemo, useCallback } from 'react';
 import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
-import { useSettings } from '@/hooks/use-settings';
+import { useSettings } from '@/hooks';
 import { CLASS_PLAYER_CTL_BTN } from '@/youtube-utils';
 
 import classes from './index.scss';

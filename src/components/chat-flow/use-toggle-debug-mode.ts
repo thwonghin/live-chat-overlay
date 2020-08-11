@@ -1,8 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { debugInfoActions } from '@/reducers/debug-info';
-import { useKeyboardToggle } from '@/hooks/use-keyboard-toggle';
-import { useKeyboardEvent } from '@/hooks/use-keyboard-event';
+import { useKeyboardToggle, useKeyboardEvent } from '@/hooks';
 
 const dKey = 68;
 const rKey = 82;

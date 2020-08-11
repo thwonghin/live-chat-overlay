@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { RectResult } from '@/hooks/use-rect';
+import type { RectResult } from '@/hooks';
 import * as contexts from '@/contexts';
 
 export function useVideoPlayerRect(): RectResult {

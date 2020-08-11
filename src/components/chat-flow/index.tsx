@@ -3,11 +3,13 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import { RootState } from '@/reducers';
 import { chatEventsActions } from '@/reducers/chat-events';
-import { useSettings } from '@/hooks/use-settings';
-import { useInterval } from '@/hooks/use-interval';
-import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
+import {
+    useSettings,
+    useInterval,
+    useVideoPlayerRect,
+    CHAT_ITEM_RENDER_ID,
+} from '@/hooks';
 import { Settings } from '@/services/settings-storage/types';
-import { CHAT_ITEM_RENDER_ID } from '@/hooks/use-init-chat-event-observer';
 
 import { useToggleDebugMode } from './use-toggle-debug-mode';
 import classes from './index.scss';

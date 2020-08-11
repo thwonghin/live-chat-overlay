@@ -3,7 +3,7 @@ import { Slider, withStyles } from '@material-ui/core';
 import { isNil } from 'lodash-es';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { useSettings } from '@/hooks/use-settings';
+import { useSettings } from '@/hooks';
 import { CLASS_BIG_MODE } from '@/youtube-utils';
 
 import classes from './index.scss';

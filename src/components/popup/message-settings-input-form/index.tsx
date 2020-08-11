@@ -3,7 +3,7 @@ import type {
     MessageSettings,
     MessageSettingsKey,
 } from '@/services/settings-storage/types';
-import { useSettings } from '@/hooks/use-settings';
+import { useSettings } from '@/hooks';
 
 import Layout from './layout';
 

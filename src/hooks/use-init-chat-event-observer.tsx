@@ -4,11 +4,13 @@ import { useDispatch, useSelector, useStore } from 'react-redux';
 
 import { benchmarkAsync } from '@/utils';
 import { getVideoEle } from '@/youtube-utils';
-import { useInterval } from '@/hooks/use-interval';
-import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
-import { useSettings } from '@/hooks/use-settings';
-import { useDocumentVisible } from '@/hooks/use-document-visible';
-import { useVideoPlayerState } from '@/hooks/use-video-player-state';
+import {
+    useInterval,
+    useVideoPlayerRect,
+    useSettings,
+    useDocumentVisible,
+    useVideoPlayerState,
+} from '@/hooks';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
 import { chatEventsActions } from '@/reducers/chat-events';
 import { debugInfoActions } from '@/reducers/debug-info';

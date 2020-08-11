@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { CLASS_POPUP, CLASS_PANEL, CLASS_PANEL_MENU } from '@/youtube-utils';
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
-import { useNativeStopKeydownPropagation } from '@/hooks/use-native-stop-keydown-propagation';
+import { useNativeStopKeydownPropagation } from '@/hooks';
 import type { MessageSettingsKey } from '@/services/settings-storage/types';
 
 import classes from './index.scss';
