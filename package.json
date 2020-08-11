@@ -117,8 +117,8 @@
         "formik": "^2.1.5",
         "jss": "^10.3.0",
         "lodash-es": "^4.17.15",
-        "react": "^16.13.1",
-        "react-dom": "^16.13.1",
+        "react": "17.0.0-rc.0",
+        "react-dom": "17.0.0-rc.0",
         "react-redux": "^7.2.1",
         "regenerator-runtime": "^0.13.7",
         "use-debounce": "^3.4.3"
