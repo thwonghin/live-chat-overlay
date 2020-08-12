@@ -3,13 +3,13 @@ import React from 'react';
 import { TextField, Button, FormHelperText } from '@material-ui/core';
 import { useFormik } from 'formik';
 
-import type { MessageSettings } from '@/services/settings-storage/types';
+import type { settingsStorage } from '@/services';
 
 import classes from './index.scss';
 
 interface Props {
-    messageSettings: MessageSettings;
-    onSubmit: (value: MessageSettings) => void;
+    messageSettings: settingsStorage.MessageSettings;
+    onSubmit: (value: settingsStorage.MessageSettings) => void;
     isBackgroundColorEditable: boolean;
 }
 

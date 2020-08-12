@@ -1,11 +1,6 @@
 import React from 'react';
 
-import {
-    SuperChatItem,
-    MembershipItem,
-    NormalChatItem,
-} from '@/services/chat-event/models';
-import { MessageSettings } from '@/services/settings-storage/types';
+import type { chatEvent, settingsStorage } from '@/services';
 import TwoLinesMessage from '.';
 
 export default { title: 'TwoLinesMessage' };
@@ -19,39 +14,42 @@ const avatars = [
 ];
 const authorName = 'Author Name';
 
-const superChatItem: SuperChatItem = {
+const superChatItem: chatEvent.SuperChatItem = {
     id: 'super-chat-message',
     messageParts: [{ text: 'This is a super chat message' }],
     avatars,
     timestampInUs: 1591425506771,
+    liveDelayInMs: 0,
     donationAmount: 'HK$ 100.00',
     authorName,
     color: 'red',
     chatType: 'super-chat',
 };
 
-const membershipItem: MembershipItem = {
+const membershipItem: chatEvent.MembershipItem = {
     id: 'membership',
     authorBadges: [],
     messageParts: [{ text: 'Someone becomes a member.' }],
     avatars,
     timestampInUs: 1591425506771,
+    liveDelayInMs: 0,
     authorName,
     chatType: 'membership',
 };
 
-const normalMessageItem: NormalChatItem = {
+const normalMessageItem: chatEvent.NormalChatItem = {
     id: 'super-chat-sticker',
     authorBadges: [],
     messageParts: [{ text: 'This is a normal message' }],
     avatars,
     timestampInUs: 1591425506771,
+    liveDelayInMs: 0,
     authorName,
     chatType: 'normal',
     authorType: 'owner',
 };
 
-const messageSettings: MessageSettings = {
+const messageSettings: settingsStorage.MessageSettings = {
     color: 'white',
     weight: 700,
     opacity: 0.8,

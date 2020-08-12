@@ -1,24 +1,17 @@
 import React from 'react';
 
-import {
-    NormalChatItem,
-    MembershipItem,
-    SuperChatItem,
-} from '@/services/chat-event/models';
-import {
-    isNormalChatItem,
-    isSuperChatItem,
-    isMembershipItem,
-} from '@/services/chat-event/mapper';
-import { MessageSettings } from '@/services/settings-storage/types';
+import { chatEvent, settingsStorage } from '@/services';
 import classes from './index.scss';
 
 import MessagePartsRenderer from '../message-parts-renderer';
 import AuthorChip from '../author-chip';
 
 interface Props {
-    chatItem: NormalChatItem | MembershipItem | SuperChatItem;
-    messageSettings: MessageSettings;
+    chatItem:
+        | chatEvent.NormalChatItem
+        | chatEvent.MembershipItem
+        | chatEvent.SuperChatItem;
+    messageSettings: settingsStorage.MessageSettings;
 }
 
 const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
@@ -28,11 +21,12 @@ const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
     const flexDirection = actualNumberOfLines === 2 ? 'column' : 'row';
 
     const bgColor =
-        isNormalChatItem(chatItem) || isMembershipItem(chatItem)
+        chatEvent.isNormalChatItem(chatItem) ||
+        chatEvent.isMembershipItem(chatItem)
             ? messageSettings.bgColor
             : chatItem.color;
 
-    const donationAmount = isSuperChatItem(chatItem)
+    const donationAmount = chatEvent.isSuperChatItem(chatItem)
         ? chatItem.donationAmount
         : undefined;
 

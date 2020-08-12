@@ -1,4 +1,4 @@
-import { Settings, MessageSettings } from '@/services/settings-storage/types';
+import type { settingsStorage } from '@/services';
 import { isNonNullable } from '@/utils';
 import type * as liveChatResponse from '@/definitions/youtube';
 import {
@@ -81,8 +81,8 @@ export function isMembershipItem(
 
 export function getMessageSettings(
     chatItem: chatModel.ChatItem,
-    settings: Settings,
-): MessageSettings {
+    settings: settingsStorage.Settings,
+): settingsStorage.MessageSettings {
     const { messageSettings } = settings;
     if (isNormalChatItem(chatItem)) {
         return messageSettings[chatItem.authorType];

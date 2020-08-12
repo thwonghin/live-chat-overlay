@@ -13,23 +13,17 @@ import {
 } from '@/hooks';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
 import { chatEvents, debugInfo } from '@/features';
-import type { DebugInfo } from '@/services/chat-event/response-observer';
+import { settingsStorage, chatEvent } from '@/services';
 import type { RootState } from '@/app/live-chat-overlay/store';
-import type { ChatItem } from '@/services/chat-event/models';
 import type { InitData } from '@/definitions/youtube';
 import type { UiChatItem } from '@/components/chat-flow/types';
-import type { Settings } from '@/services/settings-storage/types';
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import {
-    getMessageSettings,
-    isSuperChatItem,
-} from '@/services/chat-event/mapper';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 
 interface GetChatItemRenderedWidthParams {
-    chatItem: ChatItem;
-    settings: Settings;
+    chatItem: chatEvent.ChatItem;
+    settings: settingsStorage.Settings;
 }
 
 async function getChatItemRenderedWidth({
@@ -70,12 +64,13 @@ function getRenderedNumOfLinesForChatItem({
     settings,
     chatItem,
 }: {
-    settings: Settings;
-    chatItem: ChatItem;
+    settings: settingsStorage.Settings;
+    chatItem: chatEvent.ChatItem;
 }): number {
-    const messageSettings = getMessageSettings(chatItem, settings);
+    const messageSettings = chatEvent.getMessageSettings(chatItem, settings);
 
-    return isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
+    return chatEvent.isSuperChatItem(chatItem) &&
+        chatItem.messageParts.length === 0
         ? 1
         : messageSettings.numberOfLines;
 }
@@ -91,10 +86,10 @@ export function useInitChatEventObserver(initData: InitData): void {
         (rootState) => rootState.debugInfo.isDebugging,
     );
     const { width: playerWidth } = useVideoPlayerRect();
-    const chatItemBufferRef = useRef<ChatItem>();
+    const chatItemBufferRef = useRef<chatEvent.ChatItem>();
 
     const dequeueChatItem = useCallback(
-        (): ChatItem | undefined =>
+        (): chatEvent.ChatItem | undefined =>
             chatEventObserver.dequeueChatItem(
                 (getVideoEle()?.currentTime ?? 0) * 1000,
             ),
@@ -164,7 +159,7 @@ export function useInitChatEventObserver(initData: InitData): void {
     useInterval(processChatItem, 300);
 
     useEffect(() => {
-        function handleDebugInfo(info: DebugInfo) {
+        function handleDebugInfo(info: chatEvent.DebugInfo) {
             if (info.processChatEventMs) {
                 dispatch(
                     debugInfo.actions.addProcessChatEventMetric(

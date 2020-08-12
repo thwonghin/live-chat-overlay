@@ -1,12 +1,5 @@
 import React from 'react';
-import type { Settings } from '@/services/settings-storage/types';
-import {
-    isNormalChatItem,
-    isSuperChatItem,
-    isSuperStickerItem,
-    isMembershipItem,
-    getMessageSettings,
-} from '@/services/chat-event/mapper';
+import { settingsStorage, chatEvent } from '@/services';
 
 import type { UiChatItem } from '../types';
 import TwoLinesMessage from '../two-lines-message';
@@ -14,33 +7,45 @@ import SuperChatSticker from '../super-chat-sticker';
 
 interface Props {
     chatItem: UiChatItem;
-    settings: Settings;
+    settings: settingsStorage.Settings;
 }
 
 const ChatItemRenderer: React.FC<Props> = ({ chatItem, settings }) => (
     <>
-        {isSuperStickerItem(chatItem) && (
+        {chatEvent.isSuperStickerItem(chatItem) && (
             <SuperChatSticker
                 chatItem={chatItem}
-                messageSettings={getMessageSettings(chatItem, settings)}
+                messageSettings={chatEvent.getMessageSettings(
+                    chatItem,
+                    settings,
+                )}
             />
         )}
-        {isNormalChatItem(chatItem) && (
+        {chatEvent.isNormalChatItem(chatItem) && (
             <TwoLinesMessage
                 chatItem={chatItem}
-                messageSettings={getMessageSettings(chatItem, settings)}
+                messageSettings={chatEvent.getMessageSettings(
+                    chatItem,
+                    settings,
+                )}
             />
         )}
-        {isSuperChatItem(chatItem) && (
+        {chatEvent.isSuperChatItem(chatItem) && (
             <TwoLinesMessage
                 chatItem={chatItem}
-                messageSettings={getMessageSettings(chatItem, settings)}
+                messageSettings={chatEvent.getMessageSettings(
+                    chatItem,
+                    settings,
+                )}
             />
         )}
-        {isMembershipItem(chatItem) && (
+        {chatEvent.isMembershipItem(chatItem) && (
             <TwoLinesMessage
                 chatItem={chatItem}
-                messageSettings={getMessageSettings(chatItem, settings)}
+                messageSettings={chatEvent.getMessageSettings(
+                    chatItem,
+                    settings,
+                )}
             />
         )}
     </>

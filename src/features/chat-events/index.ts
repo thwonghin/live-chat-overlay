@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { SettingsStorage } from '@/services/settings-storage';
-import { ChatItem } from '@/services/chat-event/models';
+import { settingsStorage, chatEvent } from '@/services';
 import { UiChatItem } from '@/components/chat-flow/types';
 
 import { State } from './types';
@@ -21,7 +20,7 @@ const slice = createSlice({
         addItem(
             state,
             action: PayloadAction<{
-                chatItem: ChatItem;
+                chatItem: chatEvent.ChatItem;
                 playerWidth: number;
                 elementWidth: number;
                 numberOfLines: number;
@@ -40,7 +39,7 @@ const slice = createSlice({
             }
 
             const addTimestamp = Date.now();
-            const { settings } = SettingsStorage;
+            const { settings } = settingsStorage.StorageInstance;
 
             const lineNumber = getLineNumber({
                 chatItemsByLineNumber: state.chatItemsByLineNumber,

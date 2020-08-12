@@ -1,14 +1,13 @@
 import React from 'react';
 import cn from 'classnames';
 
-import { Thumbnail } from '@/services/chat-event/models';
-import { MessageSettings } from '@/services/settings-storage/types';
+import type { chatEvent, settingsStorage } from '@/services';
 import classes from './index.scss';
 
 interface Props {
-    avatars: Thumbnail[];
+    avatars: chatEvent.Thumbnail[];
     name: string;
-    authorDisplaySetting: MessageSettings['authorDisplay'];
+    authorDisplaySetting: settingsStorage.MessageSettings['authorDisplay'];
     donationAmount?: string;
 }
 

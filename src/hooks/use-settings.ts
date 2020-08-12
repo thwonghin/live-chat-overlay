@@ -1,29 +1,43 @@
 import { useState, useCallback, useEffect } from 'react';
 import { cloneDeep } from 'lodash-es';
-import { SettingsStorage } from '@/services/settings-storage';
-import { Settings } from '@/services/settings-storage/types';
+import { settingsStorage } from '@/services';
 
 interface UseSettingsResult {
-    settings: Settings;
-    updateSettings: (updateFn: (prevSettings: Settings) => Settings) => void;
+    settings: settingsStorage.Settings;
+    updateSettings: (
+        updateFn: (
+            prevSettings: settingsStorage.Settings,
+        ) => settingsStorage.Settings,
+    ) => void;
 }
 
 export function useSettings(): UseSettingsResult {
-    const [settings, setSettings] = useState(SettingsStorage.settings);
+    const [settings, setSettings] = useState(
+        settingsStorage.StorageInstance.settings,
+    );
 
     useEffect(() => {
-        function handleSettingsChange(newSettings: Settings): void {
+        function handleSettingsChange(
+            newSettings: settingsStorage.Settings,
+        ): void {
             setSettings(cloneDeep(newSettings));
         }
 
-        SettingsStorage.on('change', handleSettingsChange);
+        settingsStorage.StorageInstance.on('change', handleSettingsChange);
 
-        return () => SettingsStorage.off('change', handleSettingsChange);
+        return () =>
+            settingsStorage.StorageInstance.off('change', handleSettingsChange);
     }, []);
 
     const updateSettings = useCallback(
-        (updateFn: (prevSettings: Settings) => Settings): void => {
-            SettingsStorage.settings = updateFn(cloneDeep(settings));
+        (
+            updateFn: (
+                prevSettings: settingsStorage.Settings,
+            ) => settingsStorage.Settings,
+        ): void => {
+            settingsStorage.StorageInstance.settings = updateFn(
+                cloneDeep(settings),
+            );
         },
         [settings],
     );

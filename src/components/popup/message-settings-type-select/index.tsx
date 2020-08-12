@@ -3,11 +3,13 @@ import React, { useCallback } from 'react';
 import { Select, FormLabel, MenuItem } from '@material-ui/core';
 
 import { assertNever } from '@/utils';
-import type { MessageSettingsKey } from '@/services/settings-storage/types';
+import type { settingsStorage } from '@/services';
 
 import classes from './index.scss';
 
-function getStringByMessageKey(key: MessageSettingsKey): string {
+function getStringByMessageKey(
+    key: settingsStorage.MessageSettingsKey,
+): string {
     switch (key) {
         case 'guest':
             return browser.i18n.getMessage('guestMessageType');
@@ -30,7 +32,7 @@ function getStringByMessageKey(key: MessageSettingsKey): string {
     }
 }
 
-const supportedTypes: MessageSettingsKey[] = [
+const supportedTypes: settingsStorage.MessageSettingsKey[] = [
     'guest',
     'member',
     'verified',
@@ -46,14 +48,14 @@ const messageSettingsOptions = supportedTypes.map((type) => ({
 }));
 
 interface Props {
-    value: MessageSettingsKey;
-    onChange: (value: MessageSettingsKey) => void;
+    value: settingsStorage.MessageSettingsKey;
+    onChange: (value: settingsStorage.MessageSettingsKey) => void;
 }
 
 const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
     const handleChange = useCallback(
         (event: React.ChangeEvent<{ value: unknown }>) => {
-            onChange(event.target.value as MessageSettingsKey);
+            onChange(event.target.value as settingsStorage.MessageSettingsKey);
         },
         [onChange],
     );

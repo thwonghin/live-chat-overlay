@@ -1,16 +1,16 @@
 import React from 'react';
-import { ChatEventResponseObserver } from '@/services/chat-event/response-observer';
+import { chatEvent } from '@/services';
 
 export const ChatEventObserverContext = React.createContext<
-    ChatEventResponseObserver
->(new ChatEventResponseObserver());
+    chatEvent.ResponseObserver
+>(new chatEvent.ResponseObserver());
 
 interface Props {
     children: React.ReactNode;
 }
 
 export const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
-    const observer = new ChatEventResponseObserver();
+    const observer = new chatEvent.ResponseObserver();
 
     return (
         <ChatEventObserverContext.Provider value={observer}>

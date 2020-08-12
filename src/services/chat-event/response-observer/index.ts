@@ -1,6 +1,6 @@
 import { browser } from 'webextension-polyfill-ts';
 
-import { CustomEventDetail } from '@/services/fetch-interceptor';
+import type { fetchInterceptor } from '@/services';
 import type {
     YotubeChatResponse,
     ReplayResponse,
@@ -9,6 +9,7 @@ import type {
 } from '@/definitions/youtube';
 import { benchmark } from '@/utils';
 import { EventEmitter } from '@/utils/event-emitter';
+
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
@@ -39,10 +40,10 @@ type EventMap = {
     debug: DebugInfo;
 };
 
-type ChatEventResponseObserverEventEmitter = EventEmitter<EventMap>;
+type ResponseObserverEventEmitter = EventEmitter<EventMap>;
 
-export class ChatEventResponseObserver {
-    private eventEmitter: ChatEventResponseObserverEventEmitter;
+export class ResponseObserver {
+    private eventEmitter: ResponseObserverEventEmitter;
 
     private isStarted = false;
 
@@ -61,10 +62,10 @@ export class ChatEventResponseObserver {
         this.eventEmitter = new EventEmitter();
     }
 
-    public on: ChatEventResponseObserverEventEmitter['on'] = (...args) =>
+    public on: ResponseObserverEventEmitter['on'] = (...args) =>
         this.eventEmitter.on(...args);
 
-    public off: ChatEventResponseObserverEventEmitter['off'] = (...args) =>
+    public off: ResponseObserverEventEmitter['off'] = (...args) =>
         this.eventEmitter.off(...args);
 
     public importInitData(initData: InitData): void {
@@ -86,7 +87,9 @@ export class ChatEventResponseObserver {
     }
 
     private onChatMessage = (e: Event): void => {
-        const customEvent = e as CustomEvent<CustomEventDetail>;
+        const customEvent = e as CustomEvent<
+            fetchInterceptor.CustomEventDetail
+        >;
 
         if (!customEvent.detail.url.startsWith(GET_LIVE_CHAT_URL)) {
             return;

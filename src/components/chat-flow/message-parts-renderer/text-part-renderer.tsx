@@ -1,8 +1,8 @@
 import React from 'react';
-import { TextPart } from '@/services/chat-event/models';
+import type { chatEvent } from '@/services';
 
 interface Props {
-    textPart: TextPart;
+    textPart: chatEvent.TextPart;
 }
 
 const TextPartRenderer: React.FC<Props> = ({ textPart }) => {

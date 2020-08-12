@@ -1,6 +1,6 @@
-import { ChatItem } from '@/services/chat-event/models';
+import type { chatEvent } from '@/services';
 
-export type UiChatItem = ChatItem & {
+export type UiChatItem = chatEvent.ChatItem & {
     addTimestamp: number;
     lineNumber: number;
     elementWidth: number;

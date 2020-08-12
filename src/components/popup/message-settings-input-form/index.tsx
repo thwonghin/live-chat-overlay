@@ -1,21 +1,18 @@
 import React, { useCallback } from 'react';
-import type {
-    MessageSettings,
-    MessageSettingsKey,
-} from '@/services/settings-storage/types';
+import type { settingsStorage } from '@/services';
 import { useSettings } from '@/hooks';
 
 import Layout from './layout';
 
 interface Props {
-    messageSettingsKey: MessageSettingsKey;
+    messageSettingsKey: settingsStorage.MessageSettingsKey;
 }
 
 const MessageSettingsInputForm: React.FC<Props> = ({ messageSettingsKey }) => {
     const { settings, updateSettings } = useSettings();
 
     const handleSubmit = useCallback(
-        (value: MessageSettings) => {
+        (value: settingsStorage.MessageSettings) => {
             updateSettings((prevSettings) => ({
                 ...prevSettings,
                 messageSettings: {

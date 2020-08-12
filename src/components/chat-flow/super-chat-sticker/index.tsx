@@ -1,14 +1,13 @@
 import React from 'react';
 
-import { SuperStickerItem } from '@/services/chat-event/models';
-import { MessageSettings } from '@/services/settings-storage/types';
+import type { chatEvent, settingsStorage } from '@/services';
 
 import classes from './index.scss';
 import AuthorChip from '../author-chip';
 
 interface Props {
-    chatItem: SuperStickerItem;
-    messageSettings: MessageSettings;
+    chatItem: chatEvent.SuperStickerItem;
+    messageSettings: settingsStorage.MessageSettings;
 }
 
 const SuperChatSticker: React.FC<Props> = ({ chatItem, messageSettings }) => {

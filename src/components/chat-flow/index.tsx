@@ -9,7 +9,7 @@ import {
     useVideoPlayerRect,
     CHAT_ITEM_RENDER_ID,
 } from '@/hooks';
-import { Settings } from '@/services/settings-storage/types';
+import type { settingsStorage } from '@/services';
 
 import { useToggleDebugMode } from './use-toggle-debug-mode';
 import classes from './index.scss';
@@ -19,7 +19,7 @@ import { UiChatItem } from './types';
 import DebugOverlay from './debug-overlay';
 
 interface Props {
-    settings: Settings;
+    settings: settingsStorage.Settings;
     chatItems: UiChatItem[];
     onDone: (chatItem: UiChatItem) => void;
     isDebugActive: boolean;
