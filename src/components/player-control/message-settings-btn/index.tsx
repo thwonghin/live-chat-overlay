@@ -7,7 +7,7 @@ import { faPalette } from '@fortawesome/free-solid-svg-icons';
 
 import { CLASS_PLAYER_CTL_BTN } from '@/youtube-utils';
 
-import { popupActions } from '@/reducers/popup';
+import { popup } from '@/features';
 import classes from './index.scss';
 
 const iconWidth = (2 / 3) * (512 / 640) * 100;
@@ -18,7 +18,7 @@ const MessageSettingsBtn: React.FC = () => {
         (event) => {
             event.preventDefault();
 
-            dispatch(popupActions.togglePopup('message-settings'));
+            dispatch(popup.actions.togglePopup('message-settings'));
         },
         [dispatch],
     );

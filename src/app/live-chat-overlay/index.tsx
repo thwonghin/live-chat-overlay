@@ -11,13 +11,13 @@ import {
 import * as contexts from '@/contexts';
 import { InitData } from '@/definitions/youtube';
 
-import { store } from '@/reducers';
 import {
     getVideoPlayerContainer,
     getRightControlEle,
     getVideoPlayerEle,
 } from '@/youtube-utils';
 
+import { store } from './store';
 import { theme } from './theme';
 import App from './app';
 

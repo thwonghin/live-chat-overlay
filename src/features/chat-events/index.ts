@@ -14,7 +14,7 @@ const initialState: State = {
     chatItemsByLineNumber: {},
 };
 
-const chatEventsSlice = createSlice({
+const slice = createSlice({
     name: 'chat-events',
     initialState,
     reducers: {
@@ -143,5 +143,5 @@ const chatEventsSlice = createSlice({
     },
 });
 
-export const chatEventsActions = chatEventsSlice.actions;
-export const chatEventsReducer = chatEventsSlice.reducer;
+export const { actions, reducer } = slice;
+export * from './types';

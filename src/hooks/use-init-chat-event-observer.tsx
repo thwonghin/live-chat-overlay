@@ -12,10 +12,9 @@ import {
     useVideoPlayerState,
 } from '@/hooks';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
-import { chatEventsActions } from '@/reducers/chat-events';
-import { debugInfoActions } from '@/reducers/debug-info';
+import { chatEvents, debugInfo } from '@/features';
 import type { DebugInfo } from '@/services/chat-event/response-observer';
-import type { RootState } from '@/reducers';
+import type { RootState } from '@/app/live-chat-overlay/store';
 import type { ChatItem } from '@/services/chat-event/models';
 import type { InitData } from '@/definitions/youtube';
 import type { UiChatItem } from '@/components/chat-flow/types';
@@ -133,7 +132,7 @@ export function useInitChatEventObserver(initData: InitData): void {
 
         if (isDebugging) {
             dispatch(
-                debugInfoActions.addChatItemEleWidthMetric(getEleWidthRuntime),
+                debugInfo.actions.addChatItemEleWidthMetric(getEleWidthRuntime),
             );
         }
 
@@ -141,7 +140,7 @@ export function useInitChatEventObserver(initData: InitData): void {
         chatItemBufferRef.current = chatItem;
 
         dispatch(
-            chatEventsActions.addItem({
+            chatEvents.actions.addItem({
                 chatItem,
                 playerWidth,
                 elementWidth,
@@ -165,39 +164,39 @@ export function useInitChatEventObserver(initData: InitData): void {
     useInterval(processChatItem, 300);
 
     useEffect(() => {
-        function handleDebugInfo(debugInfo: DebugInfo) {
-            if (debugInfo.processChatEventMs) {
+        function handleDebugInfo(info: DebugInfo) {
+            if (info.processChatEventMs) {
                 dispatch(
-                    debugInfoActions.addProcessChatEventMetric(
-                        debugInfo.processChatEventMs,
+                    debugInfo.actions.addProcessChatEventMetric(
+                        info.processChatEventMs,
                     ),
                 );
             }
-            if (debugInfo.processXhrResponseMs) {
+            if (info.processXhrResponseMs) {
                 dispatch(
-                    debugInfoActions.addProcessXhrMetric(
-                        debugInfo.processXhrResponseMs,
+                    debugInfo.actions.addProcessXhrMetric(
+                        info.processXhrResponseMs,
                     ),
                 );
             }
-            if (debugInfo.processChatEventQueueLength) {
+            if (info.processChatEventQueueLength) {
                 dispatch(
-                    debugInfoActions.updateProcessChatEventQueueLength(
-                        debugInfo.processChatEventQueueLength,
+                    debugInfo.actions.updateProcessChatEventQueueLength(
+                        info.processChatEventQueueLength,
                     ),
                 );
             }
-            if (debugInfo.processXhrQueueLength) {
+            if (info.processXhrQueueLength) {
                 dispatch(
-                    debugInfoActions.updateProcessXhrQueueLength(
-                        debugInfo.processXhrQueueLength,
+                    debugInfo.actions.updateProcessXhrQueueLength(
+                        info.processXhrQueueLength,
                     ),
                 );
             }
-            if (debugInfo.outdatedChatEventCount) {
+            if (info.outdatedChatEventCount) {
                 dispatch(
-                    debugInfoActions.addOutdatedRemovedChatEventCount(
-                        debugInfo.outdatedChatEventCount,
+                    debugInfo.actions.addOutdatedRemovedChatEventCount(
+                        info.outdatedChatEventCount,
                     ),
                 );
             }

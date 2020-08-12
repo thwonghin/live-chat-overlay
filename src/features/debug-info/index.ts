@@ -28,7 +28,7 @@ const initialState: State = {
     outdatedRemovedChatEventCount: 0,
 };
 
-const debugInfoSlice = createSlice({
+const slice = createSlice({
     name: 'debug-info',
     initialState,
     reducers: {
@@ -107,5 +107,5 @@ const debugInfoSlice = createSlice({
     },
 });
 
-export const debugInfoActions = debugInfoSlice.actions;
-export const debugInfoReducer = debugInfoSlice.reducer;
+export const { actions, reducer } = slice;
+export * from './types';

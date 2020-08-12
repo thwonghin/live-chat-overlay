@@ -6,7 +6,7 @@ const initialState: State = {
     currentPopup: null,
 };
 
-const popupSlice = createSlice({
+const slice = createSlice({
     name: 'popup',
     initialState,
     reducers: {
@@ -31,5 +31,5 @@ const popupSlice = createSlice({
     },
 });
 
-export const popupActions = popupSlice.actions;
-export const popupReducer = popupSlice.reducer;
+export const { actions, reducer } = slice;
+export * from './types';

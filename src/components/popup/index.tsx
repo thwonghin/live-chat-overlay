@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { useSelector } from 'react-redux';
-import type { RootState } from '@/reducers';
-import type { PopupType } from '@/reducers/popup/types';
+import type { RootState } from '@/app/live-chat-overlay/store';
+import type { popup } from '@/features';
 
 import MessageSettingsPopup from './message-settings-popup';
 
@@ -15,7 +15,7 @@ const PopupContainer: React.FC<Props> = ({
     playerControlContainer,
     playerEle,
 }) => {
-    const currentPopup = useSelector<RootState, PopupType | null>(
+    const currentPopup = useSelector<RootState, popup.PopupType | null>(
         (state) => state.popup.currentPopup,
     );
 

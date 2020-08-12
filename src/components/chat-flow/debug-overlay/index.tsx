@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
-import { RootState } from '@/reducers';
-import { Benchmark } from '@/reducers/debug-info/types';
+import type { RootState } from '@/app/live-chat-overlay/store';
+import type { debugInfo } from '@/features/';
 
 import classes from './index.scss';
 
@@ -22,7 +22,7 @@ interface RoundedBenchmark {
     count: number;
 }
 
-function roundBenchmark(benchmark: Benchmark): RoundedBenchmark {
+function roundBenchmark(benchmark: debugInfo.Benchmark): RoundedBenchmark {
     return {
         min: benchmark.min.toFixed(2),
         max: benchmark.max.toFixed(2),

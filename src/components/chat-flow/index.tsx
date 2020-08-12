@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, CSSProperties } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
-import { RootState } from '@/reducers';
-import { chatEventsActions } from '@/reducers/chat-events';
+import type { RootState } from '@/app/live-chat-overlay/store';
+import { chatEvents } from '@/features';
 import {
     useSettings,
     useInterval,
@@ -94,13 +94,13 @@ const ChatFlow: React.FC = () => {
     const dispatch = useDispatch();
     const onMsgDone = useCallback(
         (chatItem) => {
-            dispatch(chatEventsActions.markAsDone(chatItem));
+            dispatch(chatEvents.actions.markAsDone(chatItem));
         },
         [dispatch],
     );
 
     const cleanup = useCallback(() => {
-        dispatch(chatEventsActions.cleanup());
+        dispatch(chatEvents.actions.cleanup());
     }, [dispatch]);
 
     useInterval(cleanup, 1000);

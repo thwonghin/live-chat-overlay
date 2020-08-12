@@ -1,13 +1,11 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
-import { chatEventsReducer } from './chat-events';
-import { debugInfoReducer } from './debug-info';
-import { popupReducer } from './popup';
+import { popup, debugInfo, chatEvents } from '@/features';
 
 const rootReducer = combineReducers({
-    chatEvents: chatEventsReducer,
-    debugInfo: debugInfoReducer,
-    popup: popupReducer,
+    chatEvents: chatEvents.reducer,
+    debugInfo: debugInfo.reducer,
+    popup: popup.reducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
