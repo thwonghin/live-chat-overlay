@@ -7,8 +7,7 @@ import type {
     LiveResponse,
     InitData,
 } from '@/definitions/youtube';
-import { benchmark } from '@/utils';
-import { EventEmitter } from '@/utils/event-emitter';
+import { benchmark, EventEmitter } from '@/utils';
 
 import {
     mapChatItemsFromReplayResponse,

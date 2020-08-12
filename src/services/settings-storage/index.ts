@@ -1,8 +1,7 @@
 import { browser } from 'webextension-polyfill-ts';
 import { defaultsDeep } from 'lodash-es';
 
-import { catchWithFallback } from '@/utils';
-import { EventEmitter } from '@/utils/event-emitter';
+import { catchWithFallback, EventEmitter } from '@/utils';
 import type { Settings, MessageSettings, AuthorDisplayMethod } from './types';
 
 export * from './types';
