@@ -5,7 +5,7 @@ import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 
-import { CLASS_PLAYER_CTL_BTN } from '@/youtube-utils';
+import { youtube } from '@/utils';
 
 import { popup } from '@/features';
 import classes from './index.scss';
@@ -25,7 +25,7 @@ const MessageSettingsBtn: React.FC = () => {
 
     return (
         <button
-            className={cn([classes.btn, CLASS_PLAYER_CTL_BTN])}
+            className={cn([classes.btn, youtube.CLASS_PLAYER_CTL_BTN])}
             type="button"
             title={browser.i18n.getMessage('messageSettingsButtonTitle')}
             onClick={handleClick}

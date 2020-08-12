@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 
-import { CLASS_POPUP, CLASS_PANEL, CLASS_PANEL_MENU } from '@/youtube-utils';
+import { youtube } from '@/utils';
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
 import { useNativeStopKeydownPropagation } from '@/hooks';
@@ -28,15 +28,19 @@ const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
         <div
             ref={containerRef}
             className={cn([
-                CLASS_POPUP,
+                youtube.CLASS_POPUP,
                 classes.container,
                 {
                     [classes['container-hidden']]: isHidden,
                 },
             ])}
         >
-            <div className={cn([CLASS_PANEL, classes['nest-container']])}>
-                <div className={cn([CLASS_PANEL_MENU, classes.content])}>
+            <div
+                className={cn([youtube.CLASS_PANEL, classes['nest-container']])}
+            >
+                <div
+                    className={cn([youtube.CLASS_PANEL_MENU, classes.content])}
+                >
                     <MessageSettingsTypeSelect
                         value={selectedMessageType}
                         onChange={setSelectedMessageType}

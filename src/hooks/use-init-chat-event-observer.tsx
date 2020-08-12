@@ -2,8 +2,7 @@ import React, { useEffect, useContext, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
-import { benchmarkAsync } from '@/utils';
-import { getVideoEle } from '@/youtube-utils';
+import { benchmarkAsync, youtube } from '@/utils';
 import {
     useInterval,
     useVideoPlayerRect,
@@ -91,7 +90,7 @@ export function useInitChatEventObserver(initData: InitData): void {
     const dequeueChatItem = useCallback(
         (): chatEvent.ChatItem | undefined =>
             chatEventObserver.dequeueChatItem(
-                (getVideoEle()?.currentTime ?? 0) * 1000,
+                (youtube.getVideoEle()?.currentTime ?? 0) * 1000,
             ),
         [chatEventObserver],
     );

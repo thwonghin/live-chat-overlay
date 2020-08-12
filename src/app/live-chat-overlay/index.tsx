@@ -11,11 +11,7 @@ import {
 import * as contexts from '@/contexts';
 import { InitData } from '@/definitions/youtube';
 
-import {
-    getVideoPlayerContainer,
-    getRightControlEle,
-    getVideoPlayerEle,
-} from '@/youtube-utils';
+import { youtube } from '@/utils';
 
 import { store } from './store';
 import { theme } from './theme';
@@ -25,18 +21,18 @@ const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
 export function injectLiveChatOverlay(initData: InitData): () => void {
-    const videoPlayerContainer = getVideoPlayerContainer();
+    const videoPlayerContainer = youtube.getVideoPlayerContainer();
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');
     }
 
-    const rightControlEle = getRightControlEle();
+    const rightControlEle = youtube.getRightControlEle();
     if (!rightControlEle) {
         throw new Error('Right Player Control not found.');
     }
     rightControlEle.style.display = 'flex';
 
-    const videoPlayerEle = getVideoPlayerEle();
+    const videoPlayerEle = youtube.getVideoPlayerEle();
     if (!videoPlayerEle) {
         throw new Error('Video Player Ele not found');
     }

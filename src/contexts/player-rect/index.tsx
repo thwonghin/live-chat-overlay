@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 
-import { getVideoPlayerEle } from '@/youtube-utils';
+import { youtube } from '@/utils';
 import { useRect } from '@/hooks';
 import type { RectResult } from '@/hooks';
 
 export function useVideoPlayerRect(): RectResult {
-    const playerRef = useRef(getVideoPlayerEle());
+    const playerRef = useRef(youtube.getVideoPlayerEle());
     return useRect(playerRef);
 }
 

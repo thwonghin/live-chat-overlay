@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { useSettings } from '@/hooks';
-import { CLASS_BIG_MODE } from '@/youtube-utils';
+import { youtube } from '@/utils';
 
 import classes from './index.scss';
 
@@ -17,7 +17,7 @@ function reverse(value: number): number {
 
 const StyledSlider = withStyles({
     root: {
-        [`.${CLASS_BIG_MODE} &`]: {
+        [`.${youtube.CLASS_BIG_MODE} &`]: {
             width: 78,
         },
         marginRight: 8,
@@ -27,7 +27,7 @@ const StyledSlider = withStyles({
         transition: 'cubic-bezier(0.4,0.0,1,1), width .2s',
     },
     thumb: {
-        [`.${CLASS_BIG_MODE} &`]: {
+        [`.${youtube.CLASS_BIG_MODE} &`]: {
             width: 18,
             height: 18,
             borderRadius: 9,
@@ -42,7 +42,7 @@ const StyledSlider = withStyles({
         },
     },
     rail: {
-        [`.${CLASS_BIG_MODE} &`]: {
+        [`.${youtube.CLASS_BIG_MODE} &`]: {
             height: 4,
         },
         height: 3,
@@ -50,7 +50,7 @@ const StyledSlider = withStyles({
         opacity: 0.2,
     },
     track: {
-        [`.${CLASS_BIG_MODE} &`]: {
+        [`.${youtube.CLASS_BIG_MODE} &`]: {
             height: 4,
         },
         height: 3,
