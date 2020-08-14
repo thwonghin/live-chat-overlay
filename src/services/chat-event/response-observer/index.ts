@@ -1,5 +1,3 @@
-import { browser } from 'webextension-polyfill-ts';
-
 import type { fetchInterceptor } from '@/services';
 import type {
     YotubeChatResponse,
@@ -24,8 +22,6 @@ const GET_LIVE_CHAT_URL =
     'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat';
 const GET_LIVE_CHAT_REPLAY_URL =
     'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat_replay';
-
-const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
 export type DebugInfo = Partial<{
     processXhrResponseMs: number;
@@ -57,7 +53,7 @@ export class ResponseObserver {
 
     private chatItemProcessQueue: ChatItem[] = [];
 
-    constructor() {
+    constructor(readonly chatEventName: string) {
         this.eventEmitter = new EventEmitter();
     }
 
@@ -214,7 +210,7 @@ export class ResponseObserver {
             return;
         }
         this.isStarted = true;
-        window.addEventListener(CHAT_EVENT_NAME, this.onChatMessage);
+        window.addEventListener(this.chatEventName, this.onChatMessage);
         this.xhrEventProcessInterval = window.setInterval(
             this.processXhrEvent,
             500,
@@ -226,7 +222,7 @@ export class ResponseObserver {
             return;
         }
         this.isStarted = false;
-        window.removeEventListener(CHAT_EVENT_NAME, this.onChatMessage);
+        window.removeEventListener(this.chatEventName, this.onChatMessage);
         window.clearInterval(this.xhrEventProcessInterval);
     }
 
