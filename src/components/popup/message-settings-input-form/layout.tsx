@@ -1,3 +1,4 @@
+import { browser } from 'webextension-polyfill-ts';
 import React from 'react';
 import { TextField, Button, FormHelperText } from '@material-ui/core';
 import { useFormik } from 'formik';

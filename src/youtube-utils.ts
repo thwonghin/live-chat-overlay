@@ -1,3 +1,5 @@
+import { browser } from 'webextension-polyfill-ts';
+
 import { appendScript, functionToString } from '@/utils';
 import type { InitData } from '@/definitions/youtube';
 

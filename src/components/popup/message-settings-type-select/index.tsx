@@ -1,3 +1,4 @@
+import { browser } from 'webextension-polyfill-ts';
 import React, { useCallback } from 'react';
 import { Select, FormLabel, MenuItem } from '@material-ui/core';
 

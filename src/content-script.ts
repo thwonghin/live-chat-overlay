@@ -1,4 +1,5 @@
 import './common';
+import { browser } from 'webextension-polyfill-ts';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
 import {
