@@ -1,3 +1,5 @@
+import { browser } from 'webextension-polyfill-ts';
+
 import { CustomEventDetail } from '@/services/fetch-interceptor';
 import type {
     YotubeChatResponse,

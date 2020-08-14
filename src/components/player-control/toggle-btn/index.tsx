@@ -1,3 +1,4 @@
+import { browser } from 'webextension-polyfill-ts';
 import React, { useMemo, useCallback } from 'react';
 import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

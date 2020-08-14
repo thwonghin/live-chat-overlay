@@ -2958,11 +2958,6 @@
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
   integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
 
-"@types/firefox-webext-browser@^78.0.1":
-  version "78.0.1"
-  resolved "https://registry.yarnpkg.com/@types/firefox-webext-browser/-/firefox-webext-browser-78.0.1.tgz#9c3b929c65a8263facac03ab930b0fb0f8addfbb"
-  integrity sha512-0d7oiI9K6Y4efP4Crl3JB88zYl7vaRdLtumqz8v6axMF8RCnK0NaGUjL4DnyQ7GLPo98b+s0BSRalaxAXgvPAQ==
-
 "@types/glob-base@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@types/glob-base/-/glob-base-0.3.0.tgz#a581d688347e10e50dd7c17d6f2880a10354319d"
@@ -15347,6 +15342,13 @@ watchpack@^1.7.4:
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.0"
+
+webextension-polyfill-ts@^0.19.0:
+  version "0.19.0"
+  resolved "https://registry.yarnpkg.com/webextension-polyfill-ts/-/webextension-polyfill-ts-0.19.0.tgz#3e3a059c656936c853b47d2a57bf114c615c1e1e"
+  integrity sha512-VcA7bdf0dzUc8JXQwQU+spSUTV0Gc0Y7VPsdrEFLbuTxJluC4xBoKVWtfUXRqykVfDvFsfo591+p1MmPSJezsw==
+  dependencies:
+    webextension-polyfill "^0.6.0"
 
 webextension-polyfill@^0.6.0:
   version "0.6.0"

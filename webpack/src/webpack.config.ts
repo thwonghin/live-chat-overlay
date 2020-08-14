@@ -110,10 +110,6 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
             new CopyWebpackPlugin({
                 patterns: [
                     {
-                        from:
-                            'node_modules/webextension-polyfill/dist/browser-polyfill.min.js',
-                    },
-                    {
                         context: 'public',
                         from: '**/*',
                     },

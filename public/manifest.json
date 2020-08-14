@@ -16,7 +16,7 @@
             "run_at": "document_start",
             "matches": ["https://www.youtube.com/*"],
             "all_frames": true,
-            "js": ["browser-polyfill.min.js", "content-script.js"],
+            "js": ["content-script.js"],
             "css": ["content-script.css"]
         }
     ]
