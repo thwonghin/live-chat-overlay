@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { SuperStickerItem } from '@/services/chat-event/models';
-import { MessageSettings } from '@/services/settings-storage/types';
+import type { chatEvent, settingsStorage } from '@/services';
 
 import SuperChatSticker from '.';
 
@@ -23,18 +22,19 @@ const stickers = [
     },
 ];
 
-const superStickerItem: SuperStickerItem = {
+const superStickerItem: chatEvent.SuperStickerItem = {
     id: 'super-chat-sticker',
     stickers,
     avatars,
     timestampInUs: 1591425506771,
+    liveDelayInMs: 0,
     donationAmount: 'HK$ 100.00',
     authorName,
     color: 'red',
     chatType: 'super-sticker',
 };
 
-const messageSettings: MessageSettings = {
+const messageSettings: settingsStorage.MessageSettings = {
     color: 'white',
     weight: 700,
     opacity: 0.8,

@@ -1,13 +1,15 @@
 import React, { useCallback, useMemo, CSSProperties } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
-import { RootState } from '@/reducers';
-import { chatEventsActions } from '@/reducers/chat-events';
-import { useSettings } from '@/hooks/use-settings';
-import { useInterval } from '@/hooks/use-interval';
-import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
-import { Settings } from '@/services/settings-storage/types';
-import { CHAT_ITEM_RENDER_ID } from '@/hooks/use-init-chat-event-observer';
+import type { RootState } from '@/app/live-chat-overlay/store';
+import { chatEvents } from '@/features';
+import {
+    useSettings,
+    useInterval,
+    useVideoPlayerRect,
+    CHAT_ITEM_RENDER_ID,
+} from '@/hooks';
+import type { settingsStorage } from '@/services';
 
 import { useToggleDebugMode } from './use-toggle-debug-mode';
 import classes from './index.scss';
@@ -17,7 +19,7 @@ import { UiChatItem } from './types';
 import DebugOverlay from './debug-overlay';
 
 interface Props {
-    settings: Settings;
+    settings: settingsStorage.Settings;
     chatItems: UiChatItem[];
     onDone: (chatItem: UiChatItem) => void;
     isDebugActive: boolean;
@@ -92,13 +94,13 @@ const ChatFlow: React.FC = () => {
     const dispatch = useDispatch();
     const onMsgDone = useCallback(
         (chatItem) => {
-            dispatch(chatEventsActions.markAsDone(chatItem));
+            dispatch(chatEvents.actions.markAsDone(chatItem));
         },
         [dispatch],
     );
 
     const cleanup = useCallback(() => {
-        dispatch(chatEventsActions.cleanup());
+        dispatch(chatEvents.actions.cleanup());
     }, [dispatch]);
 
     useInterval(cleanup, 1000);

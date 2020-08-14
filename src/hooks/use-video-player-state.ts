@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect, useCallback } from 'react';
-import { getVideoEle } from '@/youtube-utils';
+import { youtube } from '@/utils';
 
 interface PlayerState {
     isSeeking: boolean;
@@ -7,7 +7,7 @@ interface PlayerState {
 }
 
 export function useVideoPlayerState(): PlayerState {
-    const videoEle = useMemo(() => getVideoEle(), []);
+    const videoEle = useMemo(() => youtube.getVideoEle(), []);
 
     const [isSeeking, setIsSeeking] = useState(videoEle?.seeking ?? false);
     const [isPaused, setIsPaused] = useState(videoEle?.paused ?? false);

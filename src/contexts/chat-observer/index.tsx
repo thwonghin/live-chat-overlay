@@ -1,16 +1,20 @@
 import React from 'react';
-import { ChatEventResponseObserver } from '@/services/chat-event/response-observer';
+import { browser } from 'webextension-polyfill-ts';
+
+import { chatEvent } from '@/services';
+
+const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
 export const ChatEventObserverContext = React.createContext<
-    ChatEventResponseObserver
->(new ChatEventResponseObserver());
+    chatEvent.ResponseObserver
+>(new chatEvent.ResponseObserver(CHAT_EVENT_NAME));
 
 interface Props {
     children: React.ReactNode;
 }
 
-const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
-    const observer = new ChatEventResponseObserver();
+export const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
+    const observer = new chatEvent.ResponseObserver(CHAT_EVENT_NAME);
 
     return (
         <ChatEventObserverContext.Provider value={observer}>
@@ -18,5 +22,3 @@ const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
         </ChatEventObserverContext.Provider>
     );
 };
-
-export { ChatEventObserverProvider };

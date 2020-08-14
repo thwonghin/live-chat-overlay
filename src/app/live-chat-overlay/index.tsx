@@ -8,17 +8,12 @@ import {
     ThemeProvider,
 } from '@material-ui/core/styles';
 
-import { PlayerRectProvider } from '@/contexts/player-rect';
-import { ChatEventObserverProvider } from '@/contexts/chat-observer';
+import * as contexts from '@/contexts';
 import { InitData } from '@/definitions/youtube';
 
-import { store } from '@/reducers';
-import {
-    getVideoPlayerContainer,
-    getRightControlEle,
-    getVideoPlayerEle,
-} from '@/youtube-utils';
+import { youtube } from '@/utils';
 
+import { store } from './store';
 import { theme } from './theme';
 import App from './app';
 
@@ -26,18 +21,18 @@ const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
 export function injectLiveChatOverlay(initData: InitData): () => void {
-    const videoPlayerContainer = getVideoPlayerContainer();
+    const videoPlayerContainer = youtube.getVideoPlayerContainer();
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');
     }
 
-    const rightControlEle = getRightControlEle();
+    const rightControlEle = youtube.getRightControlEle();
     if (!rightControlEle) {
         throw new Error('Right Player Control not found.');
     }
     rightControlEle.style.display = 'flex';
 
-    const videoPlayerEle = getVideoPlayerEle();
+    const videoPlayerEle = youtube.getVideoPlayerEle();
     if (!videoPlayerEle) {
         throw new Error('Video Player Ele not found');
     }
@@ -63,8 +58,8 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     ReactDOM.render(
         <React.StrictMode>
             <Provider store={store}>
-                <PlayerRectProvider>
-                    <ChatEventObserverProvider>
+                <contexts.playerRect.PlayerRectProvider>
+                    <contexts.chatObserver.ChatEventObserverProvider>
                         <StylesProvider jss={jssConfig}>
                             <ThemeProvider theme={theme}>
                                 <App
@@ -76,8 +71,8 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
                                 />
                             </ThemeProvider>
                         </StylesProvider>
-                    </ChatEventObserverProvider>
-                </PlayerRectProvider>
+                    </contexts.chatObserver.ChatEventObserverProvider>
+                </contexts.playerRect.PlayerRectProvider>
             </Provider>
         </React.StrictMode>,
         liveChatContainer,

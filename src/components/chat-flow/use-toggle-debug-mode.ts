@@ -1,8 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { debugInfoActions } from '@/reducers/debug-info';
-import { useKeyboardToggle } from '@/hooks/use-keyboard-toggle';
-import { useKeyboardEvent } from '@/hooks/use-keyboard-event';
+import { debugInfo } from '@/features';
+import { useKeyboardToggle, useKeyboardEvent } from '@/hooks';
 
 const dKey = 68;
 const rKey = 82;
@@ -18,7 +17,7 @@ export function useToggleDebugMode(): void {
     });
 
     const handleRefreshEvent = useCallback(
-        () => dispatch(debugInfoActions.resetMetrics()),
+        () => dispatch(debugInfo.actions.resetMetrics()),
         [dispatch],
     );
 
@@ -32,15 +31,15 @@ export function useToggleDebugMode(): void {
 
     useEffect(() => {
         if (isActive) {
-            dispatch(debugInfoActions.startDebug());
+            dispatch(debugInfo.actions.startDebug());
         } else {
-            dispatch(debugInfoActions.stopDebug());
+            dispatch(debugInfo.actions.stopDebug());
         }
     }, [isActive, dispatch]);
 
     useEffect(() => {
         return () => {
-            dispatch(debugInfoActions.reset());
+            dispatch(debugInfo.actions.reset());
         };
     }, [dispatch]);
 }

@@ -1,12 +1,5 @@
-import { mapAddChatItemActions } from '@/services/chat-event/mapper';
 import * as helpers from '@/services/chat-event/mapper/helpers';
-import {
-    ChatItem,
-    SuperChatItem,
-    NormalChatItem,
-    MembershipItem,
-    SuperStickerItem,
-} from '@/services/chat-event/models';
+import { chatEvent } from '@/services';
 import type { AddChatItemAction } from '@/definitions/youtube';
 
 const avatars = [
@@ -18,7 +11,7 @@ const avatars = [
 ];
 const authorName = 'Author Name';
 
-const normalMessageItem: NormalChatItem = {
+const normalMessageItem: chatEvent.NormalChatItem = {
     id: 'super-chat-sticker',
     authorBadges: [],
     liveDelayInMs: 1000,
@@ -30,7 +23,7 @@ const normalMessageItem: NormalChatItem = {
     authorType: 'owner',
 };
 
-const superChatItem: SuperChatItem = {
+const superChatItem: chatEvent.SuperChatItem = {
     id: 'super-chat-message',
     liveDelayInMs: 1000,
     messageParts: [{ text: 'This is a super chat message' }],
@@ -42,7 +35,7 @@ const superChatItem: SuperChatItem = {
     chatType: 'super-chat',
 };
 
-const membershipItem: MembershipItem = {
+const membershipItem: chatEvent.MembershipItem = {
     id: 'membership',
     liveDelayInMs: 1000,
     authorBadges: [],
@@ -53,7 +46,7 @@ const membershipItem: MembershipItem = {
     chatType: 'membership',
 };
 
-const superStickerItem: SuperStickerItem = {
+const superStickerItem: chatEvent.SuperStickerItem = {
     id: 'super-chat-sticker',
     liveDelayInMs: 1000,
     stickers: [],
@@ -460,7 +453,7 @@ const sampleActions: AddChatItemAction[] = [
 ];
 
 describe('mapAddChatItemActions', () => {
-    let result: ChatItem[];
+    let result: chatEvent.ChatItem[];
 
     beforeAll(() => {
         jest.spyOn(
@@ -481,7 +474,7 @@ describe('mapAddChatItemActions', () => {
             superStickerItem,
         );
 
-        result = mapAddChatItemActions({
+        result = chatEvent.mapAddChatItemActions({
             addChatItemActions: sampleActions,
             liveDelayInMs: 1000,
             videoTimestampInMs: 10000,

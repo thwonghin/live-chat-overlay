@@ -1,7 +1,9 @@
 import React from 'react';
 
-import { useInitChatEventObserver } from '@/hooks/use-init-chat-event-observer';
-import { useResetChatEventsOnPlayerRectChange } from '@/hooks/use-reset-chat-events-on-player-rect-change';
+import {
+    useInitChatEventObserver,
+    useResetChatEventsOnPlayerRectChange,
+} from '@/hooks';
 
 import ChatFlow from '@/components/chat-flow';
 import PopupContainer from '@/components/popup';

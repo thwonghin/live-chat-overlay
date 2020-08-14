@@ -1,14 +1,12 @@
-import { browser } from 'webextension-polyfill-ts';
-
-import { CustomEventDetail } from '@/services/fetch-interceptor';
+import type { fetchInterceptor } from '@/services';
 import type {
     YotubeChatResponse,
     ReplayResponse,
     LiveResponse,
     InitData,
 } from '@/definitions/youtube';
-import { benchmark } from '@/utils';
-import { EventEmitter } from '@/utils/event-emitter';
+import { benchmark, EventEmitter } from '@/utils';
+
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
@@ -25,8 +23,6 @@ const GET_LIVE_CHAT_URL =
 const GET_LIVE_CHAT_REPLAY_URL =
     'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat_replay';
 
-const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
-
 export type DebugInfo = Partial<{
     processXhrResponseMs: number;
     processChatEventMs: number;
@@ -39,10 +35,10 @@ type EventMap = {
     debug: DebugInfo;
 };
 
-type ChatEventResponseObserverEventEmitter = EventEmitter<EventMap>;
+type ResponseObserverEventEmitter = EventEmitter<EventMap>;
 
-export class ChatEventResponseObserver {
-    private eventEmitter: ChatEventResponseObserverEventEmitter;
+export class ResponseObserver {
+    private eventEmitter: ResponseObserverEventEmitter;
 
     private isStarted = false;
 
@@ -57,14 +53,14 @@ export class ChatEventResponseObserver {
 
     private chatItemProcessQueue: ChatItem[] = [];
 
-    constructor() {
+    constructor(readonly chatEventName: string) {
         this.eventEmitter = new EventEmitter();
     }
 
-    public on: ChatEventResponseObserverEventEmitter['on'] = (...args) =>
+    public on: ResponseObserverEventEmitter['on'] = (...args) =>
         this.eventEmitter.on(...args);
 
-    public off: ChatEventResponseObserverEventEmitter['off'] = (...args) =>
+    public off: ResponseObserverEventEmitter['off'] = (...args) =>
         this.eventEmitter.off(...args);
 
     public importInitData(initData: InitData): void {
@@ -86,7 +82,9 @@ export class ChatEventResponseObserver {
     }
 
     private onChatMessage = (e: Event): void => {
-        const customEvent = e as CustomEvent<CustomEventDetail>;
+        const customEvent = e as CustomEvent<
+            fetchInterceptor.CustomEventDetail
+        >;
 
         if (!customEvent.detail.url.startsWith(GET_LIVE_CHAT_URL)) {
             return;
@@ -212,7 +210,7 @@ export class ChatEventResponseObserver {
             return;
         }
         this.isStarted = true;
-        window.addEventListener(CHAT_EVENT_NAME, this.onChatMessage);
+        window.addEventListener(this.chatEventName, this.onChatMessage);
         this.xhrEventProcessInterval = window.setInterval(
             this.processXhrEvent,
             500,
@@ -224,7 +222,7 @@ export class ChatEventResponseObserver {
             return;
         }
         this.isStarted = false;
-        window.removeEventListener(CHAT_EVENT_NAME, this.onChatMessage);
+        window.removeEventListener(this.chatEventName, this.onChatMessage);
         window.clearInterval(this.xhrEventProcessInterval);
     }
 

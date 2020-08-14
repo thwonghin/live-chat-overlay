@@ -2,33 +2,27 @@ import React, { useEffect, useContext, useCallback, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
-import { benchmarkAsync } from '@/utils';
-import { getVideoEle } from '@/youtube-utils';
-import { useInterval } from '@/hooks/use-interval';
-import { useVideoPlayerRect } from '@/hooks/use-video-player-rect';
-import { useSettings } from '@/hooks/use-settings';
-import { useDocumentVisible } from '@/hooks/use-document-visible';
-import { useVideoPlayerState } from '@/hooks/use-video-player-state';
+import { benchmarkAsync, youtube } from '@/utils';
+import {
+    useInterval,
+    useVideoPlayerRect,
+    useSettings,
+    useDocumentVisible,
+    useVideoPlayerState,
+} from '@/hooks';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
-import { chatEventsActions } from '@/reducers/chat-events';
-import { debugInfoActions } from '@/reducers/debug-info';
-import type { DebugInfo } from '@/services/chat-event/response-observer';
-import type { RootState } from '@/reducers';
-import type { ChatItem } from '@/services/chat-event/models';
+import { chatEvents, debugInfo } from '@/features';
+import { settingsStorage, chatEvent } from '@/services';
+import type { RootState } from '@/app/live-chat-overlay/store';
 import type { InitData } from '@/definitions/youtube';
 import type { UiChatItem } from '@/components/chat-flow/types';
-import type { Settings } from '@/services/settings-storage/types';
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import {
-    getMessageSettings,
-    isSuperChatItem,
-} from '@/services/chat-event/mapper';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 
 interface GetChatItemRenderedWidthParams {
-    chatItem: ChatItem;
-    settings: Settings;
+    chatItem: chatEvent.ChatItem;
+    settings: settingsStorage.Settings;
 }
 
 async function getChatItemRenderedWidth({
@@ -69,12 +63,13 @@ function getRenderedNumOfLinesForChatItem({
     settings,
     chatItem,
 }: {
-    settings: Settings;
-    chatItem: ChatItem;
+    settings: settingsStorage.Settings;
+    chatItem: chatEvent.ChatItem;
 }): number {
-    const messageSettings = getMessageSettings(chatItem, settings);
+    const messageSettings = chatEvent.getMessageSettings(chatItem, settings);
 
-    return isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
+    return chatEvent.isSuperChatItem(chatItem) &&
+        chatItem.messageParts.length === 0
         ? 1
         : messageSettings.numberOfLines;
 }
@@ -90,12 +85,12 @@ export function useInitChatEventObserver(initData: InitData): void {
         (rootState) => rootState.debugInfo.isDebugging,
     );
     const { width: playerWidth } = useVideoPlayerRect();
-    const chatItemBufferRef = useRef<ChatItem>();
+    const chatItemBufferRef = useRef<chatEvent.ChatItem>();
 
     const dequeueChatItem = useCallback(
-        (): ChatItem | undefined =>
+        (): chatEvent.ChatItem | undefined =>
             chatEventObserver.dequeueChatItem(
-                (getVideoEle()?.currentTime ?? 0) * 1000,
+                (youtube.getVideoEle()?.currentTime ?? 0) * 1000,
             ),
         [chatEventObserver],
     );
@@ -131,7 +126,7 @@ export function useInitChatEventObserver(initData: InitData): void {
 
         if (isDebugging) {
             dispatch(
-                debugInfoActions.addChatItemEleWidthMetric(getEleWidthRuntime),
+                debugInfo.actions.addChatItemEleWidthMetric(getEleWidthRuntime),
             );
         }
 
@@ -139,7 +134,7 @@ export function useInitChatEventObserver(initData: InitData): void {
         chatItemBufferRef.current = chatItem;
 
         dispatch(
-            chatEventsActions.addItem({
+            chatEvents.actions.addItem({
                 chatItem,
                 playerWidth,
                 elementWidth,
@@ -163,39 +158,39 @@ export function useInitChatEventObserver(initData: InitData): void {
     useInterval(processChatItem, 300);
 
     useEffect(() => {
-        function handleDebugInfo(debugInfo: DebugInfo) {
-            if (debugInfo.processChatEventMs) {
+        function handleDebugInfo(info: chatEvent.DebugInfo) {
+            if (info.processChatEventMs) {
                 dispatch(
-                    debugInfoActions.addProcessChatEventMetric(
-                        debugInfo.processChatEventMs,
+                    debugInfo.actions.addProcessChatEventMetric(
+                        info.processChatEventMs,
                     ),
                 );
             }
-            if (debugInfo.processXhrResponseMs) {
+            if (info.processXhrResponseMs) {
                 dispatch(
-                    debugInfoActions.addProcessXhrMetric(
-                        debugInfo.processXhrResponseMs,
+                    debugInfo.actions.addProcessXhrMetric(
+                        info.processXhrResponseMs,
                     ),
                 );
             }
-            if (debugInfo.processChatEventQueueLength) {
+            if (info.processChatEventQueueLength) {
                 dispatch(
-                    debugInfoActions.updateProcessChatEventQueueLength(
-                        debugInfo.processChatEventQueueLength,
+                    debugInfo.actions.updateProcessChatEventQueueLength(
+                        info.processChatEventQueueLength,
                     ),
                 );
             }
-            if (debugInfo.processXhrQueueLength) {
+            if (info.processXhrQueueLength) {
                 dispatch(
-                    debugInfoActions.updateProcessXhrQueueLength(
-                        debugInfo.processXhrQueueLength,
+                    debugInfo.actions.updateProcessXhrQueueLength(
+                        info.processXhrQueueLength,
                     ),
                 );
             }
-            if (debugInfo.outdatedChatEventCount) {
+            if (info.outdatedChatEventCount) {
                 dispatch(
-                    debugInfoActions.addOutdatedRemovedChatEventCount(
-                        debugInfo.outdatedChatEventCount,
+                    debugInfo.actions.addOutdatedRemovedChatEventCount(
+                        info.outdatedChatEventCount,
                     ),
                 );
             }

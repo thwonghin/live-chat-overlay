@@ -1,8 +1,8 @@
 import React from 'react';
-import { EmojiPart } from '@/services/chat-event/models';
+import type { chatEvent } from '@/services';
 
 interface Props {
-    emojiPart: EmojiPart;
+    emojiPart: chatEvent.EmojiPart;
 }
 
 const EmojiPartRenderer: React.FC<Props> = ({ emojiPart }) => {

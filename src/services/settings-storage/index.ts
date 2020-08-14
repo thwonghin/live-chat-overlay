@@ -1,9 +1,10 @@
 import { browser } from 'webextension-polyfill-ts';
 import { defaultsDeep } from 'lodash-es';
 
-import { catchWithFallback } from '@/utils';
-import { EventEmitter } from '@/utils/event-emitter';
+import { catchWithFallback, EventEmitter } from '@/utils';
 import type { Settings, MessageSettings, AuthorDisplayMethod } from './types';
+
+export * from './types';
 
 const SETTINGS_STORAGE_KEY = 'live-chat-overlay-settings';
 
@@ -74,7 +75,7 @@ type EventMap = {
 
 const eventEmitter = new EventEmitter<EventMap>();
 
-export class SettingsStorage {
+export class StorageInstance {
     static isInitiated = false;
 
     static currentSettings: Settings;
@@ -99,7 +100,7 @@ export class SettingsStorage {
     }
 
     static assertInitiated(): void {
-        if (!SettingsStorage.isInitiated) {
+        if (!StorageInstance.isInitiated) {
             throw new Error('Storage is not init!');
         }
     }

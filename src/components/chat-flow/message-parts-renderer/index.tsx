@@ -1,9 +1,5 @@
 import React from 'react';
-import { MessagePart } from '@/services/chat-event/models';
-import {
-    isEmojiMessagePart,
-    isTextMessagePart,
-} from '@/services/chat-event/mapper';
+import { chatEvent } from '@/services';
 import { assertNever } from '@/utils';
 
 import TextPartRenderer from './text-part-renderer';
@@ -11,18 +7,18 @@ import EmojiPartRenderer from './emoji-part-renderer';
 
 interface Props {
     className?: string;
-    messageParts: MessagePart[];
+    messageParts: chatEvent.MessagePart[];
 }
 
 const MessagePartsRenderer: React.FC<Props> = ({ messageParts, className }) => {
     return (
         <span className={className}>
             {messageParts.map((part, index) => {
-                if (isTextMessagePart(part)) {
+                if (chatEvent.isTextMessagePart(part)) {
                     // eslint-disable-next-line react/no-array-index-key
                     return <TextPartRenderer key={index} textPart={part} />;
                 }
-                if (isEmojiMessagePart(part)) {
+                if (chatEvent.isEmojiMessagePart(part)) {
                     // eslint-disable-next-line react/no-array-index-key
                     return <EmojiPartRenderer key={index} emojiPart={part} />;
                 }

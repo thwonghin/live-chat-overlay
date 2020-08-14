@@ -35,7 +35,7 @@ function initInterceptor(extensionId: string): void {
     };
 }
 
-export function attachFetchInterceptor(): () => void {
+export function attach(): () => void {
     return appendScript(
         document,
         functionToString(initInterceptor, browser.runtime.id),

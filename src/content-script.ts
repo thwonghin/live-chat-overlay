@@ -1,14 +1,10 @@
 import './common';
 import { browser } from 'webextension-polyfill-ts';
 
+import { youtube } from '@/utils';
+import { fetchInterceptor, settingsStorage } from '@/services';
+
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
-import {
-    isInsideLiveChatFrame,
-    waitForPlayerReady,
-    getInitData,
-} from './youtube-utils';
-import { attachFetchInterceptor } from './services/fetch-interceptor';
-import { SettingsStorage } from './services/settings-storage';
 
 function injectStyles(): () => void {
     const path = browser.extension.getURL('content-script.css');
@@ -24,12 +20,12 @@ function injectStyles(): () => void {
 }
 
 async function init(): Promise<void> {
-    await SettingsStorage.init();
+    await settingsStorage.StorageInstance.init();
     const cleanupStyles = injectStyles();
-    const detechFetchInterceptor = attachFetchInterceptor();
-    const initData = await getInitData();
+    const detechFetchInterceptor = fetchInterceptor.attach();
+    const initData = await youtube.getInitData();
 
-    await waitForPlayerReady();
+    await youtube.waitForPlayerReady();
 
     const cleanupLiveChat = injectLiveChatOverlay(initData);
 
@@ -42,6 +38,6 @@ async function init(): Promise<void> {
     window.addEventListener('unload', cleanup);
 }
 
-if (isInsideLiveChatFrame()) {
+if (youtube.isInsideLiveChatFrame()) {
     document.addEventListener('DOMContentLoaded', init);
 }
