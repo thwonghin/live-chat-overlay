@@ -44,15 +44,24 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     liveChatContainer.style.left = '0';
     liveChatContainer.style.width = '100%';
     liveChatContainer.style.height = '100%';
+    videoPlayerContainer.appendChild(liveChatContainer);
 
     const playerControlContainer = window.parent.document.createElement('span');
     playerControlContainer.id = PLAYER_CONTROL_CONTAINER;
     playerControlContainer.style.display = 'flex';
     playerControlContainer.style.alignItems = 'center';
+    rightControlEle.prepend(playerControlContainer);
+
+    const jssInsertionPointContainer = window.parent.document.createElement(
+        'div',
+    );
+    const jssInsertionPoint = window.parent.document.createElement('div');
+    jssInsertionPointContainer.appendChild(jssInsertionPoint);
+    window.parent.document.head.appendChild(jssInsertionPointContainer);
 
     const jssConfig = jss.create({
         ...jssPreset(),
-        insertionPoint: window.parent.document.head,
+        insertionPoint: jssInsertionPoint,
     });
 
     ReactDOM.render(
@@ -78,11 +87,9 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
         liveChatContainer,
     );
 
-    videoPlayerContainer.appendChild(liveChatContainer);
-    rightControlEle.prepend(playerControlContainer);
-
     return () => {
-        liveChatContainer.remove();
         playerControlContainer.remove();
+        liveChatContainer.remove();
+        jssInsertionPointContainer.remove();
     };
 }
