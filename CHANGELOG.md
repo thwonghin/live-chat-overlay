@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/thwonghin/live-chat-overlay/compare/v2.2.0...v2.3.0) (2020-08-15)
+
+
+### Features
+
+* gracefully remove live chat app ([#291](https://github.com/thwonghin/live-chat-overlay/issues/291)) ([7cf9610](https://github.com/thwonghin/live-chat-overlay/commit/7cf9610be9048ce3b07c9e7b0b96154156eac669))
+
+
+### Bug Fixes
+
+* remove jss style after unload ([#290](https://github.com/thwonghin/live-chat-overlay/issues/290)) ([37baf97](https://github.com/thwonghin/live-chat-overlay/commit/37baf97a052332c5f5677968cd8c990dd9ee68f6))
+
 ## [2.2.0](https://github.com/thwonghin/live-chat-overlay/compare/v2.1.1...v2.2.0) (2020-08-10)
 
 
