@@ -22,7 +22,7 @@ const slice = createSlice({
                 currentPopup: action.payload,
             };
         },
-        hidePopup(state) {
+        reset(state) {
             return {
                 ...state,
                 currentPopup: null,

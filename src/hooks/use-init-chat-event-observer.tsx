@@ -230,6 +230,11 @@ export function useInitChatEventObserver(initData: InitData): void {
     useEffect(() => {
         chatEventObserver.start();
 
-        return (): void => chatEventObserver.stop();
-    }, [chatEventObserver]);
+        return (): void => {
+            chatEventObserver.stop();
+            chatEventObserver.reset();
+            dispatch(chatEvents.actions.reset());
+            dispatch(debugInfo.actions.reset());
+        };
+    }, [chatEventObserver, dispatch]);
 }

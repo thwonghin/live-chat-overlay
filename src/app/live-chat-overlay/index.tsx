@@ -88,6 +88,7 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     );
 
     return () => {
+        ReactDOM.unmountComponentAtNode(liveChatContainer);
         playerControlContainer.remove();
         liveChatContainer.remove();
         jssInsertionPointContainer.remove();
