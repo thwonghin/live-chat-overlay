@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { popup } from '@/features';
 import type { RootState } from '@/app/live-chat-overlay/store';
-import type { popup } from '@/features';
 
 import MessageSettingsPopup from './message-settings-popup';
 
@@ -17,6 +18,14 @@ const PopupContainer: React.FC<Props> = ({
 }) => {
     const currentPopup = useSelector<RootState, popup.PopupType | null>(
         (state) => state.popup.currentPopup,
+    );
+    const dispatch = useDispatch();
+
+    useEffect(
+        () => () => {
+            dispatch(popup.actions.reset());
+        },
+        [dispatch],
     );
 
     return ReactDOM.createPortal(
