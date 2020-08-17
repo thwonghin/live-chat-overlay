@@ -36,7 +36,7 @@
         "@types/classnames": "^2.2.10",
         "@types/copy-webpack-plugin": "^6.0.0",
         "@types/cssnano": "^4.0.0",
-        "@types/jest": "^26.0.9",
+        "@types/jest": "^26.0.10",
         "@types/lodash-es": "^4.17.3",
         "@types/mini-css-extract-plugin": "^0.9.1",
         "@types/node": "^14.0.27",
