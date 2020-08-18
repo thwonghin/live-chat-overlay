@@ -46,7 +46,7 @@
         "@types/stylelint": "^9.10.1",
         "@types/terser-webpack-plugin": "^4.1.0",
         "@types/webpack": "^4.41.21",
-        "@typescript-eslint/eslint-plugin": "^3.9.0",
+        "@typescript-eslint/eslint-plugin": "^3.9.1",
         "babel-loader": "^8.1.0",
         "chrome-webstore-upload-cli": "^1.2.0",
         "copy-webpack-plugin": "^6.0.3",
