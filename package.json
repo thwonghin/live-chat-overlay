@@ -32,7 +32,7 @@
         "@babel/runtime": "^7.11.2",
         "@commitlint/cli": "^9.1.2",
         "@commitlint/config-conventional": "^9.1.2",
-        "@storybook/react": "^6.0.17",
+        "@storybook/react": "^6.0.21",
         "@types/classnames": "^2.2.10",
         "@types/copy-webpack-plugin": "^6.0.0",
         "@types/cssnano": "^4.0.0",
