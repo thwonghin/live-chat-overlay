@@ -49,7 +49,7 @@
         "@typescript-eslint/eslint-plugin": "^3.10.1",
         "babel-loader": "^8.1.0",
         "chrome-webstore-upload-cli": "^1.2.0",
-        "copy-webpack-plugin": "^6.0.3",
+        "copy-webpack-plugin": "^6.1.0",
         "css-loader": "^4.2.2",
         "cssnano": "^4.1.10",
         "dot-json": "^1.2.0",
