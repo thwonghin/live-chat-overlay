@@ -70,17 +70,17 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
                         {
                             loader: 'postcss-loader',
                             options: {
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-                                plugins: (): unknown[] => [
-                                    ...(shouldSkipPreChecking
-                                        ? []
-                                        : [stylelint]),
-                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-                                    postcssPresetEnv(),
-                                    ...(mode === 'production'
-                                        ? [cssNano()]
-                                        : []),
-                                ],
+                                postcssOptions: {
+                                    plugins: [
+                                        ...(shouldSkipPreChecking
+                                            ? []
+                                            : [stylelint]),
+                                        postcssPresetEnv(),
+                                        ...(mode === 'production'
+                                            ? [cssNano()]
+                                            : []),
+                                    ],
+                                },
                             },
                         },
                     ],
