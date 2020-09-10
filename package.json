@@ -10,7 +10,7 @@
         "node": ">=14.8.0"
     },
     "scripts": {
-        "test:unit": "jest tests/unit",
+        "test:unit": "tsc -p tests --noEmit && jest tests/unit",
         "lint": "eslint --quiet --ext .ts src tests",
         "lint:test": "eslint --quiet --ext .ts tests",
         "lint:fix": "eslint src --ext ts,tsx --quiet --fix && stylelint src/**/*.scss --fix",
@@ -33,6 +33,7 @@
         "@commitlint/cli": "^9.1.2",
         "@commitlint/config-conventional": "^9.1.2",
         "@storybook/react": "^6.0.21",
+        "@swc-node/jest": "^0.3.5",
         "@types/classnames": "^2.2.10",
         "@types/copy-webpack-plugin": "^6.0.0",
         "@types/cssnano": "^4.0.0",
