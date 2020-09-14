@@ -52,7 +52,7 @@
         "copy-webpack-plugin": "^6.1.0",
         "css-loader": "^4.3.0",
         "cssnano": "^4.1.10",
-        "dot-json": "^1.2.0",
+        "dot-json": "^1.2.1",
         "eslint": "^7.8.1",
         "eslint-config-airbnb-typescript": "^10.0.0",
         "eslint-config-prettier": "^6.11.0",
