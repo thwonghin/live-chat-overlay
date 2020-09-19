@@ -8,15 +8,15 @@ function getAuthorTypeFromBadges(
     if (!authorBadges) {
         return 'guest';
     }
-    const iconTypes = authorBadges
+    const resolvedIconType = authorBadges
         .map((v) => v.liveChatAuthorBadgeRenderer.icon?.iconType)
-        .filter((iconType): iconType is string => !!iconType);
+        .filter((iconType): iconType is string => !!iconType)[0];
 
-    if (iconTypes.length === 0) {
+    if (!resolvedIconType) {
         return 'member';
     }
 
-    return iconTypes[0].toLowerCase() as chatModel.NormalChatItem['authorType'];
+    return resolvedIconType.toLowerCase() as chatModel.NormalChatItem['authorType'];
 }
 
 function isTextMessageRun(

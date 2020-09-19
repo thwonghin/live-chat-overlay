@@ -41,7 +41,7 @@ async function getChatItemRenderedWidth({
         elementWidth: 0,
     };
 
-    await new Promise((resolve) => {
+    await new Promise<void>((resolve) => {
         ReactDOM.render(
             <ChatItemRenderer chatItem={tempUiChatItem} settings={settings} />,
             containerEle,
@@ -49,7 +49,7 @@ async function getChatItemRenderedWidth({
         );
     });
 
-    const rect = containerEle?.children[0].getBoundingClientRect();
+    const rect = containerEle?.children[0]?.getBoundingClientRect();
 
     const width = rect?.width;
     if (!width) {

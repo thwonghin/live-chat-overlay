@@ -79,6 +79,10 @@ const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
                 ? afterChangeValue[0]
                 : afterChangeValue;
 
+            if (updatedValue === undefined) {
+                return;
+            }
+
             setTimeout(() => {
                 updateSettings((prevSettings) => ({
                     ...prevSettings,
