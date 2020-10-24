@@ -1,8 +1,8 @@
 diff --git a/node_modules/webpack/types.d.ts b/node_modules/webpack/types.d.ts
-index 1845a24..fdd1205 100644
+index 3949ac5..0b17301 100644
 --- a/node_modules/webpack/types.d.ts
 +++ b/node_modules/webpack/types.d.ts
-@@ -6625,9 +6625,7 @@ declare interface PerformanceOptions {
+@@ -6635,9 +6635,7 @@ declare interface PerformanceOptions {
  	 */
  	maxEntrypointSize?: number;
  }
@@ -13,7 +13,7 @@ index 1845a24..fdd1205 100644
  declare interface PnpApiImpl {
  	resolveToUnqualified: (arg0: string, arg1: string, arg2?: any) => string;
  }
-@@ -9849,6 +9847,11 @@ declare interface WebpackPluginInstance {
+@@ -9861,6 +9859,11 @@ declare interface WebpackPluginInstance {
  	 */
  	apply: (compiler: Compiler) => void;
  }
@@ -25,7 +25,7 @@ index 1845a24..fdd1205 100644
  declare interface WithId {
  	id: string | number;
  }
-@@ -10390,8 +10393,15 @@ declare namespace exports {
+@@ -10402,8 +10405,15 @@ declare namespace exports {
  		RuleSetUseItem,
  		Configuration,
  		WebpackOptionsNormalized,
