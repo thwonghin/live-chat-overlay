@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { chatEvent, settingsStorage } from '@/services';
 import classes from './index.scss';

@@ -129,6 +129,8 @@
         "serialize-javascript": ">=3.1.0",
         "dot-prop": "^5.1.1",
         "@types/react": "^16.9.53",
-        "@types/react-dom": "^16.9.8"
+        "@types/react-dom": "^16.9.8",
+        "//": "https://github.com/facebook/react/issues/19940#issuecomment-705904005",
+        "jsx-ast-utils": "^3.1.0"
     }
 }

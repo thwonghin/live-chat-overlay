@@ -1,4 +1,5 @@
-import React, { useMemo, useRef, useState, useLayoutEffect } from 'react';
+import { useMemo, useRef, useState, useLayoutEffect } from 'react';
+import * as React from 'react';
 
 import { useTimeout, useRect, useSettings } from '@/hooks';
 import classes from './index.scss';

@@ -1,4 +1,4 @@
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import * as jss from 'jss';
@@ -65,7 +65,7 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     });
 
     ReactDOM.render(
-        <React.StrictMode>
+        <StrictMode>
             <Provider store={store}>
                 <contexts.playerRect.PlayerRectProvider>
                     <contexts.chatObserver.ChatEventObserverProvider>
@@ -83,7 +83,7 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
                     </contexts.chatObserver.ChatEventObserverProvider>
                 </contexts.playerRect.PlayerRectProvider>
             </Provider>
-        </React.StrictMode>,
+        </StrictMode>,
         liveChatContainer,
     );
 

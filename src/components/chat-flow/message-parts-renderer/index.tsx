@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { chatEvent } from '@/services';
 import { assertNever } from '@/utils';
 

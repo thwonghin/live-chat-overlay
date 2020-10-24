@@ -1,4 +1,5 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import * as React from 'react';
 import { Slider, withStyles } from '@material-ui/core';
 import { isNil } from 'lodash-es';
 import { useDebouncedCallback } from 'use-debounce';
