@@ -50,6 +50,13 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
         },
         module: {
             rules: [
+                // TODO: remove this workaround for https://github.com/webpack/webpack/issues/11467
+                {
+                    test: /\.m?js/,
+                    resolve: {
+                        fullySpecified: false,
+                    },
+                },
                 {
                     test: /\.(js|jsx|ts|tsx)$/i,
                     use: 'babel-loader',
@@ -117,6 +124,12 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
             }),
             new MiniCssExtractPlugin({
                 filename: '[name].css',
+            }),
+            // Webpack 5 removed node.js polyfills, but React still using it
+            new webpack.DefinePlugin({
+                'process.env': {
+                    NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+                },
             }),
         ],
         optimization: {
