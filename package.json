@@ -115,7 +115,7 @@
         "react-redux": "^7.2.1",
         "regenerator-runtime": "^0.13.7",
         "use-debounce": "^5.0.1",
-        "webextension-polyfill-ts": "^0.20.0"
+        "webextension-polyfill-ts": "^0.21.0"
     },
     "resolutions": {
         "yargs-parser": "18.1.3",
