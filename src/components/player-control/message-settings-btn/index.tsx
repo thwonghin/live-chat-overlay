@@ -1,5 +1,6 @@
 import { browser } from 'webextension-polyfill-ts';
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

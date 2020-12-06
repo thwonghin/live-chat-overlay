@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { settingsStorage, chatEvent } from '@/services';
 
 import type { UiChatItem } from '../types';

@@ -13,7 +13,6 @@ import stylelint from 'stylelint';
 const rootDir = path.resolve(__dirname, '../..');
 const srcDir = path.resolve(rootDir, 'src');
 const distDir = path.resolve(rootDir, 'dist');
-const tsconfigPath = path.resolve(rootDir, 'tsconfig.json');
 
 type WebpackEnv = 'production' | 'development' | 'release' | 'storybook';
 
@@ -33,6 +32,10 @@ export default (webpackEnv: WebpackEnv): webpack.Configuration => {
 
     const shouldSkipPreChecking = webpackEnv === 'release';
     const mode = getMode();
+    const tsconfigPath = path.resolve(
+        rootDir,
+        webpackEnv === 'development' ? 'tsconfig.dev.json' : 'tsconfig.json',
+    );
 
     const config: webpack.Configuration = {
         mode,

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import type { chatEvent } from '@/services';
 
 interface Props {
@@ -8,9 +8,9 @@ interface Props {
 const EmojiPartRenderer: React.FC<Props> = ({ emojiPart }) => {
     return (
         <img
-            src={emojiPart.thumbnails[0].url}
-            height={emojiPart.thumbnails[0].height}
-            width={emojiPart.thumbnails[0].width}
+            src={emojiPart.thumbnails[0]?.url}
+            height={emojiPart.thumbnails[0]?.height}
+            width={emojiPart.thumbnails[0]?.width}
         />
     );
 };
