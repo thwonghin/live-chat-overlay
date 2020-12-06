@@ -82,9 +82,7 @@ export class ResponseObserver {
     }
 
     private onChatMessage = (e: Event): void => {
-        const customEvent = e as CustomEvent<
-            fetchInterceptor.CustomEventDetail
-        >;
+        const customEvent = e as CustomEvent<fetchInterceptor.CustomEventDetail>;
 
         if (!customEvent.detail.url.startsWith(GET_LIVE_CHAT_URL)) {
             return;

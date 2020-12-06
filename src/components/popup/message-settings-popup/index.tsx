@@ -17,9 +17,10 @@ interface Props {
 
 const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
     const containerRef = useRef<HTMLDivElement>(null);
-    const [selectedMessageType, setSelectedMessageType] = useState<
-        settingsStorage.MessageSettingsKey
-    >('guest');
+    const [
+        selectedMessageType,
+        setSelectedMessageType,
+    ] = useState<settingsStorage.MessageSettingsKey>('guest');
 
     // Workaround for cannot stop event propagation: use native event handler
     // https://github.com/facebook/react/issues/11387#issuecomment-524113945
