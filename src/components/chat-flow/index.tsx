@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo, CSSProperties } from 'react';
+import { useCallback, useMemo, CSSProperties } from 'react';
+import * as React from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import type { RootState } from '@/app/live-chat-overlay/store';

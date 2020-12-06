@@ -181,6 +181,9 @@ export class ResponseObserver {
         }
 
         const { result: isTime, runtime } = benchmark(() => {
+            if (!this.chatItemProcessQueue[0]) {
+                throw new Error('Unknown error');
+            }
             return isTimeToDispatch({
                 chatItem: this.chatItemProcessQueue[0],
                 currentTimeInUsec,

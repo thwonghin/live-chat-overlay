@@ -85,7 +85,7 @@ const slice = createSlice({
                                   state.chatItemsByLineNumber[lineNumber + 1] ??
                                   []
                               ).concat(uiChatItem)
-                            : state.chatItemsByLineNumber[lineNumber + 1],
+                            : state.chatItemsByLineNumber[lineNumber + 1] ?? [],
                 },
             };
         },
@@ -116,7 +116,7 @@ const slice = createSlice({
                               )
                             : state.chatItemsByLineNumber[
                                   doneChatItem.lineNumber + 1
-                              ],
+                              ] ?? [],
                 },
             };
         },
@@ -125,7 +125,10 @@ const slice = createSlice({
                 (item) => state.chatItemStateById[item.id] !== 'finished',
             );
             const newChatItemStateById = Object.fromEntries(
-                filtered.map(({ id }) => [id, state.chatItemStateById[id]]),
+                filtered.map(({ id }) => [
+                    id,
+                    state.chatItemStateById[id] ?? 'added',
+                ]),
             );
 
             return {

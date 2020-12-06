@@ -41,8 +41,8 @@
         "@types/lodash-es": "^4.17.3",
         "@types/mini-css-extract-plugin": "^1.2.1",
         "@types/node": "^14.14.7",
-        "@types/react": "^16.9.56",
-        "@types/react-dom": "^16.9.9",
+        "@types/react": "^17.0.0",
+        "@types/react-dom": "^17.0.0",
         "@types/react-redux": "^7.1.11",
         "@types/stylelint": "^9.10.1",
         "@types/terser-webpack-plugin": "^5.0.2",
@@ -83,7 +83,7 @@
         "ts-jest": "^26.4.4",
         "tsconfig-paths-webpack-plugin": "^3.3.0",
         "typed-css-modules-webpack-plugin": "^0.2.0",
-        "typescript": "^4.0.5",
+        "typescript": "^4.1.2",
         "webpack": "^5.4.0",
         "webpack-cli": "^4.2.0"
     },
@@ -121,7 +121,9 @@
         "yargs-parser": "18.1.3",
         "serialize-javascript": ">=3.1.0",
         "dot-prop": "^5.1.1",
-        "@types/react": "^16.9.56",
-        "@types/react-dom": "^16.9.9"
+        "@types/react": "^17.0.0",
+        "@types/react-dom": "^17.0.0",
+        "//": "https://github.com/facebook/react/issues/19940#issuecomment-705904005",
+        "jsx-ast-utils": "^3.1.0"
     }
 }

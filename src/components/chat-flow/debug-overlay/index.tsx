@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { useSelector, shallowEqual } from 'react-redux';
 
 import type { RootState } from '@/app/live-chat-overlay/store';

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import cn from 'classnames';
 
 import type { chatEvent, settingsStorage } from '@/services';
@@ -34,9 +34,9 @@ const AuthorChip: React.FC<Props> = ({
                     className={cn(classes['author-avator'], {
                         [classes.mr]: isNameShown || !!donationAmount,
                     })}
-                    src={avatars[0].url}
-                    width={avatars[0].width}
-                    height={avatars[0].height}
+                    src={avatars[0]?.url}
+                    width={avatars[0]?.width}
+                    height={avatars[0]?.height}
                     alt={name}
                 />
             )}

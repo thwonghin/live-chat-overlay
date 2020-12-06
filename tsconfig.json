@@ -7,9 +7,10 @@
         "module": "esnext",
         "moduleResolution": "node",
         "noEmit": true,
-        "jsx": "react",
         "esModuleInterop": true,
         "baseUrl": ".",
+        "noUncheckedIndexedAccess": true,
+        "jsx": "react-jsx",
         "paths": {
             "@/*": ["src/*"]
         }
