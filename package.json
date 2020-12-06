@@ -46,7 +46,7 @@
         "@types/react-redux": "^7.1.11",
         "@types/stylelint": "^9.10.1",
         "@types/terser-webpack-plugin": "^5.0.2",
-        "@typescript-eslint/eslint-plugin": "^4.7.0",
+        "@typescript-eslint/eslint-plugin": "^4.9.0",
         "babel-loader": "^8.2.1",
         "chrome-webstore-upload-cli": "^1.2.0",
         "copy-webpack-plugin": "^6.3.0",
