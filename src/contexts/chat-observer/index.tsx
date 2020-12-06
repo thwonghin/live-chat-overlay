@@ -5,9 +5,9 @@ import { chatEvent } from '@/services';
 
 const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
-export const ChatEventObserverContext = React.createContext<
-    chatEvent.ResponseObserver
->(new chatEvent.ResponseObserver(CHAT_EVENT_NAME));
+export const ChatEventObserverContext = React.createContext<chatEvent.ResponseObserver>(
+    new chatEvent.ResponseObserver(CHAT_EVENT_NAME),
+);
 
 interface Props {
     children: React.ReactNode;
