@@ -1,0 +1,26 @@
+diff --git a/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts b/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts
+index 0d4bab3..887508f 100644
+--- a/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts
++++ b/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts
+@@ -1,15 +1,15 @@
+ import webpack from 'webpack';
+ import { ForkTsCheckerWebpackPluginOptions } from './ForkTsCheckerWebpackPluginOptions';
+-declare class ForkTsCheckerWebpackPlugin implements webpack.Plugin {
++declare class ForkTsCheckerWebpackPlugin implements webpack.WebpackPluginInstance {
+     static readonly version: string;
+     private readonly options;
+     constructor(options?: ForkTsCheckerWebpackPluginOptions);
+     static getCompilerHooks(compiler: webpack.Compiler): {
+-        start: import("tapable").AsyncSeriesWaterfallHook<import("./reporter/FilesChange").FilesChange, webpack.compilation.Compilation, any>;
+-        waiting: import("tapable").SyncHook<webpack.compilation.Compilation, any, any>;
+-        canceled: import("tapable").SyncHook<webpack.compilation.Compilation, any, any>;
+-        error: import("tapable").SyncHook<Error, webpack.compilation.Compilation, any>;
+-        issues: import("tapable").SyncWaterfallHook<import("./issue/Issue").Issue[], webpack.compilation.Compilation | undefined, void>;
++        start: import("tapable").AsyncSeriesWaterfallHook<import("./reporter/FilesChange").FilesChange, webpack.Compilation, any>;
++        waiting: import("tapable").SyncHook<webpack.Compilation, any, any>;
++        canceled: import("tapable").SyncHook<webpack.Compilation, any, any>;
++        error: import("tapable").SyncHook<Error, webpack.Compilation, any>;
++        issues: import("tapable").SyncWaterfallHook<import("./issue/Issue").Issue[], webpack.Compilation | undefined, void>;
+     };
+     apply(compiler: webpack.Compiler): void;
+ }
