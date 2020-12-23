@@ -27,9 +27,11 @@ export function isNonNullable<T>(value: T): value is NonNullable<T> {
 export function functionToString(
     // eslint-disable-next-line @typescript-eslint/ban-types
     func: Function,
-    param: string,
+    ...params: string[]
 ): string {
-    return `(${func.toString()})('${param}')`;
+    return `(${func.toString()})(${params
+        .map((param) => `'${param}'`)
+        .join(',')})`;
 }
 
 export function appendScript(doc: Document, script: string): () => void {

@@ -6,6 +6,7 @@ import type {
     InitData,
 } from '@/definitions/youtube';
 import { benchmark, EventEmitter } from '@/utils';
+import { GET_LIVE_CHAT_REPLAY_URL } from '@/utils/youtube';
 
 import {
     mapChatItemsFromReplayResponse,
@@ -17,11 +18,6 @@ import {
     isReplayInitData,
 } from './helpers';
 import type { ChatItem } from '../models';
-
-const GET_LIVE_CHAT_URL =
-    'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat';
-const GET_LIVE_CHAT_REPLAY_URL =
-    'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat_replay';
 
 export type DebugInfo = Partial<{
     processXhrResponseMs: number;
@@ -45,7 +41,7 @@ export class ResponseObserver {
     private isDebugging = false;
 
     private xhrEventProcessQueue: {
-        responseText: string;
+        response: unknown;
         isReplay: boolean;
     }[] = [];
 
@@ -84,16 +80,12 @@ export class ResponseObserver {
     private onChatMessage = (e: Event): void => {
         const customEvent = e as CustomEvent<fetchInterceptor.CustomEventDetail>;
 
-        if (!customEvent.detail.url.startsWith(GET_LIVE_CHAT_URL)) {
-            return;
-        }
-
         const isReplay = customEvent.detail.url.startsWith(
             GET_LIVE_CHAT_REPLAY_URL,
         );
         this.xhrEventProcessQueue.push({
             isReplay,
-            responseText: customEvent.detail.response,
+            response: customEvent.detail.response,
         });
         this.emitDebugInfoEvent({
             processXhrQueueLength: this.xhrEventProcessQueue.length,
@@ -108,9 +100,7 @@ export class ResponseObserver {
         }
 
         const { runtime } = benchmark(() => {
-            const response = JSON.parse(
-                xhrEvent.responseText,
-            ) as YotubeChatResponse;
+            const response = xhrEvent.response as YotubeChatResponse;
 
             const chatItems = xhrEvent.isReplay
                 ? mapChatItemsFromReplayResponse(
