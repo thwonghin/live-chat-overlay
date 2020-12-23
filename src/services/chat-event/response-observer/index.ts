@@ -140,7 +140,7 @@ export class ResponseObserver {
         const afterCount = this.chatItemProcessQueue.length;
 
         this.emitDebugInfoEvent({
-            outdatedChatEventCount: afterCount - beforeCount,
+            outdatedChatEventCount: beforeCount - afterCount,
         });
     }
 
