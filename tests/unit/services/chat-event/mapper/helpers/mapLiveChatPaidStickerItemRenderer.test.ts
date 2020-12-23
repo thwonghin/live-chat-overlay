@@ -77,11 +77,12 @@ describe('mapLiveChatPaidStickerRenderer', () => {
         const result = mapLiveChatPaidStickerRenderer({
             renderer: getFixture(),
             liveDelayInMs: 1000,
+            currentTimestampMs: 160000000000,
+            playerTimestampMs: 1500,
         });
 
         expect(result).toEqual({
             id: 'random-id',
-            liveDelayInMs: 1000,
             stickers: [
                 {
                     url: 'https://sample-sticker/small.jpg',
@@ -106,7 +107,7 @@ describe('mapLiveChatPaidStickerRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1591023793124462,
+            videoTimestampInMs: 1431023795624.462,
             authorName: 'Sample Author',
             chatType: 'super-sticker',
             color: 'rgba(208,0,0,1)',
@@ -119,11 +120,12 @@ describe('mapLiveChatPaidStickerRenderer', () => {
             renderer: getFixture(),
             videoTimestampInMs: 100000000,
             liveDelayInMs: 0,
+            currentTimestampMs: 160000000000,
+            playerTimestampMs: 1500,
         });
 
         expect(result).toEqual({
             id: 'random-id',
-            liveDelayInMs: 0,
             stickers: [
                 {
                     url: 'https://sample-sticker/small.jpg',
@@ -148,7 +150,6 @@ describe('mapLiveChatPaidStickerRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1591023793124462,
             videoTimestampInMs: 100000000,
             authorName: 'Sample Author',
             chatType: 'super-sticker',

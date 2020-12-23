@@ -92,11 +92,12 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
         const result = mapLiveChatPaidMessageItemRenderer({
             renderer: getFixture(),
             liveDelayInMs: 1000,
+            currentTimestampMs: 160000000000,
+            playerTimestampMs: 1500,
         });
 
         expect(result).toEqual({
             id: 'random-id',
-            liveDelayInMs: 1000,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -130,7 +131,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1591023793124462,
+            videoTimestampInMs: 1431023795624.462,
             authorName: 'Sample Author',
             chatType: 'super-chat',
             color: 'rgba(230,33,23,1)',
@@ -143,11 +144,12 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
             renderer: getFixture(),
             videoTimestampInMs: 100000000,
             liveDelayInMs: 0,
+            currentTimestampMs: 160000000000,
+            playerTimestampMs: 1500,
         });
 
         expect(result).toEqual({
             id: 'random-id',
-            liveDelayInMs: 0,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -181,7 +183,6 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1591023793124462,
             videoTimestampInMs: 100000000,
             authorName: 'Sample Author',
             chatType: 'super-chat',
@@ -195,12 +196,13 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
         sample.message = undefined;
         const result = mapLiveChatPaidMessageItemRenderer({
             renderer: sample,
-            liveDelayInMs: 0,
+            liveDelayInMs: 1000,
+            currentTimestampMs: 160000000000,
+            playerTimestampMs: 1500,
         });
 
         expect(result).toEqual({
             id: 'random-id',
-            liveDelayInMs: 0,
             messageParts: [],
             avatars: [
                 {
@@ -214,7 +216,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1591023793124462,
+            videoTimestampInMs: 1431023795624.462,
             authorName: 'Sample Author',
             chatType: 'super-chat',
             color: 'rgba(230,33,23,1)',

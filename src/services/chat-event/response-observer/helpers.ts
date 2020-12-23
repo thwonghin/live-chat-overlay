@@ -9,10 +9,12 @@ import type {
 import { mapAddChatItemActions, isNormalChatItem } from '../mapper';
 import { ChatItem } from '../models';
 
-export function mapChatItemsFromReplayResponse(
-    continuationContents: ReplayContinuationContents,
-): ChatItem[] {
-    return (continuationContents.liveChatContinuation.actions ?? [])
+export function mapChatItemsFromReplayResponse(params: {
+    currentTimestampMs: number;
+    playerTimestampMs: number;
+    continuationContents: ReplayContinuationContents;
+}): ChatItem[] {
+    return (params.continuationContents.liveChatContinuation.actions ?? [])
         .map((a) => a.replayChatItemAction)
         .filter(isNonNullable)
         .flatMap((a) => {
@@ -23,6 +25,8 @@ export function mapChatItemsFromReplayResponse(
             const items = mapAddChatItemActions({
                 addChatItemActions,
                 liveDelayInMs: 0,
+                currentTimestampMs: params.currentTimestampMs,
+                playerTimestampMs: params.playerTimestampMs,
                 videoTimestampInMs: Number(a.videoOffsetTimeMsec),
             });
 
@@ -46,40 +50,33 @@ function getTimeoutMs(
     );
 }
 
-export function mapChatItemsFromLiveResponse(
-    continuationContents: LiveContinuationContents,
-): ChatItem[] {
+export function mapChatItemsFromLiveResponse(params: {
+    currentTimestampMs: number;
+    playerTimestampMs: number;
+    continuationContents: LiveContinuationContents;
+}): ChatItem[] {
     return mapAddChatItemActions({
         addChatItemActions: (
-            continuationContents.liveChatContinuation.actions ?? []
+            params.continuationContents.liveChatContinuation.actions ?? []
         )
             .map((v) => v.addChatItemAction)
             .filter(isNonNullable),
-        liveDelayInMs: getTimeoutMs(continuationContents) ?? 0,
+        liveDelayInMs: getTimeoutMs(params.continuationContents) ?? 0,
+        currentTimestampMs: params.currentTimestampMs,
+        playerTimestampMs: params.playerTimestampMs,
     });
 }
 
 interface IsTimeToDispatchParams {
-    currentTimeInUsec: number;
     currentPlayerTimeInMsc: number;
     chatItem: ChatItem;
 }
 
 export function isTimeToDispatch({
     currentPlayerTimeInMsc,
-    currentTimeInUsec,
     chatItem,
 }: IsTimeToDispatchParams): boolean {
-    return chatItem.videoTimestampInMs
-        ? currentPlayerTimeInMsc >= chatItem.videoTimestampInMs
-        : currentTimeInUsec >=
-              chatItem.timestampInUs + chatItem.liveDelayInMs * 1000;
-}
-
-interface IsOutdatedReplayChatItemParams {
-    currentPlayerTimeInMsc: number;
-    chatItemAtVideoTimestampInMs: number;
-    factor: number;
+    return currentPlayerTimeInMsc >= chatItem.videoTimestampInMs;
 }
 
 export const MAX_CHAT_DISPLAY_DELAY_IN_SEC = 5;
@@ -95,33 +92,20 @@ export function getOutdatedFactor(chatItem: ChatItem): number {
     return 3;
 }
 
-export function isOutdatedReplayChatItem({
-    currentPlayerTimeInMsc,
-    chatItemAtVideoTimestampInMs,
-    factor,
-}: IsOutdatedReplayChatItemParams): boolean {
-    return (
-        chatItemAtVideoTimestampInMs <
-        currentPlayerTimeInMsc - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * factor
-    );
-}
-
-interface IsOutdatedLiveChatItemParams {
-    currentTimeInUsec: number;
-    chatItemCreateAtTimestampInUs: number;
-    liveDelayInMs: number;
+interface IsOutdatedChatItemParams {
+    currentPlayerTimeInMsc: number;
+    chatItemAtVideoTimestampInMs: number;
     factor: number;
 }
 
-export function isOutdatedLiveChatItem({
-    currentTimeInUsec,
-    chatItemCreateAtTimestampInUs,
-    liveDelayInMs,
+export function isOutdatedChatItem({
+    currentPlayerTimeInMsc,
+    chatItemAtVideoTimestampInMs,
     factor,
-}: IsOutdatedLiveChatItemParams): boolean {
+}: IsOutdatedChatItemParams): boolean {
     return (
-        chatItemCreateAtTimestampInUs + liveDelayInMs * 1000 <
-        currentTimeInUsec - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * 1000 * factor
+        chatItemAtVideoTimestampInMs <
+        currentPlayerTimeInMsc - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * factor
     );
 }
 

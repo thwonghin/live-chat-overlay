@@ -12,8 +12,7 @@ import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
     isTimeToDispatch,
-    isOutdatedLiveChatItem,
-    isOutdatedReplayChatItem,
+    isOutdatedChatItem,
     getOutdatedFactor,
     isReplayInitData,
 } from './helpers';
@@ -41,8 +40,21 @@ export class ResponseObserver {
 
     private chatItemProcessQueue: ChatItem[] = [];
 
-    constructor(readonly chatEventName: string) {
+    constructor(
+        readonly chatEventName: string,
+        private videoPlayer: HTMLVideoElement,
+    ) {
         this.eventEmitter = new EventEmitter();
+    }
+
+    private getCurrentTimeInfo(): {
+        playerTimestampMs: number;
+        currentTimestampMs: number;
+    } {
+        return {
+            playerTimestampMs: this.videoPlayer.currentTime * 1000,
+            currentTimestampMs: Date.now(),
+        };
     }
 
     public on: ResponseObserverEventEmitter['on'] = (...args) =>
@@ -52,9 +64,16 @@ export class ResponseObserver {
         this.eventEmitter.off(...args);
 
     public importInitData(initData: InitData): void {
+        const timeInfo = this.getCurrentTimeInfo();
         const chatItems = isReplayInitData(initData)
-            ? mapChatItemsFromReplayResponse(initData.continuationContents)
-            : mapChatItemsFromLiveResponse(initData.continuationContents);
+            ? mapChatItemsFromReplayResponse({
+                  ...timeInfo,
+                  continuationContents: initData.continuationContents,
+              })
+            : mapChatItemsFromLiveResponse({
+                  ...timeInfo,
+                  continuationContents: initData.continuationContents,
+              });
 
         this.chatItemProcessQueue.push(...chatItems);
 
@@ -79,13 +98,18 @@ export class ResponseObserver {
         const response = customEvent.detail.response as YotubeChatResponse;
 
         const { runtime } = benchmark(() => {
+            const timeInfo = this.getCurrentTimeInfo();
             const chatItems = isReplay
-                ? mapChatItemsFromReplayResponse(
-                      (response as ReplayResponse).continuationContents,
-                  )
-                : mapChatItemsFromLiveResponse(
-                      (response as LiveResponse).continuationContents,
-                  );
+                ? mapChatItemsFromReplayResponse({
+                      ...timeInfo,
+                      continuationContents: (response as ReplayResponse)
+                          .continuationContents,
+                  })
+                : mapChatItemsFromLiveResponse({
+                      ...timeInfo,
+                      continuationContents: (response as LiveResponse)
+                          .continuationContents,
+                  });
 
             this.chatItemProcessQueue.push(...chatItems);
         }, this.isDebugging);
@@ -100,40 +124,30 @@ export class ResponseObserver {
         currentTimeInUsec: number;
         currentPlayerTimeInMsc: number;
     }): void {
-        let count = 0;
+        const beforeCount = this.chatItemProcessQueue.length;
 
         this.chatItemProcessQueue = this.chatItemProcessQueue.filter(
             (chatItem) => {
                 const factor = getOutdatedFactor(chatItem);
-                const isOutdatedChatItem = chatItem.videoTimestampInMs
-                    ? isOutdatedReplayChatItem({
-                          factor,
-                          currentPlayerTimeInMsc: params.currentPlayerTimeInMsc,
-                          chatItemAtVideoTimestampInMs:
-                              chatItem.videoTimestampInMs,
-                      })
-                    : isOutdatedLiveChatItem({
-                          factor,
-                          currentTimeInUsec: params.currentTimeInUsec,
-                          liveDelayInMs: chatItem.liveDelayInMs,
-                          chatItemCreateAtTimestampInUs: chatItem.timestampInUs,
-                      });
-
-                if (isOutdatedChatItem) {
-                    count += 1;
-                }
-                return !isOutdatedChatItem;
+                return !isOutdatedChatItem({
+                    factor,
+                    currentPlayerTimeInMsc: params.currentPlayerTimeInMsc,
+                    chatItemAtVideoTimestampInMs: chatItem.videoTimestampInMs,
+                });
             },
         );
 
+        const afterCount = this.chatItemProcessQueue.length;
+
         this.emitDebugInfoEvent({
-            outdatedChatEventCount: count,
+            outdatedChatEventCount: beforeCount - afterCount,
         });
     }
 
-    public dequeueChatItem(
-        currentPlayerTimeInMsc: number,
-    ): ChatItem | undefined {
+    public dequeueChatItem(): ChatItem | undefined {
+        const currentPlayerTimeInMsc =
+            (this.videoPlayer.currentTime ?? 0) * 1000;
+
         const currentTimeInUsec = Date.now() * 1000;
         this.cleanOutdatedChatItems({
             currentPlayerTimeInMsc,
@@ -150,7 +164,6 @@ export class ResponseObserver {
             }
             return isTimeToDispatch({
                 chatItem: this.chatItemProcessQueue[0],
-                currentTimeInUsec,
                 currentPlayerTimeInMsc,
             });
         }, this.isDebugging);

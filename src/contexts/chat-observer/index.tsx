@@ -2,11 +2,15 @@ import * as React from 'react';
 import { browser } from 'webextension-polyfill-ts';
 
 import { chatEvent } from '@/services';
+import { getVideoEle } from '@/utils/youtube';
 
 const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
 export const ChatEventObserverContext = React.createContext<chatEvent.ResponseObserver>(
-    new chatEvent.ResponseObserver(CHAT_EVENT_NAME),
+    new chatEvent.ResponseObserver(
+        CHAT_EVENT_NAME,
+        document.createElement('video'),
+    ),
 );
 
 interface Props {
@@ -14,7 +18,11 @@ interface Props {
 }
 
 export const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
-    const observer = new chatEvent.ResponseObserver(CHAT_EVENT_NAME);
+    const video = getVideoEle();
+    if (!video) {
+        throw new Error('Video element not found');
+    }
+    const observer = new chatEvent.ResponseObserver(CHAT_EVENT_NAME, video);
 
     return (
         <ChatEventObserverContext.Provider value={observer}>
