@@ -10,7 +10,6 @@ export interface State {
     getChatItemEleWidthBenchmark: Benchmark;
     processXhrBenchmark: Benchmark;
     processChatEventBenchmark: Benchmark;
-    processXhrQueueLength: number;
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
 }

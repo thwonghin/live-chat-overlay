@@ -36,7 +36,6 @@ export const DebugOverlay: React.FC = () => {
                     count: 10,
                 }}
                 processChatEventQueueLength={100}
-                processXhrQueueLength={100}
                 outdatedRemovedChatEventCount={100}
             />
         </div>
