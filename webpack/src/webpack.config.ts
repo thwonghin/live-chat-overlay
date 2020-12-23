@@ -2,7 +2,6 @@ import * as path from 'path';
 import * as webpack from 'webpack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { TypedCssModulesPlugin } from 'typed-css-modules-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
@@ -134,9 +133,6 @@ export default (
                 },
             }),
         ],
-        optimization: {
-            minimizer: [new TerserPlugin()],
-        },
     };
 
     return config;
