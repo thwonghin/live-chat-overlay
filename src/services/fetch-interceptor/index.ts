@@ -1,43 +1,48 @@
 import { browser } from 'webextension-polyfill-ts';
 
 import { appendScript, functionToString } from '@/utils';
+import { GET_LIVE_CHAT_URL } from '@/utils/youtube';
 
 export interface CustomEventDetail {
-    response: string;
+    response: unknown;
     url: string;
 }
 
-function initInterceptor(extensionId: string): void {
+function initInterceptor(extensionId: string, urlPrefix: string): void {
     const originalFetch = window.fetch;
 
-    window.fetch = (url, ...args) => {
-        let result: Response;
-        return originalFetch(url, ...args)
-            .then((fetchResult) => {
-                result = fetchResult;
-                return result.clone().text();
-            })
-            .then((resultText) => {
+    window.fetch = async (url, ...args) => {
+        const fetchResult = await originalFetch(url, ...args);
+        const requestUrl = typeof url === 'string' ? url : url.url;
+
+        if (requestUrl.startsWith(urlPrefix)) {
+            const clonedResult = fetchResult.clone();
+
+            setTimeout(async () => {
                 const event = new CustomEvent<CustomEventDetail>(
                     `${extensionId}_chat_message`,
                     {
                         detail: {
-                            response: resultText,
-                            url: typeof url === 'string' ? url : url.url,
+                            response: await clonedResult.json(),
+                            url: requestUrl,
                         },
                     },
                 );
-
                 window.dispatchEvent(event);
+            }, 0);
+        }
 
-                return result;
-            });
+        return fetchResult;
     };
 }
 
 export function attach(): () => void {
     return appendScript(
         document,
-        functionToString(initInterceptor, browser.runtime.id),
+        functionToString(
+            initInterceptor,
+            browser.runtime.id,
+            GET_LIVE_CHAT_URL,
+        ),
     );
 }

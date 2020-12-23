@@ -180,13 +180,6 @@ export function useInitChatEventObserver(initData: InitData): void {
                     ),
                 );
             }
-            if (info.processXhrQueueLength) {
-                dispatch(
-                    debugInfo.actions.updateProcessXhrQueueLength(
-                        info.processXhrQueueLength,
-                    ),
-                );
-            }
             if (info.outdatedChatEventCount) {
                 dispatch(
                     debugInfo.actions.addOutdatedRemovedChatEventCount(

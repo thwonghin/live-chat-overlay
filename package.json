@@ -91,9 +91,7 @@
         "webpack-cli": "^4.2.0"
     },
     "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not op_mini all"
+        "Chrome >= 74"
     ],
     "husky": {
         "hooks": {

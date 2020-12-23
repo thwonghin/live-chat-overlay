@@ -51,7 +51,6 @@ interface DebugOverlayLayoutProps {
     getEleWidthBenchmark: RoundedBenchmark;
     processXhrBenchmark: RoundedBenchmark;
     processChatEventBenchmark: RoundedBenchmark;
-    processXhrQueueLength: number;
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
 }
@@ -61,7 +60,6 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
     getEleWidthBenchmark,
     processChatEventBenchmark,
     processXhrBenchmark,
-    processXhrQueueLength,
     processChatEventQueueLength,
     outdatedRemovedChatEventCount,
 }) => {
@@ -103,9 +101,6 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                     </>
                 )}
                 <br />
-                <p className={classes['debug-text']}>
-                    {`Response Process Queue Length: ${processXhrQueueLength}`}
-                </p>
                 {processXhrBenchmark.count !== 0 && (
                     <>
                         <p className={classes['debug-text']}>
@@ -180,9 +175,6 @@ const DebugOverlay: React.FC = () => {
             roundBenchmark(rootState.debugInfo.processChatEventBenchmark),
         shallowEqual,
     );
-    const processXhrQueueLength = useSelector<RootState, number>(
-        (rootState) => rootState.debugInfo.processXhrQueueLength,
-    );
     const processChatEventQueueLength = useSelector<RootState, number>(
         (rootState) => rootState.debugInfo.processChatEventQueueLength,
     );
@@ -196,7 +188,6 @@ const DebugOverlay: React.FC = () => {
             getEleWidthBenchmark={getEleWidthBenchmark}
             processChatEventBenchmark={processChatEventBenchmark}
             processXhrBenchmark={processXhrBenchmark}
-            processXhrQueueLength={processXhrQueueLength}
             processChatEventQueueLength={processChatEventQueueLength}
             outdatedRemovedChatEventCount={outdatedRemovedChatEventCount}
         />

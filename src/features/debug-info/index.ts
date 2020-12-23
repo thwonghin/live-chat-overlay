@@ -23,7 +23,6 @@ const initialState: State = {
         avg: 0,
         count: 0,
     },
-    processXhrQueueLength: 0,
     processChatEventQueueLength: 0,
     outdatedRemovedChatEventCount: 0,
 };
@@ -69,12 +68,6 @@ const slice = createSlice({
                     state.processChatEventBenchmark,
                     action.payload * 1000,
                 ),
-            };
-        },
-        updateProcessXhrQueueLength(state, action: PayloadAction<number>) {
-            return {
-                ...state,
-                processXhrQueueLength: action.payload,
             };
         },
         updateProcessChatEventQueueLength(

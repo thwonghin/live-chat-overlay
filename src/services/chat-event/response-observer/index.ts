@@ -6,6 +6,7 @@ import type {
     InitData,
 } from '@/definitions/youtube';
 import { benchmark, EventEmitter } from '@/utils';
+import { GET_LIVE_CHAT_REPLAY_URL } from '@/utils/youtube';
 
 import {
     mapChatItemsFromReplayResponse,
@@ -18,15 +19,9 @@ import {
 } from './helpers';
 import type { ChatItem } from '../models';
 
-const GET_LIVE_CHAT_URL =
-    'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat';
-const GET_LIVE_CHAT_REPLAY_URL =
-    'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat_replay';
-
 export type DebugInfo = Partial<{
     processXhrResponseMs: number;
     processChatEventMs: number;
-    processXhrQueueLength: number;
     processChatEventQueueLength: number;
     outdatedChatEventCount: number;
 }>;
@@ -43,13 +38,6 @@ export class ResponseObserver {
     private isStarted = false;
 
     private isDebugging = false;
-
-    private xhrEventProcessQueue: {
-        responseText: string;
-        isReplay: boolean;
-    }[] = [];
-
-    private xhrEventProcessInterval = -1;
 
     private chatItemProcessQueue: ChatItem[] = [];
 
@@ -84,35 +72,14 @@ export class ResponseObserver {
     private onChatMessage = (e: Event): void => {
         const customEvent = e as CustomEvent<fetchInterceptor.CustomEventDetail>;
 
-        if (!customEvent.detail.url.startsWith(GET_LIVE_CHAT_URL)) {
-            return;
-        }
-
         const isReplay = customEvent.detail.url.startsWith(
             GET_LIVE_CHAT_REPLAY_URL,
         );
-        this.xhrEventProcessQueue.push({
-            isReplay,
-            responseText: customEvent.detail.response,
-        });
-        this.emitDebugInfoEvent({
-            processXhrQueueLength: this.xhrEventProcessQueue.length,
-        });
-    };
 
-    private processXhrEvent = (): void => {
-        const xhrEvent = this.xhrEventProcessQueue.shift();
-
-        if (!xhrEvent) {
-            return;
-        }
+        const response = customEvent.detail.response as YotubeChatResponse;
 
         const { runtime } = benchmark(() => {
-            const response = JSON.parse(
-                xhrEvent.responseText,
-            ) as YotubeChatResponse;
-
-            const chatItems = xhrEvent.isReplay
+            const chatItems = isReplay
                 ? mapChatItemsFromReplayResponse(
                       (response as ReplayResponse).continuationContents,
                   )
@@ -125,7 +92,6 @@ export class ResponseObserver {
 
         this.emitDebugInfoEvent({
             processXhrResponseMs: runtime,
-            processXhrQueueLength: this.xhrEventProcessQueue.length,
             processChatEventQueueLength: this.chatItemProcessQueue.length,
         });
     };
@@ -212,10 +178,6 @@ export class ResponseObserver {
         }
         this.isStarted = true;
         window.addEventListener(this.chatEventName, this.onChatMessage);
-        this.xhrEventProcessInterval = window.setInterval(
-            this.processXhrEvent,
-            500,
-        );
     }
 
     public stop(): void {
@@ -224,15 +186,12 @@ export class ResponseObserver {
         }
         this.isStarted = false;
         window.removeEventListener(this.chatEventName, this.onChatMessage);
-        window.clearInterval(this.xhrEventProcessInterval);
     }
 
     public reset(): void {
         this.chatItemProcessQueue = [];
-        this.xhrEventProcessQueue = [];
 
         this.emitDebugInfoEvent({
-            processXhrQueueLength: 0,
             processChatEventQueueLength: 0,
         });
     }
@@ -240,7 +199,6 @@ export class ResponseObserver {
     public startDebug(): void {
         this.isDebugging = true;
         this.emitDebugInfoEvent({
-            processXhrQueueLength: this.xhrEventProcessQueue.length,
             processChatEventQueueLength: this.chatItemProcessQueue.length,
         });
     }

@@ -11,6 +11,10 @@ export const CLASS_PANEL_MENU = 'ytp-panel-menu';
 export const CLASS_MENUITEM = 'ytp-menuitem';
 export const CLASS_AUTOHIDE = 'ytp-autohide';
 
+export const GET_LIVE_CHAT_URL =
+    'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat';
+export const GET_LIVE_CHAT_REPLAY_URL = `${GET_LIVE_CHAT_URL}_replay`;
+
 export function getVideoPlayerContainer(): HTMLElement | null {
     return window.parent.document.querySelector(
         '#ytd-player .html5-video-container',
