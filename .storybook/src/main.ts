@@ -1,6 +1,6 @@
 import configFunc from '../../webpack/dist/webpack.config';
 
-const custom = configFunc('storybook');
+const custom = configFunc({ storybook: true });
 
 export default {
     stories: ['../../src/**/*.stories.tsx'],

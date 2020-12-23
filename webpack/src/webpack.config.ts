@@ -16,18 +16,17 @@ const distDir = path.resolve(rootDir, 'dist');
 
 type WebpackEnv = 'production' | 'development' | 'release' | 'storybook';
 
-export default (webpackEnv: WebpackEnv): webpack.Configuration => {
+export default (
+    webpackEnv: Partial<Record<WebpackEnv, boolean>>,
+): webpack.Configuration => {
     function getMode(): 'production' | 'development' | 'none' {
-        switch (webpackEnv) {
-            case 'development':
-            case 'storybook':
-                return 'development';
-            case 'production':
-            case 'release':
-                return 'production';
-            default:
-                return 'none';
+        if (webpackEnv.development || webpackEnv.storybook) {
+            return 'development';
         }
+        if (webpackEnv.production || webpackEnv.release) {
+            return 'production';
+        }
+        return 'none';
     }
 
     const shouldSkipPreChecking = webpackEnv === 'release';
