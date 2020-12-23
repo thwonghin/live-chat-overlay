@@ -133,7 +133,7 @@ interface PurchaseAmountText {
 export interface LiveChatPaidMessageRenderer {
     id: string;
     timestampUsec: string;
-    authorName: AuthorName;
+    authorName?: AuthorName;
     authorPhoto: AuthorPhoto;
     purchaseAmountText: PurchaseAmountText;
     message?: Message;
@@ -154,7 +154,7 @@ export interface LiveChatMembershipItemRenderer {
     timestampUsec: string;
     authorExternalChannelId: string;
     headerSubtext: Message;
-    authorName: AuthorName;
+    authorName?: AuthorName;
     authorPhoto: AuthorPhoto;
     authorBadges: AuthorBadge[];
     contextMenuEndpoint: ContextMenuEndpoint;
@@ -172,7 +172,7 @@ export interface LiveChatPaidStickerRenderer {
     contextMenuAccessibility: ContextMenuAccessibility;
     timestampUsec: string;
     authorPhoto: AuthorPhoto;
-    authorName: AuthorName;
+    authorName?: AuthorName;
     authorExternalChannelId: string;
     timestampText: TimestampText;
     sticker: Sticker;
