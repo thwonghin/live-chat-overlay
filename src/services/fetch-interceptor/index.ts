@@ -10,28 +10,22 @@ export interface CustomEventDetail {
 function initInterceptor(extensionId: string): void {
     const originalFetch = window.fetch;
 
-    window.fetch = (url, ...args) => {
-        let result: Response;
-        return originalFetch(url, ...args)
-            .then((fetchResult) => {
-                result = fetchResult;
-                return result.clone().text();
-            })
-            .then((resultText) => {
-                const event = new CustomEvent<CustomEventDetail>(
-                    `${extensionId}_chat_message`,
-                    {
-                        detail: {
-                            response: resultText,
-                            url: typeof url === 'string' ? url : url.url,
-                        },
-                    },
-                );
+    window.fetch = async (url, ...args) => {
+        const fetchResult = await originalFetch(url, ...args);
+        const clonedResult = await fetchResult.clone().text();
+        const event = new CustomEvent<CustomEventDetail>(
+            `${extensionId}_chat_message`,
+            {
+                detail: {
+                    response: clonedResult,
+                    url: typeof url === 'string' ? url : url.url,
+                },
+            },
+        );
 
-                window.dispatchEvent(event);
+        window.dispatchEvent(event);
 
-                return result;
-            });
+        return fetchResult;
     };
 }
 
