@@ -115,7 +115,7 @@ interface TimestampText {
 
 export interface LiveChatTextMessageRenderer {
     message: Message;
-    authorName: AuthorName;
+    authorName?: AuthorName;
     authorPhoto: AuthorPhoto;
     contextMenuEndpoint: ContextMenuEndpoint;
     id: string;

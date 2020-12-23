@@ -12,12 +12,16 @@ import * as chatModel from '../models';
 interface MapAddChatItemActionsParams {
     addChatItemActions: liveChatResponse.AddChatItemAction[];
     liveDelayInMs: number;
+    currentTimestampMs: number;
+    playerTimestampMs: number;
     videoTimestampInMs?: number;
 }
 
 export function mapAddChatItemActions({
     addChatItemActions,
     liveDelayInMs,
+    currentTimestampMs,
+    playerTimestampMs,
     videoTimestampInMs,
 }: MapAddChatItemActionsParams): chatModel.ChatItem[] {
     return addChatItemActions
@@ -26,6 +30,8 @@ export function mapAddChatItemActions({
                 return mapLiveChatPaidMessageItemRenderer({
                     renderer: action.item.liveChatPaidMessageRenderer,
                     liveDelayInMs,
+                    currentTimestampMs,
+                    playerTimestampMs,
                     videoTimestampInMs,
                 });
             }
@@ -33,6 +39,8 @@ export function mapAddChatItemActions({
                 return mapLiveChatPaidStickerRenderer({
                     renderer: action.item.liveChatPaidStickerRenderer,
                     liveDelayInMs,
+                    currentTimestampMs,
+                    playerTimestampMs,
                     videoTimestampInMs,
                 });
             }
@@ -40,6 +48,8 @@ export function mapAddChatItemActions({
                 return mapLiveChatMembershipItemRenderer({
                     renderer: action.item.liveChatMembershipItemRenderer,
                     liveDelayInMs,
+                    currentTimestampMs,
+                    playerTimestampMs,
                     videoTimestampInMs,
                 });
             }
@@ -47,6 +57,8 @@ export function mapAddChatItemActions({
                 return mapLiveChatTextMessageRenderer({
                     renderer: action.item.liveChatTextMessageRenderer,
                     liveDelayInMs,
+                    currentTimestampMs,
+                    playerTimestampMs,
                     videoTimestampInMs,
                 });
             }

@@ -119,11 +119,12 @@ describe('mapLiveChatTextMessageRenderer', () => {
         const result = mapLiveChatTextMessageRenderer({
             renderer: getFixture(),
             liveDelayInMs: 1000,
+            currentTimestampMs: 160000000000,
+            playerTimestampMs: 1500,
         });
 
         expect(result).toEqual({
             id: 'random-id',
-            liveDelayInMs: 1000,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -157,7 +158,7 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1500000000000000,
+            videoTimestampInMs: 1340000002500,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'member',
@@ -172,11 +173,12 @@ describe('mapLiveChatTextMessageRenderer', () => {
         const result = mapLiveChatTextMessageRenderer({
             renderer: fixture,
             liveDelayInMs: 1000,
+            currentTimestampMs: 160000000000,
+            playerTimestampMs: 1500,
         });
 
         expect(result).toEqual({
             id: 'random-id',
-            liveDelayInMs: 1000,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -210,7 +212,7 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1500000000000000,
+            videoTimestampInMs: 1340000002500,
             authorName: 'Sample Author',
             authorBadges: [],
             authorType: 'guest',
@@ -237,11 +239,12 @@ describe('mapLiveChatTextMessageRenderer', () => {
         const result = mapLiveChatTextMessageRenderer({
             renderer: fixture,
             liveDelayInMs: 1000,
+            currentTimestampMs: 160000000000,
+            playerTimestampMs: 1500,
         });
 
         expect(result).toEqual({
             id: 'random-id',
-            liveDelayInMs: 1000,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -275,7 +278,7 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1500000000000000,
+            videoTimestampInMs: 1340000002500,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'moderator',
@@ -288,13 +291,14 @@ describe('mapLiveChatTextMessageRenderer', () => {
 
         const result = mapLiveChatTextMessageRenderer({
             renderer: fixture,
-            videoTimestampInMs: 100000000,
             liveDelayInMs: 0,
+            currentTimestampMs: 160000000000,
+            playerTimestampMs: 1500,
+            videoTimestampInMs: 100000000,
         });
 
         expect(result).toEqual({
             id: 'random-id',
-            liveDelayInMs: 0,
             messageParts: [
                 {
                     text: 'Test Message',
@@ -328,7 +332,6 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            timestampInUs: 1500000000000000,
             videoTimestampInMs: 100000000,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],

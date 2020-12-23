@@ -1,4 +1,4 @@
-import { isOutdatedReplayChatItem } from '@/services/chat-event/response-observer/helpers';
+import { isOutdatedChatItem } from '@/services/chat-event/response-observer/helpers';
 
 const chatItemVideoTimestamp = 5000;
 
@@ -7,7 +7,7 @@ interface TestParams {
     expectedResult: boolean;
 }
 
-describe('isOutdatedReplayChatItem', () => {
+describe('isOutdatedChatItem', () => {
     describe('when the factor is 1', () => {
         describe.each`
             condition                                       | currentPlayerTime | expectedResult
@@ -19,7 +19,7 @@ describe('isOutdatedReplayChatItem', () => {
         `('when $condition', (testParams: TestParams) => {
             it('should return correct result', () => {
                 expect(
-                    isOutdatedReplayChatItem({
+                    isOutdatedChatItem({
                         factor: 1,
                         chatItemAtVideoTimestampInMs:
                             chatItemVideoTimestamp * 1000,
@@ -42,7 +42,7 @@ describe('isOutdatedReplayChatItem', () => {
         `('when $condition', (testParams: TestParams) => {
             it('should return correct result', () => {
                 expect(
-                    isOutdatedReplayChatItem({
+                    isOutdatedChatItem({
                         factor: 3,
                         chatItemAtVideoTimestampInMs:
                             chatItemVideoTimestamp * 1000,
