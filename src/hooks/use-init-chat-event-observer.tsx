@@ -76,6 +76,7 @@ function getRenderedNumOfLinesForChatItem({
 
 export function useInitChatEventObserver(initData: InitData): void {
     const dispatch = useDispatch();
+    const processLock = useRef(true);
     const { settings } = useSettings();
     const chatEventObserver = useContext(ChatEventObserverContext);
     const { isPaused, isSeeking } = useVideoPlayerState();
@@ -94,54 +95,63 @@ export function useInitChatEventObserver(initData: InitData): void {
     );
 
     const processChatItem = useCallback(async () => {
-        const { isFull } = store.getState().chatEvents;
-
-        // Reset buffer
-        if (!isFull) {
-            chatItemBufferRef.current = undefined;
-        }
-
-        // Try to dequeue in all cases to avoid overflow
-        const chatItem = isFull
-            ? chatItemBufferRef.current ?? dequeueChatItem()
-            : dequeueChatItem();
-
-        if (!chatItem || !isDocumentVisible || isPaused) {
+        if (!processLock.current) {
             return;
         }
+        let shouldQuit = false;
+        processLock.current = false;
 
-        const {
-            result: elementWidth,
-            runtime: getEleWidthRuntime,
-        } = await benchmarkAsync(
-            () =>
-                getChatItemRenderedWidth({
-                    chatItem,
-                    settings,
-                }),
-            isDebugging,
-        );
+        while (!shouldQuit) {
+            const chatItem = chatItemBufferRef.current ?? dequeueChatItem();
 
-        if (isDebugging) {
-            dispatch(
-                debugInfo.actions.addChatItemEleWidthMetric(getEleWidthRuntime),
+            if (!chatItem || !isDocumentVisible || isPaused) {
+                shouldQuit = true;
+                break;
+            }
+
+            const {
+                result: elementWidth,
+                runtime: getEleWidthRuntime,
+                // eslint-disable-next-line no-await-in-loop
+            } = await benchmarkAsync(
+                () =>
+                    getChatItemRenderedWidth({
+                        chatItem,
+                        settings,
+                    }),
+                isDebugging,
             );
-        }
 
-        // Set buffer for next loop if it is full after dispatch the chat item
-        chatItemBufferRef.current = chatItem;
+            if (isDebugging) {
+                dispatch(
+                    debugInfo.actions.addChatItemEleWidthMetric(
+                        getEleWidthRuntime,
+                    ),
+                );
+            }
 
-        dispatch(
-            chatEvents.actions.addItem({
-                chatItem,
-                playerWidth,
-                elementWidth,
-                numberOfLines: getRenderedNumOfLinesForChatItem({
-                    settings,
+            dispatch(
+                chatEvents.actions.addItem({
                     chatItem,
+                    playerWidth,
+                    elementWidth,
+                    numberOfLines: getRenderedNumOfLinesForChatItem({
+                        settings,
+                        chatItem,
+                    }),
                 }),
-            }),
-        );
+            );
+
+            const { lastLineNumber } = store.getState().chatEvents;
+            // Set buffer for next loop if it is full after dispatch the chat item
+            if (lastLineNumber === null) {
+                chatItemBufferRef.current = chatItem;
+                shouldQuit = true;
+            } else {
+                chatItemBufferRef.current = undefined;
+            }
+        }
+        processLock.current = true;
     }, [
         store,
         isDocumentVisible,
@@ -153,7 +163,7 @@ export function useInitChatEventObserver(initData: InitData): void {
         dispatch,
     ]);
 
-    useInterval(processChatItem, 300);
+    useInterval(processChatItem, 500);
 
     useEffect(() => {
         function handleDebugInfo(info: chatEvent.DebugInfo) {

@@ -7,7 +7,7 @@ import { State } from './types';
 import { getLineNumber } from './helpers';
 
 const initialState: State = {
-    isFull: false,
+    lastLineNumber: null,
     chatItems: [],
     chatItemStateById: {},
     chatItemsByLineNumber: {},
@@ -54,7 +54,7 @@ const slice = createSlice({
             if (lineNumber === null) {
                 return {
                     ...state,
-                    isFull: true,
+                    lastLineNumber: null,
                 };
             }
 
@@ -68,7 +68,7 @@ const slice = createSlice({
 
             return {
                 ...state,
-                isFull: false,
+                lastLineNumber: lineNumber,
                 chatItems: state.chatItems.concat(uiChatItem),
                 chatItemStateById: {
                     ...state.chatItemStateById,
