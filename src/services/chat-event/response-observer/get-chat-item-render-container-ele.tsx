@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import * as settingsStorage from '@/services/settings-storage';
+import { settingsStorage } from '@/services';
 
 import { ChatItem } from '../models';
 

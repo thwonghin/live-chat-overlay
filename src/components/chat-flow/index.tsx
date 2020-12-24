@@ -5,8 +5,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import type { RootState } from '@/app/live-chat-overlay/store';
 import { chatEvents } from '@/features';
 import { useSettings, useInterval, useVideoPlayerRect } from '@/hooks';
-import type { settingsStorage } from '@/services';
-import { CHAT_ITEM_RENDER_ID } from '@/services/chat-event/response-observer/get-chat-item-render-container-ele';
+import { settingsStorage, chatEvent } from '@/services';
 
 import { useToggleDebugMode } from './use-toggle-debug-mode';
 import classes from './index.scss';
@@ -53,7 +52,7 @@ const ChatFlowLayout: React.FC<Props> = ({
         <div className={classes.container} style={containerStyle}>
             <div
                 className={classes['test-render-container']}
-                id={CHAT_ITEM_RENDER_ID}
+                id={chatEvent.CHAT_ITEM_RENDER_ID}
             />
             <div style={style}>
                 {chatItems.map((chatItem) => (

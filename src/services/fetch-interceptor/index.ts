@@ -1,7 +1,6 @@
 import { browser } from 'webextension-polyfill-ts';
 
-import { appendScript, functionToString } from '@/utils';
-import { GET_LIVE_CHAT_URL } from '@/utils/youtube';
+import { appendScript, functionToString, youtube } from '@/utils';
 
 export interface CustomEventDetail {
     response: unknown;
@@ -42,7 +41,7 @@ export function attach(): () => void {
         functionToString(
             initInterceptor,
             browser.runtime.id,
-            GET_LIVE_CHAT_URL,
+            youtube.GET_LIVE_CHAT_URL,
         ),
     );
 }

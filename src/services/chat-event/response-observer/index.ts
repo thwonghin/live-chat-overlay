@@ -5,8 +5,7 @@ import type {
     LiveResponse,
     InitData,
 } from '@/definitions/youtube';
-import { benchmark, benchmarkAsync, EventEmitter } from '@/utils';
-import { GET_LIVE_CHAT_REPLAY_URL } from '@/utils/youtube';
+import { benchmark, benchmarkAsync, EventEmitter, youtube } from '@/utils';
 import { settingsStorage } from '@/services';
 
 import {
@@ -19,6 +18,8 @@ import {
 } from './helpers';
 import { assignChatItemRenderedWidth } from './get-chat-item-render-container-ele';
 import type { ChatItem } from '../models';
+
+export { CHAT_ITEM_RENDER_ID } from './get-chat-item-render-container-ele';
 
 export type DebugInfo = Partial<{
     processXhrResponseMs: number;
@@ -105,7 +106,7 @@ export class ResponseObserver {
         const customEvent = e as CustomEvent<fetchInterceptor.CustomEventDetail>;
 
         const isReplay = customEvent.detail.url.startsWith(
-            GET_LIVE_CHAT_REPLAY_URL,
+            youtube.GET_LIVE_CHAT_REPLAY_URL,
         );
 
         const response = customEvent.detail.response as YotubeChatResponse;
