@@ -1,3 +1,13 @@
+## 2.5.0 (2020-12-24)
+
+* chore: bump deps 2020-12-24 (#465) ([2f6684f](https://github.com/thwonghin/live-chat-overlay/commit/2f6684f)), closes [#465](https://github.com/thwonghin/live-chat-overlay/issues/465)
+* chore: use default terser settings from webpack (#461) ([ae2bcc4](https://github.com/thwonghin/live-chat-overlay/commit/ae2bcc4)), closes [#461](https://github.com/thwonghin/live-chat-overlay/issues/461)
+* test: rename test files to kebab-case (#464) ([5a88e2a](https://github.com/thwonghin/live-chat-overlay/commit/5a88e2a)), closes [#464](https://github.com/thwonghin/live-chat-overlay/issues/464)
+* feat: map live timestamp to video timestamp (#460) ([b4e2fc9](https://github.com/thwonghin/live-chat-overlay/commit/b4e2fc9)), closes [#460](https://github.com/thwonghin/live-chat-overlay/issues/460)
+* feat: show more chat event (#463) ([d957d24](https://github.com/thwonghin/live-chat-overlay/commit/d957d24)), closes [#463](https://github.com/thwonghin/live-chat-overlay/issues/463)
+
+
+
 ## 2.4.0 (2020-12-23)
 
 * chore: [security] bump node-fetch from 2.6.0 to 2.6.1 (#322) ([de04acb](https://github.com/thwonghin/live-chat-overlay/commit/de04acb)), closes [#322](https://github.com/thwonghin/live-chat-overlay/issues/322)
