@@ -7,7 +7,7 @@ import type {
 } from '@/definitions/youtube';
 import { benchmark, benchmarkAsync, EventEmitter } from '@/utils';
 import { GET_LIVE_CHAT_REPLAY_URL } from '@/utils/youtube';
-import { StorageInstance } from '@/services/settings-storage';
+import { settingsStorage } from '@/services';
 
 import {
     mapChatItemsFromReplayResponse,
@@ -82,7 +82,7 @@ export class ResponseObserver {
             async () =>
                 assignChatItemRenderedWidth({
                     chatItems,
-                    settings: StorageInstance.currentSettings,
+                    settings: settingsStorage.StorageInstance.currentSettings,
                 }),
             this.isDebugging,
         );
@@ -131,7 +131,8 @@ export class ResponseObserver {
                 async () =>
                     assignChatItemRenderedWidth({
                         chatItems,
-                        settings: StorageInstance.currentSettings,
+                        settings:
+                            settingsStorage.StorageInstance.currentSettings,
                     }),
                 this.isDebugging,
             );
