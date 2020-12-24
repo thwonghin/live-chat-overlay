@@ -16,8 +16,8 @@ import {
     isOutdatedChatItem,
     getOutdatedFactor,
     isReplayInitData,
-    assignChatItemRenderedWidth,
 } from './helpers';
+import { assignChatItemRenderedWidth } from './get-chat-item-render-container-ele';
 import type { ChatItem } from '../models';
 
 export type DebugInfo = Partial<{
