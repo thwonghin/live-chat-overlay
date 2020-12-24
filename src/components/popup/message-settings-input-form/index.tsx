@@ -13,12 +13,16 @@ const MessageSettingsInputForm: React.FC<Props> = ({ messageSettingsKey }) => {
     const { settings, updateSettings } = useSettings();
 
     const handleSubmit = useCallback(
-        (value: settingsStorage.MessageSettings) => {
+        (value: {
+            globalOpacity: number;
+            messageSettings: settingsStorage.MessageSettings;
+        }) => {
             updateSettings((prevSettings) => ({
                 ...prevSettings,
+                globalOpacity: value.globalOpacity,
                 messageSettings: {
                     ...prevSettings.messageSettings,
-                    [messageSettingsKey]: value,
+                    [messageSettingsKey]: value.messageSettings,
                 },
             }));
         },
@@ -29,6 +33,7 @@ const MessageSettingsInputForm: React.FC<Props> = ({ messageSettingsKey }) => {
         <Layout
             key={messageSettingsKey}
             onSubmit={handleSubmit}
+            globalOpacity={settings.globalOpacity}
             messageSettings={settings.messageSettings[messageSettingsKey]}
             isBackgroundColorEditable={messageSettingsKey !== 'super-chat'}
         />

@@ -8,18 +8,26 @@ import type { settingsStorage } from '@/services';
 import classes from './index.scss';
 
 interface Props {
+    globalOpacity: number;
     messageSettings: settingsStorage.MessageSettings;
-    onSubmit: (value: settingsStorage.MessageSettings) => void;
+    onSubmit: (value: {
+        globalOpacity: number;
+        messageSettings: settingsStorage.MessageSettings;
+    }) => void;
     isBackgroundColorEditable: boolean;
 }
 
 const MessageSettingsInputFormLayout: React.FC<Props> = ({
+    globalOpacity,
     messageSettings,
     onSubmit,
     isBackgroundColorEditable,
 }) => {
     const formik = useFormik({
-        initialValues: messageSettings,
+        initialValues: {
+            globalOpacity,
+            messageSettings,
+        },
         onSubmit,
     });
 
@@ -31,11 +39,29 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
             <div className={classes.row}>
                 <TextField
                     color="secondary"
+                    label={browser.i18n.getMessage('globalOpacityInputLabel')}
+                    value={formik.values.globalOpacity}
+                    name="globalOpacity"
+                    type="number"
+                    onChange={formik.handleChange}
+                    inputProps={{
+                        min: 0,
+                        max: 1,
+                        step: 0.01,
+                    }}
+                    style={{
+                        width: '100%',
+                    }}
+                />
+            </div>
+            <div className={classes.row}>
+                <TextField
+                    color="secondary"
                     label={browser.i18n.getMessage(
                         'messageSettingsColorInputLabel',
                     )}
-                    value={formik.values.color}
-                    name="color"
+                    value={formik.values.messageSettings.color}
+                    name="messageSettings.color"
                     type="text"
                     onChange={formik.handleChange}
                     style={{
@@ -47,8 +73,8 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     label={browser.i18n.getMessage(
                         'messageSettingsWeightInputLabel',
                     )}
-                    value={formik.values.weight}
-                    name="weight"
+                    value={formik.values.messageSettings.weight}
+                    name="messageSettings.weight"
                     type="number"
                     onChange={formik.handleChange}
                     inputProps={{
@@ -67,8 +93,8 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     label={browser.i18n.getMessage(
                         'messageSettingsStrokeColorInputLabel',
                     )}
-                    value={formik.values.strokeColor}
-                    name="strokeColor"
+                    value={formik.values.messageSettings.strokeColor}
+                    name="messageSettings.strokeColor"
                     type="text"
                     onChange={formik.handleChange}
                     style={{
@@ -80,8 +106,8 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     label={browser.i18n.getMessage(
                         'messageSettingsStrokeWidthInputLabel',
                     )}
-                    value={formik.values.strokeWidth}
-                    name="strokeWidth"
+                    value={formik.values.messageSettings.strokeWidth}
+                    name="messageSettings.strokeWidth"
                     type="number"
                     inputProps={{
                         min: 0,
@@ -101,8 +127,8 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                         'messageSettingsBgColorInputLabel',
                     )}
                     disabled={!isBackgroundColorEditable}
-                    value={formik.values.bgColor}
-                    name="bgColor"
+                    value={formik.values.messageSettings.bgColor}
+                    name="messageSettings.bgColor"
                     type="text"
                     onChange={formik.handleChange}
                     style={{
@@ -114,8 +140,8 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     label={browser.i18n.getMessage(
                         'messageSettingsOpacityInputLabel',
                     )}
-                    value={formik.values.opacity}
-                    name="opacity"
+                    value={formik.values.messageSettings.opacity}
+                    name="messageSettings.opacity"
                     type="number"
                     onChange={formik.handleChange}
                     inputProps={{

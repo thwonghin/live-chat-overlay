@@ -14,6 +14,9 @@
     "messageSettingsButtonTitle": {
         "message": "評論主題設定"
     },
+    "globalOpacityInputLabel": {
+        "message": "廣域透明度"
+    },
     "messageSettingsColorInputLabel": {
         "message": "字體顏色"
     },
