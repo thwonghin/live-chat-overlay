@@ -1,3 +1,11 @@
+## 2.6.0 (2020-12-24)
+
+* refactor: update imports (#468) ([683afb3](https://github.com/thwonghin/live-chat-overlay/commit/683afb3)), closes [#468](https://github.com/thwonghin/live-chat-overlay/issues/468)
+* fix: update settings cause re-render (#467) ([7fcc60a](https://github.com/thwonghin/live-chat-overlay/commit/7fcc60a)), closes [#467](https://github.com/thwonghin/live-chat-overlay/issues/467)
+* feat: global opacity (#466) ([6e61e35](https://github.com/thwonghin/live-chat-overlay/commit/6e61e35)), closes [#466](https://github.com/thwonghin/live-chat-overlay/issues/466)
+
+
+
 ## 2.5.0 (2020-12-24)
 
 * chore: bump deps 2020-12-24 (#465) ([2f6684f](https://github.com/thwonghin/live-chat-overlay/commit/2f6684f)), closes [#465](https://github.com/thwonghin/live-chat-overlay/issues/465)
