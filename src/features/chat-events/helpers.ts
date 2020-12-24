@@ -19,7 +19,10 @@ function hasSpaceInLine({
 }: HasSpaceInLineParams): boolean {
     const lastMsgFlowedTime =
         (addTimestamp - lastMessageInLine.addTimestamp) / 1000;
-    const lastMsgWidth = lastMessageInLine.elementWidth;
+    const lastMsgWidth = lastMessageInLine.width;
+    if (!lastMsgWidth) {
+        throw new Error('Unknown width');
+    }
     const lastMsgSpeed = (containerWidth + lastMsgWidth) / flowTimeInSec;
     const lastMsgPos = lastMsgSpeed * lastMsgFlowedTime - lastMsgWidth;
 

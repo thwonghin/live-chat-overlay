@@ -18,6 +18,7 @@ export type MessagePart = TextPart | EmojiPart;
 
 export interface NormalChatItem {
     id: string;
+    width?: number;
     messageParts: MessagePart[];
     avatars: Thumbnail[];
     videoTimestampInMs: number;

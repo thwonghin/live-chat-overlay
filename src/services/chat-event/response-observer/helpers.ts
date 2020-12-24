@@ -1,4 +1,5 @@
 import { first } from 'lodash-es';
+
 import { isNonNullable } from '@/utils';
 import type {
     ReplayContinuationContents,
@@ -6,6 +7,7 @@ import type {
     ReplayInitData,
     InitData,
 } from '@/definitions/youtube';
+
 import { mapAddChatItemActions, isNormalChatItem } from '../mapper';
 import { ChatItem } from '../models';
 

@@ -1,8 +1,6 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
-import ReactDOM from 'react-dom';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
-import { benchmarkAsync } from '@/utils';
 import {
     useInterval,
     useVideoPlayerRect,
@@ -15,49 +13,6 @@ import { chatEvents, debugInfo } from '@/features';
 import { settingsStorage, chatEvent } from '@/services';
 import type { RootState } from '@/app/live-chat-overlay/store';
 import type { InitData } from '@/definitions/youtube';
-import type { UiChatItem } from '@/components/chat-flow/types';
-import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-
-export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
-
-interface GetChatItemRenderedWidthParams {
-    chatItem: chatEvent.ChatItem;
-    settings: settingsStorage.Settings;
-}
-
-async function getChatItemRenderedWidth({
-    chatItem,
-    settings,
-}: GetChatItemRenderedWidthParams): Promise<number> {
-    const containerEle = window.parent.document.querySelector(
-        `#${CHAT_ITEM_RENDER_ID}`,
-    ) as HTMLElement;
-
-    const tempUiChatItem: UiChatItem = {
-        ...chatItem,
-        numberOfLines: 0,
-        addTimestamp: 0,
-        lineNumber: 0,
-        elementWidth: 0,
-    };
-
-    await new Promise<void>((resolve) => {
-        ReactDOM.render(
-            <ChatItemRenderer chatItem={tempUiChatItem} settings={settings} />,
-            containerEle,
-            resolve,
-        );
-    });
-
-    const rect = containerEle?.children[0]?.getBoundingClientRect();
-
-    const width = rect?.width;
-    if (!width) {
-        throw new Error('Unknown error');
-    }
-
-    return width;
-}
 
 function getRenderedNumOfLinesForChatItem({
     settings,
@@ -76,6 +31,7 @@ function getRenderedNumOfLinesForChatItem({
 
 export function useInitChatEventObserver(initData: InitData): void {
     const dispatch = useDispatch();
+    const processLock = useRef(true);
     const { settings } = useSettings();
     const chatEventObserver = useContext(ChatEventObserverContext);
     const { isPaused, isSeeking } = useVideoPlayerState();
@@ -93,67 +49,53 @@ export function useInitChatEventObserver(initData: InitData): void {
         [chatEventObserver],
     );
 
-    const processChatItem = useCallback(async () => {
-        const { isFull } = store.getState().chatEvents;
-
-        // Reset buffer
-        if (!isFull) {
-            chatItemBufferRef.current = undefined;
-        }
-
-        // Try to dequeue in all cases to avoid overflow
-        const chatItem = isFull
-            ? chatItemBufferRef.current ?? dequeueChatItem()
-            : dequeueChatItem();
-
-        if (!chatItem || !isDocumentVisible || isPaused) {
+    const processChatItem = useCallback(() => {
+        if (!processLock.current) {
             return;
         }
+        let shouldQuit = false;
+        processLock.current = false;
 
-        const {
-            result: elementWidth,
-            runtime: getEleWidthRuntime,
-        } = await benchmarkAsync(
-            () =>
-                getChatItemRenderedWidth({
-                    chatItem,
-                    settings,
-                }),
-            isDebugging,
-        );
+        while (!shouldQuit) {
+            const chatItem = chatItemBufferRef.current ?? dequeueChatItem();
 
-        if (isDebugging) {
+            if (!chatItem || !isDocumentVisible || isPaused) {
+                shouldQuit = true;
+                break;
+            }
+
             dispatch(
-                debugInfo.actions.addChatItemEleWidthMetric(getEleWidthRuntime),
-            );
-        }
-
-        // Set buffer for next loop if it is full after dispatch the chat item
-        chatItemBufferRef.current = chatItem;
-
-        dispatch(
-            chatEvents.actions.addItem({
-                chatItem,
-                playerWidth,
-                elementWidth,
-                numberOfLines: getRenderedNumOfLinesForChatItem({
-                    settings,
+                chatEvents.actions.addItem({
                     chatItem,
+                    playerWidth,
+                    numberOfLines: getRenderedNumOfLinesForChatItem({
+                        settings,
+                        chatItem,
+                    }),
                 }),
-            }),
-        );
+            );
+
+            const { lastLineNumber } = store.getState().chatEvents;
+            // Set buffer for next loop if it is full after dispatch the chat item
+            if (lastLineNumber === null) {
+                chatItemBufferRef.current = chatItem;
+                shouldQuit = true;
+            } else {
+                chatItemBufferRef.current = undefined;
+            }
+        }
+        processLock.current = true;
     }, [
         store,
         isDocumentVisible,
         isPaused,
-        isDebugging,
         dequeueChatItem,
         settings,
         playerWidth,
         dispatch,
     ]);
 
-    useInterval(processChatItem, 300);
+    useInterval(processChatItem, 500);
 
     useEffect(() => {
         function handleDebugInfo(info: chatEvent.DebugInfo) {
@@ -185,6 +127,13 @@ export function useInitChatEventObserver(initData: InitData): void {
                     ),
                 );
             }
+            if (info.getEleWidthBenchmark) {
+                dispatch(
+                    debugInfo.actions.addChatItemEleWidthMetric(
+                        info.getEleWidthBenchmark,
+                    ),
+                );
+            }
         }
 
         chatEventObserver.on('debug', handleDebugInfo);
@@ -207,6 +156,7 @@ export function useInitChatEventObserver(initData: InitData): void {
     }, [isSeeking, chatEventObserver]);
 
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         chatEventObserver.importInitData(initData);
     }, [initData, chatEventObserver]);
 

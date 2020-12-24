@@ -14,10 +14,9 @@ const authorName = 'Author Name';
 const normalMessageItem: chatEvent.NormalChatItem = {
     id: 'super-chat-sticker',
     authorBadges: [],
-    liveDelayInMs: 1000,
     messageParts: [{ text: 'This is a normal message' }],
     avatars,
-    timestampInUs: 1591425506771,
+    videoTimestampInMs: 1591425506771,
     authorName,
     chatType: 'normal',
     authorType: 'owner',
@@ -25,10 +24,9 @@ const normalMessageItem: chatEvent.NormalChatItem = {
 
 const superChatItem: chatEvent.SuperChatItem = {
     id: 'super-chat-message',
-    liveDelayInMs: 1000,
     messageParts: [{ text: 'This is a super chat message' }],
     avatars,
-    timestampInUs: 1591425506771,
+    videoTimestampInMs: 1591425506771,
     donationAmount: 'HK$ 100.00',
     authorName,
     color: 'red',
@@ -37,21 +35,19 @@ const superChatItem: chatEvent.SuperChatItem = {
 
 const membershipItem: chatEvent.MembershipItem = {
     id: 'membership',
-    liveDelayInMs: 1000,
     authorBadges: [],
     messageParts: [{ text: 'Someone becomes a member.' }],
     avatars,
-    timestampInUs: 1591425506771,
+    videoTimestampInMs: 1591425506771,
     authorName,
     chatType: 'membership',
 };
 
 const superStickerItem: chatEvent.SuperStickerItem = {
     id: 'super-chat-sticker',
-    liveDelayInMs: 1000,
     stickers: [],
     avatars,
-    timestampInUs: 1591425506771,
+    videoTimestampInMs: 1591425506771,
     donationAmount: 'HK$ 100.00',
     authorName,
     color: 'red',
@@ -478,6 +474,8 @@ describe('mapAddChatItemActions', () => {
             addChatItemActions: sampleActions,
             liveDelayInMs: 1000,
             videoTimestampInMs: 10000,
+            currentTimestampMs: 160000000,
+            playerTimestampMs: 1000,
         });
     });
 
@@ -492,7 +490,9 @@ describe('mapAddChatItemActions', () => {
 
     it('should call mapper with correct params', () => {
         expect(helpers.mapLiveChatPaidStickerRenderer).toHaveBeenCalledWith({
-            renderer: sampleActions[0].item?.liveChatPaidStickerRenderer ?? {},
+            renderer: sampleActions[0]?.item?.liveChatPaidStickerRenderer ?? {},
+            currentTimestampMs: 160000000,
+            playerTimestampMs: 1000,
             liveDelayInMs: 1000,
             videoTimestampInMs: 10000,
         });
@@ -500,22 +500,28 @@ describe('mapAddChatItemActions', () => {
         expect(helpers.mapLiveChatPaidMessageItemRenderer).toHaveBeenCalledWith(
             {
                 renderer:
-                    sampleActions[2].item?.liveChatPaidMessageRenderer ?? {},
+                    sampleActions[2]?.item?.liveChatPaidMessageRenderer ?? {},
                 liveDelayInMs: 1000,
+                currentTimestampMs: 160000000,
+                playerTimestampMs: 1000,
                 videoTimestampInMs: 10000,
             },
         );
 
         expect(helpers.mapLiveChatMembershipItemRenderer).toHaveBeenCalledWith({
             renderer:
-                sampleActions[3].item?.liveChatMembershipItemRenderer ?? {},
+                sampleActions[3]?.item?.liveChatMembershipItemRenderer ?? {},
             liveDelayInMs: 1000,
+            currentTimestampMs: 160000000,
+            playerTimestampMs: 1000,
             videoTimestampInMs: 10000,
         });
 
         expect(helpers.mapLiveChatTextMessageRenderer).toHaveBeenCalledWith({
-            renderer: sampleActions[4].item?.liveChatTextMessageRenderer ?? {},
+            renderer: sampleActions[4]?.item?.liveChatTextMessageRenderer ?? {},
             liveDelayInMs: 1000,
+            currentTimestampMs: 160000000,
+            playerTimestampMs: 1000,
             videoTimestampInMs: 10000,
         });
     });

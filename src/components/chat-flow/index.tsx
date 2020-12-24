@@ -4,13 +4,9 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 
 import type { RootState } from '@/app/live-chat-overlay/store';
 import { chatEvents } from '@/features';
-import {
-    useSettings,
-    useInterval,
-    useVideoPlayerRect,
-    CHAT_ITEM_RENDER_ID,
-} from '@/hooks';
+import { useSettings, useInterval, useVideoPlayerRect } from '@/hooks';
 import type { settingsStorage } from '@/services';
+import { CHAT_ITEM_RENDER_ID } from '@/services/chat-event/response-observer/get-chat-item-render-container-ele';
 
 import { useToggleDebugMode } from './use-toggle-debug-mode';
 import classes from './index.scss';

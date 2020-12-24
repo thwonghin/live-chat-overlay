@@ -7,7 +7,7 @@ import { State } from './types';
 import { getLineNumber } from './helpers';
 
 const initialState: State = {
-    isFull: false,
+    lastLineNumber: null,
     chatItems: [],
     chatItemStateById: {},
     chatItemsByLineNumber: {},
@@ -22,20 +22,18 @@ const slice = createSlice({
             action: PayloadAction<{
                 chatItem: chatEvent.ChatItem;
                 playerWidth: number;
-                elementWidth: number;
                 numberOfLines: number;
             }>,
         ): State {
-            const {
-                chatItem,
-                playerWidth,
-                elementWidth,
-                numberOfLines,
-            } = action.payload;
+            const { chatItem, playerWidth, numberOfLines } = action.payload;
 
             // Avoid duplicate chat item for some reason
             if (state.chatItemStateById[chatItem.id]) {
                 return state;
+            }
+
+            if (!chatItem.width) {
+                throw new Error('Unknown width');
             }
 
             const addTimestamp = Date.now();
@@ -44,7 +42,7 @@ const slice = createSlice({
             const lineNumber = getLineNumber({
                 chatItemsByLineNumber: state.chatItemsByLineNumber,
                 addTimestamp,
-                elementWidth,
+                elementWidth: chatItem.width,
                 maxLineNumber: settings.totalNumberOfLines,
                 flowTimeInSec: settings.flowTimeInSec,
                 containerWidth: playerWidth,
@@ -54,7 +52,7 @@ const slice = createSlice({
             if (lineNumber === null) {
                 return {
                     ...state,
-                    isFull: true,
+                    lastLineNumber: null,
                 };
             }
 
@@ -62,13 +60,12 @@ const slice = createSlice({
                 ...chatItem,
                 numberOfLines,
                 addTimestamp,
-                elementWidth,
                 lineNumber,
             };
 
             return {
                 ...state,
-                isFull: false,
+                lastLineNumber: lineNumber,
                 chatItems: state.chatItems.concat(uiChatItem),
                 chatItemStateById: {
                     ...state.chatItemStateById,
