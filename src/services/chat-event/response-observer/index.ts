@@ -5,8 +5,9 @@ import type {
     LiveResponse,
     InitData,
 } from '@/definitions/youtube';
-import { benchmark, EventEmitter } from '@/utils';
+import { benchmark, benchmarkAsync, EventEmitter } from '@/utils';
 import { GET_LIVE_CHAT_REPLAY_URL } from '@/utils/youtube';
+import { Settings } from '@/services/settings-storage';
 
 import {
     mapChatItemsFromReplayResponse,
@@ -15,6 +16,7 @@ import {
     isOutdatedChatItem,
     getOutdatedFactor,
     isReplayInitData,
+    assignChatItemRenderedWidth,
 } from './helpers';
 import type { ChatItem } from '../models';
 
@@ -23,6 +25,7 @@ export type DebugInfo = Partial<{
     processChatEventMs: number;
     processChatEventQueueLength: number;
     outdatedChatEventCount: number;
+    getEleWidthBenchmark: number;
 }>;
 
 type EventMap = {
@@ -43,6 +46,7 @@ export class ResponseObserver {
     constructor(
         readonly chatEventName: string,
         private videoPlayer: HTMLVideoElement,
+        private settings: Settings,
     ) {
         this.eventEmitter = new EventEmitter();
     }
@@ -63,7 +67,7 @@ export class ResponseObserver {
     public off: ResponseObserverEventEmitter['off'] = (...args) =>
         this.eventEmitter.off(...args);
 
-    public importInitData(initData: InitData): void {
+    public async importInitData(initData: InitData): Promise<void> {
         const timeInfo = this.getCurrentTimeInfo();
         const chatItems = isReplayInitData(initData)
             ? mapChatItemsFromReplayResponse({
@@ -75,9 +79,19 @@ export class ResponseObserver {
                   continuationContents: initData.continuationContents,
               });
 
-        this.chatItemProcessQueue.push(...chatItems);
+        const { result: chatItemsWithWidth, runtime } = await benchmarkAsync(
+            async () =>
+                assignChatItemRenderedWidth({
+                    chatItems,
+                    settings: this.settings,
+                }),
+            this.isDebugging,
+        );
+
+        this.chatItemProcessQueue.push(...chatItemsWithWidth);
 
         this.emitDebugInfoEvent({
+            getEleWidthBenchmark: runtime,
             processChatEventQueueLength: this.chatItemProcessQueue.length,
         });
     }
@@ -88,7 +102,7 @@ export class ResponseObserver {
         }
     }
 
-    private onChatMessage = (e: Event): void => {
+    private onChatMessage = async (e: Event): Promise<void> => {
         const customEvent = e as CustomEvent<fetchInterceptor.CustomEventDetail>;
 
         const isReplay = customEvent.detail.url.startsWith(
@@ -97,7 +111,7 @@ export class ResponseObserver {
 
         const response = customEvent.detail.response as YotubeChatResponse;
 
-        const { runtime } = benchmark(() => {
+        const { runtime } = await benchmarkAsync(async () => {
             const timeInfo = this.getCurrentTimeInfo();
             const chatItems = isReplay
                 ? mapChatItemsFromReplayResponse({
@@ -111,7 +125,24 @@ export class ResponseObserver {
                           .continuationContents,
                   });
 
-            this.chatItemProcessQueue.push(...chatItems);
+            const {
+                result: chatItemsWithWidth,
+                runtime: getEleRuntime,
+            } = await benchmarkAsync(
+                async () =>
+                    assignChatItemRenderedWidth({
+                        chatItems,
+                        settings: this.settings,
+                    }),
+                this.isDebugging,
+            );
+
+            this.chatItemProcessQueue.push(...chatItemsWithWidth);
+
+            this.emitDebugInfoEvent({
+                getEleWidthBenchmark: getEleRuntime,
+                processChatEventQueueLength: this.chatItemProcessQueue.length,
+            });
         }, this.isDebugging);
 
         this.emitDebugInfoEvent({

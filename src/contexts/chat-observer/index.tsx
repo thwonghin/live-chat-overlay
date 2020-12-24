@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { browser } from 'webextension-polyfill-ts';
 
-import { chatEvent } from '@/services';
+import { chatEvent, settingsStorage } from '@/services';
 import { getVideoEle } from '@/utils/youtube';
+import { useSettings } from '@/hooks';
 
 const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
@@ -10,6 +11,7 @@ export const ChatEventObserverContext = React.createContext<chatEvent.ResponseOb
     new chatEvent.ResponseObserver(
         CHAT_EVENT_NAME,
         document.createElement('video'),
+        {} as settingsStorage.Settings,
     ),
 );
 
@@ -22,7 +24,12 @@ export const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
     if (!video) {
         throw new Error('Video element not found');
     }
-    const observer = new chatEvent.ResponseObserver(CHAT_EVENT_NAME, video);
+    const { settings } = useSettings();
+    const observer = new chatEvent.ResponseObserver(
+        CHAT_EVENT_NAME,
+        video,
+        settings,
+    );
 
     return (
         <ChatEventObserverContext.Provider value={observer}>

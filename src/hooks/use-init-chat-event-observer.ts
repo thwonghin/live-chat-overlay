@@ -1,8 +1,6 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
-import ReactDOM from 'react-dom';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
-import { benchmarkAsync } from '@/utils';
 import {
     useInterval,
     useVideoPlayerRect,
@@ -15,49 +13,8 @@ import { chatEvents, debugInfo } from '@/features';
 import { settingsStorage, chatEvent } from '@/services';
 import type { RootState } from '@/app/live-chat-overlay/store';
 import type { InitData } from '@/definitions/youtube';
-import type { UiChatItem } from '@/components/chat-flow/types';
-import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
-
-interface GetChatItemRenderedWidthParams {
-    chatItem: chatEvent.ChatItem;
-    settings: settingsStorage.Settings;
-}
-
-async function getChatItemRenderedWidth({
-    chatItem,
-    settings,
-}: GetChatItemRenderedWidthParams): Promise<number> {
-    const containerEle = window.parent.document.querySelector(
-        `#${CHAT_ITEM_RENDER_ID}`,
-    ) as HTMLElement;
-
-    const tempUiChatItem: UiChatItem = {
-        ...chatItem,
-        numberOfLines: 0,
-        addTimestamp: 0,
-        lineNumber: 0,
-        elementWidth: 0,
-    };
-
-    await new Promise<void>((resolve) => {
-        ReactDOM.render(
-            <ChatItemRenderer chatItem={tempUiChatItem} settings={settings} />,
-            containerEle,
-            resolve,
-        );
-    });
-
-    const rect = containerEle?.children[0]?.getBoundingClientRect();
-
-    const width = rect?.width;
-    if (!width) {
-        throw new Error('Unknown error');
-    }
-
-    return width;
-}
 
 function getRenderedNumOfLinesForChatItem({
     settings,
@@ -94,7 +51,7 @@ export function useInitChatEventObserver(initData: InitData): void {
         [chatEventObserver],
     );
 
-    const processChatItem = useCallback(async () => {
+    const processChatItem = useCallback(() => {
         if (!processLock.current) {
             return;
         }
@@ -109,32 +66,10 @@ export function useInitChatEventObserver(initData: InitData): void {
                 break;
             }
 
-            const {
-                result: elementWidth,
-                runtime: getEleWidthRuntime,
-                // eslint-disable-next-line no-await-in-loop
-            } = await benchmarkAsync(
-                () =>
-                    getChatItemRenderedWidth({
-                        chatItem,
-                        settings,
-                    }),
-                isDebugging,
-            );
-
-            if (isDebugging) {
-                dispatch(
-                    debugInfo.actions.addChatItemEleWidthMetric(
-                        getEleWidthRuntime,
-                    ),
-                );
-            }
-
             dispatch(
                 chatEvents.actions.addItem({
                     chatItem,
                     playerWidth,
-                    elementWidth,
                     numberOfLines: getRenderedNumOfLinesForChatItem({
                         settings,
                         chatItem,
@@ -156,7 +91,6 @@ export function useInitChatEventObserver(initData: InitData): void {
         store,
         isDocumentVisible,
         isPaused,
-        isDebugging,
         dequeueChatItem,
         settings,
         playerWidth,
@@ -195,6 +129,13 @@ export function useInitChatEventObserver(initData: InitData): void {
                     ),
                 );
             }
+            if (info.getEleWidthBenchmark) {
+                dispatch(
+                    debugInfo.actions.addChatItemEleWidthMetric(
+                        info.getEleWidthBenchmark,
+                    ),
+                );
+            }
         }
 
         chatEventObserver.on('debug', handleDebugInfo);
@@ -217,6 +158,7 @@ export function useInitChatEventObserver(initData: InitData): void {
     }, [isSeeking, chatEventObserver]);
 
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         chatEventObserver.importInitData(initData);
     }, [initData, chatEventObserver]);
 
