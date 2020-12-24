@@ -25,5 +25,6 @@ export interface Settings {
     isEnabled: boolean;
     totalNumberOfLines: number;
     flowTimeInSec: number;
+    globalOpacity: number;
     messageSettings: Record<MessageSettingsKey, MessageSettings>;
 }

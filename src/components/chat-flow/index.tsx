@@ -31,8 +31,9 @@ const ChatFlowLayout: React.FC<Props> = ({
     const style = useMemo<React.CSSProperties>(
         () => ({
             visibility: settings.isEnabled ? 'visible' : 'hidden',
+            opacity: settings.globalOpacity,
         }),
-        [settings.isEnabled],
+        [settings.isEnabled, settings.globalOpacity],
     );
 
     const videoPlayerRect = useVideoPlayerRect();
