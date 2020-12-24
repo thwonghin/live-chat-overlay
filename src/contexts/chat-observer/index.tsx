@@ -2,7 +2,7 @@ import * as React from 'react';
 import { browser } from 'webextension-polyfill-ts';
 
 import { chatEvent } from '@/services';
-import { getVideoEle } from '@/utils/youtube';
+import { youtube } from '@/utils';
 
 const CHAT_EVENT_NAME = `${browser.runtime.id}_chat_message`;
 
@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const ChatEventObserverProvider: React.FC<Props> = ({ children }) => {
-    const video = getVideoEle();
+    const video = youtube.getVideoEle();
     if (!video) {
         throw new Error('Video element not found');
     }
