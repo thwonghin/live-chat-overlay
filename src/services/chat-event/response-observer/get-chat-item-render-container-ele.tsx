@@ -5,12 +5,14 @@ import * as settingsStorage from '@/services/settings-storage';
 
 import { ChatItem } from '../models';
 
+export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
+
 let chatItemRenderContainerEle: HTMLElement;
 
 function getChatItemRenderContainerEle(): HTMLElement {
     if (!chatItemRenderContainerEle) {
         chatItemRenderContainerEle = window.parent.document.querySelector(
-            `#live-chat-overlay-test-rendering`,
+            `#${CHAT_ITEM_RENDER_ID}`,
         ) as HTMLElement;
     }
     return chatItemRenderContainerEle;

@@ -14,8 +14,6 @@ import { settingsStorage, chatEvent } from '@/services';
 import type { RootState } from '@/app/live-chat-overlay/store';
 import type { InitData } from '@/definitions/youtube';
 
-export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
-
 function getRenderedNumOfLinesForChatItem({
     settings,
     chatItem,
