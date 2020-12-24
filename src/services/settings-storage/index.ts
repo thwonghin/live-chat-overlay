@@ -30,6 +30,7 @@ const defaultSettings: Settings = {
     isEnabled: true,
     totalNumberOfLines: 15,
     flowTimeInSec: 10,
+    globalOpacity: 0.7,
     messageSettings: {
         guest: commonMsgSettings,
         member: {

@@ -44,8 +44,9 @@ const ChatFlowLayout: React.FC<Props> = ({
     const containerStyle = useMemo<CSSProperties>(
         () => ({
             fontSize: lineHeight,
+            opacity: settings.globalOpacity,
         }),
-        [lineHeight],
+        [lineHeight, settings.globalOpacity],
     );
 
     return (
