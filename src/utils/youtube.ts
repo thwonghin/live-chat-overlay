@@ -1,7 +1,7 @@
 import { browser } from 'webextension-polyfill-ts';
 
 import { appendScript, functionToString } from '@/utils';
-import type { InitData } from '@/definitions/youtube';
+import type { InitData, YotubeChatResponse } from '@/definitions/youtube';
 
 export const CLASS_BIG_MODE = 'ytp-big-mode';
 export const CLASS_PLAYER_CTL_BTN = 'ytp-button';
@@ -145,4 +145,10 @@ export async function getInitData(): Promise<InitData> {
             resolve(customEvent.detail.data);
         });
     });
+}
+
+export function isInitData(
+    data: InitData | YotubeChatResponse,
+): data is InitData {
+    return 'actionPanel' in data.continuationContents.liveChatContinuation;
 }

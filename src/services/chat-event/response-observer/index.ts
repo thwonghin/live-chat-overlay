@@ -68,32 +68,7 @@ export class ResponseObserver {
         this.eventEmitter.off(...args);
 
     public async importInitData(initData: InitData): Promise<void> {
-        const timeInfo = this.getCurrentTimeInfo();
-        const chatItems = isReplayInitData(initData)
-            ? mapChatItemsFromReplayResponse({
-                  ...timeInfo,
-                  continuationContents: initData.continuationContents,
-              })
-            : mapChatItemsFromLiveResponse({
-                  ...timeInfo,
-                  continuationContents: initData.continuationContents,
-              });
-
-        const { result: chatItemsWithWidth, runtime } = await benchmarkAsync(
-            async () =>
-                assignChatItemRenderedWidth({
-                    chatItems,
-                    settings: settingsStorage.StorageInstance.currentSettings,
-                }),
-            this.isDebugging,
-        );
-
-        this.chatItemProcessQueue.push(...chatItemsWithWidth);
-
-        this.emitDebugInfoEvent({
-            getEleWidthBenchmark: runtime,
-            processChatEventQueueLength: this.chatItemProcessQueue.length,
-        });
+        await this.processChatItems(initData, isReplayInitData(initData));
     }
 
     private emitDebugInfoEvent(debugInfo: DebugInfo) {
@@ -109,7 +84,20 @@ export class ResponseObserver {
             youtube.GET_LIVE_CHAT_REPLAY_URL,
         );
 
-        const response = customEvent.detail.response as YotubeChatResponse;
+        const response = customEvent.detail.response as
+            | YotubeChatResponse
+            | InitData;
+
+        await this.processChatItems(response, isReplay);
+    };
+
+    private async processChatItems(
+        response: YotubeChatResponse | InitData,
+        isReplay: boolean,
+    ): Promise<void> {
+        if (youtube.isInitData(response)) {
+            this.reset();
+        }
 
         const { runtime } = await benchmarkAsync(async () => {
             const timeInfo = this.getCurrentTimeInfo();
@@ -150,7 +138,7 @@ export class ResponseObserver {
             processXhrResponseMs: runtime,
             processChatEventQueueLength: this.chatItemProcessQueue.length,
         });
-    };
+    }
 
     private cleanOutdatedChatItems(params: {
         currentTimeInUsec: number;

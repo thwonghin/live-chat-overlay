@@ -248,6 +248,25 @@ interface ReplayLiveChatContinuation {
     actions?: ReplayAction[];
 }
 
+interface InitDataAttributes {
+    actionPanel: unknown;
+    clientMessages: string;
+    viewerName: string;
+}
+
+type InitLiveChatContinuation = LiveLiveChatContinuation & InitDataAttributes;
+type InitReplayLiveChatContinuation = ReplayLiveChatContinuation &
+    InitDataAttributes;
+
+interface InitLiveContinuationContents {
+    liveChatContinuation: InitLiveChatContinuation;
+}
+
+interface InitReplayContinuationContents {
+    liveChatContinuation: InitReplayLiveChatContinuation;
+    isReplay: true;
+}
+
 interface LiveContinuationContents {
     liveChatContinuation: LiveLiveChatContinuation;
 }
@@ -267,13 +286,11 @@ export interface ReplayResponse {
 export type YotubeChatResponse = LiveResponse | ReplayResponse;
 
 export interface LiveInitData {
-    continuationContents: LiveContinuationContents;
+    continuationContents: InitLiveContinuationContents;
 }
 
 export interface ReplayInitData {
-    continuationContents: ReplayContinuationContents & {
-        isReplay: true;
-    };
+    continuationContents: InitReplayContinuationContents;
 }
 
 export type InitData = LiveInitData | ReplayInitData;
