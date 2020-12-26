@@ -150,5 +150,5 @@ export async function getInitData(): Promise<InitData> {
 export function isInitData(
     data: InitData | YotubeChatResponse,
 ): data is InitData {
-    return 'actionPanel' in data.continuationContents.liveChatContinuation;
+    return 'viewerName' in data.continuationContents.liveChatContinuation;
 }
