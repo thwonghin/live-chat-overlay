@@ -1,3 +1,12 @@
+## 2.7.0 (2020-12-26)
+
+* fix: custom emoji too small (#472) ([ad84db9](https://github.com/thwonghin/live-chat-overlay/commit/ad84db9)), closes [#472](https://github.com/thwonghin/live-chat-overlay/issues/472)
+* fix: remove outdated chat items after switch chat sort (#470) ([30afea1](https://github.com/thwonghin/live-chat-overlay/commit/30afea1)), closes [#470](https://github.com/thwonghin/live-chat-overlay/issues/470)
+* fix: remove outdated chat items after switch chat sort in replay (#471) ([9fbafc4](https://github.com/thwonghin/live-chat-overlay/commit/9fbafc4)), closes [#471](https://github.com/thwonghin/live-chat-overlay/issues/471)
+* feat: tune chat process interval to 100ms (#469) ([b52bb38](https://github.com/thwonghin/live-chat-overlay/commit/b52bb38)), closes [#469](https://github.com/thwonghin/live-chat-overlay/issues/469)
+
+
+
 ## 2.6.0 (2020-12-24)
 
 * refactor: update imports (#468) ([683afb3](https://github.com/thwonghin/live-chat-overlay/commit/683afb3)), closes [#468](https://github.com/thwonghin/live-chat-overlay/issues/468)
