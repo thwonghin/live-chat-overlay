@@ -249,8 +249,6 @@ interface ReplayLiveChatContinuation {
 }
 
 interface InitDataAttributes {
-    actionPanel: unknown;
-    clientMessages: string;
     viewerName: string;
 }
 
