@@ -1,16 +1,18 @@
 import * as React from 'react';
 import type { chatEvent } from '@/services';
+import { last } from 'lodash-es';
 
 interface Props {
     emojiPart: chatEvent.EmojiPart;
 }
 
 const EmojiPartRenderer: React.FC<Props> = ({ emojiPart }) => {
+    const thumbnail = last(emojiPart.thumbnails);
     return (
         <img
-            src={emojiPart.thumbnails[0]?.url}
-            height={emojiPart.thumbnails[0]?.height}
-            width={emojiPart.thumbnails[0]?.width}
+            src={thumbnail?.url}
+            height={thumbnail?.height}
+            width={thumbnail?.width}
         />
     );
 };
