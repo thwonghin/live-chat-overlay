@@ -95,7 +95,7 @@ export function useInitChatEventObserver(initData: InitData): void {
         dispatch,
     ]);
 
-    useInterval(processChatItem, 500);
+    useInterval(processChatItem, 100);
 
     useEffect(() => {
         function handleDebugInfo(info: chatEvent.DebugInfo) {
