@@ -107,7 +107,7 @@ describe('mapLiveChatPaidStickerRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1431023795624.462,
+            videoTimestampInMs: 1431023797124.462,
             authorName: 'Sample Author',
             chatType: 'super-sticker',
             color: 'rgba(208,0,0,1)',

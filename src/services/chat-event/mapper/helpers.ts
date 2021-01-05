@@ -81,6 +81,8 @@ function mapAuthorBadges(
         );
 }
 
+const fixedDelayMs = 1500;
+
 export function calculateVideoTimestampMsFromLiveTimestamp(params: {
     currentTimestampMs: number;
     liveTimestampMs: number;
@@ -88,7 +90,12 @@ export function calculateVideoTimestampMsFromLiveTimestamp(params: {
     liveTimeoutMs: number;
 }): number {
     const startTimestamp = params.currentTimestampMs - params.playerTimestampMs;
-    return params.liveTimestampMs - startTimestamp + params.liveTimeoutMs;
+    return (
+        params.liveTimestampMs -
+        startTimestamp +
+        params.liveTimeoutMs +
+        fixedDelayMs
+    );
 }
 
 interface MapLiveChatMembershipItemRendererParams {
