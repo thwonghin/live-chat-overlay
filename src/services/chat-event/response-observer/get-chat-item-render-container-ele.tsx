@@ -34,6 +34,7 @@ export async function assignChatItemRenderedWidth({
             <>
                 {chatItems.map((chatItem) => (
                     <ChatItemRenderer
+                        key={chatItem.id}
                         chatItem={{
                             ...chatItem,
                             numberOfLines: 0,
