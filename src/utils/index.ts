@@ -89,3 +89,12 @@ export async function catchWithFallback<T>(
         return fallbackValue;
     }
 }
+
+export async function promiseSeries(
+    promises: (() => Promise<void>)[],
+): Promise<void> {
+    return promises.reduce(async (prevPromise, cur) => {
+        await prevPromise;
+        return cur();
+    }, Promise.resolve());
+}

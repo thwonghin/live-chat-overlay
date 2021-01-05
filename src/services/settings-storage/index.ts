@@ -1,12 +1,12 @@
 import { browser } from 'webextension-polyfill-ts';
 import { defaultsDeep } from 'lodash-es';
 
-import { catchWithFallback, EventEmitter } from '@/utils';
+import { catchWithFallback, EventEmitter, promiseSeries } from '@/utils';
 import type { Settings, MessageSettings, AuthorDisplayMethod } from './types';
+import { migrations } from './migrations';
+import { SETTINGS_STORAGE_KEY, MIGRATIONS_STORAGE_KEY } from './const';
 
 export * from './types';
-
-const SETTINGS_STORAGE_KEY = 'live-chat-overlay-settings';
 
 export const authorDisplayMethods: AuthorDisplayMethod[] = [
     'avatar-only',
@@ -81,11 +81,45 @@ export class StorageInstance {
 
     static currentSettings: Settings;
 
+    static async runMigrations(): Promise<void> {
+        const result = await browser.storage.sync.get(MIGRATIONS_STORAGE_KEY);
+        const currentMigrations = (result[MIGRATIONS_STORAGE_KEY] ??
+            []) as string[];
+
+        const missingMigrations = migrations.filter(
+            (migration) => !currentMigrations.includes(migration.name),
+        );
+
+        await promiseSeries(
+            missingMigrations.map((migration) => async () => {
+                await migration.run(browser);
+
+                const getResult = await browser.storage.sync.get(
+                    MIGRATIONS_STORAGE_KEY,
+                );
+                const migrated = (getResult[MIGRATIONS_STORAGE_KEY] ??
+                    []) as string[];
+
+                await browser.storage.sync.set({
+                    [MIGRATIONS_STORAGE_KEY]: [...migrated, migration.name],
+                });
+            }),
+        );
+    }
+
     static async init(): Promise<void> {
-        const storedSettings = await catchWithFallback(async () => {
-            const result = await browser.storage.local.get(
-                SETTINGS_STORAGE_KEY,
+        try {
+            await StorageInstance.runMigrations();
+        } catch (error: unknown) {
+            // eslint-disable-next-line no-console
+            console.error(
+                'Fail to run migration, fallback to default settings...',
+                error,
             );
+        }
+
+        const storedSettings = await catchWithFallback(async () => {
+            const result = await browser.storage.sync.get(SETTINGS_STORAGE_KEY);
             return result[SETTINGS_STORAGE_KEY] as Settings;
         }, defaultSettings);
 
@@ -93,9 +127,6 @@ export class StorageInstance {
             storedSettings,
             defaultSettings,
         ) as Settings;
-
-        // Migration: set unsettable super chat bg color to empty string
-        this.currentSettings.messageSettings['super-chat'].bgColor = '';
 
         this.isInitiated = true;
     }
@@ -116,7 +147,7 @@ export class StorageInstance {
         this.currentSettings = value;
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        browser.storage.local.set({
+        browser.storage.sync.set({
             [SETTINGS_STORAGE_KEY]: value,
         });
         eventEmitter.trigger('change', value);
