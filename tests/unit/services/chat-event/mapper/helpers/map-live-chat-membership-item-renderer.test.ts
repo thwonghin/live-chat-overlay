@@ -155,7 +155,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1340000002500,
+            videoTimestampInMs: 1340000004000,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             chatType: 'membership',
