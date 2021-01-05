@@ -1,5 +1,4 @@
 export * from './use-click-outside';
-export * from './use-document-visible';
 export * from './use-ele-class-names';
 export * from './use-init-chat-event-observer';
 export * from './use-interval';
