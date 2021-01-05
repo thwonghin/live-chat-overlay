@@ -2,10 +2,9 @@ import { useEffect, useContext, useCallback, useRef } from 'react';
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
 import {
-    useInterval,
+    useAnimationFrame,
     useVideoPlayerRect,
     useSettings,
-    useDocumentVisible,
     useVideoPlayerState,
 } from '@/hooks';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
@@ -31,12 +30,10 @@ function getRenderedNumOfLinesForChatItem({
 
 export function useInitChatEventObserver(initData: InitData): void {
     const dispatch = useDispatch();
-    const processLock = useRef(true);
     const { settings } = useSettings();
     const chatEventObserver = useContext(ChatEventObserverContext);
     const { isPaused, isSeeking } = useVideoPlayerState();
     const store = useStore<RootState>();
-    const isDocumentVisible = useDocumentVisible(window.parent.document);
     const isDebugging = useSelector<RootState, boolean>(
         (rootState) => rootState.debugInfo.isDebugging,
     );
@@ -50,52 +47,33 @@ export function useInitChatEventObserver(initData: InitData): void {
     );
 
     const processChatItem = useCallback(() => {
-        if (!processLock.current) {
+        const chatItem = chatItemBufferRef.current ?? dequeueChatItem();
+
+        if (!chatItem || isPaused) {
             return;
         }
-        let shouldQuit = false;
-        processLock.current = false;
 
-        while (!shouldQuit) {
-            const chatItem = chatItemBufferRef.current ?? dequeueChatItem();
-
-            if (!chatItem || !isDocumentVisible || isPaused) {
-                shouldQuit = true;
-                break;
-            }
-
-            dispatch(
-                chatEvents.actions.addItem({
+        dispatch(
+            chatEvents.actions.addItem({
+                chatItem,
+                playerWidth,
+                numberOfLines: getRenderedNumOfLinesForChatItem({
+                    settings,
                     chatItem,
-                    playerWidth,
-                    numberOfLines: getRenderedNumOfLinesForChatItem({
-                        settings,
-                        chatItem,
-                    }),
                 }),
-            );
+            }),
+        );
 
-            const { lastLineNumber } = store.getState().chatEvents;
-            // Set buffer for next loop if it is full after dispatch the chat item
-            if (lastLineNumber === null) {
-                chatItemBufferRef.current = chatItem;
-                shouldQuit = true;
-            } else {
-                chatItemBufferRef.current = undefined;
-            }
+        const { lastLineNumber } = store.getState().chatEvents;
+        // Set buffer for next loop if it is full after dispatch the chat item
+        if (lastLineNumber === null) {
+            chatItemBufferRef.current = chatItem;
+        } else {
+            chatItemBufferRef.current = undefined;
         }
-        processLock.current = true;
-    }, [
-        store,
-        isDocumentVisible,
-        isPaused,
-        dequeueChatItem,
-        settings,
-        playerWidth,
-        dispatch,
-    ]);
+    }, [store, isPaused, dequeueChatItem, settings, playerWidth, dispatch]);
 
-    useInterval(processChatItem, 100);
+    useAnimationFrame(processChatItem);
 
     useEffect(() => {
         function handleDebugInfo(info: chatEvent.DebugInfo) {

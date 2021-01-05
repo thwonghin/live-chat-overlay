@@ -13,3 +13,4 @@ export * from './use-settings';
 export * from './use-timeout';
 export * from './use-video-player-rect';
 export * from './use-video-player-state';
+export * from './use-animation-frame';
