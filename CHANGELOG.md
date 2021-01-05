@@ -1,3 +1,9 @@
+## <small>2.8.1 (2021-01-05)</small>
+
+* fix: missing key props when render chat item (#490) ([33c423a](https://github.com/thwonghin/live-chat-overlay/commit/33c423a)), closes [#490](https://github.com/thwonghin/live-chat-overlay/issues/490)
+
+
+
 ## 2.8.0 (2021-01-05)
 
 * feat: tune chat flow effect (#489) ([d5d999d](https://github.com/thwonghin/live-chat-overlay/commit/d5d999d)), closes [#489](https://github.com/thwonghin/live-chat-overlay/issues/489)
