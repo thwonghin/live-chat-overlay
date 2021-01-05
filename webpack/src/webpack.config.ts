@@ -39,7 +39,9 @@ export default (
         mode,
         stats: mode === 'production' ? 'errors-only' : 'normal',
         resolve: {
-            plugins: [new TsconfigPathsPlugin({ configFile: tsconfigPath })],
+            plugins: [
+                new TsconfigPathsPlugin({ configFile: tsconfigPath }) as any,
+            ],
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
         },
         entry: {
