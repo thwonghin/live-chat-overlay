@@ -1,3 +1,11 @@
+## 2.8.0 (2021-01-05)
+
+* feat: tune chat flow effect (#489) ([d5d999d](https://github.com/thwonghin/live-chat-overlay/commit/d5d999d)), closes [#489](https://github.com/thwonghin/live-chat-overlay/issues/489)
+* feat: use `storage.sync` for settings & do related migrations (#488) ([14f20db](https://github.com/thwonghin/live-chat-overlay/commit/14f20db)), closes [#488](https://github.com/thwonghin/live-chat-overlay/issues/488)
+* chore: bump deps 2021-01-05 (#487) ([e44bc2b](https://github.com/thwonghin/live-chat-overlay/commit/e44bc2b)), closes [#487](https://github.com/thwonghin/live-chat-overlay/issues/487)
+
+
+
 ## 2.7.0 (2020-12-26)
 
 * fix: custom emoji too small (#472) ([ad84db9](https://github.com/thwonghin/live-chat-overlay/commit/ad84db9)), closes [#472](https://github.com/thwonghin/live-chat-overlay/issues/472)
