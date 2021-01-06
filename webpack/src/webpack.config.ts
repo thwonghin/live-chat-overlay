@@ -32,7 +32,7 @@ export default (
     const mode = getMode();
     const tsconfigPath = path.resolve(
         rootDir,
-        webpackEnv === 'development' ? 'tsconfig.dev.json' : 'tsconfig.json',
+        mode === 'development' ? 'tsconfig.dev.json' : 'tsconfig.json',
     );
 
     const config: webpack.Configuration = {
@@ -67,7 +67,7 @@ export default (
                 {
                     test: /\.s[ac]ss$/i,
                     use: [
-                        webpackEnv === 'storybook'
+                        webpackEnv.storybook
                             ? 'style-loader'
                             : MiniCssExtractPlugin.loader,
                         {
@@ -131,7 +131,7 @@ export default (
             // Webpack 5 removed node.js polyfills, but React still using it
             new webpack.DefinePlugin({
                 'process.env': {
-                    NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+                    NODE_ENV: JSON.stringify(mode),
                 },
             }),
         ],
