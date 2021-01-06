@@ -1,6 +1,6 @@
 {
     "name": "live-chat-overlay",
-    "version": "2.8.1",
+    "version": "2.8.2",
     "description": "Web Extension for Overlay Live Chat on Youtube",
     "main": "dist/content-script.js",
     "repository": "git@github.com:thwonghin/live-chat-overlay.git",

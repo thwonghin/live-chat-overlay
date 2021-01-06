@@ -1,3 +1,9 @@
+## <small>2.8.2 (2021-01-06)</small>
+
+* fix: wrong NODE_ENV for release and storybook (#491) ([ca23e8f](https://github.com/thwonghin/live-chat-overlay/commit/ca23e8f)), closes [#491](https://github.com/thwonghin/live-chat-overlay/issues/491)
+
+
+
 ## <small>2.8.1 (2021-01-05)</small>
 
 * fix: missing key props when render chat item (#490) ([33c423a](https://github.com/thwonghin/live-chat-overlay/commit/33c423a)), closes [#490](https://github.com/thwonghin/live-chat-overlay/issues/490)
