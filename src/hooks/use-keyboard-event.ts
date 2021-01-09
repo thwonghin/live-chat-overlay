@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 
-interface UseKeyboardEventParams {
+interface UseKeyboardEventParameters {
     shouldAlt: boolean;
     shouldCtrl: boolean;
     key: number;
@@ -14,23 +14,28 @@ export function useKeyboardEvent({
     key,
     attached,
     onChange,
-}: UseKeyboardEventParams): void {
+}: UseKeyboardEventParameters): void {
     useEffect(() => {
         const handleKeyDown = (ev: KeyboardEvent) => {
             if (shouldAlt && !ev.altKey) {
                 return;
             }
+
             if (shouldCtrl && !ev.ctrlKey) {
                 return;
             }
+
             if (key !== ev.keyCode) {
                 return;
             }
 
             onChange();
         };
+
         attached.addEventListener('keydown', handleKeyDown);
 
-        return () => attached.removeEventListener('keydown', handleKeyDown);
+        return () => {
+            attached.removeEventListener('keydown', handleKeyDown);
+        };
     }, [attached, key, shouldAlt, shouldCtrl, onChange]);
 }

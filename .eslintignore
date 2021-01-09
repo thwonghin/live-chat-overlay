@@ -1,4 +1,0 @@
-node_modules
-dist
-src/**/*.css.d.ts
-src/**/*.scss.d.ts

@@ -1,5 +1,5 @@
-// source: https://gist.github.com/morajabi/523d7a642d8c0a2f71fcfa0d8b3d2846
-import { useLayoutEffect, useCallback, useState } from 'react';
+// Source: https://gist.github.com/morajabi/523d7a642d8c0a2f71fcfa0d8b3d2846
+import {useLayoutEffect, useCallback, useState} from 'react';
 
 export type RectResult = {
     bottom: number;
@@ -37,13 +37,19 @@ export function useRect<T extends HTMLElement>(
 
     useLayoutEffect(() => {
         const element = ref.current;
-        if (!element) return (): void => {};
+        if (!element) {
+            return () => {
+                // No clean up
+            };
+        }
 
         handleResize();
 
         if (typeof ResizeObserver === 'function') {
-            let resizeObserver: ResizeObserver | null = new ResizeObserver(() =>
-                handleResize(),
+            let resizeObserver: ResizeObserver | null = new ResizeObserver(
+                () => {
+                    handleResize();
+                },
             );
             resizeObserver.observe(element);
 
@@ -51,12 +57,16 @@ export function useRect<T extends HTMLElement>(
                 if (!resizeObserver) {
                     return;
                 }
+
                 resizeObserver.disconnect();
                 resizeObserver = null;
             };
         }
+
         window.addEventListener('resize', handleResize); // Browser support, remove freely
-        return (): void => window.removeEventListener('resize', handleResize);
+        return (): void => {
+            window.removeEventListener('resize', handleResize);
+        };
     }, [handleResize, ref]);
 
     return rect;

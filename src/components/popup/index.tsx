@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
-import * as React from 'react';
+import {useEffect} from 'react';
 import ReactDOM from 'react-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { popup } from '@/features';
-import type { RootState } from '@/app/live-chat-overlay/store';
+import {popup} from '@/features';
+import type {RootState} from '@/app/live-chat-overlay/store';
 
 import MessageSettingsPopup from './message-settings-popup';
 
@@ -30,12 +29,10 @@ const PopupContainer: React.FC<Props> = ({
     );
 
     return ReactDOM.createPortal(
-        <>
-            <MessageSettingsPopup
-                isHidden={currentPopup !== 'message-settings'}
-                playerControlContainer={playerControlContainer}
-            />
-        </>,
+        <MessageSettingsPopup
+            isHidden={currentPopup !== 'message-settings'}
+            playerControlContainer={playerControlContainer}
+        />,
         playerEle,
     );
 };

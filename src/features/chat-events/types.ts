@@ -1,4 +1,4 @@
-import { UiChatItem } from '@/components/chat-flow/types';
+import {UiChatItem} from '@/components/chat-flow/types';
 
 export type ChatItemState = 'added' | 'finished';
 

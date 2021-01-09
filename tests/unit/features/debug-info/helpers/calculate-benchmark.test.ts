@@ -1,9 +1,9 @@
-import { mapValues } from 'lodash-es';
+import {mapValues} from 'lodash-es';
 
-import { calculateBenchmark } from '@/features/debug-info/helpers';
-import type { Benchmark } from '@/features/debug-info';
+import {calculateBenchmark} from '@/features/debug-info/helpers';
+import type {Benchmark} from '@/features/debug-info';
 
-interface TestParams {
+interface TestParameters {
     condition: string;
     min: number;
     max: number;
@@ -23,23 +23,23 @@ describe('calculateBenchmark', () => {
         ${'when it consume value between min and max'} | ${12}                      | ${100} | ${50} | ${20} | ${30}  | ${12}   | ${100}  | ${49.05} | ${21}
         ${'when it consume value less than min'}       | ${12}                      | ${100} | ${50} | ${20} | ${2}   | ${2}    | ${100}  | ${47.71} | ${21}
         ${'when it consume value more than max'}       | ${12}                      | ${100} | ${50} | ${20} | ${200} | ${12}   | ${200}  | ${57.14} | ${21}
-    `('$condition', (params: TestParams) => {
+    `('$condition', (parameters: TestParameters) => {
         it('should return correct result', () => {
             const nowBenchmark: Benchmark = {
-                min: params.min,
-                max: params.max,
-                avg: params.avg,
-                count: params.count,
+                min: parameters.min,
+                max: parameters.max,
+                avg: parameters.avg,
+                count: parameters.count,
             };
 
             const expectedResult: Benchmark = {
-                min: params.nextMin,
-                max: params.nextMax,
-                avg: params.nextAvg,
-                count: params.nextCount,
+                min: parameters.nextMin,
+                max: parameters.nextMax,
+                avg: parameters.nextAvg,
+                count: parameters.nextCount,
             };
 
-            const result = calculateBenchmark(nowBenchmark, params.value);
+            const result = calculateBenchmark(nowBenchmark, parameters.value);
 
             expect(mapValues(result, (value) => value.toFixed(2))).toEqual(
                 mapValues(expectedResult, (value) => value.toFixed(2)),

@@ -1,10 +1,9 @@
-import { browser } from 'webextension-polyfill-ts';
-import { useCallback } from 'react';
-import * as React from 'react';
-import { Select, FormLabel, MenuItem } from '@material-ui/core';
+import {browser} from 'webextension-polyfill-ts';
+import {useCallback} from 'react';
+import {Select, FormLabel, MenuItem} from '@material-ui/core';
 
-import { assertNever } from '@/utils';
-import type { settingsStorage } from '@/services';
+import {assertNever} from '@/utils';
+import type {settingsStorage} from '@/services';
 
 import classes from './index.scss';
 
@@ -53,9 +52,9 @@ interface Props {
     onChange: (value: settingsStorage.MessageSettingsKey) => void;
 }
 
-const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
+const MessageSettingsTypeSelect: React.FC<Props> = ({value, onChange}) => {
     const handleChange = useCallback(
-        (event: React.ChangeEvent<{ value: unknown }>) => {
+        (event: React.ChangeEvent<{value: unknown}>) => {
             onChange(event.target.value as settingsStorage.MessageSettingsKey);
         },
         [onChange],
@@ -68,12 +67,12 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
             </FormLabel>
             <Select
                 color="secondary"
-                onChange={handleChange}
                 value={value}
                 MenuProps={{
                     // Avoid window scrollbar disappeared casuing shift horizontally
                     disableScrollLock: true,
                 }}
+                onChange={handleChange}
             >
                 {messageSettingsOptions.map((option) => (
                     <MenuItem key={option.key} value={option.key}>

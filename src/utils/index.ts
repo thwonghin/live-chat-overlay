@@ -1,36 +1,33 @@
+import {isNil} from 'lodash-es';
+
 export * from './event-emitter';
 export * as youtube from './youtube';
 
 export function assertNever(type: never): never {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    throw new Error(`Unknown object: ${type}`);
+    throw new Error(`Unknown object: ${type as string}`);
 }
 
 // Reference from Youtube livechat.js
 export function colorFromDecimal(decimal: number): string {
     return `rgba(${[
-        // eslint-disable-next-line no-bitwise
         (decimal >> 16) & 255,
-        // eslint-disable-next-line no-bitwise
         (decimal >> 8) & 255,
-        // eslint-disable-next-line no-bitwise
         decimal & 255,
-        // eslint-disable-next-line no-bitwise
         ((decimal >> 24) & 255) / 255,
     ].join(',')})`;
 }
 
-export function isNonNullable<T>(value: T): value is NonNullable<T> {
-    return !!value;
+export function isNotNil<T>(value?: T | null): value is NonNullable<T> {
+    return !isNil(value);
 }
 
 export function functionToString(
     // eslint-disable-next-line @typescript-eslint/ban-types
     func: Function,
-    ...params: string[]
+    ...parameters: string[]
 ): string {
-    return `(${func.toString()})(${params
-        .map((param) => `'${param}'`)
+    return `(${func.toString()})(${parameters
+        .map((parameter) => `'${parameter}'`)
         .join(',')})`;
 }
 
@@ -39,10 +36,10 @@ export function appendScript(doc: Document, script: string): () => void {
     scriptTag.type = 'text/javascript';
     scriptTag.innerHTML = script;
 
-    doc.body.appendChild(scriptTag);
+    doc.body.append(scriptTag);
 
     return (): void => {
-        doc.body.removeChild(scriptTag);
+        scriptTag.remove();
     };
 }
 
@@ -85,16 +82,16 @@ export async function catchWithFallback<T>(
 ): Promise<T> {
     try {
         return await func();
-    } catch (error) {
+    } catch {
         return fallbackValue;
     }
 }
 
 export async function promiseSeries(
-    promises: (() => Promise<void>)[],
+    promises: Array<() => Promise<void>>,
 ): Promise<void> {
-    return promises.reduce(async (prevPromise, cur) => {
-        await prevPromise;
-        return cur();
-    }, Promise.resolve());
+    for (const promise of promises) {
+        // eslint-disable-next-line no-await-in-loop
+        await promise();
+    }
 }

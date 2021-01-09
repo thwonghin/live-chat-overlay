@@ -1,5 +1,5 @@
-import type { settingsStorage } from '@/services';
-import { isNonNullable } from '@/utils';
+import type {settingsStorage} from '@/services';
+import {isNotNil} from '@/utils';
 import type * as liveChatResponse from '@/definitions/youtube';
 import {
     mapLiveChatTextMessageRenderer,
@@ -9,7 +9,7 @@ import {
 } from './helpers';
 import * as chatModel from '../models';
 
-interface MapAddChatItemActionsParams {
+interface MapAddChatItemActionsParameters {
     addChatItemActions: liveChatResponse.AddChatItemAction[];
     liveDelayInMs: number;
     currentTimestampMs: number;
@@ -23,7 +23,7 @@ export function mapAddChatItemActions({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapAddChatItemActionsParams): chatModel.ChatItem[] {
+}: MapAddChatItemActionsParameters): chatModel.ChatItem[] {
     return addChatItemActions
         .map((action) => {
             if (action.item?.liveChatPaidMessageRenderer) {
@@ -35,6 +35,7 @@ export function mapAddChatItemActions({
                     videoTimestampInMs,
                 });
             }
+
             if (action.item?.liveChatPaidStickerRenderer) {
                 return mapLiveChatPaidStickerRenderer({
                     renderer: action.item.liveChatPaidStickerRenderer,
@@ -44,6 +45,7 @@ export function mapAddChatItemActions({
                     videoTimestampInMs,
                 });
             }
+
             if (action.item?.liveChatMembershipItemRenderer) {
                 return mapLiveChatMembershipItemRenderer({
                     renderer: action.item.liveChatMembershipItemRenderer,
@@ -53,6 +55,7 @@ export function mapAddChatItemActions({
                     videoTimestampInMs,
                 });
             }
+
             if (action.item?.liveChatTextMessageRenderer) {
                 return mapLiveChatTextMessageRenderer({
                     renderer: action.item.liveChatTextMessageRenderer,
@@ -62,9 +65,10 @@ export function mapAddChatItemActions({
                     videoTimestampInMs,
                 });
             }
+
             return null;
         })
-        .filter(isNonNullable);
+        .filter(isNotNil);
 }
 
 export function isNormalChatItem(
@@ -95,16 +99,19 @@ export function getMessageSettings(
     chatItem: chatModel.ChatItem,
     settings: settingsStorage.Settings,
 ): settingsStorage.MessageSettings {
-    const { messageSettings } = settings;
+    const {messageSettings} = settings;
     if (isNormalChatItem(chatItem)) {
         return messageSettings[chatItem.authorType];
     }
+
     if (isMembershipItem(chatItem)) {
         return messageSettings.membership;
     }
+
     if (isSuperChatItem(chatItem) || isSuperStickerItem(chatItem)) {
         return messageSettings['super-chat'];
     }
+
     throw new Error('Unknow chat item');
 }
 

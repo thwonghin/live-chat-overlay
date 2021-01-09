@@ -1,4 +1,4 @@
-import { EventEmitter } from '@/utils';
+import {EventEmitter} from '@/utils';
 
 describe('EventEmitter', () => {
     let eventEmitter: EventEmitter<{

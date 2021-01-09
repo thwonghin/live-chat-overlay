@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
+import {useEffect, useRef} from 'react';
 
-// ref: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
+// Ref: https://overreacted.io/making-setinterval-declarative-with-react-hooks/
 export function useTimeout(callback: () => void, delay: number | null): void {
     const savedCallback = useRef<() => void>();
 
@@ -14,10 +14,16 @@ export function useTimeout(callback: () => void, delay: number | null): void {
         function tick() {
             savedCallback.current?.();
         }
+
         if (delay !== null) {
             const id = setTimeout(tick, delay);
-            return (): void => clearTimeout(id);
+            return (): void => {
+                clearTimeout(id);
+            };
         }
-        return () => {};
+
+        return () => {
+            // No clean up
+        };
     }, [delay]);
 }

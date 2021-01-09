@@ -1,12 +1,11 @@
-import { useRef, useState } from 'react';
-import * as React from 'react';
+import {useRef, useState} from 'react';
 import cn from 'classnames';
 
-import { youtube } from '@/utils';
+import {youtube} from '@/utils';
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
-import { useNativeStopKeydownPropagation } from '@/hooks';
-import type { settingsStorage } from '@/services';
+import {useNativeStopKeydownPropagation} from '@/hooks';
+import type {settingsStorage} from '@/services';
 
 import classes from './index.scss';
 
@@ -15,7 +14,7 @@ interface Props {
     playerControlContainer: HTMLSpanElement;
 }
 
-const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
+const MessageSettingsPopup: React.FC<Props> = ({isHidden}) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [
         selectedMessageType,

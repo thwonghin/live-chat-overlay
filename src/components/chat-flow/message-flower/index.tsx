@@ -1,7 +1,6 @@
-import { useMemo, useRef, useState, useLayoutEffect } from 'react';
-import * as React from 'react';
+import {useMemo, useRef, useState, useLayoutEffect} from 'react';
 
-import { useTimeout, useRect, useSettings } from '@/hooks';
+import {useTimeout, useRect, useSettings} from '@/hooks';
 import classes from './index.scss';
 
 interface Props {
@@ -21,7 +20,7 @@ const MessageFlower: React.FC<Props> = ({
 
     const ref = useRef<HTMLDivElement>(null);
     const rect = useRect(ref);
-    const { settings } = useSettings();
+    const {settings} = useSettings();
     const timeout = useMemo(() => settings.flowTimeInSec * 1000, [
         settings.flowTimeInSec,
     ]);
@@ -40,10 +39,12 @@ const MessageFlower: React.FC<Props> = ({
 
     useTimeout(onDone, timeout);
 
-    useLayoutEffect(() => setIsFlowing(true), []);
+    useLayoutEffect(() => {
+        setIsFlowing(true);
+    }, []);
 
     return (
-        <div className={classes.container} style={style} ref={ref}>
+        <div ref={ref} className={classes.container} style={style}>
             {children}
         </div>
     );
