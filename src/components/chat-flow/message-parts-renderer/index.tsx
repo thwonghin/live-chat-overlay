@@ -2,6 +2,7 @@ import * as React from 'react';
 import {chatEvent} from '@/services';
 import {assertNever} from '@/utils';
 
+import TextPartRenderer from './text-part-renderer';
 import EmojiPartRenderer from './emoji-part-renderer';
 
 interface Props {
@@ -14,7 +15,8 @@ const MessagePartsRenderer: React.FC<Props> = ({messageParts, className}) => {
         <span className={className}>
             {messageParts.map((part, index) => {
                 if (chatEvent.isTextMessagePart(part)) {
-                    return part;
+                    // eslint-disable-next-line react/no-array-index-key
+                    return <TextPartRenderer key={index} textPart={part} />;
                 }
 
                 if (chatEvent.isEmojiMessagePart(part)) {

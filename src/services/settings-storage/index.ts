@@ -149,8 +149,8 @@ const storageInstance = {
         eventEmitter.trigger('change', value);
     },
 
-    on: eventEmitter.on,
-    off: eventEmitter.off,
+    on: eventEmitter.on.bind(eventEmitter),
+    off: eventEmitter.off.bind(eventEmitter),
 };
 
 export {storageInstance};
