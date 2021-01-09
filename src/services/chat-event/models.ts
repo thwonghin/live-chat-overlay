@@ -1,3 +1,5 @@
+import {Except} from 'type-fest';
+
 export interface Thumbnail {
     url: string;
     width: number;
@@ -28,7 +30,7 @@ export interface NormalChatItem {
     chatType: 'normal';
 }
 
-export type SuperChatItem = Omit<
+export type SuperChatItem = Except<
     NormalChatItem,
     'authorType' | 'chatType' | 'authorBadges'
 > & {
@@ -37,7 +39,7 @@ export type SuperChatItem = Omit<
     chatType: 'super-chat';
 };
 
-export type SuperStickerItem = Omit<
+export type SuperStickerItem = Except<
     SuperChatItem,
     'chatType' | 'messageParts'
 > & {
@@ -45,7 +47,10 @@ export type SuperStickerItem = Omit<
     chatType: 'super-sticker';
 };
 
-export type MembershipItem = Omit<NormalChatItem, 'authorType' | 'chatType'> & {
+export type MembershipItem = Except<
+    NormalChatItem,
+    'authorType' | 'chatType'
+> & {
     chatType: 'membership';
 };
 

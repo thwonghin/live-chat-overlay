@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import {useRef, useEffect} from 'react';
 
 // Ref: https://codesandbox.io/s/requestanimationframe-with-hooks-0kzh3?from-embed=&file=/src/index.js:545-1396
 export function useAnimationFrame<T>(callback: (delta: number) => T): void {
@@ -17,9 +17,11 @@ export function useAnimationFrame<T>(callback: (delta: number) => T): void {
                 const deltaTime = time - previousTimeRef.current;
                 callback(deltaTime);
             }
+
             previousTimeRef.current = time;
             requestRef.current = requestAnimationFrame(animate);
         };
+
         requestRef.current = requestAnimationFrame(animate);
         return () => {
             if (requestRef.current) {

@@ -1,9 +1,9 @@
 import ReactDOM from 'react-dom';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import { settingsStorage } from '@/services';
+import {settingsStorage} from '@/services';
 
-import { ChatItem } from '../models';
+import {ChatItem} from '../models';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 
@@ -13,12 +13,13 @@ function getChatItemRenderContainerEle(): HTMLElement {
     if (!chatItemRenderContainerEle) {
         chatItemRenderContainerEle = window.parent.document.querySelector(
             `#${CHAT_ITEM_RENDER_ID}`,
-        ) as HTMLElement;
+        )! as HTMLElement;
     }
+
     return chatItemRenderContainerEle;
 }
 
-interface GetChatItemRenderedWidthParams {
+interface GetChatItemRenderedWidthParameters {
     chatItems: ChatItem[];
     settings: settingsStorage.Settings;
 }
@@ -26,7 +27,7 @@ interface GetChatItemRenderedWidthParams {
 export async function assignChatItemRenderedWidth({
     chatItems,
     settings,
-}: GetChatItemRenderedWidthParams): Promise<ChatItem[]> {
+}: GetChatItemRenderedWidthParameters): Promise<ChatItem[]> {
     const containerEle = getChatItemRenderContainerEle();
 
     await new Promise<void>((resolve) => {

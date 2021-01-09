@@ -1,23 +1,28 @@
-import type { RefObject } from 'react';
-import { useState, useEffect } from 'react';
+import type {RefObject} from 'react';
+import {useState, useEffect} from 'react';
 
-interface UseClickOutsideParams {
-    refs: RefObject<HTMLElement>[];
+interface UseClickOutsideParameters {
+    refs: Array<RefObject<HTMLElement>>;
     doc: Document;
 }
 
-export function useClickOutside({ refs, doc }: UseClickOutsideParams): boolean {
+export function useClickOutside({
+    refs,
+    doc,
+}: UseClickOutsideParameters): boolean {
     const [isClickedOutside, setIsClickedOutside] = useState(false);
 
     useEffect(() => {
-        function handleEvent(e: Event) {
-            if (!e.target) {
+        function handleEvent(event: Event) {
+            if (!event.target) {
                 return;
             }
+
             setIsClickedOutside(
                 !refs.some(
                     (ref) =>
-                        ref.current?.contains(e.target as HTMLElement) ?? false,
+                        ref.current?.contains(event.target as HTMLElement) ??
+                        false,
                 ),
             );
         }

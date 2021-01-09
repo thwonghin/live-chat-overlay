@@ -1,6 +1,6 @@
-import { first } from 'lodash-es';
+import {first} from 'lodash-es';
 
-import { isNonNullable } from '@/utils';
+import {isNotNil} from '@/utils';
 import type {
     ReplayContinuationContents,
     LiveContinuationContents,
@@ -8,27 +8,27 @@ import type {
     InitData,
 } from '@/definitions/youtube';
 
-import { mapAddChatItemActions, isNormalChatItem } from '../mapper';
-import { ChatItem } from '../models';
+import {mapAddChatItemActions, isNormalChatItem} from '../mapper';
+import {ChatItem} from '../models';
 
-export function mapChatItemsFromReplayResponse(params: {
+export function mapChatItemsFromReplayResponse(parameters: {
     currentTimestampMs: number;
     playerTimestampMs: number;
     continuationContents: ReplayContinuationContents;
 }): ChatItem[] {
-    return (params.continuationContents.liveChatContinuation.actions ?? [])
+    return (parameters.continuationContents.liveChatContinuation.actions ?? [])
         .map((a) => a.replayChatItemAction)
-        .filter(isNonNullable)
+        .filter(isNotNil)
         .flatMap((a) => {
             const addChatItemActions = (a.actions ?? [])
                 .map((action) => action.addChatItemAction)
-                .filter(isNonNullable);
+                .filter(isNotNil);
 
             const items = mapAddChatItemActions({
                 addChatItemActions,
                 liveDelayInMs: 0,
-                currentTimestampMs: params.currentTimestampMs,
-                playerTimestampMs: params.playerTimestampMs,
+                currentTimestampMs: parameters.currentTimestampMs,
+                playerTimestampMs: parameters.playerTimestampMs,
                 videoTimestampInMs: Number(a.videoOffsetTimeMsec),
             });
 
@@ -47,29 +47,29 @@ function getTimeoutMs(
                         value.timedContinuationData ??
                         value.invalidationContinuationData,
                 )
-                .filter((v): v is NonNullable<typeof v> => !!v),
+                .filter((v): v is NonNullable<typeof v> => Boolean(v)),
         )?.timeoutMs ?? null
     );
 }
 
-export function mapChatItemsFromLiveResponse(params: {
+export function mapChatItemsFromLiveResponse(parameters: {
     currentTimestampMs: number;
     playerTimestampMs: number;
     continuationContents: LiveContinuationContents;
 }): ChatItem[] {
     return mapAddChatItemActions({
         addChatItemActions: (
-            params.continuationContents.liveChatContinuation.actions ?? []
+            parameters.continuationContents.liveChatContinuation.actions ?? []
         )
             .map((v) => v.addChatItemAction)
-            .filter(isNonNullable),
-        liveDelayInMs: getTimeoutMs(params.continuationContents) ?? 0,
-        currentTimestampMs: params.currentTimestampMs,
-        playerTimestampMs: params.playerTimestampMs,
+            .filter(isNotNil),
+        liveDelayInMs: getTimeoutMs(parameters.continuationContents) ?? 0,
+        currentTimestampMs: parameters.currentTimestampMs,
+        playerTimestampMs: parameters.playerTimestampMs,
     });
 }
 
-interface IsTimeToDispatchParams {
+interface IsTimeToDispatchParameters {
     currentPlayerTimeInMsc: number;
     chatItem: ChatItem;
 }
@@ -77,7 +77,7 @@ interface IsTimeToDispatchParams {
 export function isTimeToDispatch({
     currentPlayerTimeInMsc,
     chatItem,
-}: IsTimeToDispatchParams): boolean {
+}: IsTimeToDispatchParameters): boolean {
     return currentPlayerTimeInMsc >= chatItem.videoTimestampInMs;
 }
 
@@ -91,10 +91,11 @@ export function getOutdatedFactor(chatItem: ChatItem): number {
     ) {
         return 1;
     }
+
     return 3;
 }
 
-interface IsOutdatedChatItemParams {
+interface IsOutdatedChatItemParameters {
     currentPlayerTimeInMsc: number;
     chatItemAtVideoTimestampInMs: number;
     factor: number;
@@ -104,7 +105,7 @@ export function isOutdatedChatItem({
     currentPlayerTimeInMsc,
     chatItemAtVideoTimestampInMs,
     factor,
-}: IsOutdatedChatItemParams): boolean {
+}: IsOutdatedChatItemParameters): boolean {
     return (
         chatItemAtVideoTimestampInMs <
         currentPlayerTimeInMsc - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * factor

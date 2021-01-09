@@ -1,7 +1,7 @@
-import { browser } from 'webextension-polyfill-ts';
+import {browser} from 'webextension-polyfill-ts';
 
-import { appendScript, functionToString } from '@/utils';
-import type { InitData, YotubeChatResponse } from '@/definitions/youtube';
+import {appendScript, functionToString} from '@/utils';
+import type {InitData, YotubeChatResponse} from '@/definitions/youtube';
 
 export const CLASS_BIG_MODE = 'ytp-big-mode';
 export const CLASS_PLAYER_CTL_BTN = 'ytp-button';
@@ -45,7 +45,7 @@ export function getLiveChatEle(): HTMLElement | null {
 }
 
 export function isLiveStream(): boolean {
-    return !!getLiveChatEle();
+    return Boolean(getLiveChatEle());
 }
 
 export async function waitForPlayerReady(): Promise<void> {
@@ -105,7 +105,7 @@ export function isInsideLiveChatFrame(): boolean {
 }
 
 function dispatchInitData(extensionId: string): void {
-    // window.ytInitialData is mutated, need to get from raw HTML
+    // Window.ytInitialData is mutated, need to get from raw HTML
     document.querySelectorAll('script').forEach((tag) => {
         if (
             !tag.innerHTML.includes(extensionId) &&
@@ -113,9 +113,9 @@ function dispatchInitData(extensionId: string): void {
         ) {
             const innerHTML = tag.innerHTML.trim();
             const startIndex = innerHTML.indexOf('{"responseContext"');
-            const initData = innerHTML.slice(startIndex, innerHTML.length - 1);
+            const initData = innerHTML.slice(startIndex, -1);
 
-            const event = new CustomEvent<{ data: InitData }>(
+            const event = new CustomEvent<{data: InitData}>(
                 `${extensionId}_init_data`,
                 {
                     detail: {
@@ -139,7 +139,7 @@ export async function getInitData(): Promise<InitData> {
         );
 
         window.addEventListener(`${extensionId}_init_data`, (event) => {
-            const customEvent = event as CustomEvent<{ data: InitData }>;
+            const customEvent = event as CustomEvent<{data: InitData}>;
 
             removeScript();
             resolve(customEvent.detail.data);

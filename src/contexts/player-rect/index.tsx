@@ -1,16 +1,15 @@
-import { useRef } from 'react';
-import * as React from 'react';
+import {useRef, createContext} from 'react';
 
-import { youtube } from '@/utils';
-import { useRect } from '@/hooks';
-import type { RectResult } from '@/hooks';
+import {youtube} from '@/utils';
+import {useRect} from '@/hooks';
+import type {RectResult} from '@/hooks';
 
 export function useVideoPlayerRect(): RectResult {
     const playerRef = useRef(youtube.getVideoPlayerEle());
     return useRect(playerRef);
 }
 
-export const PlayerRectContext = React.createContext<RectResult>({
+export const PlayerRectContext = createContext<RectResult>({
     bottom: 0,
     top: 0,
     left: 0,
@@ -23,7 +22,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export const PlayerRectProvider: React.FC<Props> = ({ children }) => {
+export const PlayerRectProvider: React.FC<Props> = ({children}) => {
     const rect = useVideoPlayerRect();
 
     return (

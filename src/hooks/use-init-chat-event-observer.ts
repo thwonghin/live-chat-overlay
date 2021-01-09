@@ -1,5 +1,5 @@
-import { useEffect, useContext, useCallback, useRef } from 'react';
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import {useEffect, useContext, useCallback, useRef} from 'react';
+import {useDispatch, useSelector, useStore} from 'react-redux';
 
 import {
     useAnimationFrame,
@@ -7,13 +7,13 @@ import {
     useSettings,
     useVideoPlayerState,
 } from '@/hooks';
-import { ChatEventObserverContext } from '@/contexts/chat-observer';
-import { chatEvents, debugInfo } from '@/features';
-import { settingsStorage, chatEvent } from '@/services';
-import type { RootState } from '@/app/live-chat-overlay/store';
-import type { InitData } from '@/definitions/youtube';
+import {ChatEventObserverContext} from '@/contexts/chat-observer';
+import {chatEvents, debugInfo} from '@/features';
+import {settingsStorage, chatEvent} from '@/services';
+import type {RootState} from '@/app/live-chat-overlay/store';
+import type {InitData} from '@/definitions/youtube';
 
-function getRenderedNumOfLinesForChatItem({
+function getRenderedNumberOfLinesForChatItem({
     settings,
     chatItem,
 }: {
@@ -30,14 +30,14 @@ function getRenderedNumOfLinesForChatItem({
 
 export function useInitChatEventObserver(initData: InitData): void {
     const dispatch = useDispatch();
-    const { settings } = useSettings();
+    const {settings} = useSettings();
     const chatEventObserver = useContext(ChatEventObserverContext);
-    const { isPaused, isSeeking } = useVideoPlayerState();
+    const {isPaused, isSeeking} = useVideoPlayerState();
     const store = useStore<RootState>();
     const isDebugging = useSelector<RootState, boolean>(
         (rootState) => rootState.debugInfo.isDebugging,
     );
-    const { width: playerWidth } = useVideoPlayerRect();
+    const {width: playerWidth} = useVideoPlayerRect();
     const chatItemBufferRef = useRef<chatEvent.ChatItem>();
 
     const dequeueChatItem = useCallback(
@@ -57,14 +57,14 @@ export function useInitChatEventObserver(initData: InitData): void {
             chatEvents.actions.addItem({
                 chatItem,
                 playerWidth,
-                numberOfLines: getRenderedNumOfLinesForChatItem({
+                numberOfLines: getRenderedNumberOfLinesForChatItem({
                     settings,
                     chatItem,
                 }),
             }),
         );
 
-        const { lastLineNumber } = store.getState().chatEvents;
+        const {lastLineNumber} = store.getState().chatEvents;
         // Set buffer for next loop if it is full after dispatch the chat item
         if (lastLineNumber === null) {
             chatItemBufferRef.current = chatItem;
@@ -84,6 +84,7 @@ export function useInitChatEventObserver(initData: InitData): void {
                     ),
                 );
             }
+
             if (info.processXhrResponseMs) {
                 dispatch(
                     debugInfo.actions.addProcessXhrMetric(
@@ -91,6 +92,7 @@ export function useInitChatEventObserver(initData: InitData): void {
                     ),
                 );
             }
+
             if (info.processChatEventQueueLength) {
                 dispatch(
                     debugInfo.actions.updateProcessChatEventQueueLength(
@@ -98,6 +100,7 @@ export function useInitChatEventObserver(initData: InitData): void {
                     ),
                 );
             }
+
             if (info.outdatedChatEventCount) {
                 dispatch(
                     debugInfo.actions.addOutdatedRemovedChatEventCount(
@@ -105,6 +108,7 @@ export function useInitChatEventObserver(initData: InitData): void {
                     ),
                 );
             }
+
             if (info.getEleWidthBenchmark) {
                 dispatch(
                     debugInfo.actions.addChatItemEleWidthMetric(
@@ -116,7 +120,9 @@ export function useInitChatEventObserver(initData: InitData): void {
 
         chatEventObserver.on('debug', handleDebugInfo);
 
-        return () => chatEventObserver.off('debug', handleDebugInfo);
+        return () => {
+            chatEventObserver.off('debug', handleDebugInfo);
+        };
     }, [chatEventObserver, dispatch]);
 
     useEffect(() => {

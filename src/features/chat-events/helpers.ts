@@ -1,7 +1,7 @@
-import { last } from 'lodash-es';
-import type { UiChatItem } from '@/components/chat-flow/types';
+import {last} from 'lodash-es';
+import type {UiChatItem} from '@/components/chat-flow/types';
 
-interface HasSpaceInLineParams {
+interface HasSpaceInLineParameters {
     lastMessageInLine: UiChatItem;
     elementWidth: number;
     addTimestamp: number;
@@ -16,24 +16,27 @@ function hasSpaceInLine({
     addTimestamp,
     flowTimeInSec,
     containerWidth,
-}: HasSpaceInLineParams): boolean {
-    const lastMsgFlowedTime =
+}: HasSpaceInLineParameters): boolean {
+    const lastMessageFlowedTime =
         (addTimestamp - lastMessageInLine.addTimestamp) / 1000;
-    const lastMsgWidth = lastMessageInLine.width;
-    if (!lastMsgWidth) {
+    const lastMessageWidth = lastMessageInLine.width;
+    if (!lastMessageWidth) {
         throw new Error('Unknown width');
     }
-    const lastMsgSpeed = (containerWidth + lastMsgWidth) / flowTimeInSec;
-    const lastMsgPos = lastMsgSpeed * lastMsgFlowedTime - lastMsgWidth;
 
-    const remainingTime = flowTimeInSec - lastMsgFlowedTime;
+    const lastMessageSpeed =
+        (containerWidth + lastMessageWidth) / flowTimeInSec;
+    const lastMessagePos =
+        lastMessageSpeed * lastMessageFlowedTime - lastMessageWidth;
+
+    const remainingTime = flowTimeInSec - lastMessageFlowedTime;
 
     const speed = (containerWidth + elementWidth) / flowTimeInSec;
 
-    return speed * remainingTime < containerWidth && lastMsgPos > 0;
+    return speed * remainingTime < containerWidth && lastMessagePos > 0;
 }
 
-interface GetLineNumberParams {
+interface GetLineNumberParameters {
     chatItemsByLineNumber: Record<number, UiChatItem[]>;
     elementWidth: number;
     maxLineNumber: number;
@@ -51,14 +54,14 @@ export function getLineNumber({
     flowTimeInSec,
     containerWidth,
     displayNumberOfLines,
-}: GetLineNumberParams): number | null {
+}: GetLineNumberParameters): number | null {
     for (
         let lineNumber = 0;
         lineNumber < maxLineNumber - displayNumberOfLines - 1;
         lineNumber += 1
     ) {
         if (
-            Array(displayNumberOfLines)
+            new Array(displayNumberOfLines)
                 .fill(null)
                 .map((v, index) => index + lineNumber)
                 .every((loopLineNumber) => {

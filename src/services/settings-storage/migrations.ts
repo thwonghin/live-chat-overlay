@@ -1,12 +1,12 @@
-import { Browser } from 'webextension-polyfill-ts';
+import {Browser} from 'webextension-polyfill-ts';
 
-import type { Settings } from './types';
-import { SETTINGS_STORAGE_KEY } from './const';
+import type {Settings} from './types';
+import {SETTINGS_STORAGE_KEY} from './const';
 
-export const migrations: {
+export const migrations: Array<{
     name: string;
     run: (browser: Browser) => Promise<void>;
-}[] = [
+}> = [
     {
         name: 'MigrateLocalStorageToSyncStorage',
         run: async (browser: Browser): Promise<void> => {
@@ -33,6 +33,7 @@ export const migrations: {
                     [SETTINGS_STORAGE_KEY]: localSettings,
                 });
             }
+
             await browser.storage.local.clear();
         },
     },

@@ -1,4 +1,4 @@
-import { assertNever, colorFromDecimal } from '@/utils';
+import {assertNever, colorFromDecimal} from '@/utils';
 import type * as liveChatResponse from '@/definitions/youtube';
 import * as chatModel from '../models';
 
@@ -8,9 +8,10 @@ function getAuthorTypeFromBadges(
     if (!authorBadges) {
         return 'guest';
     }
+
     const resolvedIconType = authorBadges
         .map((v) => v.liveChatAuthorBadgeRenderer.icon?.iconType)
-        .filter((iconType): iconType is string => !!iconType)[0];
+        .find((iconType): iconType is string => Boolean(iconType));
 
     if (!resolvedIconType) {
         return 'member';
@@ -59,9 +60,11 @@ function mapMessagePart(
     if (isTextMessageRun(messageRun)) {
         return mapTextMessagePart(messageRun);
     }
+
     if (isEmojiMessageRun(messageRun)) {
         return mapEmojiMessagePart(messageRun);
     }
+
     return assertNever(messageRun);
 }
 
@@ -71,10 +74,10 @@ function mapAuthorBadges(
     if (!rendererAuthorBadges) {
         return [];
     }
+
     return rendererAuthorBadges
-        .filter((v) => !!v.liveChatAuthorBadgeRenderer.customThumbnail)
+        .filter((v) => Boolean(v.liveChatAuthorBadgeRenderer.customThumbnail))
         .flatMap((v) =>
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             v.liveChatAuthorBadgeRenderer.customThumbnail!.thumbnails.flatMap(
                 (_) => _.url,
             ),
@@ -83,22 +86,23 @@ function mapAuthorBadges(
 
 const fixedDelayMs = 1500;
 
-export function calculateVideoTimestampMsFromLiveTimestamp(params: {
+export function calculateVideoTimestampMsFromLiveTimestamp(parameters: {
     currentTimestampMs: number;
     liveTimestampMs: number;
     playerTimestampMs: number;
     liveTimeoutMs: number;
 }): number {
-    const startTimestamp = params.currentTimestampMs - params.playerTimestampMs;
+    const startTimestamp =
+        parameters.currentTimestampMs - parameters.playerTimestampMs;
     return (
-        params.liveTimestampMs -
+        parameters.liveTimestampMs -
         startTimestamp +
-        params.liveTimeoutMs +
+        parameters.liveTimeoutMs +
         fixedDelayMs
     );
 }
 
-interface MapLiveChatMembershipItemRendererParams {
+interface MapLiveChatMembershipItemRendererParameters {
     renderer: liveChatResponse.LiveChatMembershipItemRenderer;
     liveDelayInMs: number;
     currentTimestampMs: number;
@@ -112,7 +116,7 @@ export function mapLiveChatMembershipItemRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatMembershipItemRendererParams): chatModel.MembershipItem {
+}: MapLiveChatMembershipItemRendererParameters): chatModel.MembershipItem {
     return {
         id: renderer.id,
         messageParts: (renderer.headerSubtext?.runs ?? []).map(mapMessagePart),
@@ -131,7 +135,7 @@ export function mapLiveChatMembershipItemRenderer({
     };
 }
 
-interface MapLiveChatPaidMessageItemRendererParams {
+interface MapLiveChatPaidMessageItemRendererParameters {
     renderer: liveChatResponse.LiveChatPaidMessageRenderer;
     liveDelayInMs: number;
     currentTimestampMs: number;
@@ -145,7 +149,7 @@ export function mapLiveChatPaidMessageItemRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatPaidMessageItemRendererParams): chatModel.SuperChatItem {
+}: MapLiveChatPaidMessageItemRendererParameters): chatModel.SuperChatItem {
     return {
         id: renderer.id,
         messageParts: (renderer.message?.runs ?? []).map(mapMessagePart),
@@ -165,7 +169,7 @@ export function mapLiveChatPaidMessageItemRenderer({
     };
 }
 
-interface MapLiveChatPaidStickerRendererParams {
+interface MapLiveChatPaidStickerRendererParameters {
     renderer: liveChatResponse.LiveChatPaidStickerRenderer;
     liveDelayInMs: number;
     currentTimestampMs: number;
@@ -179,7 +183,7 @@ export function mapLiveChatPaidStickerRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatPaidStickerRendererParams): chatModel.SuperStickerItem {
+}: MapLiveChatPaidStickerRendererParameters): chatModel.SuperStickerItem {
     return {
         id: renderer.id,
         avatars: renderer.authorPhoto.thumbnails,
@@ -199,7 +203,7 @@ export function mapLiveChatPaidStickerRenderer({
     };
 }
 
-interface MapLiveChatTextMessageRendererParams {
+interface MapLiveChatTextMessageRendererParameters {
     renderer: liveChatResponse.LiveChatTextMessageRenderer;
     liveDelayInMs: number;
     currentTimestampMs: number;
@@ -213,7 +217,7 @@ export function mapLiveChatTextMessageRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatTextMessageRendererParams): chatModel.NormalChatItem {
+}: MapLiveChatTextMessageRendererParameters): chatModel.NormalChatItem {
     return {
         id: renderer.id,
         messageParts: renderer.message.runs.map(mapMessagePart),

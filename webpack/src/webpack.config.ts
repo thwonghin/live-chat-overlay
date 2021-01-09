@@ -3,7 +3,7 @@ import * as webpack from 'webpack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import { TypedCssModulesPlugin } from 'typed-css-modules-webpack-plugin';
+import {TypedCssModulesPlugin} from 'typed-css-modules-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import postcssPresetEnv from 'postcss-preset-env';
 import cssNano from 'cssnano';
@@ -15,16 +15,18 @@ const distDir = path.resolve(rootDir, 'dist');
 
 type WebpackEnv = 'production' | 'development' | 'release' | 'storybook';
 
-export default (
+const config = (
     webpackEnv: Partial<Record<WebpackEnv, boolean>>,
 ): webpack.Configuration => {
     function getMode(): 'production' | 'development' | 'none' {
         if (webpackEnv.development || webpackEnv.storybook) {
             return 'development';
         }
+
         if (webpackEnv.production || webpackEnv.release) {
             return 'production';
         }
+
         return 'none';
     }
 
@@ -40,7 +42,7 @@ export default (
         stats: mode === 'production' ? 'errors-only' : 'normal',
         resolve: {
             plugins: [
-                new TsconfigPathsPlugin({ configFile: tsconfigPath }) as any,
+                new TsconfigPathsPlugin({configFile: tsconfigPath}) as any,
             ],
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
         },
@@ -111,10 +113,6 @@ export default (
                               configFile: tsconfigPath,
                               mode: 'write-references',
                           },
-                          eslint: {
-                              enabled: true,
-                              files: ['./src/**/*.ts', './src/**/*.tsx'],
-                          },
                       }),
                   ]),
             new CopyWebpackPlugin({
@@ -139,3 +137,5 @@ export default (
 
     return config;
 };
+
+export default config;

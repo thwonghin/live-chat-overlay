@@ -20,6 +20,47 @@
  */
 declare class ResizeObserver {
     /**
+     * The **disconnect()** method of the
+     * [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)
+     * interface unobserves all observed
+     * [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) or
+     * [SVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement)
+     * targets.
+     */
+    disconnect: () => void;
+
+    /**
+     * The `observe()` method of the
+     * [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)
+     * interface starts observing the specified
+     * [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) or
+     * [SVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement).
+     *
+     * @example
+     * resizeObserver.observe(target, options);
+     *
+     * @param target
+     * A reference to an
+     * [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) or
+     * [SVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement)
+     * to be observed.
+     *
+     * @param options
+     * An options object allowing you to set options for the observation.
+     * Currently this only has one possible option that can be set.
+     */
+    observe: (target: Element, options?: ResizeObserverObserveOptions) => void;
+
+    /**
+     * The **unobserve()** method of the
+     * [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)
+     * interface ends the observing of a specified
+     * [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) or
+     * [SVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement).
+     */
+    unobserve: (target: Element) => void;
+
+    /**
      * The **ResizeObserver** constructor creates a new `ResizeObserver` object,
      * which can be used to report changes to the content or border box of an
      * `Element` or the bounding box of an `SVGElement`.
@@ -71,47 +112,6 @@ declare class ResizeObserver {
      * resizeObserver.observe(divElem);
      */
     constructor(callback: ResizeObserverCallback);
-
-    /**
-     * The **disconnect()** method of the
-     * [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)
-     * interface unobserves all observed
-     * [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) or
-     * [SVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement)
-     * targets.
-     */
-    disconnect: () => void;
-
-    /**
-     * The `observe()` method of the
-     * [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)
-     * interface starts observing the specified
-     * [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) or
-     * [SVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement).
-     *
-     * @example
-     * resizeObserver.observe(target, options);
-     *
-     * @param target
-     * A reference to an
-     * [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) or
-     * [SVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement)
-     * to be observed.
-     *
-     * @param options
-     * An options object allowing you to set options for the observation.
-     * Currently this only has one possible option that can be set.
-     */
-    observe: (target: Element, options?: ResizeObserverObserveOptions) => void;
-
-    /**
-     * The **unobserve()** method of the
-     * [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver)
-     * interface ends the observing of a specified
-     * [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element) or
-     * [SVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGElement).
-     */
-    unobserve: (target: Element) => void;
 }
 
 interface ResizeObserverObserveOptions {

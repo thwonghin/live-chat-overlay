@@ -1,7 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import type { chatEvent, settingsStorage } from '@/services';
+import type {chatEvent, settingsStorage} from '@/services';
 import classes from './index.scss';
 
 interface Props {
@@ -32,7 +32,7 @@ const AuthorChip: React.FC<Props> = ({
             {isAvatorShown && (
                 <img
                     className={cn(classes['author-avator'], {
-                        [classes.mr]: isNameShown || !!donationAmount,
+                        [classes.mr]: isNameShown || Boolean(donationAmount),
                     })}
                     src={avatars[0]?.url}
                     width={avatars[0]?.width}
@@ -43,13 +43,13 @@ const AuthorChip: React.FC<Props> = ({
             {isNameShown && (
                 <span
                     className={cn(classes['author-name'], {
-                        [classes.mr]: !!donationAmount,
+                        [classes.mr]: Boolean(donationAmount),
                     })}
                 >
                     {name}
                 </span>
             )}
-            {!!donationAmount && (
+            {Boolean(donationAmount) && (
                 <span className={classes.donation}>{donationAmount}</span>
             )}
         </div>

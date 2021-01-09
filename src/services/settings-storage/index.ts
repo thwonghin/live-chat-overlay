@@ -1,10 +1,10 @@
-import { browser } from 'webextension-polyfill-ts';
-import { defaultsDeep } from 'lodash-es';
+import {browser} from 'webextension-polyfill-ts';
+import {defaultsDeep} from 'lodash-es';
 
-import { catchWithFallback, EventEmitter, promiseSeries } from '@/utils';
-import type { Settings, MessageSettings, AuthorDisplayMethod } from './types';
-import { migrations } from './migrations';
-import { SETTINGS_STORAGE_KEY, MIGRATIONS_STORAGE_KEY } from './const';
+import {catchWithFallback, EventEmitter, promiseSeries} from '@/utils';
+import type {Settings, MessageSettings, AuthorDisplayMethod} from './types';
+import {migrations} from './migrations';
+import {SETTINGS_STORAGE_KEY, MIGRATIONS_STORAGE_KEY} from './const';
 
 export * from './types';
 
@@ -15,7 +15,7 @@ export const authorDisplayMethods: AuthorDisplayMethod[] = [
     'none',
 ];
 
-const commonMsgSettings: MessageSettings = {
+const commonMessageSettings: MessageSettings = {
     color: 'white',
     weight: 700,
     opacity: 0.8,
@@ -32,37 +32,37 @@ const defaultSettings: Settings = {
     flowTimeInSec: 10,
     globalOpacity: 0.7,
     messageSettings: {
-        guest: commonMsgSettings,
+        guest: commonMessageSettings,
         member: {
-            ...commonMsgSettings,
+            ...commonMessageSettings,
             color: '#2ba640',
         },
-        you: commonMsgSettings,
+        you: commonMessageSettings,
         moderator: {
-            ...commonMsgSettings,
+            ...commonMessageSettings,
             color: '#5e84f1',
             authorDisplay: 'all',
         },
         owner: {
-            ...commonMsgSettings,
+            ...commonMessageSettings,
             color: 'white',
             bgColor: '#ffd600',
             authorDisplay: 'all',
         },
         verified: {
-            ...commonMsgSettings,
+            ...commonMessageSettings,
             color: '#E9E9E9',
             bgColor: '#606060',
             authorDisplay: 'all',
         },
         membership: {
-            ...commonMsgSettings,
+            ...commonMessageSettings,
             bgColor: '#2ba640',
             numberOfLines: 1,
             authorDisplay: 'all',
         },
         'super-chat': {
-            ...commonMsgSettings,
+            ...commonMessageSettings,
             numberOfLines: 2,
             authorDisplay: 'all',
             bgColor: '',
@@ -76,86 +76,81 @@ type EventMap = {
 
 const eventEmitter = new EventEmitter<EventMap>();
 
-export class StorageInstance {
-    static isInitiated = false;
+let isInitiated = false;
+let currentSettings: Settings;
 
-    static currentSettings: Settings;
+async function runMigrations() {
+    const result = await browser.storage.sync.get(MIGRATIONS_STORAGE_KEY);
+    const currentMigrations = (result[MIGRATIONS_STORAGE_KEY] ??
+        []) as string[];
 
-    static async runMigrations(): Promise<void> {
-        const result = await browser.storage.sync.get(MIGRATIONS_STORAGE_KEY);
-        const currentMigrations = (result[MIGRATIONS_STORAGE_KEY] ??
-            []) as string[];
+    const missingMigrations = migrations.filter(
+        (migration) => !currentMigrations.includes(migration.name),
+    );
 
-        const missingMigrations = migrations.filter(
-            (migration) => !currentMigrations.includes(migration.name),
-        );
+    await promiseSeries(
+        missingMigrations.map((migration) => async () => {
+            await migration.run(browser);
 
-        await promiseSeries(
-            missingMigrations.map((migration) => async () => {
-                await migration.run(browser);
-
-                const getResult = await browser.storage.sync.get(
-                    MIGRATIONS_STORAGE_KEY,
-                );
-                const migrated = (getResult[MIGRATIONS_STORAGE_KEY] ??
-                    []) as string[];
-
-                await browser.storage.sync.set({
-                    [MIGRATIONS_STORAGE_KEY]: [...migrated, migration.name],
-                });
-            }),
-        );
-    }
-
-    static async init(): Promise<void> {
-        try {
-            await StorageInstance.runMigrations();
-        } catch (error: unknown) {
-            // eslint-disable-next-line no-console
-            console.error(
-                'Fail to run migration, fallback to default settings...',
-                error,
+            const getResult = await browser.storage.sync.get(
+                MIGRATIONS_STORAGE_KEY,
             );
-        }
+            const migrated = (getResult[MIGRATIONS_STORAGE_KEY] ??
+                []) as string[];
 
-        const storedSettings = await catchWithFallback(async () => {
-            const result = await browser.storage.sync.get(SETTINGS_STORAGE_KEY);
-            return result[SETTINGS_STORAGE_KEY] as Settings;
-        }, defaultSettings);
+            await browser.storage.sync.set({
+                [MIGRATIONS_STORAGE_KEY]: [...migrated, migration.name],
+            });
+        }),
+    );
+}
 
-        this.currentSettings = defaultsDeep(
-            storedSettings,
-            defaultSettings,
-        ) as Settings;
+function assertInitiated(): void {
+    if (!isInitiated) {
+        throw new Error('Storage is not init!');
+    }
+}
 
-        this.isInitiated = true;
+async function init(): Promise<void> {
+    try {
+        await runMigrations();
+    } catch (error: unknown) {
+        console.error(
+            'Fail to run migration, fallback to default settings...',
+            error,
+        );
     }
 
-    static assertInitiated(): void {
-        if (!StorageInstance.isInitiated) {
-            throw new Error('Storage is not init!');
-        }
-    }
+    const storedSettings = await catchWithFallback(async () => {
+        const result = await browser.storage.sync.get(SETTINGS_STORAGE_KEY);
+        return result[SETTINGS_STORAGE_KEY] as Settings;
+    }, defaultSettings);
 
-    static get settings(): Settings {
-        this.assertInitiated();
-        return this.currentSettings;
-    }
+    currentSettings = defaultsDeep(storedSettings, defaultSettings) as Settings;
 
-    static set settings(value: Settings) {
-        this.assertInitiated();
-        this.currentSettings = value;
+    isInitiated = true;
+}
+
+const storageInstance = {
+    init,
+    get settings(): Settings {
+        assertInitiated();
+        return currentSettings;
+    },
+
+    set settings(value: Settings) {
+        assertInitiated();
+        currentSettings = value;
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         browser.storage.sync.set({
             [SETTINGS_STORAGE_KEY]: value,
         });
         eventEmitter.trigger('change', value);
-    }
+    },
 
-    static on: typeof eventEmitter['on'] = (...args) =>
-        eventEmitter.on(...args);
+    on: eventEmitter.on,
+    off: eventEmitter.off,
+};
 
-    static off: typeof eventEmitter['off'] = (...args) =>
-        eventEmitter.off(...args);
-}
+export {storageInstance};

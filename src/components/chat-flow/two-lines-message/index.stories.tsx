@@ -1,9 +1,10 @@
 import * as React from 'react';
 
-import type { chatEvent, settingsStorage } from '@/services';
+import type {chatEvent, settingsStorage} from '@/services';
 import TwoLinesMessage from '.';
 
-export default { title: 'TwoLinesMessage' };
+const settings = {title: 'TwoLinesMessage'};
+export default settings;
 
 const avatars = [
     {
@@ -16,7 +17,7 @@ const authorName = 'Author Name';
 
 const superChatItem: chatEvent.SuperChatItem = {
     id: 'super-chat-message',
-    messageParts: [{ text: 'This is a super chat message' }],
+    messageParts: [{text: 'This is a super chat message'}],
     avatars,
     videoTimestampInMs: 0,
     donationAmount: 'HK$ 100.00',
@@ -28,7 +29,7 @@ const superChatItem: chatEvent.SuperChatItem = {
 const membershipItem: chatEvent.MembershipItem = {
     id: 'membership',
     authorBadges: [],
-    messageParts: [{ text: 'Someone becomes a member.' }],
+    messageParts: [{text: 'Someone becomes a member.'}],
     avatars,
     videoTimestampInMs: 0,
     authorName,
@@ -38,7 +39,7 @@ const membershipItem: chatEvent.MembershipItem = {
 const normalMessageItem: chatEvent.NormalChatItem = {
     id: 'super-chat-sticker',
     authorBadges: [],
-    messageParts: [{ text: 'This is a normal message' }],
+    messageParts: [{text: 'This is a normal message'}],
     avatars,
     videoTimestampInMs: 0,
     authorName,
@@ -57,8 +58,8 @@ const messageSettings: settingsStorage.MessageSettings = {
     authorDisplay: 'all',
 };
 
-const Container: React.FC = ({ children }) => (
-    <div style={{ fontSize: 40, position: 'absolute' }}>{children}</div>
+const Container: React.FC = ({children}) => (
+    <div style={{fontSize: 40, position: 'absolute'}}>{children}</div>
 );
 
 export const TwoLinesSuperChatMessage: React.FC = () => (

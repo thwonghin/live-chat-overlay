@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import { State } from './types';
-import { calculateBenchmark } from './helpers';
+import {State} from './types';
+import {calculateBenchmark} from './helpers';
 
 const initialState: State = {
     isDebugging: false,
@@ -100,5 +100,5 @@ const slice = createSlice({
     },
 });
 
-export const { actions, reducer } = slice;
+export const {actions, reducer} = slice;
 export * from './types';

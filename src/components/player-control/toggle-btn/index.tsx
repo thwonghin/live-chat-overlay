@@ -1,11 +1,10 @@
-import { browser } from 'webextension-polyfill-ts';
-import { useMemo, useCallback } from 'react';
-import * as React from 'react';
+import {browser} from 'webextension-polyfill-ts';
+import {useMemo, useCallback} from 'react';
 import cn from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
-import { useSettings } from '@/hooks';
-import { youtube } from '@/utils';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faCommentSlash, faComment} from '@fortawesome/free-solid-svg-icons';
+import {useSettings} from '@/hooks';
+import {youtube} from '@/utils';
 
 import classes from './index.scss';
 
@@ -16,7 +15,7 @@ const withSlashIconRatio =
     iconToBtnRatio * (faCommentHeight / faCommentSlashHeight);
 
 const ToggleBtn: React.FC = () => {
-    const { settings, updateSettings } = useSettings();
+    const {settings, updateSettings} = useSettings();
 
     const icon = useMemo<JSX.Element>(() => {
         const ratio = settings.isEnabled ? withSlashIconRatio : iconToBtnRatio;
@@ -40,9 +39,9 @@ const ToggleBtn: React.FC = () => {
     const onClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
         (event) => {
             event.preventDefault();
-            updateSettings((prevSettings) => ({
-                ...prevSettings,
-                isEnabled: !prevSettings.isEnabled,
+            updateSettings((previousSettings) => ({
+                ...previousSettings,
+                isEnabled: !previousSettings.isEnabled,
             }));
         },
         [updateSettings],
@@ -52,8 +51,8 @@ const ToggleBtn: React.FC = () => {
         <button
             className={cn([classes.btn, youtube.CLASS_PLAYER_CTL_BTN])}
             title={title}
-            onClick={onClick}
             type="button"
+            onClick={onClick}
         >
             {icon}
         </button>

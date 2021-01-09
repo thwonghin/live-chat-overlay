@@ -1,17 +1,16 @@
-import { useCallback, useMemo, CSSProperties } from 'react';
-import * as React from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import {useCallback, useMemo, CSSProperties} from 'react';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 
-import type { RootState } from '@/app/live-chat-overlay/store';
-import { chatEvents } from '@/features';
-import { useSettings, useInterval, useVideoPlayerRect } from '@/hooks';
-import { settingsStorage, chatEvent } from '@/services';
+import type {RootState} from '@/app/live-chat-overlay/store';
+import {chatEvents} from '@/features';
+import {useSettings, useInterval, useVideoPlayerRect} from '@/hooks';
+import {settingsStorage, chatEvent} from '@/services';
 
-import { useToggleDebugMode } from './use-toggle-debug-mode';
+import {useToggleDebugMode} from './use-toggle-debug-mode';
 import classes from './index.scss';
 import MessageFlower from './message-flower';
 import ChatItemRenderer from './chat-item-renderer';
-import { UiChatItem } from './types';
+import {UiChatItem} from './types';
 import DebugOverlay from './debug-overlay';
 
 interface Props {
@@ -57,10 +56,12 @@ const ChatFlowLayout: React.FC<Props> = ({
             <div style={style}>
                 {chatItems.map((chatItem) => (
                     <MessageFlower
-                        onDone={() => onDone(chatItem)}
                         key={chatItem.id}
                         top={lineHeight * chatItem.lineNumber}
                         containerWidth={containerWidth}
+                        onDone={() => {
+                            onDone(chatItem);
+                        }}
                     >
                         <ChatItemRenderer
                             chatItem={chatItem}
@@ -75,7 +76,7 @@ const ChatFlowLayout: React.FC<Props> = ({
 };
 
 const ChatFlow: React.FC = () => {
-    const { settings } = useSettings();
+    const {settings} = useSettings();
 
     useToggleDebugMode();
 
@@ -89,7 +90,7 @@ const ChatFlow: React.FC = () => {
     >((rootState) => rootState.chatEvents.chatItems, shallowEqual);
 
     const dispatch = useDispatch();
-    const onMsgDone = useCallback(
+    const onMessageDone = useCallback(
         (chatItem) => {
             dispatch(chatEvents.actions.markAsDone(chatItem));
         },
@@ -105,9 +106,9 @@ const ChatFlow: React.FC = () => {
     return (
         <ChatFlowLayout
             chatItems={chatItems}
-            onDone={onMsgDone}
             settings={settings}
             isDebugActive={isDebugActive}
+            onDone={onMessageDone}
         />
     );
 };

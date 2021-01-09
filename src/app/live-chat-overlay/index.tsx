@@ -1,6 +1,6 @@
-import { StrictMode } from 'react';
+import {StrictMode} from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import * as jss from 'jss';
 import {
     StylesProvider,
@@ -9,12 +9,12 @@ import {
 } from '@material-ui/core/styles';
 
 import * as contexts from '@/contexts';
-import { InitData } from '@/definitions/youtube';
+import {InitData} from '@/definitions/youtube';
 
-import { youtube } from '@/utils';
+import {youtube} from '@/utils';
 
-import { store } from './store';
-import { theme } from './theme';
+import {store} from './store';
+import {theme} from './theme';
 import App from './app';
 
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
@@ -30,6 +30,7 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     if (!rightControlEle) {
         throw new Error('Right Player Control not found.');
     }
+
     rightControlEle.style.display = 'flex';
 
     const videoPlayerEle = youtube.getVideoPlayerEle();
@@ -44,7 +45,7 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     liveChatContainer.style.left = '0';
     liveChatContainer.style.width = '100%';
     liveChatContainer.style.height = '100%';
-    videoPlayerContainer.appendChild(liveChatContainer);
+    videoPlayerContainer.append(liveChatContainer);
 
     const playerControlContainer = window.parent.document.createElement('span');
     playerControlContainer.id = PLAYER_CONTROL_CONTAINER;
@@ -56,8 +57,8 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
         'div',
     );
     const jssInsertionPoint = window.parent.document.createElement('div');
-    jssInsertionPointContainer.appendChild(jssInsertionPoint);
-    window.parent.document.head.appendChild(jssInsertionPointContainer);
+    jssInsertionPointContainer.append(jssInsertionPoint);
+    window.parent.document.head.append(jssInsertionPointContainer);
 
     const jssConfig = jss.create({
         ...jssPreset(),

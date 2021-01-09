@@ -3,8 +3,8 @@ module.exports = {
     testEnvironment: 'node',
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
-        "^.+\\.(css|scss)$": "<rootDir>/tests/mocks/styleMock.ts",
-        '^lodash-es$': 'lodash', // workaround for es module
+        '^.+\\.(css|scss)$': '<rootDir>/tests/mocks/style-mock.ts',
+        '^lodash-es$': 'lodash', // Workaround for es module
     },
     globals: {
         'ts-jest': {

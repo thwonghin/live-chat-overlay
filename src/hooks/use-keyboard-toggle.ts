@@ -1,7 +1,7 @@
-import { useState, useCallback } from 'react';
-import { useKeyboardEvent } from './use-keyboard-event';
+import {useState, useCallback} from 'react';
+import {useKeyboardEvent} from './use-keyboard-event';
 
-interface UseKeyboardToggleParams {
+interface UseKeyboardToggleParameters {
     shouldAlt: boolean;
     shouldCtrl: boolean;
     key: number;
@@ -17,13 +17,12 @@ export function useKeyboardToggle({
     shouldCtrl,
     key,
     attached,
-}: UseKeyboardToggleParams): UseKeyboardToggleResult {
+}: UseKeyboardToggleParameters): UseKeyboardToggleResult {
     const [isActive, setIsActive] = useState(false);
 
-    const toggleActive = useCallback(
-        () => setIsActive((prevIsActive) => !prevIsActive),
-        [],
-    );
+    const toggleActive = useCallback(() => {
+        setIsActive((previousIsActive) => !previousIsActive);
+    }, []);
 
     useKeyboardEvent({
         shouldAlt,

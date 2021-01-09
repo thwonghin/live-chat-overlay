@@ -1,8 +1,8 @@
-import { isOutdatedChatItem } from '@/services/chat-event/response-observer/helpers';
+import {isOutdatedChatItem} from '@/services/chat-event/response-observer/helpers';
 
 const chatItemVideoTimestamp = 5000;
 
-interface TestParams {
+interface TestParameters {
     currentPlayerTime: number;
     expectedResult: boolean;
 }
@@ -16,7 +16,7 @@ describe('isOutdatedChatItem', () => {
             ${'chat item is half of display time'}          | ${5005}           | ${false}
             ${'chat item is right at the current time'}     | ${5000}           | ${false}
             ${'chat item is not time to display'}           | ${4000}           | ${false}
-        `('when $condition', (testParams: TestParams) => {
+        `('when $condition', (testParameters: TestParameters) => {
             it('should return correct result', () => {
                 expect(
                     isOutdatedChatItem({
@@ -24,9 +24,9 @@ describe('isOutdatedChatItem', () => {
                         chatItemAtVideoTimestampInMs:
                             chatItemVideoTimestamp * 1000,
                         currentPlayerTimeInMsc:
-                            testParams.currentPlayerTime * 1000,
+                            testParameters.currentPlayerTime * 1000,
                     }),
-                ).toBe(testParams.expectedResult);
+                ).toBe(testParameters.expectedResult);
             });
         });
     });
@@ -39,7 +39,7 @@ describe('isOutdatedChatItem', () => {
             ${'chat item is half of display time'}          | ${5015}           | ${false}
             ${'chat item is right at the current time'}     | ${5000}           | ${false}
             ${'chat item is not time to display'}           | ${4000}           | ${false}
-        `('when $condition', (testParams: TestParams) => {
+        `('when $condition', (testParameters: TestParameters) => {
             it('should return correct result', () => {
                 expect(
                     isOutdatedChatItem({
@@ -47,9 +47,9 @@ describe('isOutdatedChatItem', () => {
                         chatItemAtVideoTimestampInMs:
                             chatItemVideoTimestamp * 1000,
                         currentPlayerTimeInMsc:
-                            testParams.currentPlayerTime * 1000,
+                            testParameters.currentPlayerTime * 1000,
                     }),
-                ).toBe(testParams.expectedResult);
+                ).toBe(testParameters.expectedResult);
             });
         });
     });

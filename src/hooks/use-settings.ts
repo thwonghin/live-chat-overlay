@@ -1,19 +1,19 @@
-import { useState, useCallback, useEffect } from 'react';
-import { cloneDeep } from 'lodash-es';
-import { settingsStorage } from '@/services';
+import {useState, useCallback, useEffect} from 'react';
+import {cloneDeep} from 'lodash-es';
+import {settingsStorage} from '@/services';
 
 interface UseSettingsResult {
     settings: settingsStorage.Settings;
     updateSettings: (
         updateFn: (
-            prevSettings: settingsStorage.Settings,
+            previousSettings: settingsStorage.Settings,
         ) => settingsStorage.Settings,
     ) => void;
 }
 
 export function useSettings(): UseSettingsResult {
     const [settings, setSettings] = useState(
-        settingsStorage.StorageInstance.settings,
+        settingsStorage.storageInstance.settings,
     );
 
     useEffect(() => {
@@ -23,19 +23,20 @@ export function useSettings(): UseSettingsResult {
             setSettings(cloneDeep(newSettings));
         }
 
-        settingsStorage.StorageInstance.on('change', handleSettingsChange);
+        settingsStorage.storageInstance.on('change', handleSettingsChange);
 
-        return () =>
-            settingsStorage.StorageInstance.off('change', handleSettingsChange);
+        return () => {
+            settingsStorage.storageInstance.off('change', handleSettingsChange);
+        };
     }, []);
 
     const updateSettings = useCallback(
         (
             updateFn: (
-                prevSettings: settingsStorage.Settings,
+                previousSettings: settingsStorage.Settings,
             ) => settingsStorage.Settings,
         ): void => {
-            settingsStorage.StorageInstance.settings = updateFn(
+            settingsStorage.storageInstance.settings = updateFn(
                 cloneDeep(settings),
             );
         },

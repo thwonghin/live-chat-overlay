@@ -1,4 +1,4 @@
-import { catchWithFallback } from '@/utils';
+import {catchWithFallback} from '@/utils';
 
 describe('catchWithFallback', () => {
     describe('when the func does not throw error', () => {

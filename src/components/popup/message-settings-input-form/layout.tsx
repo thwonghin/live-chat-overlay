@@ -1,9 +1,9 @@
-import { browser } from 'webextension-polyfill-ts';
+import {browser} from 'webextension-polyfill-ts';
 import * as React from 'react';
-import { TextField, Button, FormHelperText } from '@material-ui/core';
-import { useFormik } from 'formik';
+import {TextField, Button, FormHelperText} from '@material-ui/core';
+import {useFormik} from 'formik';
 
-import type { settingsStorage } from '@/services';
+import type {settingsStorage} from '@/services';
 
 import classes from './index.scss';
 
@@ -32,7 +32,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
     });
 
     return (
-        <form onSubmit={formik.handleSubmit} className={classes.container}>
+        <form className={classes.container} onSubmit={formik.handleSubmit}>
             <FormHelperText>
                 {browser.i18n.getMessage('colorInputHelperText')}
             </FormHelperText>
@@ -43,7 +43,6 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     value={formik.values.globalOpacity}
                     name="globalOpacity"
                     type="number"
-                    onChange={formik.handleChange}
                     inputProps={{
                         min: 0,
                         max: 1,
@@ -52,6 +51,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     style={{
                         width: '100%',
                     }}
+                    onChange={formik.handleChange}
                 />
             </div>
             <div className={classes.row}>
@@ -63,10 +63,10 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     value={formik.values.messageSettings.color}
                     name="messageSettings.color"
                     type="text"
-                    onChange={formik.handleChange}
                     style={{
                         width: '60%',
                     }}
+                    onChange={formik.handleChange}
                 />
                 <TextField
                     color="secondary"
@@ -76,7 +76,6 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     value={formik.values.messageSettings.weight}
                     name="messageSettings.weight"
                     type="number"
-                    onChange={formik.handleChange}
                     inputProps={{
                         min: 100,
                         max: 900,
@@ -85,6 +84,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     style={{
                         width: '30%',
                     }}
+                    onChange={formik.handleChange}
                 />
             </div>
             <div className={classes.row}>
@@ -96,10 +96,10 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     value={formik.values.messageSettings.strokeColor}
                     name="messageSettings.strokeColor"
                     type="text"
-                    onChange={formik.handleChange}
                     style={{
                         width: '60%',
                     }}
+                    onChange={formik.handleChange}
                 />
                 <TextField
                     color="secondary"
@@ -114,10 +114,10 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                         max: 0.5,
                         step: 0.001,
                     }}
-                    onChange={formik.handleChange}
                     style={{
                         width: '30%',
                     }}
+                    onChange={formik.handleChange}
                 />
             </div>
             <div className={classes.row}>
@@ -130,10 +130,10 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     value={formik.values.messageSettings.bgColor}
                     name="messageSettings.bgColor"
                     type="text"
-                    onChange={formik.handleChange}
                     style={{
                         width: '60%',
                     }}
+                    onChange={formik.handleChange}
                 />
                 <TextField
                     color="secondary"
@@ -143,7 +143,6 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     value={formik.values.messageSettings.opacity}
                     name="messageSettings.opacity"
                     type="number"
-                    onChange={formik.handleChange}
                     inputProps={{
                         min: 0,
                         max: 1,
@@ -152,6 +151,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     style={{
                         width: '30%',
                     }}
+                    onChange={formik.handleChange}
                 />
             </div>
             <div className={classes.row}>

@@ -1,6 +1,6 @@
-import { browser } from 'webextension-polyfill-ts';
+import {browser} from 'webextension-polyfill-ts';
 
-import { appendScript, functionToString, youtube } from '@/utils';
+import {appendScript, functionToString, youtube} from '@/utils';
 
 export interface CustomEventDetail {
     response: unknown;

@@ -1,7 +1,7 @@
 export class EventEmitter<EventMap extends Record<string, unknown>> {
     private listeners: Partial<
         {
-            [Key in keyof EventMap]: ((data: EventMap[Key]) => void)[];
+            [Key in keyof EventMap]: Array<(data: EventMap[Key]) => void>;
         }
     > = {};
 
@@ -9,7 +9,9 @@ export class EventEmitter<EventMap extends Record<string, unknown>> {
         event: K,
         data: EventMap[K],
     ): void {
-        this.listeners[event]?.forEach((callback) => callback(data));
+        this.listeners[event]?.forEach((callback) => {
+            callback(data);
+        });
     }
 
     public on<K extends keyof EventMap>(
@@ -19,6 +21,7 @@ export class EventEmitter<EventMap extends Record<string, unknown>> {
         if (!this.listeners[event]) {
             this.listeners[event] = [];
         }
+
         this.listeners[event]?.push(callback);
     }
 
