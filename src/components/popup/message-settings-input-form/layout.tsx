@@ -1,9 +1,9 @@
-import {browser} from 'webextension-polyfill-ts';
 import * as React from 'react';
 import {TextField, Button, FormHelperText} from '@material-ui/core';
 import {useFormik} from 'formik';
 
 import type {settingsStorage} from '@/services';
+import {useI18n} from '@/contexts/i18n';
 
 import classes from './index.scss';
 
@@ -30,16 +30,17 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
         },
         onSubmit,
     });
+    const i18n = useI18n();
 
     return (
         <form className={classes.container} onSubmit={formik.handleSubmit}>
             <FormHelperText>
-                {browser.i18n.getMessage('colorInputHelperText')}
+                {i18n.getMessage('colorInputHelperText')}
             </FormHelperText>
             <div className={classes.row}>
                 <TextField
                     color="secondary"
-                    label={browser.i18n.getMessage('globalOpacityInputLabel')}
+                    label={i18n.getMessage('globalOpacityInputLabel')}
                     value={formik.values.globalOpacity}
                     name="globalOpacity"
                     type="number"
@@ -57,7 +58,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
             <div className={classes.row}>
                 <TextField
                     color="secondary"
-                    label={browser.i18n.getMessage(
+                    label={i18n.getMessage(
                         'messageSettingsColorInputLabel',
                     )}
                     value={formik.values.messageSettings.color}
@@ -70,7 +71,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                 />
                 <TextField
                     color="secondary"
-                    label={browser.i18n.getMessage(
+                    label={i18n.getMessage(
                         'messageSettingsWeightInputLabel',
                     )}
                     value={formik.values.messageSettings.weight}
@@ -90,7 +91,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
             <div className={classes.row}>
                 <TextField
                     color="secondary"
-                    label={browser.i18n.getMessage(
+                    label={i18n.getMessage(
                         'messageSettingsStrokeColorInputLabel',
                     )}
                     value={formik.values.messageSettings.strokeColor}
@@ -103,7 +104,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                 />
                 <TextField
                     color="secondary"
-                    label={browser.i18n.getMessage(
+                    label={i18n.getMessage(
                         'messageSettingsStrokeWidthInputLabel',
                     )}
                     value={formik.values.messageSettings.strokeWidth}
@@ -123,7 +124,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
             <div className={classes.row}>
                 <TextField
                     color="secondary"
-                    label={browser.i18n.getMessage(
+                    label={i18n.getMessage(
                         'messageSettingsBgColorInputLabel',
                     )}
                     disabled={!isBackgroundColorEditable}
@@ -137,7 +138,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                 />
                 <TextField
                     color="secondary"
-                    label={browser.i18n.getMessage(
+                    label={i18n.getMessage(
                         'messageSettingsOpacityInputLabel',
                     )}
                     value={formik.values.messageSettings.opacity}
@@ -156,10 +157,10 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
             </div>
             <div className={classes.row}>
                 <Button type="submit" color="primary" variant="contained">
-                    {browser.i18n.getMessage('applyButtonText')}
+                    {i18n.getMessage('applyButtonText')}
                 </Button>
                 <Button type="button" onClick={formik.handleReset}>
-                    {browser.i18n.getMessage('resetButtonText')}
+                    {i18n.getMessage('resetButtonText')}
                 </Button>
             </div>
         </form>

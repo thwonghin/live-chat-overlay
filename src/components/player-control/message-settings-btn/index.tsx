@@ -1,4 +1,3 @@
-import {browser} from 'webextension-polyfill-ts';
 import {useCallback} from 'react';
 import {useDispatch} from 'react-redux';
 import cn from 'classnames';
@@ -6,6 +5,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPalette} from '@fortawesome/free-solid-svg-icons';
 
 import {youtube} from '@/utils';
+import {useI18n} from '@/contexts/i18n';
 
 import {popup} from '@/features';
 import classes from './index.scss';
@@ -22,12 +22,13 @@ const MessageSettingsBtn: React.FC = () => {
         },
         [dispatch],
     );
+    const i18n = useI18n();
 
     return (
         <button
             className={cn([classes.btn, youtube.CLASS_PLAYER_CTL_BTN])}
             type="button"
-            title={browser.i18n.getMessage('messageSettingsButtonTitle')}
+            title={i18n.getMessage('messageSettingsButtonTitle')}
             onClick={handleClick}
         >
             <FontAwesomeIcon

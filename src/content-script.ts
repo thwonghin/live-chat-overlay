@@ -30,7 +30,7 @@ async function init(): Promise<void> {
 
     await youtube.waitForPlayerReady();
 
-    const cleanupLiveChat = injectLiveChatOverlay(initData, browser.runtime.id);
+    const cleanupLiveChat = injectLiveChatOverlay(initData, browser);
 
     function cleanup(): void {
         cleanupLiveChat();

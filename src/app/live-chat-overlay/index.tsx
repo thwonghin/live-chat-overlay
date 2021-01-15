@@ -1,3 +1,4 @@
+import {Browser} from 'webextension-polyfill-ts';
 import {StrictMode} from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
@@ -22,7 +23,7 @@ const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
 export function injectLiveChatOverlay(
     initData: InitData,
-    chatEventPrefix: string,
+    browser: Browser,
 ): () => void {
     const videoPlayerContainer = youtube.getVideoPlayerContainer();
     if (!videoPlayerContainer) {
@@ -71,23 +72,25 @@ export function injectLiveChatOverlay(
     ReactDOM.render(
         <StrictMode>
             <Provider store={store}>
-                <contexts.playerRect.PlayerRectProvider>
-                    <contexts.chatObserver.ChatEventObserverProvider
-                        chatEventPrefix={chatEventPrefix}
-                    >
-                        <StylesProvider jss={jssConfig}>
-                            <ThemeProvider theme={theme}>
-                                <App
-                                    initData={initData}
-                                    playerControlContainer={
-                                        playerControlContainer
-                                    }
-                                    playerEle={videoPlayerEle}
-                                />
-                            </ThemeProvider>
-                        </StylesProvider>
-                    </contexts.chatObserver.ChatEventObserverProvider>
-                </contexts.playerRect.PlayerRectProvider>
+                <contexts.i18n.I18nProvider browser={browser}>
+                    <contexts.playerRect.PlayerRectProvider>
+                        <contexts.chatObserver.ChatEventObserverProvider
+                            chatEventPrefix={browser.runtime.id}
+                        >
+                            <StylesProvider jss={jssConfig}>
+                                <ThemeProvider theme={theme}>
+                                    <App
+                                        initData={initData}
+                                        playerControlContainer={
+                                            playerControlContainer
+                                        }
+                                        playerEle={videoPlayerEle}
+                                    />
+                                </ThemeProvider>
+                            </StylesProvider>
+                        </contexts.chatObserver.ChatEventObserverProvider>
+                    </contexts.playerRect.PlayerRectProvider>
+                </contexts.i18n.I18nProvider>
             </Provider>
         </StrictMode>,
         liveChatContainer,
