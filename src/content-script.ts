@@ -23,14 +23,14 @@ function injectStyles(): () => void {
 }
 
 async function init(): Promise<void> {
-    await settingsStorage.storageInstance.init();
+    await settingsStorage.storageInstance.init(browser);
     const cleanupStyles = injectStyles();
-    const detechFetchInterceptor = fetchInterceptor.attach();
-    const initData = await youtube.getInitData();
+    const detechFetchInterceptor = fetchInterceptor.attach(browser.runtime.id);
+    const initData = await youtube.getInitData(browser.runtime.id);
 
     await youtube.waitForPlayerReady();
 
-    const cleanupLiveChat = injectLiveChatOverlay(initData);
+    const cleanupLiveChat = injectLiveChatOverlay(initData, browser);
 
     function cleanup(): void {
         cleanupLiveChat();

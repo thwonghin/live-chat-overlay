@@ -1,32 +1,34 @@
-import {browser} from 'webextension-polyfill-ts';
-import {useCallback} from 'react';
+import type {I18n} from 'webextension-polyfill-ts';
+import {useCallback, useMemo} from 'react';
 import {Select, FormLabel, MenuItem} from '@material-ui/core';
 
 import {assertNever} from '@/utils';
 import type {settingsStorage} from '@/services';
+import {useI18n} from '@/contexts/i18n';
 
 import classes from './index.scss';
 
 function getStringByMessageKey(
+    i18n: I18n.Static,
     key: settingsStorage.MessageSettingsKey,
 ): string {
     switch (key) {
         case 'guest':
-            return browser.i18n.getMessage('guestMessageType');
+            return i18n.getMessage('guestMessageType');
         case 'member':
-            return browser.i18n.getMessage('memberMessageType');
+            return i18n.getMessage('memberMessageType');
         case 'verified':
-            return browser.i18n.getMessage('verifiedMessageType');
+            return i18n.getMessage('verifiedMessageType');
         case 'moderator':
-            return browser.i18n.getMessage('moderatorMessageType');
+            return i18n.getMessage('moderatorMessageType');
         case 'owner':
-            return browser.i18n.getMessage('ownerMessageType');
+            return i18n.getMessage('ownerMessageType');
         case 'you':
             throw new Error('"you" type message Not supported');
         case 'membership':
-            return browser.i18n.getMessage('membershipMessageType');
+            return i18n.getMessage('membershipMessageType');
         case 'super-chat':
-            return browser.i18n.getMessage('superChatMessageType');
+            return i18n.getMessage('superChatMessageType');
         default:
             return assertNever(key);
     }
@@ -42,11 +44,6 @@ const supportedTypes: settingsStorage.MessageSettingsKey[] = [
     'super-chat',
 ];
 
-const messageSettingsOptions = supportedTypes.map((type) => ({
-    key: type,
-    label: getStringByMessageKey(type),
-}));
-
 interface Props {
     value: settingsStorage.MessageSettingsKey;
     onChange: (value: settingsStorage.MessageSettingsKey) => void;
@@ -59,11 +56,21 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({value, onChange}) => {
         },
         [onChange],
     );
+    const i18n = useI18n();
+
+    const messageSettingsOptions = useMemo(
+        () =>
+            supportedTypes.map((type) => ({
+                key: type,
+                label: getStringByMessageKey(i18n, type),
+            })),
+        [supportedTypes, i18n],
+    );
 
     return (
         <div>
             <FormLabel className={classes.label}>
-                {browser.i18n.getMessage('messageTypeSelectLabel')}
+                {i18n.getMessage('messageTypeSelectLabel')}
             </FormLabel>
             <Select
                 color="secondary"

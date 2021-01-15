@@ -1,5 +1,3 @@
-import {browser} from 'webextension-polyfill-ts';
-
 import {appendScript, functionToString, youtube} from '@/utils';
 
 export interface CustomEventDetail {
@@ -35,13 +33,9 @@ function initInterceptor(extensionId: string, urlPrefix: string): void {
     };
 }
 
-export function attach(): () => void {
+export function attach(prefix: string): () => void {
     return appendScript(
         document,
-        functionToString(
-            initInterceptor,
-            browser.runtime.id,
-            youtube.GET_LIVE_CHAT_URL,
-        ),
+        functionToString(initInterceptor, prefix, youtube.GET_LIVE_CHAT_URL),
     );
 }

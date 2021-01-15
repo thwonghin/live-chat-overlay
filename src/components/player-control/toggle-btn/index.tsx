@@ -1,10 +1,10 @@
-import {browser} from 'webextension-polyfill-ts';
 import {useMemo, useCallback} from 'react';
 import cn from 'classnames';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCommentSlash, faComment} from '@fortawesome/free-solid-svg-icons';
 import {useSettings} from '@/hooks';
 import {youtube} from '@/utils';
+import {useI18n} from '@/contexts/i18n';
 
 import classes from './index.scss';
 
@@ -16,6 +16,7 @@ const withSlashIconRatio =
 
 const ToggleBtn: React.FC = () => {
     const {settings, updateSettings} = useSettings();
+    const i18n = useI18n();
 
     const icon = useMemo<JSX.Element>(() => {
         const ratio = settings.isEnabled ? withSlashIconRatio : iconToBtnRatio;
@@ -31,8 +32,8 @@ const ToggleBtn: React.FC = () => {
     const title = useMemo<string>(
         () =>
             settings.isEnabled
-                ? browser.i18n.getMessage('toggleButtonHideTitle')
-                : browser.i18n.getMessage('toggleButtonShowTitle'),
+                ? i18n.getMessage('toggleButtonHideTitle')
+                : i18n.getMessage('toggleButtonShowTitle'),
         [settings.isEnabled],
     );
 

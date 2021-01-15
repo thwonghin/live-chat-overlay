@@ -1,5 +1,3 @@
-import {browser} from 'webextension-polyfill-ts';
-
 import {appendScript, functionToString} from '@/utils';
 import type {InitData, YotubeChatResponse} from '@/definitions/youtube';
 
@@ -104,11 +102,11 @@ export function isInsideLiveChatFrame(): boolean {
     return window.location.href.startsWith('https://www.youtube.com/live_chat');
 }
 
-function dispatchInitData(extensionId: string): void {
+function dispatchInitData(prefix: string): void {
     // Window.ytInitialData is mutated, need to get from raw HTML
     document.querySelectorAll('script').forEach((tag) => {
         if (
-            !tag.innerHTML.includes(extensionId) &&
+            !tag.innerHTML.includes(prefix) &&
             tag.innerHTML.includes('window["ytInitialData"] =')
         ) {
             const innerHTML = tag.innerHTML.trim();
@@ -116,7 +114,7 @@ function dispatchInitData(extensionId: string): void {
             const initData = innerHTML.slice(startIndex, -1);
 
             const event = new CustomEvent<{data: InitData}>(
-                `${extensionId}_init_data`,
+                `${prefix}_init_data`,
                 {
                     detail: {
                         data: JSON.parse(initData) as InitData,
@@ -129,16 +127,14 @@ function dispatchInitData(extensionId: string): void {
     });
 }
 
-export async function getInitData(): Promise<InitData> {
-    const extensionId = browser.runtime.id;
-
+export async function getInitData(prefix: string): Promise<InitData> {
     return new Promise((resolve) => {
         const removeScript = appendScript(
             document,
-            functionToString(dispatchInitData, browser.runtime.id),
+            functionToString(dispatchInitData, prefix),
         );
 
-        window.addEventListener(`${extensionId}_init_data`, (event) => {
+        window.addEventListener(`${prefix}_init_data`, (event) => {
             const customEvent = event as CustomEvent<{data: InitData}>;
 
             removeScript();

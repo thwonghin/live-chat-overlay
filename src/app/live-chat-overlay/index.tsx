@@ -1,3 +1,4 @@
+import {Browser} from 'webextension-polyfill-ts';
 import {StrictMode} from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
@@ -20,7 +21,10 @@ import App from './app';
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
-export function injectLiveChatOverlay(initData: InitData): () => void {
+export function injectLiveChatOverlay(
+    initData: InitData,
+    browser: Browser,
+): () => void {
     const videoPlayerContainer = youtube.getVideoPlayerContainer();
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');
@@ -68,21 +72,25 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
     ReactDOM.render(
         <StrictMode>
             <Provider store={store}>
-                <contexts.playerRect.PlayerRectProvider>
-                    <contexts.chatObserver.ChatEventObserverProvider>
-                        <StylesProvider jss={jssConfig}>
-                            <ThemeProvider theme={theme}>
-                                <App
-                                    initData={initData}
-                                    playerControlContainer={
-                                        playerControlContainer
-                                    }
-                                    playerEle={videoPlayerEle}
-                                />
-                            </ThemeProvider>
-                        </StylesProvider>
-                    </contexts.chatObserver.ChatEventObserverProvider>
-                </contexts.playerRect.PlayerRectProvider>
+                <contexts.i18n.I18nProvider browser={browser}>
+                    <contexts.playerRect.PlayerRectProvider>
+                        <contexts.chatObserver.ChatEventObserverProvider
+                            chatEventPrefix={browser.runtime.id}
+                        >
+                            <StylesProvider jss={jssConfig}>
+                                <ThemeProvider theme={theme}>
+                                    <App
+                                        initData={initData}
+                                        playerControlContainer={
+                                            playerControlContainer
+                                        }
+                                        playerEle={videoPlayerEle}
+                                    />
+                                </ThemeProvider>
+                            </StylesProvider>
+                        </contexts.chatObserver.ChatEventObserverProvider>
+                    </contexts.playerRect.PlayerRectProvider>
+                </contexts.i18n.I18nProvider>
             </Provider>
         </StrictMode>,
         liveChatContainer,

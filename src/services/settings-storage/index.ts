@@ -1,4 +1,4 @@
-import {browser} from 'webextension-polyfill-ts';
+import type {Browser} from 'webextension-polyfill-ts';
 import {defaultsDeep} from 'lodash-es';
 
 import {catchWithFallback, EventEmitter, promiseSeries} from '@/utils';
@@ -78,6 +78,7 @@ const eventEmitter = new EventEmitter<EventMap>();
 
 let isInitiated = false;
 let currentSettings: Settings;
+let browser: Browser;
 
 async function runMigrations() {
     const result = await browser.storage.sync.get(MIGRATIONS_STORAGE_KEY);
@@ -111,7 +112,8 @@ function assertInitiated(): void {
     }
 }
 
-async function init(): Promise<void> {
+async function init(inputBrowser: Browser): Promise<void> {
+    browser = inputBrowser;
     try {
         await runMigrations();
     } catch (error: unknown) {
