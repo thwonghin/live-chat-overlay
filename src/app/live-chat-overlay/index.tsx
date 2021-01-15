@@ -20,7 +20,10 @@ import App from './app';
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
-export function injectLiveChatOverlay(initData: InitData): () => void {
+export function injectLiveChatOverlay(
+    initData: InitData,
+    chatEventPrefix: string,
+): () => void {
     const videoPlayerContainer = youtube.getVideoPlayerContainer();
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');
@@ -69,7 +72,9 @@ export function injectLiveChatOverlay(initData: InitData): () => void {
         <StrictMode>
             <Provider store={store}>
                 <contexts.playerRect.PlayerRectProvider>
-                    <contexts.chatObserver.ChatEventObserverProvider>
+                    <contexts.chatObserver.ChatEventObserverProvider
+                        chatEventPrefix={chatEventPrefix}
+                    >
                         <StylesProvider jss={jssConfig}>
                             <ThemeProvider theme={theme}>
                                 <App
