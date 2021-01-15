@@ -1,5 +1,5 @@
-import {last} from 'lodash-es';
-import type {UiChatItem} from '@/components/chat-flow/types';
+import { last } from 'lodash-es';
+import type { UiChatItem } from '@/components/chat-flow/types';
 
 interface HasSpaceInLineParameters {
     lastMessageInLine: UiChatItem;

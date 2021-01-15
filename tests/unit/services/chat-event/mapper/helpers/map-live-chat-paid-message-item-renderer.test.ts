@@ -1,5 +1,5 @@
-import type {LiveChatPaidMessageRenderer} from '@/definitions/youtube';
-import {mapLiveChatPaidMessageItemRenderer} from '@/services/chat-event/mapper/helpers';
+import type { LiveChatPaidMessageRenderer } from '@/definitions/youtube';
+import { mapLiveChatPaidMessageItemRenderer } from '@/services/chat-event/mapper/helpers';
 
 function getFixture(): LiveChatPaidMessageRenderer {
     return {

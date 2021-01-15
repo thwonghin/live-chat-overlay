@@ -1,5 +1,5 @@
-import type {RefObject} from 'react';
-import {useState, useEffect} from 'react';
+import type { RefObject } from 'react';
+import { useState, useEffect } from 'react';
 
 interface UseClickOutsideParameters {
     refs: Array<RefObject<HTMLElement>>;

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {useSelector, shallowEqual} from 'react-redux';
+import { useSelector, shallowEqual } from 'react-redux';
 
-import type {RootState} from '@/app/live-chat-overlay/store';
-import type {debugInfo} from '@/features/';
+import type { RootState } from '@/app/live-chat-overlay/store';
+import type { debugInfo } from '@/features/';
 
 import classes from './index.scss';
 
@@ -33,7 +33,7 @@ function roundBenchmark(benchmark: debugInfo.Benchmark): RoundedBenchmark {
 
 function renderBenchmark(
     benchmark: RoundedBenchmark,
-): Array<{key: string; text: string}> {
+): Array<{ key: string; text: string }> {
     return [
         {
             key: 'min-max',
@@ -77,11 +77,13 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                         Message Count By Position:
                     </p>
                 )}
-                {chatEventDebugInfo.messageByLineNumber.map(({row, count}) => (
-                    <p key={row} className={classes['debug-text']}>
-                        {`${row + 1}: ${count}`}
-                    </p>
-                ))}
+                {chatEventDebugInfo.messageByLineNumber.map(
+                    ({ row, count }) => (
+                        <p key={row} className={classes['debug-text']}>
+                            {`${row + 1}: ${count}`}
+                        </p>
+                    ),
+                )}
             </div>
             <div className={classes['benchmark-container']}>
                 {getEleWidthBenchmark.count !== 0 && (
@@ -90,7 +92,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                             Get element width benchmark (μs):
                         </p>
                         {renderBenchmark(getEleWidthBenchmark).map(
-                            ({key, text}) => (
+                            ({ key, text }) => (
                                 <p key={key} className={classes['debug-text']}>
                                     {text}
                                 </p>
@@ -105,7 +107,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                             Process response benchmark (μs):
                         </p>
                         {renderBenchmark(processXhrBenchmark).map(
-                            ({key, text}) => (
+                            ({ key, text }) => (
                                 <p key={key} className={classes['debug-text']}>
                                     {text}
                                 </p>
@@ -123,7 +125,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                             Process chat event benchmark (μs):
                         </p>
                         {renderBenchmark(processChatEventBenchmark).map(
-                            ({key, text}) => (
+                            ({ key, text }) => (
                                 <p key={key} className={classes['debug-text']}>
                                     {text}
                                 </p>

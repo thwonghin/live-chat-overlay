@@ -1,9 +1,9 @@
-import {useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
-import {chatEvents} from '@/features';
+import { chatEvents } from '@/features';
 
-import {useVideoPlayerRect} from './use-video-player-rect';
+import { useVideoPlayerRect } from './use-video-player-rect';
 
 export function useResetChatEventsOnPlayerRectChange(): void {
     const rect = useVideoPlayerRect();

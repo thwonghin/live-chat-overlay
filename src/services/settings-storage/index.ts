@@ -1,10 +1,10 @@
-import type {Browser} from 'webextension-polyfill-ts';
-import {defaultsDeep} from 'lodash-es';
+import type { Browser } from 'webextension-polyfill-ts';
+import { defaultsDeep } from 'lodash-es';
 
-import {catchWithFallback, EventEmitter, promiseSeries} from '@/utils';
-import type {Settings, MessageSettings, AuthorDisplayMethod} from './types';
-import {migrations} from './migrations';
-import {SETTINGS_STORAGE_KEY, MIGRATIONS_STORAGE_KEY} from './const';
+import { catchWithFallback, EventEmitter, promiseSeries } from '@/utils';
+import type { Settings, MessageSettings, AuthorDisplayMethod } from './types';
+import { migrations } from './migrations';
+import { SETTINGS_STORAGE_KEY, MIGRATIONS_STORAGE_KEY } from './const';
 
 export * from './types';
 
@@ -155,4 +155,4 @@ const storageInstance = {
     off: eventEmitter.off.bind(eventEmitter),
 };
 
-export {storageInstance};
+export { storageInstance };

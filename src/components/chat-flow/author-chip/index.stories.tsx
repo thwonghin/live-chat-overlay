@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import AuthorChip from './index';
 
-const settings = {title: 'AuthorChip'};
+const settings = { title: 'AuthorChip' };
 
 export default settings;
 
@@ -15,8 +15,8 @@ const avatars = [
 ];
 const name = 'Author Name';
 
-const Container: React.FC = ({children}) => (
-    <div style={{fontSize: 40}}>{children}</div>
+const Container: React.FC = ({ children }) => (
+    <div style={{ fontSize: 40 }}>{children}</div>
 );
 
 export const WithAllDisplay: React.FC = () => (

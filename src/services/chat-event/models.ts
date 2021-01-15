@@ -1,4 +1,4 @@
-import {Except} from 'type-fest';
+import { Except } from 'type-fest';
 
 export interface Thumbnail {
     url: string;

@@ -89,7 +89,7 @@ interface ContextMenuEndpoint {
 }
 
 interface CustomThumbnail {
-    thumbnails: Array<{url: string}>;
+    thumbnails: Array<{ url: string }>;
 }
 
 export interface LiveChatAuthorBadgeRenderer {

@@ -1,7 +1,7 @@
 import * as React from 'react';
-import {settingsStorage, chatEvent} from '@/services';
+import { settingsStorage, chatEvent } from '@/services';
 
-import type {UiChatItem} from '../types';
+import type { UiChatItem } from '../types';
 import TwoLinesMessage from '../two-lines-message';
 import SuperChatSticker from '../super-chat-sticker';
 
@@ -10,7 +10,7 @@ interface Props {
     settings: settingsStorage.Settings;
 }
 
-const ChatItemRenderer: React.FC<Props> = ({chatItem, settings}) => (
+const ChatItemRenderer: React.FC<Props> = ({ chatItem, settings }) => (
     <>
         {chatEvent.isSuperStickerItem(chatItem) && (
             <SuperChatSticker

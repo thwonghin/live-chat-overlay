@@ -1,5 +1,5 @@
-import {appendScript, functionToString} from '@/utils';
-import type {InitData, YotubeChatResponse} from '@/definitions/youtube';
+import { appendScript, functionToString } from '@/utils';
+import type { InitData, YotubeChatResponse } from '@/definitions/youtube';
 
 export const CLASS_BIG_MODE = 'ytp-big-mode';
 export const CLASS_PLAYER_CTL_BTN = 'ytp-button';
@@ -113,7 +113,7 @@ function dispatchInitData(prefix: string): void {
             const startIndex = innerHTML.indexOf('{"responseContext"');
             const initData = innerHTML.slice(startIndex, -1);
 
-            const event = new CustomEvent<{data: InitData}>(
+            const event = new CustomEvent<{ data: InitData }>(
                 `${prefix}_init_data`,
                 {
                     detail: {
@@ -135,7 +135,7 @@ export async function getInitData(prefix: string): Promise<InitData> {
         );
 
         window.addEventListener(`${prefix}_init_data`, (event) => {
-            const customEvent = event as CustomEvent<{data: InitData}>;
+            const customEvent = event as CustomEvent<{ data: InitData }>;
 
             removeScript();
             resolve(customEvent.detail.data);

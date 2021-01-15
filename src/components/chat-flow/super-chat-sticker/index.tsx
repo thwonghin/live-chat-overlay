@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import type {chatEvent, settingsStorage} from '@/services';
+import type { chatEvent, settingsStorage } from '@/services';
 
 import classes from './index.scss';
 import AuthorChip from '../author-chip';
@@ -10,7 +10,7 @@ interface Props {
     messageSettings: settingsStorage.MessageSettings;
 }
 
-const SuperChatSticker: React.FC<Props> = ({chatItem, messageSettings}) => {
+const SuperChatSticker: React.FC<Props> = ({ chatItem, messageSettings }) => {
     const imageSize = `${0.8 * messageSettings.numberOfLines}em`;
 
     return (

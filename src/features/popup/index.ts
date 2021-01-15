@@ -1,6 +1,6 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type {State, PopupType} from './types';
+import type { State, PopupType } from './types';
 
 const initialState: State = {
     currentPopup: null,
@@ -32,5 +32,5 @@ const slice = createSlice({
     },
 });
 
-export const {actions, reducer} = slice;
+export const { actions, reducer } = slice;
 export * from './types';

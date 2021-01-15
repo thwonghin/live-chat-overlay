@@ -1,9 +1,9 @@
 import ReactDOM from 'react-dom';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import {settingsStorage} from '@/services';
+import { settingsStorage } from '@/services';
 
-import {ChatItem} from '../models';
+import { ChatItem } from '../models';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 

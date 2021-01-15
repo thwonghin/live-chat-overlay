@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import {chatEvent} from '@/services';
-import {youtube} from '@/utils';
+import { chatEvent } from '@/services';
+import { youtube } from '@/utils';
 
 export const ChatEventObserverContext = React.createContext<chatEvent.ResponseObserver>(
     new chatEvent.ResponseObserver(

@@ -1,5 +1,5 @@
-import {useMemo, useState, useEffect, useCallback} from 'react';
-import {youtube} from '@/utils';
+import { useMemo, useState, useEffect, useCallback } from 'react';
+import { youtube } from '@/utils';
 
 interface PlayerState {
     isSeeking: boolean;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import {chatEvent, settingsStorage} from '@/services';
+import { chatEvent, settingsStorage } from '@/services';
 import classes from './index.scss';
 
 import MessagePartsRenderer from '../message-parts-renderer';
@@ -14,7 +14,7 @@ interface Props {
     messageSettings: settingsStorage.MessageSettings;
 }
 
-const TwoLinesMessage: React.FC<Props> = ({chatItem, messageSettings}) => {
+const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
     const actualNumberOfLines =
         chatItem.messageParts.length > 0 ? messageSettings.numberOfLines : 1;
 

@@ -1,10 +1,10 @@
-import {useCallback} from 'react';
-import {Slider, withStyles} from '@material-ui/core';
-import {isNil} from 'lodash-es';
-import {useDebouncedCallback} from 'use-debounce';
+import { useCallback } from 'react';
+import { Slider, withStyles } from '@material-ui/core';
+import { isNil } from 'lodash-es';
+import { useDebouncedCallback } from 'use-debounce';
 
-import {useSettings} from '@/hooks';
-import {youtube} from '@/utils';
+import { useSettings } from '@/hooks';
+import { youtube } from '@/utils';
 
 import classes from './index.scss';
 
@@ -65,8 +65,8 @@ interface Props {
     isHidden: boolean;
 }
 
-const SpeedSlider: React.FC<Props> = ({isHidden}) => {
-    const {settings, updateSettings} = useSettings();
+const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
+    const { settings, updateSettings } = useSettings();
 
     const handleChange = useCallback<
         (event: React.ChangeEvent<unknown>, value: number | number[]) => void
@@ -94,7 +94,7 @@ const SpeedSlider: React.FC<Props> = ({isHidden}) => {
         [updateSettings],
     );
 
-    const {callback: debouncedHandleChange} = useDebouncedCallback(
+    const { callback: debouncedHandleChange } = useDebouncedCallback(
         handleChange,
         500,
     );

@@ -1,7 +1,7 @@
-import {Browser} from 'webextension-polyfill-ts';
-import {StrictMode} from 'react';
+import { Browser } from 'webextension-polyfill-ts';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import * as jss from 'jss';
 import {
     StylesProvider,
@@ -10,12 +10,12 @@ import {
 } from '@material-ui/core/styles';
 
 import * as contexts from '@/contexts';
-import {InitData} from '@/definitions/youtube';
+import { InitData } from '@/definitions/youtube';
 
-import {youtube} from '@/utils';
+import { youtube } from '@/utils';
 
-import {store} from './store';
-import {theme} from './theme';
+import { store } from './store';
+import { theme } from './theme';
 import App from './app';
 
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';

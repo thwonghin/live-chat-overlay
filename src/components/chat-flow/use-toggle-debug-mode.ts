@@ -1,7 +1,7 @@
-import {useEffect, useCallback} from 'react';
-import {useDispatch} from 'react-redux';
-import {debugInfo} from '@/features';
-import {useKeyboardToggle, useKeyboardEvent} from '@/hooks';
+import { useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { debugInfo } from '@/features';
+import { useKeyboardToggle, useKeyboardEvent } from '@/hooks';
 
 const dKey = 68;
 const rKey = 82;
@@ -9,7 +9,7 @@ const rKey = 82;
 export function useToggleDebugMode(): void {
     const dispatch = useDispatch();
 
-    const {isActive} = useKeyboardToggle({
+    const { isActive } = useKeyboardToggle({
         shouldAlt: true,
         shouldCtrl: true,
         key: dKey,
