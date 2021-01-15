@@ -3,7 +3,7 @@ import * as webpack from 'webpack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import {TypedCssModulesPlugin} from 'typed-css-modules-webpack-plugin';
+import { TypedCssModulesPlugin } from 'typed-css-modules-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import postcssPresetEnv from 'postcss-preset-env';
 import cssNano from 'cssnano';
@@ -42,7 +42,7 @@ const config = (
         stats: mode === 'production' ? 'errors-only' : 'normal',
         resolve: {
             plugins: [
-                new TsconfigPathsPlugin({configFile: tsconfigPath}) as any,
+                new TsconfigPathsPlugin({ configFile: tsconfigPath }) as any,
             ],
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
         },

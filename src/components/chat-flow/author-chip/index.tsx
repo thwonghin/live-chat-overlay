@@ -1,7 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 
-import type {chatEvent, settingsStorage} from '@/services';
+import type { chatEvent, settingsStorage } from '@/services';
 import classes from './index.scss';
 
 interface Props {

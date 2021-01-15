@@ -1,4 +1,4 @@
-import type {Browser, I18n} from 'webextension-polyfill-ts';
+import type { Browser, I18n } from 'webextension-polyfill-ts';
 import * as React from 'react';
 
 export const I18nContext = React.createContext<I18n.Static>({} as any);
@@ -12,7 +12,7 @@ interface Props {
     children: React.ReactNode;
 }
 
-export const I18nProvider: React.FC<Props> = ({browser, children}) => {
+export const I18nProvider: React.FC<Props> = ({ browser, children }) => {
     return (
         <I18nContext.Provider value={browser.i18n}>
             {children}

@@ -1,10 +1,10 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import {settingsStorage, chatEvent} from '@/services';
-import {UiChatItem} from '@/components/chat-flow/types';
+import { settingsStorage, chatEvent } from '@/services';
+import { UiChatItem } from '@/components/chat-flow/types';
 
-import {State} from './types';
-import {getLineNumber} from './helpers';
+import { State } from './types';
+import { getLineNumber } from './helpers';
 
 const initialState: State = {
     lastLineNumber: null,
@@ -25,7 +25,7 @@ const slice = createSlice({
                 numberOfLines: number;
             }>,
         ): State {
-            const {chatItem, playerWidth, numberOfLines} = action.payload;
+            const { chatItem, playerWidth, numberOfLines } = action.payload;
 
             // Avoid duplicate chat item for some reason
             if (state.chatItemStateById[chatItem.id]) {
@@ -37,7 +37,7 @@ const slice = createSlice({
             }
 
             const addTimestamp = Date.now();
-            const {settings} = settingsStorage.storageInstance;
+            const { settings } = settingsStorage.storageInstance;
 
             const lineNumber = getLineNumber({
                 chatItemsByLineNumber: state.chatItemsByLineNumber,
@@ -122,7 +122,7 @@ const slice = createSlice({
                 (item) => state.chatItemStateById[item.id] !== 'finished',
             );
             const newChatItemStateById = Object.fromEntries(
-                filtered.map(({id}) => [
+                filtered.map(({ id }) => [
                     id,
                     state.chatItemStateById[id] ?? 'added',
                 ]),
@@ -142,5 +142,5 @@ const slice = createSlice({
     },
 });
 
-export const {actions, reducer} = slice;
+export const { actions, reducer } = slice;
 export * from './types';

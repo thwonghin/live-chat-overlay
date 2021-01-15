@@ -1,5 +1,5 @@
-import type {LiveChatMembershipItemRenderer} from '@/definitions/youtube';
-import {mapLiveChatMembershipItemRenderer} from '@/services/chat-event/mapper/helpers';
+import type { LiveChatMembershipItemRenderer } from '@/definitions/youtube';
+import { mapLiveChatMembershipItemRenderer } from '@/services/chat-event/mapper/helpers';
 
 function getFixture(): LiveChatMembershipItemRenderer {
     return {

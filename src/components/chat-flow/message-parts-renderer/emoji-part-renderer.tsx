@@ -1,12 +1,12 @@
 import * as React from 'react';
-import type {chatEvent} from '@/services';
-import {last} from 'lodash-es';
+import type { chatEvent } from '@/services';
+import { last } from 'lodash-es';
 
 interface Props {
     emojiPart: chatEvent.EmojiPart;
 }
 
-const EmojiPartRenderer: React.FC<Props> = ({emojiPart}) => {
+const EmojiPartRenderer: React.FC<Props> = ({ emojiPart }) => {
     const thumbnail = last(emojiPart.thumbnails);
     return (
         <img

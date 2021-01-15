@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {TextField, Button, FormHelperText} from '@material-ui/core';
-import {useFormik} from 'formik';
+import { TextField, Button, FormHelperText } from '@material-ui/core';
+import { useFormik } from 'formik';
 
-import type {settingsStorage} from '@/services';
-import {useI18n} from '@/contexts/i18n';
+import type { settingsStorage } from '@/services';
+import { useI18n } from '@/contexts/i18n';
 
 import classes from './index.scss';
 
@@ -58,9 +58,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
             <div className={classes.row}>
                 <TextField
                     color="secondary"
-                    label={i18n.getMessage(
-                        'messageSettingsColorInputLabel',
-                    )}
+                    label={i18n.getMessage('messageSettingsColorInputLabel')}
                     value={formik.values.messageSettings.color}
                     name="messageSettings.color"
                     type="text"
@@ -71,9 +69,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                 />
                 <TextField
                     color="secondary"
-                    label={i18n.getMessage(
-                        'messageSettingsWeightInputLabel',
-                    )}
+                    label={i18n.getMessage('messageSettingsWeightInputLabel')}
                     value={formik.values.messageSettings.weight}
                     name="messageSettings.weight"
                     type="number"
@@ -124,9 +120,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
             <div className={classes.row}>
                 <TextField
                     color="secondary"
-                    label={i18n.getMessage(
-                        'messageSettingsBgColorInputLabel',
-                    )}
+                    label={i18n.getMessage('messageSettingsBgColorInputLabel')}
                     disabled={!isBackgroundColorEditable}
                     value={formik.values.messageSettings.bgColor}
                     name="messageSettings.bgColor"
@@ -138,9 +132,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                 />
                 <TextField
                     color="secondary"
-                    label={i18n.getMessage(
-                        'messageSettingsOpacityInputLabel',
-                    )}
+                    label={i18n.getMessage('messageSettingsOpacityInputLabel')}
                     value={formik.values.messageSettings.opacity}
                     name="messageSettings.opacity"
                     type="number"

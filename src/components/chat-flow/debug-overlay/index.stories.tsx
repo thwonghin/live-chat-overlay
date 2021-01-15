@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {DebugOverlayLayout} from './index';
+import { DebugOverlayLayout } from './index';
 
-const settings = {title: 'DebugOverlay'};
+const settings = { title: 'DebugOverlay' };
 
 export default settings;
 
 export const DebugOverlay: React.FC = () => {
     return (
-        <div style={{width: 800, height: 800, position: 'relative'}}>
+        <div style={{ width: 800, height: 800, position: 'relative' }}>
             <DebugOverlayLayout
                 chatEventDebugInfo={{
                     messageByLineNumber: [

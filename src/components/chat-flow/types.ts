@@ -1,4 +1,4 @@
-import type {chatEvent} from '@/services';
+import type { chatEvent } from '@/services';
 
 export type UiChatItem = chatEvent.ChatItem & {
     addTimestamp: number;

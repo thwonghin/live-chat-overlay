@@ -1,10 +1,10 @@
-import {useMemo, useCallback} from 'react';
+import { useMemo, useCallback } from 'react';
 import cn from 'classnames';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faCommentSlash, faComment} from '@fortawesome/free-solid-svg-icons';
-import {useSettings} from '@/hooks';
-import {youtube} from '@/utils';
-import {useI18n} from '@/contexts/i18n';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
+import { useSettings } from '@/hooks';
+import { youtube } from '@/utils';
+import { useI18n } from '@/contexts/i18n';
 
 import classes from './index.scss';
 
@@ -15,7 +15,7 @@ const withSlashIconRatio =
     iconToBtnRatio * (faCommentHeight / faCommentSlashHeight);
 
 const ToggleBtn: React.FC = () => {
-    const {settings, updateSettings} = useSettings();
+    const { settings, updateSettings } = useSettings();
     const i18n = useI18n();
 
     const icon = useMemo<JSX.Element>(() => {
@@ -34,7 +34,7 @@ const ToggleBtn: React.FC = () => {
             settings.isEnabled
                 ? i18n.getMessage('toggleButtonHideTitle')
                 : i18n.getMessage('toggleButtonShowTitle'),
-        [settings.isEnabled],
+        [settings.isEnabled, i18n],
     );
 
     const onClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(

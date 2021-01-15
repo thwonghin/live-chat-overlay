@@ -1,5 +1,5 @@
-import type {settingsStorage} from '@/services';
-import {isNotNil} from '@/utils';
+import type { settingsStorage } from '@/services';
+import { isNotNil } from '@/utils';
 import type * as liveChatResponse from '@/definitions/youtube';
 import {
     mapLiveChatTextMessageRenderer,
@@ -99,7 +99,7 @@ export function getMessageSettings(
     chatItem: chatModel.ChatItem,
     settings: settingsStorage.Settings,
 ): settingsStorage.MessageSettings {
-    const {messageSettings} = settings;
+    const { messageSettings } = settings;
     if (isNormalChatItem(chatItem)) {
         return messageSettings[chatItem.authorType];
     }

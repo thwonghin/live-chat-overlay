@@ -1,5 +1,5 @@
-import type {RefObject} from 'react';
-import {useEffect} from 'react';
+import type { RefObject } from 'react';
+import { useEffect } from 'react';
 
 export function useNativeStopKeydownPropagation(
     ref: RefObject<HTMLElement>,

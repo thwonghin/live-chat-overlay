@@ -1,5 +1,5 @@
-import {useState, useCallback} from 'react';
-import {useKeyboardEvent} from './use-keyboard-event';
+import { useState, useCallback } from 'react';
+import { useKeyboardEvent } from './use-keyboard-event';
 
 interface UseKeyboardToggleParameters {
     shouldAlt: boolean;

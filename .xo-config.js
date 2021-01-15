@@ -8,7 +8,8 @@ module.exports = {
         "react/jsx-uses-react": "off",
         "react/react-in-jsx-scope": "off",
         "react/prop-types": 'off',
-        "unicorn/no-array-callback-reference": "off"
+        "unicorn/no-array-callback-reference": "off",
+        "react-hooks/exhaustive-deps": "error"
     },
     settings: {
         react: {

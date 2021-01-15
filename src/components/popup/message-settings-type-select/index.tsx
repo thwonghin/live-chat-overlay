@@ -1,10 +1,10 @@
-import type {I18n} from 'webextension-polyfill-ts';
-import {useCallback, useMemo} from 'react';
-import {Select, FormLabel, MenuItem} from '@material-ui/core';
+import type { I18n } from 'webextension-polyfill-ts';
+import { useCallback, useMemo } from 'react';
+import { Select, FormLabel, MenuItem } from '@material-ui/core';
 
-import {assertNever} from '@/utils';
-import type {settingsStorage} from '@/services';
-import {useI18n} from '@/contexts/i18n';
+import { assertNever } from '@/utils';
+import type { settingsStorage } from '@/services';
+import { useI18n } from '@/contexts/i18n';
 
 import classes from './index.scss';
 
@@ -49,9 +49,9 @@ interface Props {
     onChange: (value: settingsStorage.MessageSettingsKey) => void;
 }
 
-const MessageSettingsTypeSelect: React.FC<Props> = ({value, onChange}) => {
+const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
     const handleChange = useCallback(
-        (event: React.ChangeEvent<{value: unknown}>) => {
+        (event: React.ChangeEvent<{ value: unknown }>) => {
             onChange(event.target.value as settingsStorage.MessageSettingsKey);
         },
         [onChange],
@@ -64,7 +64,7 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({value, onChange}) => {
                 key: type,
                 label: getStringByMessageKey(i18n, type),
             })),
-        [supportedTypes, i18n],
+        [i18n],
     );
 
     return (

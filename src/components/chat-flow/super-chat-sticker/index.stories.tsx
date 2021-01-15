@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import type {chatEvent, settingsStorage} from '@/services';
+import type { chatEvent, settingsStorage } from '@/services';
 
 import SuperChatSticker from '.';
 
-const settings = {title: 'SuperChatSticker'};
+const settings = { title: 'SuperChatSticker' };
 export default settings;
 
 const avatars = [
@@ -45,8 +45,8 @@ const messageSettings: settingsStorage.MessageSettings = {
     authorDisplay: 'all',
 };
 
-const Container: React.FC = ({children}) => (
-    <div style={{fontSize: 40, position: 'absolute'}}>{children}</div>
+const Container: React.FC = ({ children }) => (
+    <div style={{ fontSize: 40, position: 'absolute' }}>{children}</div>
 );
 
 export const TwoLinesSuperChatSticker: React.FC = () => (

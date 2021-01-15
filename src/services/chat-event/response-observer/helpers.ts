@@ -1,6 +1,6 @@
-import {first} from 'lodash-es';
+import { first } from 'lodash-es';
 
-import {isNotNil} from '@/utils';
+import { isNotNil } from '@/utils';
 import type {
     ReplayContinuationContents,
     LiveContinuationContents,
@@ -8,8 +8,8 @@ import type {
     InitData,
 } from '@/definitions/youtube';
 
-import {mapAddChatItemActions, isNormalChatItem} from '../mapper';
-import {ChatItem} from '../models';
+import { mapAddChatItemActions, isNormalChatItem } from '../mapper';
+import { ChatItem } from '../models';
 
 export function mapChatItemsFromReplayResponse(parameters: {
     currentTimestampMs: number;

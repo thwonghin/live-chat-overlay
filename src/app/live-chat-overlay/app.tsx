@@ -8,7 +8,7 @@ import {
 import ChatFlow from '@/components/chat-flow';
 import PopupContainer from '@/components/popup';
 import PlayerControl from '@/components/player-control';
-import {InitData} from '@/definitions/youtube';
+import { InitData } from '@/definitions/youtube';
 
 interface Props {
     initData: InitData;

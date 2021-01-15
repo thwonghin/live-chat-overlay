@@ -1,4 +1,4 @@
-import {appendScript, functionToString, youtube} from '@/utils';
+import { appendScript, functionToString, youtube } from '@/utils';
 
 export interface CustomEventDetail {
     response: unknown;

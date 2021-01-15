@@ -1,6 +1,6 @@
 import * as helpers from '@/services/chat-event/mapper/helpers';
-import {chatEvent} from '@/services';
-import type {AddChatItemAction} from '@/definitions/youtube';
+import { chatEvent } from '@/services';
+import type { AddChatItemAction } from '@/definitions/youtube';
 
 const avatars = [
     {
@@ -14,7 +14,7 @@ const authorName = 'Author Name';
 const normalMessageItem: chatEvent.NormalChatItem = {
     id: 'super-chat-sticker',
     authorBadges: [],
-    messageParts: [{text: 'This is a normal message'}],
+    messageParts: [{ text: 'This is a normal message' }],
     avatars,
     videoTimestampInMs: 1591425506771,
     authorName,
@@ -24,7 +24,7 @@ const normalMessageItem: chatEvent.NormalChatItem = {
 
 const superChatItem: chatEvent.SuperChatItem = {
     id: 'super-chat-message',
-    messageParts: [{text: 'This is a super chat message'}],
+    messageParts: [{ text: 'This is a super chat message' }],
     avatars,
     videoTimestampInMs: 1591425506771,
     donationAmount: 'HK$ 100.00',
@@ -36,7 +36,7 @@ const superChatItem: chatEvent.SuperChatItem = {
 const membershipItem: chatEvent.MembershipItem = {
     id: 'membership',
     authorBadges: [],
-    messageParts: [{text: 'Someone becomes a member.'}],
+    messageParts: [{ text: 'Someone becomes a member.' }],
     avatars,
     videoTimestampInMs: 1591425506771,
     authorName,

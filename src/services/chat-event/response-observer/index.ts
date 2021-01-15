@@ -1,12 +1,12 @@
-import type {fetchInterceptor} from '@/services';
+import type { fetchInterceptor } from '@/services';
 import type {
     YotubeChatResponse,
     ReplayResponse,
     LiveResponse,
     InitData,
 } from '@/definitions/youtube';
-import {benchmark, benchmarkAsync, EventEmitter, youtube} from '@/utils';
-import {settingsStorage} from '@/services';
+import { benchmark, benchmarkAsync, EventEmitter, youtube } from '@/utils';
+import { settingsStorage } from '@/services';
 
 import {
     mapChatItemsFromReplayResponse,
@@ -16,10 +16,10 @@ import {
     getOutdatedFactor,
     isReplayInitData,
 } from './helpers';
-import {assignChatItemRenderedWidth} from './get-chat-item-render-container-ele';
-import type {ChatItem} from '../models';
+import { assignChatItemRenderedWidth } from './get-chat-item-render-container-ele';
+import type { ChatItem } from '../models';
 
-export {CHAT_ITEM_RENDER_ID} from './get-chat-item-render-container-ele';
+export { CHAT_ITEM_RENDER_ID } from './get-chat-item-render-container-ele';
 
 export type DebugInfo = Partial<{
     processXhrResponseMs: number;
@@ -77,7 +77,7 @@ export class ResponseObserver {
             return undefined;
         }
 
-        const {result: isTime, runtime} = benchmark(() => {
+        const { result: isTime, runtime } = benchmark(() => {
             if (!this.chatItemProcessQueue[0]) {
                 throw new Error('Unknown error');
             }
@@ -180,7 +180,7 @@ export class ResponseObserver {
             this.reset();
         }
 
-        const {runtime} = await benchmarkAsync(async () => {
+        const { runtime } = await benchmarkAsync(async () => {
             const timeInfo = this.getCurrentTimeInfo();
             const chatItems = isReplay
                 ? mapChatItemsFromReplayResponse({
