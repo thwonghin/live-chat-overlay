@@ -7,7 +7,7 @@ name: Create Release
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout Code
@@ -32,7 +32,7 @@ jobs:
   deploy-to-chrome:
     name: Deploy to Chrome Web Store
     needs: build
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/download-artifact@v1
         with:
