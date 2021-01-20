@@ -1,0 +1,24 @@
+diff --git a/node_modules/@types/lodash-es/debounce.d.ts b/node_modules/@types/lodash-es/debounce.d.ts
+index f26b7a4..5c0a633 100644
+--- a/node_modules/@types/lodash-es/debounce.d.ts
++++ b/node_modules/@types/lodash-es/debounce.d.ts
+@@ -1,4 +1,4 @@
+-import { debounce, DebouncedFunc, DebounceSettings } from "lodash";
++import { debounce, DebounceSettings } from "lodash";
+ 
+-export { DebounceSettings, DebouncedFunc };
++export { DebounceSettings };
+ export default debounce;
+diff --git a/node_modules/@types/lodash-es/index.d.ts b/node_modules/@types/lodash-es/index.d.ts
+index 95cf505..01b3314 100644
+--- a/node_modules/@types/lodash-es/index.d.ts
++++ b/node_modules/@types/lodash-es/index.d.ts
+@@ -37,7 +37,7 @@ export { default as countBy } from "./countBy";
+ export { default as create } from "./create";
+ export { default as curry } from "./curry";
+ export { default as curryRight } from "./curryRight";
+-export { default as debounce, DebouncedFunc, DebounceSettings } from "./debounce";
++export { default as debounce, DebounceSettings } from "./debounce";
+ export { default as deburr } from "./deburr";
+ export { default as defaultTo } from "./defaultTo";
+ export { default as defaults } from "./defaults";
