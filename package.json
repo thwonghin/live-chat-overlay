@@ -49,7 +49,7 @@
         "@types/react-redux": "^7.1.15",
         "@types/stylelint": "^9.10.1",
         "babel-loader": "^8.2.2",
-        "chrome-webstore-upload-cli": "^1.2.0",
+        "chrome-webstore-upload-cli": "^1.2.1",
         "copy-webpack-plugin": "^7.0.0",
         "css-loader": "^5.0.1",
         "cssnano": "^4.1.10",
