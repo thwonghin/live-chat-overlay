@@ -1,3 +1,17 @@
+## <small>2.8.3 (2021-01-30)</small>
+
+* chore: bump deps 2021-01-09 (#495) ([1bbc37b](https://github.com/thwonghin/live-chat-overlay/commit/1bbc37b)), closes [#495](https://github.com/thwonghin/live-chat-overlay/issues/495)
+* chore: migrate eslint to xo (#496) ([a796f6d](https://github.com/thwonghin/live-chat-overlay/commit/a796f6d)), closes [#496](https://github.com/thwonghin/live-chat-overlay/issues/496)
+* chore: update README.md ([4b53ffb](https://github.com/thwonghin/live-chat-overlay/commit/4b53ffb))
+* chore: upgrade dependencies 2021-01-14 (#508) ([1d0493b](https://github.com/thwonghin/live-chat-overlay/commit/1d0493b)), closes [#508](https://github.com/thwonghin/live-chat-overlay/issues/508)
+* chore: upgrade deps 2021-01-20 (#522) ([5e2afed](https://github.com/thwonghin/live-chat-overlay/commit/5e2afed)), closes [#522](https://github.com/thwonghin/live-chat-overlay/issues/522)
+* chore: upgrade deps 2021-01-30 (#532) ([e823037](https://github.com/thwonghin/live-chat-overlay/commit/e823037)), closes [#532](https://github.com/thwonghin/live-chat-overlay/issues/532)
+* ci: run ci on ubuntu 20.04 (#513) ([14f6355](https://github.com/thwonghin/live-chat-overlay/commit/14f6355)), closes [#513](https://github.com/thwonghin/live-chat-overlay/issues/513)
+* style: tune import style (#512) ([fbb3fcd](https://github.com/thwonghin/live-chat-overlay/commit/fbb3fcd)), closes [#512](https://github.com/thwonghin/live-chat-overlay/issues/512)
+* refactor: only import browser in content-script entry point (#511) ([25fae8f](https://github.com/thwonghin/live-chat-overlay/commit/25fae8f)), closes [#511](https://github.com/thwonghin/live-chat-overlay/issues/511)
+
+
+
 ## <small>2.8.2 (2021-01-06)</small>
 
 * fix: wrong NODE_ENV for release and storybook (#491) ([ca23e8f](https://github.com/thwonghin/live-chat-overlay/commit/ca23e8f)), closes [#491](https://github.com/thwonghin/live-chat-overlay/issues/491)
