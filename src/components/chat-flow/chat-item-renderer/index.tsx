@@ -8,54 +8,39 @@ import PinnedMessage from '../pinned-message';
 
 interface Props {
     chatItem: UiChatItem;
-    settings: settingsStorage.Settings;
+    messageSettings: settingsStorage.MessageSettings;
 }
 
-const ChatItemRenderer: React.FC<Props> = ({ chatItem, settings }) => (
+const ChatItemRenderer: React.FC<Props> = ({ chatItem, messageSettings }) => (
     <>
         {chatEvent.isSuperStickerItem(chatItem) && (
             <SuperChatSticker
                 chatItem={chatItem}
-                messageSettings={chatEvent.getMessageSettings(
-                    chatItem,
-                    settings,
-                )}
+                messageSettings={messageSettings}
             />
         )}
         {chatEvent.isNormalChatItem(chatItem) && (
             <TwoLinesMessage
                 chatItem={chatItem}
-                messageSettings={chatEvent.getMessageSettings(
-                    chatItem,
-                    settings,
-                )}
+                messageSettings={messageSettings}
             />
         )}
         {chatEvent.isSuperChatItem(chatItem) && (
             <TwoLinesMessage
                 chatItem={chatItem}
-                messageSettings={chatEvent.getMessageSettings(
-                    chatItem,
-                    settings,
-                )}
+                messageSettings={messageSettings}
             />
         )}
         {chatEvent.isMembershipItem(chatItem) && (
             <TwoLinesMessage
                 chatItem={chatItem}
-                messageSettings={chatEvent.getMessageSettings(
-                    chatItem,
-                    settings,
-                )}
+                messageSettings={messageSettings}
             />
         )}
         {chatEvent.isPinnedItem(chatItem) && (
             <PinnedMessage
                 chatItem={chatItem}
-                messageSettings={chatEvent.getMessageSettings(
-                    chatItem,
-                    settings,
-                )}
+                messageSettings={messageSettings}
             />
         )}
     </>

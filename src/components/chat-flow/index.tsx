@@ -54,21 +54,27 @@ const ChatFlowLayout: React.FC<Props> = ({
                 id={chatEvent.CHAT_ITEM_RENDER_ID}
             />
             <div style={style}>
-                {chatItems.map((chatItem) => (
-                    <MessageFlower
-                        key={chatItem.id}
-                        top={lineHeight * chatItem.lineNumber}
-                        containerWidth={containerWidth}
-                        onDone={() => {
-                            onDone(chatItem);
-                        }}
-                    >
-                        <ChatItemRenderer
-                            chatItem={chatItem}
-                            settings={settings}
-                        />
-                    </MessageFlower>
-                ))}
+                {chatItems.map((chatItem) => {
+                    const messageSettings = chatEvent.getMessageSettings(
+                        chatItem,
+                        settings,
+                    );
+                    return (
+                        <MessageFlower
+                            key={chatItem.id}
+                            top={lineHeight * chatItem.lineNumber}
+                            containerWidth={containerWidth}
+                            onDone={() => {
+                                onDone(chatItem);
+                            }}
+                        >
+                            <ChatItemRenderer
+                                chatItem={chatItem}
+                                messageSettings={messageSettings}
+                            />
+                        </MessageFlower>
+                    );
+                })}
             </div>
             {isDebugActive && <DebugOverlay />}
         </div>
