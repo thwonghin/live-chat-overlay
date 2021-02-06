@@ -633,6 +633,7 @@ describe('mapAddChatItemActions', () => {
             currentTimestampMs: 160000000,
             playerTimestampMs: 1000,
             videoTimestampInMs: 10000,
+            isSticky: true,
         });
 
         expect(helpers.mapLiveChatPaidMessageItemRenderer).toHaveBeenCalledWith(

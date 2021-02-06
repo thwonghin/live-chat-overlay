@@ -28,6 +28,7 @@ export interface NormalChatItem {
     authorBadges: string[];
     authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you' | 'verified';
     chatType: 'normal';
+    isSticky?: boolean;
 }
 
 export type SuperChatItem = Except<

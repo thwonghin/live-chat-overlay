@@ -209,6 +209,7 @@ interface MapLiveChatTextMessageRendererParameters {
     currentTimestampMs: number;
     playerTimestampMs: number;
     videoTimestampInMs?: number;
+    isSticky?: boolean;
 }
 
 export function mapLiveChatTextMessageRenderer({
@@ -217,6 +218,7 @@ export function mapLiveChatTextMessageRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
+    isSticky,
 }: MapLiveChatTextMessageRendererParameters): chatModel.NormalChatItem {
     return {
         id: renderer.id,
@@ -234,5 +236,6 @@ export function mapLiveChatTextMessageRenderer({
         authorType: getAuthorTypeFromBadges(renderer.authorBadges),
         chatType: 'normal',
         authorBadges: mapAuthorBadges(renderer.authorBadges),
+        isSticky,
     };
 }

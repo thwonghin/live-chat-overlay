@@ -91,6 +91,7 @@ export function mapAddChatItemActions({
                     currentTimestampMs,
                     playerTimestampMs,
                     videoTimestampInMs,
+                    isSticky: true,
                 });
             }
 
