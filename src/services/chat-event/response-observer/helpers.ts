@@ -20,12 +20,16 @@ export function mapChatItemsFromReplayResponse(parameters: {
         .map((a) => a.replayChatItemAction)
         .filter(isNotNil)
         .flatMap((a) => {
-            const addChatItemActions = (a.actions ?? [])
-                .map((action) => action.addChatItemAction)
+            const actions = (a.actions ?? [])
+                .map(
+                    (action) =>
+                        action.addChatItemAction ??
+                        action.addBannerToLiveChatCommand,
+                )
                 .filter(isNotNil);
 
             const items = mapAddChatItemActions({
-                addChatItemActions,
+                actions,
                 liveDelayInMs: 0,
                 currentTimestampMs: parameters.currentTimestampMs,
                 playerTimestampMs: parameters.playerTimestampMs,
@@ -58,10 +62,10 @@ export function mapChatItemsFromLiveResponse(parameters: {
     continuationContents: LiveContinuationContents;
 }): ChatItem[] {
     return mapAddChatItemActions({
-        addChatItemActions: (
+        actions: (
             parameters.continuationContents.liveChatContinuation.actions ?? []
         )
-            .map((v) => v.addChatItemAction)
+            .map((v) => v.addChatItemAction ?? v.addBannerToLiveChatCommand)
             .filter(isNotNil),
         liveDelayInMs: getTimeoutMs(parameters.continuationContents) ?? 0,
         currentTimestampMs: parameters.currentTimestampMs,

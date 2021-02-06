@@ -9,8 +9,11 @@ import {
 } from './helpers';
 import * as chatModel from '../models';
 
-interface MapAddChatItemActionsParameters {
-    addChatItemActions: liveChatResponse.AddChatItemAction[];
+interface MapActionsParameters {
+    actions: Array<
+        | liveChatResponse.AddChatItemAction
+        | liveChatResponse.AddBannerToLiveChatCommand
+    >;
     liveDelayInMs: number;
     currentTimestampMs: number;
     playerTimestampMs: number;
@@ -18,47 +21,72 @@ interface MapAddChatItemActionsParameters {
 }
 
 export function mapAddChatItemActions({
-    addChatItemActions,
+    actions,
     liveDelayInMs,
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapAddChatItemActionsParameters): chatModel.ChatItem[] {
-    return addChatItemActions
+}: MapActionsParameters): chatModel.ChatItem[] {
+    return actions
         .map((action) => {
-            if (action.item?.liveChatPaidMessageRenderer) {
-                return mapLiveChatPaidMessageItemRenderer({
-                    renderer: action.item.liveChatPaidMessageRenderer,
-                    liveDelayInMs,
-                    currentTimestampMs,
-                    playerTimestampMs,
-                    videoTimestampInMs,
-                });
+            if ('item' in action) {
+                if (action.item?.liveChatPaidMessageRenderer) {
+                    return mapLiveChatPaidMessageItemRenderer({
+                        renderer: action.item.liveChatPaidMessageRenderer,
+                        liveDelayInMs,
+                        currentTimestampMs,
+                        playerTimestampMs,
+                        videoTimestampInMs,
+                    });
+                }
+
+                if (action.item?.liveChatPaidStickerRenderer) {
+                    return mapLiveChatPaidStickerRenderer({
+                        renderer: action.item.liveChatPaidStickerRenderer,
+                        liveDelayInMs,
+                        currentTimestampMs,
+                        playerTimestampMs,
+                        videoTimestampInMs,
+                    });
+                }
+
+                if (action.item?.liveChatMembershipItemRenderer) {
+                    return mapLiveChatMembershipItemRenderer({
+                        renderer: action.item.liveChatMembershipItemRenderer,
+                        liveDelayInMs,
+                        currentTimestampMs,
+                        playerTimestampMs,
+                        videoTimestampInMs,
+                    });
+                }
+
+                if (action.item?.liveChatTextMessageRenderer) {
+                    return mapLiveChatTextMessageRenderer({
+                        renderer: action.item.liveChatTextMessageRenderer,
+                        liveDelayInMs,
+                        currentTimestampMs,
+                        playerTimestampMs,
+                        videoTimestampInMs,
+                    });
+                }
+
+                if (action.item?.liveChatViewerEngagementMessageRenderer) {
+                    return null;
+                }
+
+                if (action.item?.liveChatPlaceholderItemRenderer) {
+                    return null;
+                }
             }
 
-            if (action.item?.liveChatPaidStickerRenderer) {
-                return mapLiveChatPaidStickerRenderer({
-                    renderer: action.item.liveChatPaidStickerRenderer,
-                    liveDelayInMs,
-                    currentTimestampMs,
-                    playerTimestampMs,
-                    videoTimestampInMs,
-                });
-            }
-
-            if (action.item?.liveChatMembershipItemRenderer) {
-                return mapLiveChatMembershipItemRenderer({
-                    renderer: action.item.liveChatMembershipItemRenderer,
-                    liveDelayInMs,
-                    currentTimestampMs,
-                    playerTimestampMs,
-                    videoTimestampInMs,
-                });
-            }
-
-            if (action.item?.liveChatTextMessageRenderer) {
+            if (
+                'bannerRenderer' in action &&
+                action.bannerRenderer.liveChatBannerRenderer
+            ) {
                 return mapLiveChatTextMessageRenderer({
-                    renderer: action.item.liveChatTextMessageRenderer,
+                    renderer:
+                        action.bannerRenderer.liveChatBannerRenderer.contents
+                            .liveChatTextMessageRenderer,
                     liveDelayInMs,
                     currentTimestampMs,
                     playerTimestampMs,

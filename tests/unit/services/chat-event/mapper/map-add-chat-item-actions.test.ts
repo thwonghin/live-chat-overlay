@@ -1,6 +1,9 @@
 import * as helpers from '@/services/chat-event/mapper/helpers';
 import { chatEvent } from '@/services';
-import type { AddChatItemAction } from '@/definitions/youtube';
+import type {
+    AddChatItemAction,
+    AddBannerToLiveChatCommand,
+} from '@/definitions/youtube';
 
 const avatars = [
     {
@@ -54,7 +57,7 @@ const superStickerItem: chatEvent.SuperStickerItem = {
     chatType: 'super-sticker',
 };
 
-const sampleActions: AddChatItemAction[] = [
+const sampleActions: Array<AddChatItemAction | AddBannerToLiveChatCommand> = [
     {
         clientId: 'client-id',
         item: {
@@ -124,6 +127,127 @@ const sampleActions: AddChatItemAction[] = [
                 },
                 timestampText: {
                     simpleText: '0:40',
+                },
+            },
+        },
+    },
+    {
+        bannerRenderer: {
+            liveChatBannerRenderer: {
+                contents: {
+                    liveChatTextMessageRenderer: {
+                        message: {
+                            runs: [
+                                {
+                                    text: 'Test Message (Sticky)',
+                                },
+                                {
+                                    emoji: {
+                                        emojiId: 'sample-emoji-id',
+                                        shortcuts: [':text-emoji:'],
+                                        searchTerms: ['text-emoji', 'emoji'],
+                                        image: {
+                                            thumbnails: [
+                                                {
+                                                    url: 'https://sample-image',
+                                                    width: 24,
+                                                    height: 24,
+                                                },
+                                                {
+                                                    url:
+                                                        'https://sample-image-larger',
+                                                    width: 48,
+                                                    height: 48,
+                                                },
+                                            ],
+                                            accessibility: {
+                                                accessibilityData: {
+                                                    label: ':text-emoji:',
+                                                },
+                                            },
+                                        },
+                                        isCustomEmoji: true,
+                                    },
+                                },
+                            ],
+                        },
+                        authorName: {
+                            simpleText: 'Sample Author',
+                        },
+                        authorPhoto: {
+                            thumbnails: [
+                                {
+                                    url:
+                                        'https://sample-author-avatar/small.jpg',
+                                    width: 32,
+                                    height: 32,
+                                },
+                                {
+                                    url:
+                                        'https://sample-author-avatar/large.jpg',
+                                    width: 64,
+                                    height: 64,
+                                },
+                            ],
+                        },
+                        contextMenuEndpoint: {
+                            commandMetadata: {
+                                webCommandMetadata: {
+                                    ignoreNavigation: true,
+                                },
+                            },
+                            liveChatItemContextMenuEndpoint: {
+                                params: 'some-endpoint',
+                            },
+                        },
+                        id: 'random-id',
+                        timestampUsec: '1500000000000000',
+                        authorBadges: [
+                            {
+                                liveChatAuthorBadgeRenderer: {
+                                    customThumbnail: {
+                                        thumbnails: [
+                                            {
+                                                url: 'https://badge-url',
+                                            },
+                                        ],
+                                    },
+                                    tooltip: 'Member (1 year)',
+                                    accessibility: {
+                                        accessibilityData: {
+                                            label: 'Member (1 year)',
+                                        },
+                                    },
+                                },
+                            },
+                            {
+                                liveChatAuthorBadgeRenderer: {
+                                    customThumbnail: {
+                                        thumbnails: [
+                                            {
+                                                url: 'https://badge-url-2',
+                                            },
+                                        ],
+                                    },
+                                    tooltip: 'Moderator',
+                                    accessibility: {
+                                        accessibilityData: {
+                                            label: 'Moderator (1 year)',
+                                        },
+                                    },
+                                },
+                            },
+                        ],
+                        authorExternalChannelId: 'channel-id',
+                        contextMenuAccessibility: {
+                            accessibilityData: {
+                                label: 'More option on comment',
+                            },
+                        },
+                        timestampText: {
+                            simpleText: '1:00',
+                        },
+                    },
                 },
             },
         },
@@ -471,7 +595,7 @@ describe('mapAddChatItemActions', () => {
         );
 
         result = chatEvent.mapAddChatItemActions({
-            addChatItemActions: sampleActions,
+            actions: sampleActions,
             liveDelayInMs: 1000,
             videoTimestampInMs: 10000,
             currentTimestampMs: 160000000,
@@ -482,6 +606,7 @@ describe('mapAddChatItemActions', () => {
     it('should return correct result', () => {
         expect(result).toEqual([
             superStickerItem,
+            normalMessageItem,
             superChatItem,
             membershipItem,
             normalMessageItem,
@@ -490,17 +615,31 @@ describe('mapAddChatItemActions', () => {
 
     it('should call mapper with correct params', () => {
         expect(helpers.mapLiveChatPaidStickerRenderer).toHaveBeenCalledWith({
-            renderer: sampleActions[0]?.item?.liveChatPaidStickerRenderer ?? {},
+            renderer:
+                (sampleActions[0] as AddChatItemAction).item
+                    ?.liveChatPaidStickerRenderer ?? {},
             currentTimestampMs: 160000000,
             playerTimestampMs: 1000,
             liveDelayInMs: 1000,
             videoTimestampInMs: 10000,
         });
 
+        expect(helpers.mapLiveChatTextMessageRenderer).toHaveBeenCalledWith({
+            renderer:
+                (sampleActions[1] as AddBannerToLiveChatCommand)?.bannerRenderer
+                    .liveChatBannerRenderer.contents
+                    ?.liveChatTextMessageRenderer ?? {},
+            liveDelayInMs: 1000,
+            currentTimestampMs: 160000000,
+            playerTimestampMs: 1000,
+            videoTimestampInMs: 10000,
+        });
+
         expect(helpers.mapLiveChatPaidMessageItemRenderer).toHaveBeenCalledWith(
             {
                 renderer:
-                    sampleActions[2]?.item?.liveChatPaidMessageRenderer ?? {},
+                    (sampleActions[3] as AddChatItemAction).item
+                        ?.liveChatPaidMessageRenderer ?? {},
                 liveDelayInMs: 1000,
                 currentTimestampMs: 160000000,
                 playerTimestampMs: 1000,
@@ -510,7 +649,8 @@ describe('mapAddChatItemActions', () => {
 
         expect(helpers.mapLiveChatMembershipItemRenderer).toHaveBeenCalledWith({
             renderer:
-                sampleActions[3]?.item?.liveChatMembershipItemRenderer ?? {},
+                (sampleActions[4] as AddChatItemAction)?.item
+                    ?.liveChatMembershipItemRenderer ?? {},
             liveDelayInMs: 1000,
             currentTimestampMs: 160000000,
             playerTimestampMs: 1000,
@@ -518,7 +658,9 @@ describe('mapAddChatItemActions', () => {
         });
 
         expect(helpers.mapLiveChatTextMessageRenderer).toHaveBeenCalledWith({
-            renderer: sampleActions[4]?.item?.liveChatTextMessageRenderer ?? {},
+            renderer:
+                (sampleActions[5] as AddChatItemAction)?.item
+                    ?.liveChatTextMessageRenderer ?? {},
             liveDelayInMs: 1000,
             currentTimestampMs: 160000000,
             playerTimestampMs: 1000,
