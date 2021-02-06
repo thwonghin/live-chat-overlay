@@ -28,7 +28,6 @@ export interface NormalChatItem {
     authorBadges: string[];
     authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you' | 'verified';
     chatType: 'normal';
-    isSticky?: boolean;
 }
 
 export type SuperChatItem = Except<
@@ -55,8 +54,13 @@ export type MembershipItem = Except<
     chatType: 'membership';
 };
 
+export type StickyItem = Except<NormalChatItem, 'chatType'> & {
+    chatType: 'sticky';
+};
+
 export type ChatItem =
     | NormalChatItem
     | SuperChatItem
     | SuperStickerItem
-    | MembershipItem;
+    | MembershipItem
+    | StickyItem;

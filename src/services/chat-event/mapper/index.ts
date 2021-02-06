@@ -6,6 +6,7 @@ import {
     mapLiveChatPaidMessageItemRenderer,
     mapLiveChatMembershipItemRenderer,
     mapLiveChatPaidStickerRenderer,
+    mapStickyLiveChatTextMessageRenderer,
 } from './helpers';
 import * as chatModel from '../models';
 
@@ -83,7 +84,7 @@ export function mapAddChatItemActions({
                 'bannerRenderer' in action &&
                 action.bannerRenderer.liveChatBannerRenderer
             ) {
-                return mapLiveChatTextMessageRenderer({
+                return mapStickyLiveChatTextMessageRenderer({
                     renderer:
                         action.bannerRenderer.liveChatBannerRenderer.contents
                             .liveChatTextMessageRenderer,
@@ -91,7 +92,6 @@ export function mapAddChatItemActions({
                     currentTimestampMs,
                     playerTimestampMs,
                     videoTimestampInMs,
-                    isSticky: true,
                 });
             }
 
@@ -122,6 +122,12 @@ export function isMembershipItem(
     chatItem: chatModel.ChatItem,
 ): chatItem is chatModel.MembershipItem {
     return chatItem.chatType === 'membership';
+}
+
+export function isStickyItem(
+    chatItem: chatModel.ChatItem,
+): chatItem is chatModel.StickyItem {
+    return chatItem.chatType === 'sticky';
 }
 
 export function getMessageSettings(

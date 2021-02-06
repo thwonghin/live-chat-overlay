@@ -57,6 +57,17 @@ const superStickerItem: chatEvent.SuperStickerItem = {
     chatType: 'super-sticker',
 };
 
+const stickyNormalMessageItem: chatEvent.StickyItem = {
+    id: 'super-chat-sticker',
+    authorBadges: [],
+    messageParts: [{ text: 'This is a normal message' }],
+    avatars,
+    videoTimestampInMs: 1591425506771,
+    authorName,
+    chatType: 'sticky',
+    authorType: 'owner',
+};
+
 const sampleActions: Array<AddChatItemAction | AddBannerToLiveChatCommand> = [
     {
         clientId: 'client-id',
@@ -594,6 +605,11 @@ describe('mapAddChatItemActions', () => {
             superStickerItem,
         );
 
+        jest.spyOn(
+            helpers,
+            'mapStickyLiveChatTextMessageRenderer',
+        ).mockReturnValue(stickyNormalMessageItem);
+
         result = chatEvent.mapAddChatItemActions({
             actions: sampleActions,
             liveDelayInMs: 1000,
@@ -606,7 +622,7 @@ describe('mapAddChatItemActions', () => {
     it('should return correct result', () => {
         expect(result).toEqual([
             superStickerItem,
-            normalMessageItem,
+            stickyNormalMessageItem,
             superChatItem,
             membershipItem,
             normalMessageItem,
@@ -624,7 +640,9 @@ describe('mapAddChatItemActions', () => {
             videoTimestampInMs: 10000,
         });
 
-        expect(helpers.mapLiveChatTextMessageRenderer).toHaveBeenCalledWith({
+        expect(
+            helpers.mapStickyLiveChatTextMessageRenderer,
+        ).toHaveBeenCalledWith({
             renderer:
                 (sampleActions[1] as AddBannerToLiveChatCommand)?.bannerRenderer
                     .liveChatBannerRenderer.contents
@@ -633,7 +651,6 @@ describe('mapAddChatItemActions', () => {
             currentTimestampMs: 160000000,
             playerTimestampMs: 1000,
             videoTimestampInMs: 10000,
-            isSticky: true,
         });
 
         expect(helpers.mapLiveChatPaidMessageItemRenderer).toHaveBeenCalledWith(
