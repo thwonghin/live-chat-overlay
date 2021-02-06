@@ -15,13 +15,15 @@ import DebugOverlay from './debug-overlay';
 
 interface Props {
     settings: settingsStorage.Settings;
-    chatItems: UiChatItem[];
+    nonStickyChatItems: UiChatItem[];
+    stickyChatItems: UiChatItem[];
     onDone: (chatItem: UiChatItem) => void;
     isDebugActive: boolean;
 }
 
 const ChatFlowLayout: React.FC<Props> = ({
-    chatItems,
+    nonStickyChatItems,
+    stickyChatItems,
     onDone,
     settings,
     isDebugActive,
@@ -54,7 +56,7 @@ const ChatFlowLayout: React.FC<Props> = ({
                 id={chatEvent.CHAT_ITEM_RENDER_ID}
             />
             <div style={style}>
-                {chatItems.map((chatItem) => {
+                {nonStickyChatItems.map((chatItem) => {
                     const messageSettings = chatEvent.getMessageSettings(
                         chatItem,
                         settings,
@@ -75,6 +77,19 @@ const ChatFlowLayout: React.FC<Props> = ({
                         </MessageFlower>
                     );
                 })}
+                {stickyChatItems.map((chatItem) => {
+                    const messageSettings = chatEvent.getMessageSettings(
+                        chatItem,
+                        settings,
+                    );
+                    return (
+                        <ChatItemRenderer
+                            key={chatItem.id}
+                            chatItem={chatItem}
+                            messageSettings={messageSettings}
+                        />
+                    );
+                })}
             </div>
             {isDebugActive && <DebugOverlay />}
         </div>
@@ -90,10 +105,29 @@ const ChatFlow: React.FC = () => {
         (rootState) => rootState.debugInfo.isDebugging,
     );
 
-    const chatItems = useSelector<
+    const nonStickyChatItems = useSelector<
         RootState,
         RootState['chatEvents']['chatItems']
-    >((rootState) => rootState.chatEvents.chatItems, shallowEqual);
+    >(
+        (rootState) =>
+            rootState.chatEvents.chatItems.filter(
+                (chatItem) =>
+                    !chatEvent.getMessageSettings(chatItem, settings).isSticky,
+            ),
+        shallowEqual,
+    );
+
+    const stickyChatItems = useSelector<
+        RootState,
+        RootState['chatEvents']['chatItems']
+    >(
+        (rootState) =>
+            rootState.chatEvents.chatItems.filter(
+                (chatItem) =>
+                    chatEvent.getMessageSettings(chatItem, settings).isSticky,
+            ),
+        shallowEqual,
+    );
 
     const dispatch = useDispatch();
     const onMessageDone = useCallback(
@@ -111,7 +145,8 @@ const ChatFlow: React.FC = () => {
 
     return (
         <ChatFlowLayout
-            chatItems={chatItems}
+            nonStickyChatItems={nonStickyChatItems}
+            stickyChatItems={stickyChatItems}
             settings={settings}
             isDebugActive={isDebugActive}
             onDone={onMessageDone}
