@@ -1,5 +1,5 @@
 import type { LiveChatTextMessageRenderer } from '@/definitions/youtube';
-import { mapStickyLiveChatTextMessageRenderer } from '@/services/chat-event/mapper/helpers';
+import { mapPinnedLiveChatTextMessageRenderer } from '@/services/chat-event/mapper/helpers';
 
 function getFixture(): LiveChatTextMessageRenderer {
     return {
@@ -116,7 +116,7 @@ function getFixture(): LiveChatTextMessageRenderer {
 
 describe('mapStickyLiveChatTextMessageRenderer', () => {
     it('should map member type chat correctly', () => {
-        const result = mapStickyLiveChatTextMessageRenderer({
+        const result = mapPinnedLiveChatTextMessageRenderer({
             renderer: getFixture(),
             liveDelayInMs: 1000,
             currentTimestampMs: 160000000000,
@@ -162,7 +162,7 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'member',
-            chatType: 'sticky',
+            chatType: 'pinned',
         });
     });
 
@@ -170,7 +170,7 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
         const fixture = getFixture();
         fixture.authorBadges = undefined;
 
-        const result = mapStickyLiveChatTextMessageRenderer({
+        const result = mapPinnedLiveChatTextMessageRenderer({
             renderer: fixture,
             liveDelayInMs: 1000,
             currentTimestampMs: 160000000000,
@@ -216,7 +216,7 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
             authorName: 'Sample Author',
             authorBadges: [],
             authorType: 'guest',
-            chatType: 'sticky',
+            chatType: 'pinned',
         });
     });
 
@@ -236,7 +236,7 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
             },
         });
 
-        const result = mapStickyLiveChatTextMessageRenderer({
+        const result = mapPinnedLiveChatTextMessageRenderer({
             renderer: fixture,
             liveDelayInMs: 1000,
             currentTimestampMs: 160000000000,
@@ -282,14 +282,14 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'moderator',
-            chatType: 'sticky',
+            chatType: 'pinned',
         });
     });
 
     it('should map with videoTimestamp corretly', () => {
         const fixture = getFixture();
 
-        const result = mapStickyLiveChatTextMessageRenderer({
+        const result = mapPinnedLiveChatTextMessageRenderer({
             renderer: fixture,
             liveDelayInMs: 0,
             currentTimestampMs: 160000000000,
@@ -336,7 +336,7 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'member',
-            chatType: 'sticky',
+            chatType: 'pinned',
         });
     });
 });

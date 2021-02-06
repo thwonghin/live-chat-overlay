@@ -6,7 +6,7 @@ import {
     mapLiveChatPaidMessageItemRenderer,
     mapLiveChatMembershipItemRenderer,
     mapLiveChatPaidStickerRenderer,
-    mapStickyLiveChatTextMessageRenderer,
+    mapPinnedLiveChatTextMessageRenderer,
 } from './helpers';
 import * as chatModel from '../models';
 
@@ -84,7 +84,7 @@ export function mapAddChatItemActions({
                 'bannerRenderer' in action &&
                 action.bannerRenderer.liveChatBannerRenderer
             ) {
-                return mapStickyLiveChatTextMessageRenderer({
+                return mapPinnedLiveChatTextMessageRenderer({
                     renderer:
                         action.bannerRenderer.liveChatBannerRenderer.contents
                             .liveChatTextMessageRenderer,
@@ -124,10 +124,10 @@ export function isMembershipItem(
     return chatItem.chatType === 'membership';
 }
 
-export function isStickyItem(
+export function isPinnedItem(
     chatItem: chatModel.ChatItem,
-): chatItem is chatModel.StickyItem {
-    return chatItem.chatType === 'sticky';
+): chatItem is chatModel.PinnedChatItem {
+    return chatItem.chatType === 'pinned';
 }
 
 export function getMessageSettings(
@@ -145,6 +145,10 @@ export function getMessageSettings(
 
     if (isSuperChatItem(chatItem) || isSuperStickerItem(chatItem)) {
         return messageSettings['super-chat'];
+    }
+
+    if (isPinnedItem(chatItem)) {
+        return messageSettings.pinned;
     }
 
     throw new Error('Unknow chat item');

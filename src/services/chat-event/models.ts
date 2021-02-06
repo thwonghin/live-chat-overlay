@@ -54,8 +54,8 @@ export type MembershipItem = Except<
     chatType: 'membership';
 };
 
-export type StickyItem = Except<NormalChatItem, 'chatType'> & {
-    chatType: 'sticky';
+export type PinnedChatItem = Except<NormalChatItem, 'chatType'> & {
+    chatType: 'pinned';
 };
 
 export type ChatItem =
@@ -63,4 +63,4 @@ export type ChatItem =
     | SuperChatItem
     | SuperStickerItem
     | MembershipItem
-    | StickyItem;
+    | PinnedChatItem;

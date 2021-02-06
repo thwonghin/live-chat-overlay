@@ -237,13 +237,13 @@ export function mapLiveChatTextMessageRenderer({
     };
 }
 
-export function mapStickyLiveChatTextMessageRenderer({
+export function mapPinnedLiveChatTextMessageRenderer({
     renderer,
     liveDelayInMs,
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatTextMessageRendererParameters): chatModel.StickyItem {
+}: MapLiveChatTextMessageRendererParameters): chatModel.PinnedChatItem {
     return {
         ...mapLiveChatTextMessageRenderer({
             renderer,
@@ -252,6 +252,6 @@ export function mapStickyLiveChatTextMessageRenderer({
             playerTimestampMs,
             videoTimestampInMs,
         }),
-        chatType: 'sticky',
+        chatType: 'pinned',
     };
 }

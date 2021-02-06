@@ -57,14 +57,14 @@ const superStickerItem: chatEvent.SuperStickerItem = {
     chatType: 'super-sticker',
 };
 
-const stickyNormalMessageItem: chatEvent.StickyItem = {
-    id: 'super-chat-sticker',
+const pinnedNormalMessageItem: chatEvent.PinnedChatItem = {
+    id: 'pinned-item',
     authorBadges: [],
     messageParts: [{ text: 'This is a normal message' }],
     avatars,
     videoTimestampInMs: 1591425506771,
     authorName,
-    chatType: 'sticky',
+    chatType: 'pinned',
     authorType: 'owner',
 };
 
@@ -607,8 +607,8 @@ describe('mapAddChatItemActions', () => {
 
         jest.spyOn(
             helpers,
-            'mapStickyLiveChatTextMessageRenderer',
-        ).mockReturnValue(stickyNormalMessageItem);
+            'mapPinnedLiveChatTextMessageRenderer',
+        ).mockReturnValue(pinnedNormalMessageItem);
 
         result = chatEvent.mapAddChatItemActions({
             actions: sampleActions,
@@ -622,7 +622,7 @@ describe('mapAddChatItemActions', () => {
     it('should return correct result', () => {
         expect(result).toEqual([
             superStickerItem,
-            stickyNormalMessageItem,
+            pinnedNormalMessageItem,
             superChatItem,
             membershipItem,
             normalMessageItem,
@@ -641,7 +641,7 @@ describe('mapAddChatItemActions', () => {
         });
 
         expect(
-            helpers.mapStickyLiveChatTextMessageRenderer,
+            helpers.mapPinnedLiveChatTextMessageRenderer,
         ).toHaveBeenCalledWith({
             renderer:
                 (sampleActions[1] as AddBannerToLiveChatCommand)?.bannerRenderer

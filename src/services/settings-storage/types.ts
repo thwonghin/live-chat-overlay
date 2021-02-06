@@ -9,6 +9,7 @@ export interface MessageSettings {
     strokeWidth: number;
     numberOfLines: number;
     authorDisplay: AuthorDisplayMethod;
+    isSticky: boolean;
 }
 
 export type MessageSettingsKey =
@@ -19,7 +20,8 @@ export type MessageSettingsKey =
     | 'you'
     | 'verified'
     | 'membership'
-    | 'super-chat';
+    | 'super-chat'
+    | 'pinned';
 
 export interface Settings {
     isEnabled: boolean;

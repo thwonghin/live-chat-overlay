@@ -56,6 +56,7 @@ const messageSettings: settingsStorage.MessageSettings = {
     strokeWidth: 0.03,
     numberOfLines: 2,
     authorDisplay: 'all',
+    isSticky: false,
 };
 
 const Container: React.FC = ({ children }) => (
