@@ -12,8 +12,11 @@
     padding-left: 10px;
 }
 
-.menu-icon {
+.close-icon {
     margin-left: auto;
+
+    // Youtube disabled all svg pointer events
+    pointer-events: all !important;
 }
 
 .message {

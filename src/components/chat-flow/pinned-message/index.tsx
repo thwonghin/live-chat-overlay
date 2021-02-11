@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbtack, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 import cn from 'classnames';
 
 import { chatEvent, settingsStorage } from '@/services';
@@ -12,14 +12,30 @@ import AuthorChip from '../author-chip';
 interface Props {
     chatItem: chatEvent.PinnedChatItem;
     messageSettings: settingsStorage.MessageSettings;
+    onClickClose?: React.MouseEventHandler;
 }
 
-const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
+const PinnedMessage: React.FC<Props> = ({
+    chatItem,
+    messageSettings,
+    onClickClose,
+}) => {
     const [isExpended, setIsExpended] = React.useState(false);
 
-    const handleClick = React.useCallback(() => {
+    const handleClick: React.MouseEventHandler = React.useCallback((event) => {
+        event.preventDefault();
+        event.stopPropagation();
         setIsExpended((state) => !state);
     }, []);
+
+    const handleClickClose: React.MouseEventHandler = React.useCallback(
+        (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            onClickClose?.(event);
+        },
+        [onClickClose],
+    );
 
     const actualNumberOfLines =
         chatItem.messageParts.length > 0 ? messageSettings.numberOfLines : 1;
@@ -61,11 +77,12 @@ const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
                 messageParts={chatItem.messageParts}
             />
             <FontAwesomeIcon
-                icon={faEllipsisV}
-                className={cn(classes.icon, classes['menu-icon'])}
+                icon={faTimes}
+                className={cn(classes.icon, classes['close-icon'])}
+                onClick={handleClickClose}
             />
         </div>
     );
 };
 
-export default TwoLinesMessage;
+export default PinnedMessage;

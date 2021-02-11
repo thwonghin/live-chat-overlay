@@ -9,9 +9,14 @@ import PinnedMessage from '../pinned-message';
 interface Props {
     chatItem: UiChatItem;
     messageSettings: settingsStorage.MessageSettings;
+    onClickClose?: React.MouseEventHandler;
 }
 
-const ChatItemRenderer: React.FC<Props> = ({ chatItem, messageSettings }) => (
+const ChatItemRenderer: React.FC<Props> = ({
+    chatItem,
+    messageSettings,
+    onClickClose,
+}) => (
     <>
         {chatEvent.isSuperStickerItem(chatItem) && (
             <SuperChatSticker
@@ -41,6 +46,7 @@ const ChatItemRenderer: React.FC<Props> = ({ chatItem, messageSettings }) => (
             <PinnedMessage
                 chatItem={chatItem}
                 messageSettings={messageSettings}
+                onClickClose={onClickClose}
             />
         )}
     </>

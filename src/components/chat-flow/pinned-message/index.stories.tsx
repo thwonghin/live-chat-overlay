@@ -49,6 +49,9 @@ export const PinnedChatMessage: React.FC = () => (
         <PinnedMessage
             chatItem={pinnedMessage}
             messageSettings={messageSettings}
+            onClickClose={() => {
+                console.log('clicked close');
+            }}
         />
     </Container>
 );
@@ -66,6 +69,9 @@ export const PinnedVeryLongChatMessage: React.FC = () => (
                 ],
             }}
             messageSettings={messageSettings}
+            onClickClose={() => {
+                console.log('clicked close');
+            }}
         />
     </Container>
 );

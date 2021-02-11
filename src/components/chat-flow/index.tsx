@@ -87,6 +87,9 @@ const ChatFlowLayout: React.FC<Props> = ({
                             key={chatItem.id}
                             chatItem={chatItem}
                             messageSettings={messageSettings}
+                            onClickClose={() => {
+                                onDone(chatItem);
+                            }}
                         />
                     );
                 })}
