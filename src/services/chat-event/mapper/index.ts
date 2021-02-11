@@ -1,5 +1,5 @@
 import type { settingsStorage } from '@/services';
-import { isNotNil } from '@/utils';
+import { isNotNil, assertNever } from '@/utils';
 import type * as liveChatResponse from '@/definitions/youtube';
 import {
     mapLiveChatTextMessageRenderer,
@@ -151,7 +151,7 @@ export function getMessageSettings(
         return messageSettings.pinned;
     }
 
-    throw new Error('Unknow chat item');
+    return assertNever(chatItem);
 }
 
 export function isTextMessagePart(
