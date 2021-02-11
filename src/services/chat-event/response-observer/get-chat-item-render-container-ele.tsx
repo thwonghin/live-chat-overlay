@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import { settingsStorage } from '@/services';
+import { settingsStorage, chatEvent } from '@/services';
 
 import { ChatItem } from '../models';
 
@@ -33,18 +33,24 @@ export async function assignChatItemRenderedWidth({
     await new Promise<void>((resolve) => {
         ReactDOM.render(
             <>
-                {chatItems.map((chatItem) => (
-                    <ChatItemRenderer
-                        key={chatItem.id}
-                        chatItem={{
-                            ...chatItem,
-                            numberOfLines: 0,
-                            addTimestamp: 0,
-                            lineNumber: 0,
-                        }}
-                        settings={settings}
-                    />
-                ))}
+                {chatItems.map((chatItem) => {
+                    const messageSettings = chatEvent.getMessageSettings(
+                        chatItem,
+                        settings,
+                    );
+                    return (
+                        <ChatItemRenderer
+                            key={chatItem.id}
+                            chatItem={{
+                                ...chatItem,
+                                numberOfLines: 0,
+                                addTimestamp: 0,
+                                lineNumber: 0,
+                            }}
+                            messageSettings={messageSettings}
+                        />
+                    );
+                })}
             </>,
             containerEle,
             resolve,

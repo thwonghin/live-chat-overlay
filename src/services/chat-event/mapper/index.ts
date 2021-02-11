@@ -6,11 +6,15 @@ import {
     mapLiveChatPaidMessageItemRenderer,
     mapLiveChatMembershipItemRenderer,
     mapLiveChatPaidStickerRenderer,
+    mapPinnedLiveChatTextMessageRenderer,
 } from './helpers';
 import * as chatModel from '../models';
 
-interface MapAddChatItemActionsParameters {
-    addChatItemActions: liveChatResponse.AddChatItemAction[];
+interface MapActionsParameters {
+    actions: Array<
+        | liveChatResponse.AddChatItemAction
+        | liveChatResponse.AddBannerToLiveChatCommand
+    >;
     liveDelayInMs: number;
     currentTimestampMs: number;
     playerTimestampMs: number;
@@ -18,47 +22,72 @@ interface MapAddChatItemActionsParameters {
 }
 
 export function mapAddChatItemActions({
-    addChatItemActions,
+    actions,
     liveDelayInMs,
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapAddChatItemActionsParameters): chatModel.ChatItem[] {
-    return addChatItemActions
+}: MapActionsParameters): chatModel.ChatItem[] {
+    return actions
         .map((action) => {
-            if (action.item?.liveChatPaidMessageRenderer) {
-                return mapLiveChatPaidMessageItemRenderer({
-                    renderer: action.item.liveChatPaidMessageRenderer,
-                    liveDelayInMs,
-                    currentTimestampMs,
-                    playerTimestampMs,
-                    videoTimestampInMs,
-                });
+            if ('item' in action) {
+                if (action.item?.liveChatPaidMessageRenderer) {
+                    return mapLiveChatPaidMessageItemRenderer({
+                        renderer: action.item.liveChatPaidMessageRenderer,
+                        liveDelayInMs,
+                        currentTimestampMs,
+                        playerTimestampMs,
+                        videoTimestampInMs,
+                    });
+                }
+
+                if (action.item?.liveChatPaidStickerRenderer) {
+                    return mapLiveChatPaidStickerRenderer({
+                        renderer: action.item.liveChatPaidStickerRenderer,
+                        liveDelayInMs,
+                        currentTimestampMs,
+                        playerTimestampMs,
+                        videoTimestampInMs,
+                    });
+                }
+
+                if (action.item?.liveChatMembershipItemRenderer) {
+                    return mapLiveChatMembershipItemRenderer({
+                        renderer: action.item.liveChatMembershipItemRenderer,
+                        liveDelayInMs,
+                        currentTimestampMs,
+                        playerTimestampMs,
+                        videoTimestampInMs,
+                    });
+                }
+
+                if (action.item?.liveChatTextMessageRenderer) {
+                    return mapLiveChatTextMessageRenderer({
+                        renderer: action.item.liveChatTextMessageRenderer,
+                        liveDelayInMs,
+                        currentTimestampMs,
+                        playerTimestampMs,
+                        videoTimestampInMs,
+                    });
+                }
+
+                if (action.item?.liveChatViewerEngagementMessageRenderer) {
+                    return null;
+                }
+
+                if (action.item?.liveChatPlaceholderItemRenderer) {
+                    return null;
+                }
             }
 
-            if (action.item?.liveChatPaidStickerRenderer) {
-                return mapLiveChatPaidStickerRenderer({
-                    renderer: action.item.liveChatPaidStickerRenderer,
-                    liveDelayInMs,
-                    currentTimestampMs,
-                    playerTimestampMs,
-                    videoTimestampInMs,
-                });
-            }
-
-            if (action.item?.liveChatMembershipItemRenderer) {
-                return mapLiveChatMembershipItemRenderer({
-                    renderer: action.item.liveChatMembershipItemRenderer,
-                    liveDelayInMs,
-                    currentTimestampMs,
-                    playerTimestampMs,
-                    videoTimestampInMs,
-                });
-            }
-
-            if (action.item?.liveChatTextMessageRenderer) {
-                return mapLiveChatTextMessageRenderer({
-                    renderer: action.item.liveChatTextMessageRenderer,
+            if (
+                'bannerRenderer' in action &&
+                action.bannerRenderer.liveChatBannerRenderer
+            ) {
+                return mapPinnedLiveChatTextMessageRenderer({
+                    renderer:
+                        action.bannerRenderer.liveChatBannerRenderer.contents
+                            .liveChatTextMessageRenderer,
                     liveDelayInMs,
                     currentTimestampMs,
                     playerTimestampMs,
@@ -95,6 +124,12 @@ export function isMembershipItem(
     return chatItem.chatType === 'membership';
 }
 
+export function isPinnedItem(
+    chatItem: chatModel.ChatItem,
+): chatItem is chatModel.PinnedChatItem {
+    return chatItem.chatType === 'pinned';
+}
+
 export function getMessageSettings(
     chatItem: chatModel.ChatItem,
     settings: settingsStorage.Settings,
@@ -110,6 +145,10 @@ export function getMessageSettings(
 
     if (isSuperChatItem(chatItem) || isSuperStickerItem(chatItem)) {
         return messageSettings['super-chat'];
+    }
+
+    if (isPinnedItem(chatItem)) {
+        return messageSettings.pinned;
     }
 
     throw new Error('Unknow chat item');

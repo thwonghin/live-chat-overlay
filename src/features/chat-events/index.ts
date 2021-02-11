@@ -134,6 +134,24 @@ const slice = createSlice({
                 chatItemStateById: newChatItemStateById,
             };
         },
+        resetNonStickyItems(state): State {
+            const { settings } = settingsStorage.storageInstance;
+            const filtered = state.chatItems.filter(
+                (item) => chatEvent.getMessageSettings(item, settings).isSticky,
+            );
+            const newChatItemStateById = Object.fromEntries(
+                filtered.map(({ id }) => [
+                    id,
+                    state.chatItemStateById[id] ?? 'added',
+                ]),
+            );
+
+            return {
+                ...state,
+                chatItems: filtered,
+                chatItemStateById: newChatItemStateById,
+            };
+        },
         reset(): State {
             return {
                 ...initialState,

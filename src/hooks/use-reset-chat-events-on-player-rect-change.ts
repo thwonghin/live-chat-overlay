@@ -10,6 +10,6 @@ export function useResetChatEventsOnPlayerRectChange(): void {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(chatEvents.actions.reset());
+        dispatch(chatEvents.actions.resetNonStickyItems());
     }, [dispatch, rect.width, rect.height]);
 }
