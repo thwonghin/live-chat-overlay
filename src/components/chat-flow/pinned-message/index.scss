@@ -2,10 +2,23 @@
     display: flex;
     margin-top: 0.2em;
     border-radius: 5px;
+    cursor: pointer;
+}
+
+.icon {
+    width: 0.5em !important;
+    height: 0.5em;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.menu-icon {
+    margin-left: auto;
 }
 
 .message {
     display: flex;
+    flex: 1;
     align-items: center;
     padding: 1px 10px;
     font-size: 0.8em;
@@ -13,5 +26,12 @@
     img {
         width: 1em;
         height: 1em;
+    }
+
+    &.truncate {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 }

@@ -27,7 +27,9 @@ const pinnedMessage: chatEvent.PinnedChatItem = {
 };
 
 const Container: React.FC = ({ children }) => (
-    <div style={{ fontSize: 40, position: 'absolute' }}>{children}</div>
+    <div style={{ fontSize: 40, position: 'absolute', width: '100%' }}>
+        {children}
+    </div>
 );
 
 const messageSettings: settingsStorage.MessageSettings = {
@@ -46,6 +48,23 @@ export const PinnedChatMessage: React.FC = () => (
     <Container>
         <PinnedMessage
             chatItem={pinnedMessage}
+            messageSettings={messageSettings}
+        />
+    </Container>
+);
+
+export const PinnedVeryLongChatMessage: React.FC = () => (
+    <Container>
+        <PinnedMessage
+            chatItem={{
+                ...pinnedMessage,
+                messageParts: [
+                    {
+                        text:
+                            'This is a very long message This is a very long message This is a very long message This is a very long message This is a very long message',
+                    },
+                ],
+            }}
             messageSettings={messageSettings}
         />
     </Container>

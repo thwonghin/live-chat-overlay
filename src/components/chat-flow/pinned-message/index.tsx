@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbtack, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import cn from 'classnames';
 
 import { chatEvent, settingsStorage } from '@/services';
 import classes from './index.scss';
@@ -12,6 +15,12 @@ interface Props {
 }
 
 const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
+    const [isExpended, setIsExpended] = React.useState(false);
+
+    const handleClick = React.useCallback(() => {
+        setIsExpended((state) => !state);
+    }, []);
+
     const actualNumberOfLines =
         chatItem.messageParts.length > 0 ? messageSettings.numberOfLines : 1;
 
@@ -23,7 +32,6 @@ const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
         <div
             className={classes.container}
             style={{
-                height: `${actualNumberOfLines}em`,
                 color: messageSettings.color,
                 fontWeight: messageSettings.weight,
                 opacity: messageSettings.opacity,
@@ -35,15 +43,26 @@ const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
                     flexDirection === 'column' ? 'center' : undefined,
                 alignItems: flexDirection === 'row' ? 'center' : undefined,
             }}
+            onClick={handleClick}
         >
+            <FontAwesomeIcon icon={faThumbtack} className={classes.icon} />
             <AuthorChip
                 avatars={chatItem.avatars}
                 name={chatItem.authorName}
                 authorDisplaySetting={messageSettings.authorDisplay}
             />
             <MessagePartsRenderer
-                className={classes.message}
+                className={cn([
+                    classes.message,
+                    {
+                        [classes.truncate]: !isExpended,
+                    },
+                ])}
                 messageParts={chatItem.messageParts}
+            />
+            <FontAwesomeIcon
+                icon={faEllipsisV}
+                className={cn(classes.icon, classes['menu-icon'])}
             />
         </div>
     );
