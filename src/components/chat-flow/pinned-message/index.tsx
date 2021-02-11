@@ -37,11 +37,6 @@ const PinnedMessage: React.FC<Props> = ({
         [onClickClose],
     );
 
-    const actualNumberOfLines =
-        chatItem.messageParts.length > 0 ? messageSettings.numberOfLines : 1;
-
-    const flexDirection = actualNumberOfLines === 2 ? 'column' : 'row';
-
     const { bgColor } = messageSettings;
 
     return (
@@ -54,10 +49,6 @@ const PinnedMessage: React.FC<Props> = ({
                 backgroundColor: bgColor,
                 WebkitTextStrokeColor: messageSettings.strokeColor,
                 WebkitTextStrokeWidth: `${messageSettings.strokeWidth}em`,
-                flexDirection,
-                justifyContent:
-                    flexDirection === 'column' ? 'center' : undefined,
-                alignItems: flexDirection === 'row' ? 'center' : undefined,
             }}
             onClick={handleClick}
         >
