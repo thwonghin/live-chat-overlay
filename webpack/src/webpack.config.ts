@@ -78,7 +78,6 @@ const config = (
                                 modules: true,
                             },
                         },
-                        'sass-loader',
                         {
                             loader: 'postcss-loader',
                             options: {
@@ -95,6 +94,7 @@ const config = (
                                 },
                             },
                         },
+                        'sass-loader',
                     ],
                 },
             ],
