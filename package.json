@@ -110,8 +110,6 @@
         "webextension-polyfill-ts": "^0.25.0"
     },
     "resolutions": {
-        "@types/react": "^17.0.2",
-        "@types/react-dom": "^17.0.1",
         "stylelint-config-rational-order/stylelint": "^13.10.0"
     }
 }
