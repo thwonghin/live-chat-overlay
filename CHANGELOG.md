@@ -1,3 +1,13 @@
+## 2.9.0 (2021-02-16)
+
+* chore: bump deps 2021-02-16 (#570) ([9c7982f](https://github.com/thwonghin/live-chat-overlay/commit/9c7982f)), closes [#570](https://github.com/thwonghin/live-chat-overlay/issues/570)
+* chore: upgrade deps 2021 02 06 (#546) ([98e0236](https://github.com/thwonghin/live-chat-overlay/commit/98e0236)), closes [#546](https://github.com/thwonghin/live-chat-overlay/issues/546)
+* chore: upgrade deps 2021-02-12 (#560) ([a47ff12](https://github.com/thwonghin/live-chat-overlay/commit/a47ff12)), closes [#560](https://github.com/thwonghin/live-chat-overlay/issues/560)
+* refactor: assert never when getting msg settings (#559) ([b8881b2](https://github.com/thwonghin/live-chat-overlay/commit/b8881b2)), closes [#559](https://github.com/thwonghin/live-chat-overlay/issues/559)
+* feat: show pinned chat (#558) ([43cdd19](https://github.com/thwonghin/live-chat-overlay/commit/43cdd19)), closes [#558](https://github.com/thwonghin/live-chat-overlay/issues/558)
+
+
+
 ## <small>2.8.3 (2021-01-30)</small>
 
 * chore: bump deps 2021-01-09 (#495) ([1bbc37b](https://github.com/thwonghin/live-chat-overlay/commit/1bbc37b)), closes [#495](https://github.com/thwonghin/live-chat-overlay/issues/495)
