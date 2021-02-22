@@ -9,7 +9,8 @@ module.exports = {
         "react/react-in-jsx-scope": "off",
         "react/prop-types": 'off',
         "unicorn/no-array-callback-reference": "off",
-        "react-hooks/exhaustive-deps": "error"
+        "react-hooks/exhaustive-deps": "error",
+        "node/file-extension-in-import": "off"
     },
     settings: {
         react: {
