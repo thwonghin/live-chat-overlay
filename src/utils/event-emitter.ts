@@ -9,9 +9,9 @@ export class EventEmitter<EventMap extends Record<string, unknown>> {
         event: K,
         data: EventMap[K],
     ): void {
-        this.listeners[event]?.forEach((callback) => {
+        for (const callback of this.listeners[event] ?? []) {
             callback(data);
-        });
+        }
     }
 
     public on<K extends keyof EventMap>(

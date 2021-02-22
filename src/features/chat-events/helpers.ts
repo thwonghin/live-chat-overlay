@@ -61,7 +61,7 @@ export function getLineNumber({
         lineNumber += 1
     ) {
         if (
-            new Array(displayNumberOfLines)
+            Array.from({ length: displayNumberOfLines })
                 .fill(null)
                 .map((v, index) => index + lineNumber)
                 .every((loopLineNumber) => {
