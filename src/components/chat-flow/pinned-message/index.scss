@@ -21,19 +21,17 @@
 }
 
 .message {
-    display: flex;
-    flex: 1;
-    align-items: center;
+    display: inline;
     padding: 1px 10px;
     font-size: 0.8em;
 
     img {
         width: 1em;
         height: 1em;
+        vertical-align: middle;
     }
 
     &.truncate {
-        display: block;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
