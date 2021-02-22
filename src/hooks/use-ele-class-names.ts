@@ -5,11 +5,11 @@ export function useEleClassNames(ele: HTMLElement): string[] {
 
     useEffect(() => {
         const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
+            for (const mutation of mutations) {
                 if (mutation.attributeName === 'class') {
                     setClassNames([...ele.classList]);
                 }
-            });
+            }
         });
 
         observer.observe(ele, {

@@ -66,22 +66,25 @@ const slice = createSlice({
             return {
                 ...state,
                 lastLineNumber: lineNumber,
-                chatItems: state.chatItems.concat(uiChatItem),
+                chatItems: [...state.chatItems, uiChatItem],
                 chatItemStateById: {
                     ...state.chatItemStateById,
                     [uiChatItem.id]: 'added',
                 },
                 chatItemsByLineNumber: {
                     ...state.chatItemsByLineNumber,
-                    [lineNumber]: (
-                        state.chatItemsByLineNumber[lineNumber] ?? []
-                    ).concat(uiChatItem),
+                    [lineNumber]: [
+                        ...(state.chatItemsByLineNumber[lineNumber] ?? []),
+                        uiChatItem,
+                    ],
                     [lineNumber + 1]:
                         numberOfLines === 2
-                            ? (
-                                  state.chatItemsByLineNumber[lineNumber + 1] ??
-                                  []
-                              ).concat(uiChatItem)
+                            ? [
+                                  ...(state.chatItemsByLineNumber[
+                                      lineNumber + 1
+                                  ] ?? []),
+                                  uiChatItem,
+                              ]
                             : state.chatItemsByLineNumber[lineNumber + 1] ?? [],
                 },
             };
