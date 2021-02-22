@@ -110,6 +110,7 @@
         "webextension-polyfill-ts": "^0.25.0"
     },
     "resolutions": {
-        "stylelint-config-rational-order/stylelint": "^13.11.0"
+        "stylelint-config-rational-order/stylelint": "^13.11.0",
+        "@storybook/react/**/immer": ">=8.0.1"
     }
 }
