@@ -18,6 +18,7 @@ interface Props {
     nonStickyChatItems: UiChatItem[];
     stickyChatItems: UiChatItem[];
     onDone: (chatItem: UiChatItem) => void;
+    onRemove: (chatItem: UiChatItem) => void;
     isDebugActive: boolean;
 }
 
@@ -25,6 +26,7 @@ const ChatFlowLayout: React.FC<Props> = ({
     nonStickyChatItems,
     stickyChatItems,
     onDone,
+    onRemove,
     settings,
     isDebugActive,
 }) => {
@@ -88,7 +90,7 @@ const ChatFlowLayout: React.FC<Props> = ({
                             chatItem={chatItem}
                             messageSettings={messageSettings}
                             onClickClose={() => {
-                                onDone(chatItem);
+                                onRemove(chatItem);
                             }}
                         />
                     );
@@ -139,6 +141,12 @@ const ChatFlow: React.FC = () => {
         },
         [dispatch],
     );
+    const onRemoveMessage = useCallback(
+        (chatItem) => {
+            dispatch(chatEvents.actions.remove(chatItem));
+        },
+        [dispatch],
+    );
 
     const cleanup = useCallback(() => {
         dispatch(chatEvents.actions.cleanup());
@@ -153,6 +161,7 @@ const ChatFlow: React.FC = () => {
             settings={settings}
             isDebugActive={isDebugActive}
             onDone={onMessageDone}
+            onRemove={onRemoveMessage}
         />
     );
 };
