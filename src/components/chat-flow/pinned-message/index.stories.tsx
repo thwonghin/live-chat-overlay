@@ -75,3 +75,37 @@ export const PinnedVeryLongChatMessage: React.FC = () => (
         />
     </Container>
 );
+
+export const PinnedVeryLongChatMessageWithImage: React.FC = () => (
+    <Container>
+        <PinnedMessage
+            chatItem={{
+                ...pinnedMessage,
+                messageParts: [
+                    {
+                        text: 'This is a very long message',
+                    },
+                    {
+                        id: 'img',
+                        thumbnails: [
+                            {
+                                url: 'https://placekitten.com/50/50',
+                                height: 50,
+                                width: 50,
+                            },
+                        ],
+                        shortcuts: [':text-emoji:'],
+                    },
+                    {
+                        text:
+                            'This is a very long message This is a very long message This is a very long message This is a very long message',
+                    },
+                ],
+            }}
+            messageSettings={messageSettings}
+            onClickClose={() => {
+                console.log('clicked close');
+            }}
+        />
+    </Container>
+);
