@@ -1,3 +1,11 @@
+## <small>2.9.1 (2021-02-22)</small>
+
+* fix: pinned message layout when it has image (#582) ([34a7e95](https://github.com/thwonghin/live-chat-overlay/commit/34a7e95)), closes [#582](https://github.com/thwonghin/live-chat-overlay/issues/582)
+* fix: remove delay when closing pinned msg (#584) ([6b61b10](https://github.com/thwonghin/live-chat-overlay/commit/6b61b10)), closes [#584](https://github.com/thwonghin/live-chat-overlay/issues/584)
+* chore: bump deps 2021-02-22 (#583) ([91646bf](https://github.com/thwonghin/live-chat-overlay/commit/91646bf)), closes [#583](https://github.com/thwonghin/live-chat-overlay/issues/583)
+
+
+
 ## 2.9.0 (2021-02-16)
 
 * chore: bump deps 2021-02-16 (#570) ([9c7982f](https://github.com/thwonghin/live-chat-overlay/commit/9c7982f)), closes [#570](https://github.com/thwonghin/live-chat-overlay/issues/570)
