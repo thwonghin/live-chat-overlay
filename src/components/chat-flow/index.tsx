@@ -15,14 +15,18 @@ import DebugOverlay from './debug-overlay';
 
 interface Props {
     settings: settingsStorage.Settings;
-    chatItems: UiChatItem[];
+    nonStickyChatItems: UiChatItem[];
+    stickyChatItems: UiChatItem[];
     onDone: (chatItem: UiChatItem) => void;
+    onRemove: (chatItem: UiChatItem) => void;
     isDebugActive: boolean;
 }
 
 const ChatFlowLayout: React.FC<Props> = ({
-    chatItems,
+    nonStickyChatItems,
+    stickyChatItems,
     onDone,
+    onRemove,
     settings,
     isDebugActive,
 }) => {
@@ -54,21 +58,43 @@ const ChatFlowLayout: React.FC<Props> = ({
                 id={chatEvent.CHAT_ITEM_RENDER_ID}
             />
             <div style={style}>
-                {chatItems.map((chatItem) => (
-                    <MessageFlower
-                        key={chatItem.id}
-                        top={lineHeight * chatItem.lineNumber}
-                        containerWidth={containerWidth}
-                        onDone={() => {
-                            onDone(chatItem);
-                        }}
-                    >
+                {nonStickyChatItems.map((chatItem) => {
+                    const messageSettings = chatEvent.getMessageSettings(
+                        chatItem,
+                        settings,
+                    );
+                    return (
+                        <MessageFlower
+                            key={chatItem.id}
+                            top={lineHeight * chatItem.lineNumber}
+                            containerWidth={containerWidth}
+                            onDone={() => {
+                                onDone(chatItem);
+                            }}
+                        >
+                            <ChatItemRenderer
+                                chatItem={chatItem}
+                                messageSettings={messageSettings}
+                            />
+                        </MessageFlower>
+                    );
+                })}
+                {stickyChatItems.map((chatItem) => {
+                    const messageSettings = chatEvent.getMessageSettings(
+                        chatItem,
+                        settings,
+                    );
+                    return (
                         <ChatItemRenderer
+                            key={chatItem.id}
                             chatItem={chatItem}
-                            settings={settings}
+                            messageSettings={messageSettings}
+                            onClickClose={() => {
+                                onRemove(chatItem);
+                            }}
                         />
-                    </MessageFlower>
-                ))}
+                    );
+                })}
             </div>
             {isDebugActive && <DebugOverlay />}
         </div>
@@ -84,15 +110,40 @@ const ChatFlow: React.FC = () => {
         (rootState) => rootState.debugInfo.isDebugging,
     );
 
-    const chatItems = useSelector<
+    const nonStickyChatItems = useSelector<
         RootState,
         RootState['chatEvents']['chatItems']
-    >((rootState) => rootState.chatEvents.chatItems, shallowEqual);
+    >(
+        (rootState) =>
+            rootState.chatEvents.chatItems.filter(
+                (chatItem) =>
+                    !chatEvent.getMessageSettings(chatItem, settings).isSticky,
+            ),
+        shallowEqual,
+    );
+
+    const stickyChatItems = useSelector<
+        RootState,
+        RootState['chatEvents']['chatItems']
+    >(
+        (rootState) =>
+            rootState.chatEvents.chatItems.filter(
+                (chatItem) =>
+                    chatEvent.getMessageSettings(chatItem, settings).isSticky,
+            ),
+        shallowEqual,
+    );
 
     const dispatch = useDispatch();
     const onMessageDone = useCallback(
         (chatItem) => {
             dispatch(chatEvents.actions.markAsDone(chatItem));
+        },
+        [dispatch],
+    );
+    const onRemoveMessage = useCallback(
+        (chatItem) => {
+            dispatch(chatEvents.actions.remove(chatItem));
         },
         [dispatch],
     );
@@ -105,10 +156,12 @@ const ChatFlow: React.FC = () => {
 
     return (
         <ChatFlowLayout
-            chatItems={chatItems}
+            nonStickyChatItems={nonStickyChatItems}
+            stickyChatItems={stickyChatItems}
             settings={settings}
             isDebugActive={isDebugActive}
             onDone={onMessageDone}
+            onRemove={onRemoveMessage}
         />
     );
 };

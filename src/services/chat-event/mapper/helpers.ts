@@ -236,3 +236,22 @@ export function mapLiveChatTextMessageRenderer({
         authorBadges: mapAuthorBadges(renderer.authorBadges),
     };
 }
+
+export function mapPinnedLiveChatTextMessageRenderer({
+    renderer,
+    liveDelayInMs,
+    currentTimestampMs,
+    playerTimestampMs,
+    videoTimestampInMs,
+}: MapLiveChatTextMessageRendererParameters): chatModel.PinnedChatItem {
+    return {
+        ...mapLiveChatTextMessageRenderer({
+            renderer,
+            liveDelayInMs,
+            currentTimestampMs,
+            playerTimestampMs,
+            videoTimestampInMs,
+        }),
+        chatType: 'pinned',
+    };
+}

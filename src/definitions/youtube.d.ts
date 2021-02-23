@@ -190,11 +190,23 @@ export interface Item {
     liveChatPaidMessageRenderer?: LiveChatPaidMessageRenderer;
     liveChatMembershipItemRenderer?: LiveChatMembershipItemRenderer;
     liveChatPaidStickerRenderer?: LiveChatPaidStickerRenderer;
+    liveChatViewerEngagementMessageRenderer?: unknown;
+    liveChatPlaceholderItemRenderer?: unknown;
 }
 
 export interface AddChatItemAction {
     item?: Item;
     clientId: string;
+}
+
+export interface AddBannerToLiveChatCommand {
+    bannerRenderer: {
+        liveChatBannerRenderer: {
+            contents: {
+                liveChatTextMessageRenderer: LiveChatTextMessageRenderer;
+            };
+        };
+    };
 }
 
 interface Amount {
@@ -229,6 +241,7 @@ export interface LiveChatTickerPaidMessageItemRenderer {
 
 interface Action {
     addChatItemAction?: AddChatItemAction;
+    addBannerToLiveChatCommand?: AddBannerToLiveChatCommand;
 }
 
 export interface ReplayAction {

@@ -5,3 +5,4 @@ dist
 /src/**/*.scss.d.ts
 *.tsbuildinfo
 /sample
+/storybook-static

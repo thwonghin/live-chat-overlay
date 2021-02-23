@@ -19,14 +19,18 @@ export const ChatEventObserverProvider: React.FC<Props> = ({
     chatEventPrefix,
     children,
 }) => {
-    const video = youtube.getVideoEle();
+    const video = React.useMemo(() => youtube.getVideoEle(), []);
     if (!video) {
         throw new Error('Video element not found');
     }
 
-    const observer = new chatEvent.ResponseObserver(
-        `${chatEventPrefix}_chat_message`,
-        video,
+    const observer = React.useMemo(
+        () =>
+            new chatEvent.ResponseObserver(
+                `${chatEventPrefix}_chat_message`,
+                video,
+            ),
+        [chatEventPrefix, video],
     );
 
     return (

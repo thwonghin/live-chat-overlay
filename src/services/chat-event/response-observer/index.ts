@@ -82,10 +82,13 @@ export class ResponseObserver {
                 throw new Error('Unknown error');
             }
 
-            return isTimeToDispatch({
-                chatItem: this.chatItemProcessQueue[0],
-                currentPlayerTimeInMsc,
-            });
+            return (
+                this.chatItemProcessQueue[0].chatType === 'pinned' ||
+                isTimeToDispatch({
+                    chatItem: this.chatItemProcessQueue[0],
+                    currentPlayerTimeInMsc,
+                })
+            );
         }, this.isDebugging);
 
         if (!isTime) {
@@ -229,11 +232,16 @@ export class ResponseObserver {
         this.chatItemProcessQueue = this.chatItemProcessQueue.filter(
             (chatItem) => {
                 const factor = getOutdatedFactor(chatItem);
-                return !isOutdatedChatItem({
-                    factor,
-                    currentPlayerTimeInMsc: parameters.currentPlayerTimeInMsc,
-                    chatItemAtVideoTimestampInMs: chatItem.videoTimestampInMs,
-                });
+                return (
+                    chatItem.chatType === 'pinned' ||
+                    !isOutdatedChatItem({
+                        factor,
+                        currentPlayerTimeInMsc:
+                            parameters.currentPlayerTimeInMsc,
+                        chatItemAtVideoTimestampInMs:
+                            chatItem.videoTimestampInMs,
+                    })
+                );
             },
         );
 

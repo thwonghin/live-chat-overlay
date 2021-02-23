@@ -29,6 +29,8 @@ function getStringByMessageKey(
             return i18n.getMessage('membershipMessageType');
         case 'super-chat':
             return i18n.getMessage('superChatMessageType');
+        case 'pinned':
+            return i18n.getMessage('pinnedMessageType');
         default:
             return assertNever(key);
     }
@@ -42,6 +44,7 @@ const supportedTypes: settingsStorage.MessageSettingsKey[] = [
     'owner',
     'membership',
     'super-chat',
+    'pinned',
 ];
 
 interface Props {

@@ -104,27 +104,27 @@ export function isInsideLiveChatFrame(): boolean {
 
 function dispatchInitData(prefix: string): void {
     // Window.ytInitialData is mutated, need to get from raw HTML
-    document.querySelectorAll('script').forEach((tag) => {
-        if (
+    const initialDataTag = [...document.querySelectorAll('script')].find(
+        (tag) =>
             !tag.innerHTML.includes(prefix) &&
-            tag.innerHTML.includes('window["ytInitialData"] =')
-        ) {
-            const innerHTML = tag.innerHTML.trim();
-            const startIndex = innerHTML.indexOf('{"responseContext"');
-            const initData = innerHTML.slice(startIndex, -1);
+            tag.innerHTML.includes('window["ytInitialData"] ='),
+    );
 
-            const event = new CustomEvent<{ data: InitData }>(
-                `${prefix}_init_data`,
-                {
-                    detail: {
-                        data: JSON.parse(initData) as InitData,
-                    },
-                },
-            );
+    if (!initialDataTag) {
+        return;
+    }
 
-            setTimeout(() => window.dispatchEvent(event), 0);
-        }
+    const innerHTML = initialDataTag.innerHTML.trim();
+    const startIndex = innerHTML.indexOf('{"responseContext"');
+    const initData = innerHTML.slice(startIndex, -1);
+
+    const event = new CustomEvent<{ data: InitData }>(`${prefix}_init_data`, {
+        detail: {
+            data: JSON.parse(initData) as InitData,
+        },
     });
+
+    setTimeout(() => window.dispatchEvent(event), 0);
 }
 
 export async function getInitData(prefix: string): Promise<InitData> {

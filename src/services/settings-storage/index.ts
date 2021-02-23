@@ -24,6 +24,7 @@ const commonMessageSettings: MessageSettings = {
     strokeWidth: 0.03,
     numberOfLines: 1,
     authorDisplay: 'none',
+    isSticky: false,
 };
 
 const defaultSettings: Settings = {
@@ -66,6 +67,13 @@ const defaultSettings: Settings = {
             numberOfLines: 2,
             authorDisplay: 'all',
             bgColor: '',
+        },
+        pinned: {
+            ...commonMessageSettings,
+            numberOfLines: 1,
+            authorDisplay: 'all',
+            bgColor: '#224072',
+            isSticky: true,
         },
     },
 };

@@ -39,6 +39,30 @@ const slice = createSlice({
             const addTimestamp = Date.now();
             const { settings } = settingsStorage.storageInstance;
 
+            const messageSettings = chatEvent.getMessageSettings(
+                chatItem,
+                settings,
+            );
+
+            if (messageSettings.isSticky) {
+                const uiChatItem: UiChatItem = {
+                    ...chatItem,
+                    numberOfLines,
+                    addTimestamp,
+                    lineNumber: -1,
+                };
+
+                return {
+                    ...state,
+                    lastLineNumber: -1,
+                    chatItems: [...state.chatItems, uiChatItem],
+                    chatItemStateById: {
+                        ...state.chatItemStateById,
+                        [uiChatItem.id]: 'added',
+                    },
+                };
+            }
+
             const lineNumber = getLineNumber({
                 chatItemsByLineNumber: state.chatItemsByLineNumber,
                 addTimestamp,
@@ -66,22 +90,25 @@ const slice = createSlice({
             return {
                 ...state,
                 lastLineNumber: lineNumber,
-                chatItems: state.chatItems.concat(uiChatItem),
+                chatItems: [...state.chatItems, uiChatItem],
                 chatItemStateById: {
                     ...state.chatItemStateById,
                     [uiChatItem.id]: 'added',
                 },
                 chatItemsByLineNumber: {
                     ...state.chatItemsByLineNumber,
-                    [lineNumber]: (
-                        state.chatItemsByLineNumber[lineNumber] ?? []
-                    ).concat(uiChatItem),
+                    [lineNumber]: [
+                        ...(state.chatItemsByLineNumber[lineNumber] ?? []),
+                        uiChatItem,
+                    ],
                     [lineNumber + 1]:
                         numberOfLines === 2
-                            ? (
-                                  state.chatItemsByLineNumber[lineNumber + 1] ??
-                                  []
-                              ).concat(uiChatItem)
+                            ? [
+                                  ...(state.chatItemsByLineNumber[
+                                      lineNumber + 1
+                                  ] ?? []),
+                                  uiChatItem,
+                              ]
                             : state.chatItemsByLineNumber[lineNumber + 1] ?? [],
                 },
             };
@@ -91,7 +118,6 @@ const slice = createSlice({
 
             return {
                 ...state,
-                chatItems: state.chatItems,
                 chatItemStateById: {
                     ...state.chatItemStateById,
                     [doneChatItem.id]: 'finished',
@@ -117,9 +143,44 @@ const slice = createSlice({
                 },
             };
         },
+        remove(state, action: PayloadAction<UiChatItem>): State {
+            const filtered = state.chatItems.filter(
+                (chatItem) => chatItem.id !== action.payload.id,
+            );
+            const newChatItemStateById = Object.fromEntries(
+                filtered.map(({ id }) => [
+                    id,
+                    state.chatItemStateById[id] ?? 'added',
+                ]),
+            );
+
+            return {
+                ...state,
+                chatItems: filtered,
+                chatItemStateById: newChatItemStateById,
+            };
+        },
         cleanup(state): State {
             const filtered = state.chatItems.filter(
                 (item) => state.chatItemStateById[item.id] !== 'finished',
+            );
+            const newChatItemStateById = Object.fromEntries(
+                filtered.map(({ id }) => [
+                    id,
+                    state.chatItemStateById[id] ?? 'added',
+                ]),
+            );
+
+            return {
+                ...state,
+                chatItems: filtered,
+                chatItemStateById: newChatItemStateById,
+            };
+        },
+        resetNonStickyItems(state): State {
+            const { settings } = settingsStorage.storageInstance;
+            const filtered = state.chatItems.filter(
+                (item) => chatEvent.getMessageSettings(item, settings).isSticky,
             );
             const newChatItemStateById = Object.fromEntries(
                 filtered.map(({ id }) => [

@@ -76,5 +76,8 @@
     },
     "superChatMessageType": {
         "message": "超級留言"
+    },
+    "pinnedMessageType": {
+        "message": "置頂信息"
     }
 }
