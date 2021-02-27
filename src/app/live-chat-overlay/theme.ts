@@ -1,6 +1,9 @@
 import { createMuiTheme } from '@material-ui/core';
 
 export const theme = createMuiTheme({
+    typography: {
+        fontFamily: '"YouTube Noto", Roboto, Arial, Helvetica, sans-serif',
+    },
     palette: {
         type: 'dark',
         primary: {
