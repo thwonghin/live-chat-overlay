@@ -7,6 +7,7 @@
 }
 
 .icon {
+    /* stylelint-disable-next-line declaration-no-important */
     width: 0.5em !important;
     height: 0.5em;
     padding-right: 10px;
@@ -17,6 +18,7 @@
     margin-left: auto;
 
     // Youtube disabled all svg pointer events
+    /* stylelint-disable-next-line declaration-no-important */
     pointer-events: all !important;
 }
 

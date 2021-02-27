@@ -1,7 +1,0 @@
-{
-    "extends": ["stylelint-config-recommended-scss", "stylelint-config-sass-guidelines", "stylelint-config-rational-order", "stylelint-config-css-modules"],
-    "rules": {
-        "indentation": 4,
-        "order/properties-alphabetical-order": null
-    }
-}
