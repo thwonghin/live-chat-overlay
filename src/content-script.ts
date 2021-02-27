@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unassigned-import
 import './common';
 import { browser } from 'webextension-polyfill-ts';
 

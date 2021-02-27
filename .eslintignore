@@ -1,0 +1,4 @@
+commitlint.config.js
+jest.config.js
+.eslintrc.js
+*.scss.d.ts

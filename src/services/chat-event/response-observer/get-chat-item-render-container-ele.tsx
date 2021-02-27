@@ -13,7 +13,7 @@ function getChatItemRenderContainerEle(): HTMLElement {
     if (!chatItemRenderContainerEle) {
         chatItemRenderContainerEle = window.parent.document.querySelector(
             `#${CHAT_ITEM_RENDER_ID}`,
-        )! as HTMLElement;
+        )!;
     }
 
     return chatItemRenderContainerEle;

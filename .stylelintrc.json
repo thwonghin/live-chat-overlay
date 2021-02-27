@@ -1,0 +1,8 @@
+{
+    "extends": [
+        "stylelint-config-xo-scss",
+        "stylelint-config-rational-order",
+        "stylelint-config-css-modules",
+        "stylelint-prettier/recommended"
+    ]
+}
