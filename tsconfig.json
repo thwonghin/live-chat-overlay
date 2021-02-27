@@ -10,6 +10,7 @@
         "esModuleInterop": true,
         "baseUrl": ".",
         "noUncheckedIndexedAccess": true,
+        "noPropertyAccessFromIndexSignature": true,
         "jsx": "react-jsx",
         "paths": {
             "@/*": ["src/*"]
