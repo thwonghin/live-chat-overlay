@@ -1,4 +1,4 @@
-import { isNil } from 'lodash-es';
+import { isNil, isArguments } from 'lodash-es';
 
 export * from './event-emitter';
 export * as youtube from './youtube';
