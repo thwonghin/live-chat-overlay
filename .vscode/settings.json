@@ -1,4 +1,3 @@
 {
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "xo.enable": true
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
