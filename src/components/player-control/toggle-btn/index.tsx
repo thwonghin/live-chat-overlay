@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import cn from 'classnames';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +6,7 @@ import { useSettings } from '@/hooks';
 import { youtube } from '@/utils';
 import { useI18n } from '@/contexts/i18n';
 
+import BtnTooltip from '../btn-tooltip';
 import classes from './index.scss';
 
 const iconToBtnRatio = 2 / 3;
@@ -16,6 +17,7 @@ const withSlashIconRatio =
 
 const ToggleBtn: React.FC = () => {
     const { settings, updateSettings } = useSettings();
+
     const i18n = useI18n();
 
     const icon = useMemo<JSX.Element>(() => {
@@ -37,7 +39,7 @@ const ToggleBtn: React.FC = () => {
         [settings.isEnabled, i18n],
     );
 
-    const onClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
+    const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
         (event) => {
             event.preventDefault();
             updateSettings((previousSettings) => ({
@@ -49,14 +51,16 @@ const ToggleBtn: React.FC = () => {
     );
 
     return (
-        <button
-            className={cn([classes.btn, youtube.CLASS_PLAYER_CTL_BTN])}
-            title={title}
-            type="button"
-            onClick={onClick}
-        >
-            {icon}
-        </button>
+        <BtnTooltip title={title}>
+            <button
+                className={cn([classes.btn, youtube.CLASS_PLAYER_CTL_BTN])}
+                aria-label={title}
+                type="button"
+                onClick={handleClick}
+            >
+                {icon}
+            </button>
+        </BtnTooltip>
     );
 };
 
