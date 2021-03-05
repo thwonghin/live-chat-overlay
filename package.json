@@ -40,7 +40,7 @@
         "@commitlint/cli": "^12.0.0",
         "@commitlint/config-conventional": "^12.0.0",
         "@storybook/builder-webpack5": "^6.2.0-beta.4",
-        "@storybook/react": "^6.2.0-beta.4",
+        "@storybook/react": "^6.2.0-beta.9",
         "@types/classnames": "^2.2.11",
         "@types/copy-webpack-plugin": "^6.4.0",
         "@types/cssnano": "^4.0.0",
