@@ -94,10 +94,7 @@ const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
         [updateSettings],
     );
 
-    const { callback: debouncedHandleChange } = useDebouncedCallback(
-        handleChange,
-        500,
-    );
+    const debouncedHandleChange = useDebouncedCallback(handleChange, 500);
 
     return (
         <StyledSlider
