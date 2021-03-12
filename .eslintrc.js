@@ -5,7 +5,7 @@ module.exports = {
         'xo/esnext',
         'xo-typescript',
         'xo-react',
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
     ],
     parser: "@typescript-eslint/parser",
     parserOptions: {
