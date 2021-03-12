@@ -77,10 +77,11 @@ function mapAuthorBadges(
 
     return rendererAuthorBadges
         .filter((v) => Boolean(v.liveChatAuthorBadgeRenderer.customThumbnail))
-        .flatMap((v) =>
-            v.liveChatAuthorBadgeRenderer.customThumbnail!.thumbnails.flatMap(
-                (_) => _.url,
-            ),
+        .flatMap(
+            (v) =>
+                v.liveChatAuthorBadgeRenderer.customThumbnail?.thumbnails.flatMap(
+                    (_) => _.url,
+                ) ?? [],
         );
 }
 

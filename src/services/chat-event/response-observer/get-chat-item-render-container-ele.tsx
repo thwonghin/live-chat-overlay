@@ -11,9 +11,14 @@ let chatItemRenderContainerEle: HTMLElement;
 
 function getChatItemRenderContainerEle(): HTMLElement {
     if (!chatItemRenderContainerEle) {
-        chatItemRenderContainerEle = window.parent.document.querySelector(
+        const containerEle = window.parent.document.querySelector<HTMLElement>(
             `#${CHAT_ITEM_RENDER_ID}`,
-        )!;
+        );
+        if (!containerEle) {
+            throw new Error('Cannot find chat item render container');
+        }
+
+        chatItemRenderContainerEle = containerEle;
     }
 
     return chatItemRenderContainerEle;
