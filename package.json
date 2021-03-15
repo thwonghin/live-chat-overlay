@@ -106,7 +106,7 @@
         "classnames": "^2.2.6",
         "core-js": "3.9.1",
         "formik": "^2.2.6",
-        "jss": "^10.5.1",
+        "jss": "^10.6.0",
         "lodash-es": "^4.17.21",
         "patch-package": "^6.4.6",
         "postinstall-postinstall": "^2.1.0",
