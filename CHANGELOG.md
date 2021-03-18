@@ -1,3 +1,22 @@
+## 2.10.0 (2021-03-18)
+
+* chore: [security] bump react-dev-utils from 11.0.3 to 11.0.4 (#637) ([9d13965](https://github.com/thwonghin/live-chat-overlay/commit/9d13965)), closes [#637](https://github.com/thwonghin/live-chat-overlay/issues/637)
+* chore: bump deps 2021-02-23 (#596) ([6f82cb0](https://github.com/thwonghin/live-chat-overlay/commit/6f82cb0)), closes [#596](https://github.com/thwonghin/live-chat-overlay/issues/596)
+* chore: bump deps 2021-02-27 (#609) ([4a3d9e7](https://github.com/thwonghin/live-chat-overlay/commit/4a3d9e7)), closes [#609](https://github.com/thwonghin/live-chat-overlay/issues/609)
+* chore: bump deps 2021-03-12 (#639) ([2b72744](https://github.com/thwonghin/live-chat-overlay/commit/2b72744)), closes [#639](https://github.com/thwonghin/live-chat-overlay/issues/639)
+* chore: bump deps 2021-03-18 (#662) ([f0a997d](https://github.com/thwonghin/live-chat-overlay/commit/f0a997d)), closes [#662](https://github.com/thwonghin/live-chat-overlay/issues/662)
+* chore: bump storybook deps (#666) ([6d21eec](https://github.com/thwonghin/live-chat-overlay/commit/6d21eec)), closes [#666](https://github.com/thwonghin/live-chat-overlay/issues/666)
+* chore: bump storybook to beta to use webpack 5 (#610) ([33b5a5e](https://github.com/thwonghin/live-chat-overlay/commit/33b5a5e)), closes [#610](https://github.com/thwonghin/live-chat-overlay/issues/610)
+* chore: bump typescript to 4.2 (#509) ([699a057](https://github.com/thwonghin/live-chat-overlay/commit/699a057)), closes [#509](https://github.com/thwonghin/live-chat-overlay/issues/509)
+* chore: migrate xo to eslint with xo config (#612) ([30e6a22](https://github.com/thwonghin/live-chat-overlay/commit/30e6a22)), closes [#612](https://github.com/thwonghin/live-chat-overlay/issues/612)
+* chore: re-enable some ts eslint rule (#640) ([b4dd605](https://github.com/thwonghin/live-chat-overlay/commit/b4dd605)), closes [#640](https://github.com/thwonghin/live-chat-overlay/issues/640)
+* chore: upgrade node.js version (#641) ([5cd132c](https://github.com/thwonghin/live-chat-overlay/commit/5cd132c)), closes [#641](https://github.com/thwonghin/live-chat-overlay/issues/641)
+* chore: use xo config for stylelint (#613) ([48894de](https://github.com/thwonghin/live-chat-overlay/commit/48894de)), closes [#613](https://github.com/thwonghin/live-chat-overlay/issues/613)
+* fix: pinned message icon size is too small (#664) ([480380b](https://github.com/thwonghin/live-chat-overlay/commit/480380b)), closes [#664](https://github.com/thwonghin/live-chat-overlay/issues/664)
+* feat: add better tooltip to player buttons (#611) ([0aed91e](https://github.com/thwonghin/live-chat-overlay/commit/0aed91e)), closes [#611](https://github.com/thwonghin/live-chat-overlay/issues/611)
+
+
+
 ## <small>2.9.1 (2021-02-22)</small>
 
 * fix: pinned message layout when it has image (#582) ([34a7e95](https://github.com/thwonghin/live-chat-overlay/commit/34a7e95)), closes [#582](https://github.com/thwonghin/live-chat-overlay/issues/582)
