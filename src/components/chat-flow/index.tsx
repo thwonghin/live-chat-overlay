@@ -136,13 +136,13 @@ const ChatFlow: React.FC = () => {
 
     const dispatch = useDispatch();
     const onMessageDone = useCallback(
-        (chatItem) => {
+        (chatItem: UiChatItem) => {
             dispatch(chatEvents.actions.markAsDone(chatItem));
         },
         [dispatch],
     );
     const onRemoveMessage = useCallback(
-        (chatItem) => {
+        (chatItem: UiChatItem) => {
             dispatch(chatEvents.actions.remove(chatItem));
         },
         [dispatch],

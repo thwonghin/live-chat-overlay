@@ -1,7 +1,7 @@
 import type { Browser, I18n } from 'webextension-polyfill-ts';
 import * as React from 'react';
 
-export const I18nContext = React.createContext<I18n.Static>({} as any);
+export const I18nContext = React.createContext<I18n.Static>({} as I18n.Static);
 
 export function useI18n(): I18n.Static {
     return React.useContext(I18nContext);
