@@ -17,7 +17,7 @@
         "lint:test": "yarn lint:script tests",
         "lint:style": "stylelint src/**/*.scss",
         "lint:fix": "xo --fix && yarn lint:style --fix",
-        "clean": "rm -rf dist .storybook/dist webpack/dist webpack/tsconfig.tsbuildinfo",
+        "clean": "rm -rf dist .storybook/dist webpack/dist webpack/tsconfig.tsbuildinfo src/**/*.scss.d.ts",
         "build": "tsc -p webpack && webpack --config webpack/dist/webpack.config.js",
         "build:prod": "yarn build --env production",
         "build:release": "yarn build --env release",
