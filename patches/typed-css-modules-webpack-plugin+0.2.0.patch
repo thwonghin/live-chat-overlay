@@ -1,9 +1,12 @@
 diff --git a/dist/index.d.ts b/dist/index.d.ts
-index 9c6f75575ff2c029ff2195615f83985bb6c9973e..ce0430858fd60268d37cd4a39390f0f83f0d4a75 100644
+index 9c6f75575ff2c029ff2195615f83985bb6c9973e..3c9828891c387ddf4b4c31a39e0b90ffecab2429 100644
 --- a/dist/index.d.ts
 +++ b/dist/index.d.ts
-@@ -3,7 +3,7 @@ import { Tapable } from 'tapable';
- import { Compiler } from 'webpack';
+@@ -1,15 +1,14 @@
+ import { Plugin as PostCssPlugin } from 'postcss';
+-import { Tapable } from 'tapable';
+-import { Compiler } from 'webpack';
++import { Compiler, WebpackPluginInstance } from 'webpack';
  export interface Options {
      readonly globPattern: string;
 -    readonly postCssPlugins?: Array<PostCssPlugin<any>> | ((defaults: ReadonlyArray<PostCssPlugin<any>>) => PostCssPlugin<any>[]);
@@ -11,3 +14,10 @@ index 9c6f75575ff2c029ff2195615f83985bb6c9973e..ce0430858fd60268d37cd4a39390f0f8
      readonly camelCase?: boolean;
      readonly rootDir?: string;
      readonly searchDir?: string;
+     readonly outDir?: string;
+ }
+-export declare class TypedCssModulesPlugin implements Tapable.Plugin {
++export declare class TypedCssModulesPlugin implements WebpackPluginInstance {
+     private dtsCreator;
+     private useIncremental;
+     private globPattern;
