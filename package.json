@@ -30,12 +30,6 @@
         "postpublish": "pinst --enable"
     },
     "devDependencies": {
-        "@babel/core": "^7.13.15",
-        "@babel/plugin-proposal-class-properties": "^7.13.0",
-        "@babel/preset-env": "^7.13.15",
-        "@babel/preset-react": "^7.13.13",
-        "@babel/preset-typescript": "^7.13.0",
-        "@babel/runtime": "^7.13.10",
         "@commitlint/cli": "^12.1.1",
         "@commitlint/config-conventional": "^12.1.1",
         "@storybook/builder-webpack5": "^6.2.8",
@@ -56,7 +50,6 @@
         "@types/tapable": "^2.2.2",
         "@typescript-eslint/eslint-plugin": "^4.22.0",
         "@typescript-eslint/parser": "^4.22.0",
-        "babel-loader": "^8.2.2",
         "browserslist": "^4.16.4",
         "copy-webpack-plugin": "^8.1.1",
         "css-loader": "^5.2.2",
