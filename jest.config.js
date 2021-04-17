@@ -4,7 +4,7 @@ module.exports = {
     moduleNameMapper: {
         '^@/(.*)$': '<rootDir>/src/$1',
         '^.+\\.(css|scss)$': '<rootDir>/tests/mocks/style-mock.ts',
-        '^lodash-es$': 'lodash', // Workaround for es module
+        '^lodash-es$': require.resolve('lodash'), // Workaround for es module
     },
     globals: {
         'ts-jest': {

@@ -72,6 +72,7 @@
         "fork-ts-checker-webpack-plugin": "patch:fork-ts-checker-webpack-plugin@^6.2.1#./patches/fork-ts-checker-webpack-plugin+6.2.1.patch",
         "husky": "6.0.0",
         "jest": "^26.6.3",
+        "lodash": "^4.17.21",
         "mini-css-extract-plugin": "^1.4.1",
         "pinst": "^2.1.6",
         "postcss": "^8.2.10",
