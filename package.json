@@ -10,7 +10,7 @@
         "node": ">=14.16.1"
     },
     "scripts": {
-        "test:unit": "jest tests/unit",
+        "test:unit": "tsc -p tests && jest tests/unit",
         "lint": "yarn lint:src && yarn lint:test && yarn lint:style",
         "lint:script": "eslint --ext ts,tsx",
         "lint:src": "yarn lint:script src",
