@@ -1,3 +1,16 @@
+## <small>2.10.1 (2021-04-17)</small>
+
+* chore: [security] bump ssri from 6.0.1 to 6.0.2 (#717) ([8d5d828](https://github.com/thwonghin/live-chat-overlay/commit/8d5d828)), closes [#717](https://github.com/thwonghin/live-chat-overlay/issues/717)
+* chore: bump deps 2021-04-17 (#718) ([3566dd2](https://github.com/thwonghin/live-chat-overlay/commit/3566dd2)), closes [#718](https://github.com/thwonghin/live-chat-overlay/issues/718)
+* chore: bump node to 14.16.1 (#720) ([a5b2a6b](https://github.com/thwonghin/live-chat-overlay/commit/a5b2a6b)), closes [#720](https://github.com/thwonghin/live-chat-overlay/issues/720)
+* chore: enable PnP (#721) ([04bba1b](https://github.com/thwonghin/live-chat-overlay/commit/04bba1b)), closes [#721](https://github.com/thwonghin/live-chat-overlay/issues/721)
+* chore: install yarn version plugin (#723) ([86bd143](https://github.com/thwonghin/live-chat-overlay/commit/86bd143)), closes [#723](https://github.com/thwonghin/live-chat-overlay/issues/723)
+* chore: update README on yarn v2 ([bbb9981](https://github.com/thwonghin/live-chat-overlay/commit/bbb9981))
+* chore: use swc to transpile (#722) ([52609ec](https://github.com/thwonghin/live-chat-overlay/commit/52609ec)), closes [#722](https://github.com/thwonghin/live-chat-overlay/issues/722)
+* chore: use yarn 2 (#719) ([8b5e253](https://github.com/thwonghin/live-chat-overlay/commit/8b5e253)), closes [#719](https://github.com/thwonghin/live-chat-overlay/issues/719)
+
+
+
 ## 2.10.0 (2021-03-18)
 
 * chore: [security] bump react-dev-utils from 11.0.3 to 11.0.4 (#637) ([9d13965](https://github.com/thwonghin/live-chat-overlay/commit/9d13965)), closes [#637](https://github.com/thwonghin/live-chat-overlay/issues/637)

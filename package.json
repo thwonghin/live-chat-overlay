@@ -1,6 +1,6 @@
 {
     "name": "live-chat-overlay",
-    "version": "2.10.0",
+    "version": "2.10.1",
     "description": "Web Extension for Overlay Live Chat on Youtube",
     "main": "dist/content-script.js",
     "repository": "git@github.com:thwonghin/live-chat-overlay.git",
@@ -22,7 +22,7 @@
         "build:prod": "yarn build --env production",
         "build:release": "yarn build --env release",
         "start": "yarn build --env development --watch",
-        "version": "npx conventional-changelog-cli -p live-chat-overlay -i CHANGELOG.md -s && git add CHANGELOG.md",
+        "postversion": "npx conventional-changelog-cli -p live-chat-overlay -i CHANGELOG.md -s && git add CHANGELOG.md",
         "version:set": "dot-json dist/manifest.json version",
         "storybook": "tsc -p webpack && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && start-storybook -c .storybook/dist/",
         "storybook:build": "tsc -p webpack && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && build-storybook -c .storybook/dist/ --quiet",
