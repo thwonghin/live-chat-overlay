@@ -47,6 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@storybook/builder-webpack5", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:6.2.8"],
             ["@storybook/react", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:6.2.8"],
             ["@swc/core", "npm:1.2.52"],
+            ["@swc/jest", "npm:0.1.2"],
             ["@types/classnames", "npm:2.2.11"],
             ["@types/copy-webpack-plugin", "npm:6.4.1"],
             ["@types/cssnano", "npm:4.0.0"],
@@ -109,7 +110,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-prettier", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:1.2.0"],
             ["stylelint-scss", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:3.19.0"],
             ["swc-loader", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:0.1.13"],
-            ["ts-jest", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:26.5.5"],
             ["tsconfig-paths-webpack-plugin", "npm:3.5.1"],
             ["type-fest", "npm:1.0.2"],
             ["typed-css-modules-webpack-plugin", "patch:typed-css-modules-webpack-plugin@npm%3A0.2.0#./patches/typed-css-modules-webpack-plugin+0.2.0.patch::version=0.2.0&hash=49893d&locator=live-chat-overlay%40workspace%3A."],
@@ -5354,6 +5354,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@swc/jest", [
+        ["npm:0.1.2", {
+          "packageLocation": "./.yarn/cache/@swc-jest-npm-0.1.2-66a7f93d0d-716e6179e6.zip/node_modules/@swc/jest/",
+          "packageDependencies": [
+            ["@swc/jest", "npm:0.1.2"],
+            ["@swc/core", "npm:1.2.52"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@tootallnate/once", [
         ["npm:1.1.2", {
           "packageLocation": "./.yarn/cache/@tootallnate-once-npm-1.1.2-0517220057-d030f3fb14.zip/node_modules/@tootallnate/once/",
@@ -8159,16 +8169,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["electron-to-chromium", "npm:1.3.717"],
             ["escalade", "npm:3.1.1"],
             ["node-releases", "npm:1.1.71"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["bs-logger", [
-        ["npm:0.2.6", {
-          "packageLocation": "./.yarn/cache/bs-logger-npm-0.2.6-7670f88b66-f5f2f1315d.zip/node_modules/bs-logger/",
-          "packageDependencies": [
-            ["bs-logger", "npm:0.2.6"],
-            ["fast-json-stable-stringify", "npm:2.1.0"]
           ],
           "linkType": "HARD",
         }]
@@ -15217,6 +15217,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@storybook/builder-webpack5", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:6.2.8"],
             ["@storybook/react", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:6.2.8"],
             ["@swc/core", "npm:1.2.52"],
+            ["@swc/jest", "npm:0.1.2"],
             ["@types/classnames", "npm:2.2.11"],
             ["@types/copy-webpack-plugin", "npm:6.4.1"],
             ["@types/cssnano", "npm:4.0.0"],
@@ -15279,7 +15280,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["stylelint-prettier", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:1.2.0"],
             ["stylelint-scss", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:3.19.0"],
             ["swc-loader", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:0.1.13"],
-            ["ts-jest", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:26.5.5"],
             ["tsconfig-paths-webpack-plugin", "npm:3.5.1"],
             ["type-fest", "npm:1.0.2"],
             ["typed-css-modules-webpack-plugin", "patch:typed-css-modules-webpack-plugin@npm%3A0.2.0#./patches/typed-css-modules-webpack-plugin+0.2.0.patch::version=0.2.0&hash=49893d&locator=live-chat-overlay%40workspace%3A."],
@@ -15538,15 +15538,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["make-dir", "npm:3.1.0"],
             ["semver", "npm:6.3.0"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["make-error", [
-        ["npm:1.3.6", {
-          "packageLocation": "./.yarn/cache/make-error-npm-1.3.6-ccb85d9458-2c780bab84.zip/node_modules/make-error/",
-          "packageDependencies": [
-            ["make-error", "npm:1.3.6"]
           ],
           "linkType": "HARD",
         }]
@@ -22616,42 +22607,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/ts-essentials-npm-2.0.12-2c553d7b88-40556ad8f5.zip/node_modules/ts-essentials/",
           "packageDependencies": [
             ["ts-essentials", "npm:2.0.12"]
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["ts-jest", [
-        ["npm:26.5.5", {
-          "packageLocation": "./.yarn/cache/ts-jest-npm-26.5.5-1f49fc208f-a7fe56357b.zip/node_modules/ts-jest/",
-          "packageDependencies": [
-            ["ts-jest", "npm:26.5.5"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:26.5.5", {
-          "packageLocation": "./.yarn/$$virtual/ts-jest-virtual-887b10d07c/0/cache/ts-jest-npm-26.5.5-1f49fc208f-a7fe56357b.zip/node_modules/ts-jest/",
-          "packageDependencies": [
-            ["ts-jest", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:26.5.5"],
-            ["@types/jest", "npm:26.0.22"],
-            ["@types/typescript", null],
-            ["bs-logger", "npm:0.2.6"],
-            ["buffer-from", "npm:1.1.1"],
-            ["fast-json-stable-stringify", "npm:2.1.0"],
-            ["jest", "npm:26.6.3"],
-            ["jest-util", "npm:26.6.2"],
-            ["json5", "npm:2.2.0"],
-            ["lodash", "npm:4.17.20"],
-            ["make-error", "npm:1.3.6"],
-            ["mkdirp", "npm:1.0.4"],
-            ["semver", "npm:7.3.4"],
-            ["typescript", "patch:typescript@npm%3A4.2.4#builtin<compat/typescript>::version=4.2.4&hash=a45b0e"],
-            ["yargs-parser", "npm:20.2.4"]
-          ],
-          "packagePeers": [
-            "@types/jest",
-            "@types/typescript",
-            "jest",
-            "typescript"
           ],
           "linkType": "HARD",
         }]
