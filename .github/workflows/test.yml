@@ -26,7 +26,7 @@ jobs:
           install-command: yarn --immutable
       - name: Check Dependency Vulnerabilities
         run: |
-          yarn audit
+          yarn npm audit
       - name: Lint & Test
         run: |
           yarn lint:test && yarn test:unit --ci
