@@ -9,8 +9,8 @@
         "parser": {
             "syntax": "typescript",
             "tsx": true,
-            "decorators": true,
-            "dynamicImport": true
+            "decorators": false,
+            "dynamicImport": false
         }
     },
     "env": {
