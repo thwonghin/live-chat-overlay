@@ -2766,6 +2766,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@napi-rs/triples@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@napi-rs/triples@npm:1.0.2"
+  checksum: 72fbc29c14202a10335796d32230a0880a14fcebcdeb8ea54cea77ddad314351040f214d5715457b8875e00ac3854c431f781cf07149e5e4003142681fbb1308
+  languageName: node
+  linkType: hard
+
+"@node-rs/helper@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "@node-rs/helper@npm:1.1.0"
+  dependencies:
+    "@napi-rs/triples": ^1.0.2
+    tslib: ^2.1.0
+  checksum: b4cf30440f7c5ac61e413c9fd3c3c2d2a33cee4256241431aaa75d86f7b2489bbeed8f68a7b784d5822e63bc5942e8f35afc98e935aba7fbbd26b3a84546cb50
+  languageName: node
+  linkType: hard
+
 "@nodelib/fs.scandir@npm:2.1.4":
   version: 2.1.4
   resolution: "@nodelib/fs.scandir@npm:2.1.4"
@@ -3589,6 +3606,106 @@ __metadata:
     postcss: ">=7.0.0"
     postcss-syntax: ">=0.36.2"
   checksum: 4dc6415559da954860afdc3c8cf6e7d93b629510f74781fc893df035d3d161ed7c6294c1b8beefd0bebf0abf560020109caeb1ad89b036ae13fbfee42ce91feb
+  languageName: node
+  linkType: hard
+
+"@swc/core-android-arm64@npm:^1.2.52":
+  version: 1.2.53
+  resolution: "@swc/core-android-arm64@npm:1.2.53"
+  checksum: 1df5e0b70da15cd982ca8f0e257a98f626261eb4b8bc3c3252f84ece44a814847956c06388fb567d3cd94666ae248e9dbc39611312a5f0b7f68df7374df58038
+  languageName: node
+  linkType: hard
+
+"@swc/core-darwin-arm64@npm:^1.2.52":
+  version: 1.2.53
+  resolution: "@swc/core-darwin-arm64@npm:1.2.53"
+  checksum: ff8bf45d27fa80c1c5e851a9f8bb9831d5a95de8b71bd6431e2da3b07e1c75a356d0d1557e1c51f50a7090f1924259273f65f3b6dab395a4f829a4513bf4576c
+  languageName: node
+  linkType: hard
+
+"@swc/core-darwin-x64@npm:^1.2.52":
+  version: 1.2.53
+  resolution: "@swc/core-darwin-x64@npm:1.2.53"
+  checksum: 061092ff97912d23dc2032edb7fbf1bfdfac2073d3ec12afbc96788f1c4c26f10a3156b153b4b2494c5197c84404d62eb808440a8a56211652afee7d4108001c
+  languageName: node
+  linkType: hard
+
+"@swc/core-linux-arm-gnueabihf@npm:^1.2.52":
+  version: 1.2.53
+  resolution: "@swc/core-linux-arm-gnueabihf@npm:1.2.53"
+  checksum: 50d23b7b7f7c825332d4851eda3274334b005bdd9931ba722b5adeac1a4b89312d2310d74b46ab9aa92d9adb587607e01921860138c13004f603c15ceb19b722
+  languageName: node
+  linkType: hard
+
+"@swc/core-linux-arm64-gnu@npm:^1.2.52":
+  version: 1.2.53
+  resolution: "@swc/core-linux-arm64-gnu@npm:1.2.53"
+  checksum: 82f08da0364f589973ea995f0d9efa33a7e867a8e961a2021fbbfe87bf0b84794d973ea076c22f3ef5896d24d2919061ddd70522c9078ec889e0e18833ee4e40
+  languageName: node
+  linkType: hard
+
+"@swc/core-linux-x64-gnu@npm:^1.2.52":
+  version: 1.2.53
+  resolution: "@swc/core-linux-x64-gnu@npm:1.2.53"
+  checksum: 3d8ba8077f8ceb6865822eba219873b572caa29125edbed0e5ef3b8a7212c85aa2866aee7fe1c981e19149d4e954eaa2d6c0e093cb5bc164e0003041a86e630f
+  languageName: node
+  linkType: hard
+
+"@swc/core-linux-x64-musl@npm:^1.2.52":
+  version: 1.2.53
+  resolution: "@swc/core-linux-x64-musl@npm:1.2.53"
+  checksum: 9b467f280d6b4c5fa48e4e94a14f63fd6be2a3ff0d492260a4f3172467a7a84fc770b6950f85db1da90262d8a50b0d72b8898be8e94f2b92ad7ff5a125dbaeb1
+  languageName: node
+  linkType: hard
+
+"@swc/core-win32-ia32-msvc@npm:^1.2.52":
+  version: 1.2.53
+  resolution: "@swc/core-win32-ia32-msvc@npm:1.2.53"
+  checksum: 7b7daf3f9045a37a8f6c1994e5b2ab9810bde10c197fbbcaf5363f6d155e59a41b432d9b66a3dc43af0eb035fdc8aed49037330f191a159d795138234d546a04
+  languageName: node
+  linkType: hard
+
+"@swc/core-win32-x64-msvc@npm:^1.2.52":
+  version: 1.2.53
+  resolution: "@swc/core-win32-x64-msvc@npm:1.2.53"
+  checksum: 0983732468c394f157a4f8be42690f2e2dda3e7ba7751e2325203741db23fd51de9b6835576a4d958422750973eb5408da89f34be236d6c9541a6b019916dff3
+  languageName: node
+  linkType: hard
+
+"@swc/core@npm:^1.1.48, @swc/core@npm:^1.2.52":
+  version: 1.2.52
+  resolution: "@swc/core@npm:1.2.52"
+  dependencies:
+    "@node-rs/helper": ^1.0.0
+    "@swc/core-android-arm64": ^1.2.52
+    "@swc/core-darwin-arm64": ^1.2.52
+    "@swc/core-darwin-x64": ^1.2.52
+    "@swc/core-linux-arm-gnueabihf": ^1.2.52
+    "@swc/core-linux-arm64-gnu": ^1.2.52
+    "@swc/core-linux-x64-gnu": ^1.2.52
+    "@swc/core-linux-x64-musl": ^1.2.52
+    "@swc/core-win32-ia32-msvc": ^1.2.52
+    "@swc/core-win32-x64-msvc": ^1.2.52
+  dependenciesMeta:
+    "@swc/core-android-arm64":
+      optional: true
+    "@swc/core-darwin-arm64":
+      optional: true
+    "@swc/core-darwin-x64":
+      optional: true
+    "@swc/core-linux-arm-gnueabihf":
+      optional: true
+    "@swc/core-linux-arm64-gnu":
+      optional: true
+    "@swc/core-linux-x64-gnu":
+      optional: true
+    "@swc/core-linux-x64-musl":
+      optional: true
+    "@swc/core-win32-ia32-msvc":
+      optional: true
+    "@swc/core-win32-x64-msvc":
+      optional: true
+  checksum: 539b9b5bb712b7857ce9a51d68e836ed375287d109fa36dde716d9115f79e5f3be7db8fdf6874bc28c870b0809d81ce42dcaa7411af2a4ac6f702263cf686310
   languageName: node
   linkType: hard
 
@@ -5906,7 +6023,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.16.0":
+"browserslist@npm:^4.16.0, browserslist@npm:^4.16.4":
   version: 4.16.4
   resolution: "browserslist@npm:4.16.4"
   dependencies:
@@ -11953,6 +12070,7 @@ fsevents@^1.2.7:
     "@reduxjs/toolkit": ^1.5.1
     "@storybook/builder-webpack5": ^6.2.8
     "@storybook/react": ^6.2.8
+    "@swc/core": ^1.2.52
     "@types/classnames": ^2.2.11
     "@types/copy-webpack-plugin": ^6.4.1
     "@types/cssnano": ^4.0.0
@@ -11969,6 +12087,7 @@ fsevents@^1.2.7:
     "@typescript-eslint/eslint-plugin": ^4.22.0
     "@typescript-eslint/parser": ^4.22.0
     babel-loader: ^8.2.2
+    browserslist: ^4.16.4
     classnames: ^2.3.1
     copy-webpack-plugin: ^8.1.1
     core-js: 3.10.1
@@ -12014,6 +12133,7 @@ fsevents@^1.2.7:
     stylelint-order: ^4.1.0
     stylelint-prettier: ^1.2.0
     stylelint-scss: ^3.19.0
+    swc-loader: ^0.1.13
     ts-jest: ^26.5.5
     tsconfig-paths-webpack-plugin: ^3.5.1
     type-fest: ^1.0.2
@@ -17454,6 +17574,19 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"swc-loader@npm:^0.1.13":
+  version: 0.1.13
+  resolution: "swc-loader@npm:0.1.13"
+  dependencies:
+    "@swc/core": ^1.1.48
+    loader-utils: ^2.0.0
+  peerDependencies:
+    "@swc/core": ^1.1.48
+    webpack: ">=2"
+  checksum: c80af365be32895efe3cf8597177ed02c8ee9b272b1140b67cab556297cba6c4d10dc6a2e07c6f1180d614337a6235259506ddba2835cc93cdb0679109e16293
+  languageName: node
+  linkType: hard
+
 "symbol-observable@npm:1.2.0, symbol-observable@npm:^1.2.0":
   version: 1.2.0
   resolution: "symbol-observable@npm:1.2.0"
@@ -17935,6 +18068,13 @@ resolve@^2.0.0-next.3:
   version: 2.1.0
   resolution: "tslib@npm:2.1.0"
   checksum: d8f5bdd067611651c6b846c2388f4dc8ba1f5af124e66105f5263d1ad56da17f4b8c6566887ca2f205c5a9758451871ceca87d5d06087af2dca1699c5e33db69
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.1.0":
+  version: 2.2.0
+  resolution: "tslib@npm:2.2.0"
+  checksum: 2d35468c470410871c5246e43f12dcb6d0fc363b617c176f26443b9530e5c5ee8448966892a42956168d8f495da7865bda33dfe82c26c91991e28999974a618f
   languageName: node
   linkType: hard
 

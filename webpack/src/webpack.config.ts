@@ -64,7 +64,7 @@ const config = (
                 },
                 {
                     test: /\.(js|jsx|ts|tsx)$/i,
-                    use: 'babel-loader',
+                    use: 'swc-loader',
                 },
                 {
                     test: /\.s[ac]ss$/i,
