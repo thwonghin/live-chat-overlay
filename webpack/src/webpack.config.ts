@@ -119,14 +119,14 @@ const config = (
                           },
                       }),
                   ]),
-            new CopyWebpackPlugin({
+            (new CopyWebpackPlugin({
                 patterns: [
                     {
                         context: 'public',
                         from: '**/*',
                     },
                 ],
-            }),
+            }) as unknown) as webpack.WebpackPluginInstance,
             new MiniCssExtractPlugin({
                 filename: '[name].css',
             }),
