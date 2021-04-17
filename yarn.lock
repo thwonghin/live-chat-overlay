@@ -9076,6 +9076,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+fork-ts-checker-webpack-plugin@^6.2.1:
+  version: 6.2.1
+  resolution: "fork-ts-checker-webpack-plugin@npm:6.2.1"
+  dependencies:
+    "@babel/code-frame": ^7.8.3
+    "@types/json-schema": ^7.0.5
+    chalk: ^4.1.0
+    chokidar: ^3.4.2
+    cosmiconfig: ^6.0.0
+    deepmerge: ^4.2.2
+    fs-extra: ^9.0.0
+    memfs: ^3.1.2
+    minimatch: ^3.0.4
+    schema-utils: 2.7.0
+    semver: ^7.3.2
+    tapable: ^1.0.0
+  checksum: 35ecf3b65a115a7b6dabd00739fdd96ef34d04dc595e0232fb0510a0342b135f6a1f54c2c6d80af282c38f2bd468e3baf412180e10fd9292b3d8f4ab8894542c
+  languageName: node
+  linkType: hard
+
 "fork-ts-checker-webpack-plugin@npm:4.1.6, fork-ts-checker-webpack-plugin@npm:^4.1.6":
   version: 4.1.6
   resolution: "fork-ts-checker-webpack-plugin@npm:4.1.6"
@@ -9111,9 +9131,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fork-ts-checker-webpack-plugin@npm:^6.2.1":
+"fork-ts-checker-webpack-plugin@patch:fork-ts-checker-webpack-plugin@^6.2.1#./patches/fork-ts-checker-webpack-plugin+6.2.1.patch::locator=live-chat-overlay%40workspace%3A.":
   version: 6.2.1
-  resolution: "fork-ts-checker-webpack-plugin@npm:6.2.1"
+  resolution: "fork-ts-checker-webpack-plugin@patch:fork-ts-checker-webpack-plugin@npm%3A6.2.1#./patches/fork-ts-checker-webpack-plugin+6.2.1.patch::version=6.2.1&hash=4aa468&locator=live-chat-overlay%40workspace%3A."
   dependencies:
     "@babel/code-frame": ^7.8.3
     "@types/json-schema": ^7.0.5
@@ -9127,7 +9147,7 @@ __metadata:
     schema-utils: 2.7.0
     semver: ^7.3.2
     tapable: ^1.0.0
-  checksum: 35ecf3b65a115a7b6dabd00739fdd96ef34d04dc595e0232fb0510a0342b135f6a1f54c2c6d80af282c38f2bd468e3baf412180e10fd9292b3d8f4ab8894542c
+  checksum: 07029b63978bbf6572b054a4aecb4f3b4ac2ec919027b29bfccbbed67ebc5ff5523e537e94aaf1ba02989d0afc1ef41ea8fc688cfbf98c85638b91b5ea292d73
   languageName: node
   linkType: hard
 
@@ -12001,7 +12021,7 @@ fsevents@^1.2.7:
     eslint-plugin-prettier: ^3.4.0
     eslint-plugin-react: ^7.23.2
     eslint-plugin-react-hooks: ^4.2.0
-    fork-ts-checker-webpack-plugin: ^6.2.1
+    fork-ts-checker-webpack-plugin: "patch:fork-ts-checker-webpack-plugin@^6.2.1#./patches/fork-ts-checker-webpack-plugin+6.2.1.patch"
     formik: ^2.2.6
     husky: 6.0.0
     jest: ^26.6.3
@@ -12032,7 +12052,7 @@ fsevents@^1.2.7:
     ts-jest: ^26.5.5
     tsconfig-paths-webpack-plugin: ^3.5.1
     type-fest: ^1.0.2
-    typed-css-modules-webpack-plugin: ^0.2.0
+    typed-css-modules-webpack-plugin: "patch:typed-css-modules-webpack-plugin@^0.2.0#./patches/typed-css-modules-webpack-plugin+0.2.0.patch"
     typescript: ^4.2.4
     use-debounce: ^6.0.1
     webextension-polyfill-ts: ^0.25.0
@@ -18110,7 +18130,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"typed-css-modules-webpack-plugin@npm:^0.2.0":
+typed-css-modules-webpack-plugin@^0.2.0:
   version: 0.2.0
   resolution: "typed-css-modules-webpack-plugin@npm:0.2.0"
   dependencies:
@@ -18119,6 +18139,18 @@ resolve@^2.0.0-next.3:
     glob: ^7.1.3
     typed-css-modules: ^0.6.3
   checksum: 6780bb4cf68379e73ac158bad11cf94d86e41467c7e9a14b3e6e3e240da415b3cd98269a701f8ea1a31cb18a5b0b9110b7e0bab4d49926059b6cf453f45a216f
+  languageName: node
+  linkType: hard
+
+"typed-css-modules-webpack-plugin@patch:typed-css-modules-webpack-plugin@^0.2.0#./patches/typed-css-modules-webpack-plugin+0.2.0.patch::locator=live-chat-overlay%40workspace%3A.":
+  version: 0.2.0
+  resolution: "typed-css-modules-webpack-plugin@patch:typed-css-modules-webpack-plugin@npm%3A0.2.0#./patches/typed-css-modules-webpack-plugin+0.2.0.patch::version=0.2.0&hash=534ded&locator=live-chat-overlay%40workspace%3A."
+  dependencies:
+    chalk: ^2.4.1
+    css-modules-loader-core: ^1.1.0
+    glob: ^7.1.3
+    typed-css-modules: ^0.6.3
+  checksum: 70860b7cba79ad84b641ca3aeeea7e2e5b329b177b8f926c03d0a430449d84644586784be2cd26bc362b85639482dfcdd96e863eb68b842256ae9bc1ef2fb2ae
   languageName: node
   linkType: hard
 

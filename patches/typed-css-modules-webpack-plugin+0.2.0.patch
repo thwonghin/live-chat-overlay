@@ -1,7 +1,7 @@
-diff --git a/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts b/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts
-index 9c6f755..ce04308 100644
---- a/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts
-+++ b/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 9c6f75575ff2c029ff2195615f83985bb6c9973e..ce0430858fd60268d37cd4a39390f0f83f0d4a75 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
 @@ -3,7 +3,7 @@ import { Tapable } from 'tapable';
  import { Compiler } from 'webpack';
  export interface Options {
