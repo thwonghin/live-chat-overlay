@@ -2,7 +2,6 @@ module.exports = {
     extends: [
         'xo',
         'xo/browser',
-        'xo/esnext',
         'xo-typescript',
         'xo-react',
         "plugin:prettier/recommended"

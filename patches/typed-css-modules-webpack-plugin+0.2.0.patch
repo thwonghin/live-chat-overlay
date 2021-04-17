@@ -1,0 +1,13 @@
+diff --git a/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts b/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts
+index 9c6f755..ce04308 100644
+--- a/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts
++++ b/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts
+@@ -3,7 +3,7 @@ import { Tapable } from 'tapable';
+ import { Compiler } from 'webpack';
+ export interface Options {
+     readonly globPattern: string;
+-    readonly postCssPlugins?: Array<PostCssPlugin<any>> | ((defaults: ReadonlyArray<PostCssPlugin<any>>) => PostCssPlugin<any>[]);
++    readonly postCssPlugins?: Array<PostCssPlugin> | ((defaults: ReadonlyArray<PostCssPlugin>) => PostCssPlugin[]);
+     readonly camelCase?: boolean;
+     readonly rootDir?: string;
+     readonly searchDir?: string;
