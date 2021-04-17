@@ -8,9 +8,9 @@ dist
 /storybook-static
 
 .yarn/*
+!.yarn/cache
 !.yarn/patches
-!.yarn/releases
 !.yarn/plugins
+!.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-.pnp.*
