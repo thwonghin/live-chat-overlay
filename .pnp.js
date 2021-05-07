@@ -46,7 +46,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@reduxjs/toolkit", "npm:1.5.1"],
             ["@storybook/builder-webpack5", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:6.2.9"],
             ["@storybook/react", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:6.2.9"],
-            ["@swc/core", "npm:1.2.52"],
+            ["@swc/core", "npm:1.2.54"],
             ["@swc/jest", "npm:0.1.2"],
             ["@types/classnames", "npm:2.3.1"],
             ["@types/copy-webpack-plugin", "npm:8.0.0"],
@@ -5315,6 +5315,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@swc/core-win32-x64-msvc", "npm:1.2.53"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:1.2.54", {
+          "packageLocation": "./.yarn/cache/@swc-core-npm-1.2.54-2a6885e021-817c4702bd.zip/node_modules/@swc/core/",
+          "packageDependencies": [
+            ["@swc/core", "npm:1.2.54"],
+            ["@node-rs/helper", "npm:1.1.0"],
+            ["@swc/core-android-arm64", "npm:1.2.54"],
+            ["@swc/core-darwin-arm64", "npm:1.2.55"],
+            ["@swc/core-darwin-x64", "npm:1.2.55"],
+            ["@swc/core-linux-arm-gnueabihf", "npm:1.2.55"],
+            ["@swc/core-linux-arm64-gnu", "npm:1.2.55"],
+            ["@swc/core-linux-x64-gnu", "npm:1.2.55"],
+            ["@swc/core-linux-x64-musl", "npm:1.2.55"],
+            ["@swc/core-win32-ia32-msvc", "npm:1.2.55"],
+            ["@swc/core-win32-x64-msvc", "npm:1.2.55"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@swc/core-android-arm64", [
@@ -5322,6 +5339,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/@swc-core-android-arm64-npm-1.2.53-a8b0c31f43/node_modules/@swc/core-android-arm64/",
           "packageDependencies": [
             ["@swc/core-android-arm64", "npm:1.2.53"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:1.2.54", {
+          "packageLocation": "./.yarn/unplugged/@swc-core-android-arm64-npm-1.2.54-64ce004617/node_modules/@swc/core-android-arm64/",
+          "packageDependencies": [
+            ["@swc/core-android-arm64", "npm:1.2.54"]
           ],
           "linkType": "HARD",
         }]
@@ -5333,6 +5357,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@swc/core-darwin-arm64", "npm:1.2.53"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:1.2.55", {
+          "packageLocation": "./.yarn/unplugged/@swc-core-darwin-arm64-npm-1.2.55-555c390f61/node_modules/@swc/core-darwin-arm64/",
+          "packageDependencies": [
+            ["@swc/core-darwin-arm64", "npm:1.2.55"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@swc/core-darwin-x64", [
@@ -5340,6 +5371,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/@swc-core-darwin-x64-npm-1.2.53-17610f789b/node_modules/@swc/core-darwin-x64/",
           "packageDependencies": [
             ["@swc/core-darwin-x64", "npm:1.2.53"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:1.2.55", {
+          "packageLocation": "./.yarn/unplugged/@swc-core-darwin-x64-npm-1.2.55-32b3d49207/node_modules/@swc/core-darwin-x64/",
+          "packageDependencies": [
+            ["@swc/core-darwin-x64", "npm:1.2.55"]
           ],
           "linkType": "HARD",
         }]
@@ -5351,6 +5389,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@swc/core-linux-arm-gnueabihf", "npm:1.2.53"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:1.2.55", {
+          "packageLocation": "./.yarn/unplugged/@swc-core-linux-arm-gnueabihf-npm-1.2.55-1f2b5f659c/node_modules/@swc/core-linux-arm-gnueabihf/",
+          "packageDependencies": [
+            ["@swc/core-linux-arm-gnueabihf", "npm:1.2.55"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@swc/core-linux-arm64-gnu", [
@@ -5358,6 +5403,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/@swc-core-linux-arm64-gnu-npm-1.2.53-ffd02ec5f7/node_modules/@swc/core-linux-arm64-gnu/",
           "packageDependencies": [
             ["@swc/core-linux-arm64-gnu", "npm:1.2.53"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:1.2.55", {
+          "packageLocation": "./.yarn/unplugged/@swc-core-linux-arm64-gnu-npm-1.2.55-2874753d8e/node_modules/@swc/core-linux-arm64-gnu/",
+          "packageDependencies": [
+            ["@swc/core-linux-arm64-gnu", "npm:1.2.55"]
           ],
           "linkType": "HARD",
         }]
@@ -5369,6 +5421,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@swc/core-linux-x64-gnu", "npm:1.2.53"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:1.2.55", {
+          "packageLocation": "./.yarn/unplugged/@swc-core-linux-x64-gnu-npm-1.2.55-a5832f7ea6/node_modules/@swc/core-linux-x64-gnu/",
+          "packageDependencies": [
+            ["@swc/core-linux-x64-gnu", "npm:1.2.55"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@swc/core-linux-x64-musl", [
@@ -5376,6 +5435,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/@swc-core-linux-x64-musl-npm-1.2.53-219cbda023/node_modules/@swc/core-linux-x64-musl/",
           "packageDependencies": [
             ["@swc/core-linux-x64-musl", "npm:1.2.53"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:1.2.55", {
+          "packageLocation": "./.yarn/unplugged/@swc-core-linux-x64-musl-npm-1.2.55-8a0764bc78/node_modules/@swc/core-linux-x64-musl/",
+          "packageDependencies": [
+            ["@swc/core-linux-x64-musl", "npm:1.2.55"]
           ],
           "linkType": "HARD",
         }]
@@ -5387,6 +5453,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@swc/core-win32-ia32-msvc", "npm:1.2.53"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:1.2.55", {
+          "packageLocation": "./.yarn/unplugged/@swc-core-win32-ia32-msvc-npm-1.2.55-e012ab8af8/node_modules/@swc/core-win32-ia32-msvc/",
+          "packageDependencies": [
+            ["@swc/core-win32-ia32-msvc", "npm:1.2.55"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["@swc/core-win32-x64-msvc", [
@@ -5394,6 +5467,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/unplugged/@swc-core-win32-x64-msvc-npm-1.2.53-58d290cba7/node_modules/@swc/core-win32-x64-msvc/",
           "packageDependencies": [
             ["@swc/core-win32-x64-msvc", "npm:1.2.53"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:1.2.55", {
+          "packageLocation": "./.yarn/unplugged/@swc-core-win32-x64-msvc-npm-1.2.55-e893997ab1/node_modules/@swc/core-win32-x64-msvc/",
+          "packageDependencies": [
+            ["@swc/core-win32-x64-msvc", "npm:1.2.55"]
           ],
           "linkType": "HARD",
         }]
@@ -15329,7 +15409,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@reduxjs/toolkit", "npm:1.5.1"],
             ["@storybook/builder-webpack5", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:6.2.9"],
             ["@storybook/react", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:6.2.9"],
-            ["@swc/core", "npm:1.2.52"],
+            ["@swc/core", "npm:1.2.54"],
             ["@swc/jest", "npm:0.1.2"],
             ["@types/classnames", "npm:2.3.1"],
             ["@types/copy-webpack-plugin", "npm:8.0.0"],
@@ -22337,7 +22417,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/$$virtual/swc-loader-virtual-b9af914505/0/cache/swc-loader-npm-0.1.14-d310e42bc1-59b83d9472.zip/node_modules/swc-loader/",
           "packageDependencies": [
             ["swc-loader", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:0.1.14"],
-            ["@swc/core", "npm:1.2.52"],
+            ["@swc/core", "npm:1.2.54"],
             ["@types/swc__core", null],
             ["@types/webpack", null],
             ["loader-utils", "npm:2.0.0"],
