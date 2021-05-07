@@ -30,8 +30,8 @@
         "postpublish": "pinst --enable"
     },
     "devDependencies": {
-        "@commitlint/cli": "^12.1.1",
-        "@commitlint/config-conventional": "^12.1.1",
+        "@commitlint/cli": "^12.1.2",
+        "@commitlint/config-conventional": "^12.1.2",
         "@storybook/builder-webpack5": "^6.2.8",
         "@storybook/react": "^6.2.8",
         "@swc/core": "^1.2.52",

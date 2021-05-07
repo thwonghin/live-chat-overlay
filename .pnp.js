@@ -37,8 +37,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
-            ["@commitlint/cli", "npm:12.1.1"],
-            ["@commitlint/config-conventional", "npm:12.1.1"],
+            ["@commitlint/cli", "npm:12.1.2"],
+            ["@commitlint/config-conventional", "npm:12.1.2"],
             ["@fortawesome/fontawesome-svg-core", "npm:1.2.35"],
             ["@fortawesome/free-solid-svg-icons", "npm:5.15.3"],
             ["@fortawesome/react-fontawesome", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:0.1.14"],
@@ -3204,16 +3204,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@commitlint/cli", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-cli-npm-12.1.1-46768b55a2-d43562ef87.zip/node_modules/@commitlint/cli/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-cli-npm-12.1.2-f825de6f1f-1191a9f35f.zip/node_modules/@commitlint/cli/",
           "packageDependencies": [
-            ["@commitlint/cli", "npm:12.1.1"],
-            ["@commitlint/format", "npm:12.1.1"],
-            ["@commitlint/lint", "npm:12.1.1"],
-            ["@commitlint/load", "npm:12.1.1"],
-            ["@commitlint/read", "npm:12.1.1"],
-            ["@commitlint/types", "npm:12.1.1"],
-            ["get-stdin", "npm:8.0.0"],
+            ["@commitlint/cli", "npm:12.1.2"],
+            ["@commitlint/format", "npm:12.1.2"],
+            ["@commitlint/lint", "npm:12.1.2"],
+            ["@commitlint/load", "npm:12.1.2"],
+            ["@commitlint/read", "npm:12.1.2"],
+            ["@commitlint/types", "npm:12.1.2"],
             ["lodash", "npm:4.17.20"],
             ["resolve-from", "npm:5.0.0"],
             ["resolve-global", "npm:1.0.0"],
@@ -3223,21 +3222,21 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@commitlint/config-conventional", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-config-conventional-npm-12.1.1-c2fda49e70-3474a7b70a.zip/node_modules/@commitlint/config-conventional/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-config-conventional-npm-12.1.2-e55dfc2bbb-4ea56ae426.zip/node_modules/@commitlint/config-conventional/",
           "packageDependencies": [
-            ["@commitlint/config-conventional", "npm:12.1.1"],
+            ["@commitlint/config-conventional", "npm:12.1.2"],
             ["conventional-changelog-conventionalcommits", "npm:4.5.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["@commitlint/ensure", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-ensure-npm-12.1.1-2d7dfdd3f0-6e0e0cdef6.zip/node_modules/@commitlint/ensure/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-ensure-npm-12.1.2-981a928db7-615849bb7b.zip/node_modules/@commitlint/ensure/",
           "packageDependencies": [
-            ["@commitlint/ensure", "npm:12.1.1"],
-            ["@commitlint/types", "npm:12.1.1"],
+            ["@commitlint/ensure", "npm:12.1.2"],
+            ["@commitlint/types", "npm:12.1.2"],
             ["lodash", "npm:4.17.20"]
           ],
           "linkType": "HARD",
@@ -3253,48 +3252,48 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@commitlint/format", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-format-npm-12.1.1-72ad097232-3b3afaba59.zip/node_modules/@commitlint/format/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-format-npm-12.1.2-3f359ea80d-31069375d8.zip/node_modules/@commitlint/format/",
           "packageDependencies": [
-            ["@commitlint/format", "npm:12.1.1"],
-            ["@commitlint/types", "npm:12.1.1"],
+            ["@commitlint/format", "npm:12.1.2"],
+            ["@commitlint/types", "npm:12.1.2"],
             ["chalk", "npm:4.1.0"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["@commitlint/is-ignored", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-is-ignored-npm-12.1.1-77ba445682-b843e29b14.zip/node_modules/@commitlint/is-ignored/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-is-ignored-npm-12.1.2-e2a641e100-41b5cbd09f.zip/node_modules/@commitlint/is-ignored/",
           "packageDependencies": [
-            ["@commitlint/is-ignored", "npm:12.1.1"],
-            ["@commitlint/types", "npm:12.1.1"],
+            ["@commitlint/is-ignored", "npm:12.1.2"],
+            ["@commitlint/types", "npm:12.1.2"],
             ["semver", "npm:7.3.5"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["@commitlint/lint", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-lint-npm-12.1.1-8b09412316-14e79d1a15.zip/node_modules/@commitlint/lint/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-lint-npm-12.1.2-5ab74148f9-07c7fa23f9.zip/node_modules/@commitlint/lint/",
           "packageDependencies": [
-            ["@commitlint/lint", "npm:12.1.1"],
-            ["@commitlint/is-ignored", "npm:12.1.1"],
-            ["@commitlint/parse", "npm:12.1.1"],
-            ["@commitlint/rules", "npm:12.1.1"],
-            ["@commitlint/types", "npm:12.1.1"]
+            ["@commitlint/lint", "npm:12.1.2"],
+            ["@commitlint/is-ignored", "npm:12.1.2"],
+            ["@commitlint/parse", "npm:12.1.2"],
+            ["@commitlint/rules", "npm:12.1.2"],
+            ["@commitlint/types", "npm:12.1.2"]
           ],
           "linkType": "HARD",
         }]
       ]],
       ["@commitlint/load", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-load-npm-12.1.1-bc23140e2e-0219855239.zip/node_modules/@commitlint/load/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-load-npm-12.1.2-5908edc601-4116372d9f.zip/node_modules/@commitlint/load/",
           "packageDependencies": [
-            ["@commitlint/load", "npm:12.1.1"],
+            ["@commitlint/load", "npm:12.1.2"],
             ["@commitlint/execute-rule", "npm:12.1.1"],
             ["@commitlint/resolve-extends", "npm:12.1.1"],
-            ["@commitlint/types", "npm:12.1.1"],
+            ["@commitlint/types", "npm:12.1.2"],
             ["chalk", "npm:4.1.0"],
             ["cosmiconfig", "npm:7.0.0"],
             ["lodash", "npm:4.17.20"],
@@ -3313,11 +3312,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@commitlint/parse", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-parse-npm-12.1.1-c149b0a43d-2f20e684da.zip/node_modules/@commitlint/parse/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-parse-npm-12.1.2-ade05d99bb-d425f7fd1c.zip/node_modules/@commitlint/parse/",
           "packageDependencies": [
-            ["@commitlint/parse", "npm:12.1.1"],
-            ["@commitlint/types", "npm:12.1.1"],
+            ["@commitlint/parse", "npm:12.1.2"],
+            ["@commitlint/types", "npm:12.1.2"],
             ["conventional-changelog-angular", "npm:5.0.12"],
             ["conventional-commits-parser", "npm:3.2.0"]
           ],
@@ -3325,12 +3324,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@commitlint/read", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-read-npm-12.1.1-b6309a7a8e-adf7d3fcca.zip/node_modules/@commitlint/read/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-read-npm-12.1.2-d6f82187e4-96819a67ab.zip/node_modules/@commitlint/read/",
           "packageDependencies": [
-            ["@commitlint/read", "npm:12.1.1"],
+            ["@commitlint/read", "npm:12.1.2"],
             ["@commitlint/top-level", "npm:12.1.1"],
-            ["@commitlint/types", "npm:12.1.1"],
+            ["@commitlint/types", "npm:12.1.2"],
             ["fs-extra", "npm:9.1.0"],
             ["git-raw-commits", "npm:2.0.10"]
           ],
@@ -3351,14 +3350,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@commitlint/rules", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-rules-npm-12.1.1-2d5f0a7778-90ae6a58e8.zip/node_modules/@commitlint/rules/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-rules-npm-12.1.2-0abe0e181f-b52ff7b189.zip/node_modules/@commitlint/rules/",
           "packageDependencies": [
-            ["@commitlint/rules", "npm:12.1.1"],
-            ["@commitlint/ensure", "npm:12.1.1"],
+            ["@commitlint/rules", "npm:12.1.2"],
+            ["@commitlint/ensure", "npm:12.1.2"],
             ["@commitlint/message", "npm:12.1.1"],
             ["@commitlint/to-lines", "npm:12.1.1"],
-            ["@commitlint/types", "npm:12.1.1"]
+            ["@commitlint/types", "npm:12.1.2"]
           ],
           "linkType": "HARD",
         }]
@@ -3383,10 +3382,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@commitlint/types", [
-        ["npm:12.1.1", {
-          "packageLocation": "./.yarn/cache/@commitlint-types-npm-12.1.1-ac29e34c0d-c9a93f6eb6.zip/node_modules/@commitlint/types/",
+        ["npm:12.1.2", {
+          "packageLocation": "./.yarn/cache/@commitlint-types-npm-12.1.2-87443d4d2a-20ddac5171.zip/node_modules/@commitlint/types/",
           "packageDependencies": [
-            ["@commitlint/types", "npm:12.1.1"],
+            ["@commitlint/types", "npm:12.1.2"],
             ["chalk", "npm:4.1.0"]
           ],
           "linkType": "HARD",
@@ -15207,8 +15206,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["live-chat-overlay", "workspace:."],
-            ["@commitlint/cli", "npm:12.1.1"],
-            ["@commitlint/config-conventional", "npm:12.1.1"],
+            ["@commitlint/cli", "npm:12.1.2"],
+            ["@commitlint/config-conventional", "npm:12.1.2"],
             ["@fortawesome/fontawesome-svg-core", "npm:1.2.35"],
             ["@fortawesome/free-solid-svg-icons", "npm:5.15.3"],
             ["@fortawesome/react-fontawesome", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:0.1.14"],
