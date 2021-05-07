@@ -117,7 +117,7 @@ const config = (
                               configFile: tsconfigPath,
                               mode: 'write-references',
                           },
-                      }),
+                      }) as any,
                   ]),
             (new CopyWebpackPlugin({
                 patterns: [
