@@ -3442,10 +3442,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/classnames@npm:^2.2.11":
-  version: 2.2.11
-  resolution: "@types/classnames@npm:2.2.11"
-  checksum: 5bbd4fd0f803a46424152ecc89cfb88464af4d655634de8a98ec54977b0b6d9da107e799c24a2b66f0133438e84bac51b2275134cf028edea749fb018f731e89
+"@types/classnames@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@types/classnames@npm:2.3.0"
+  dependencies:
+    classnames: "*"
+  checksum: e0e96a5f7c7198edb3be39404e1a88873bea191eb5e77e3c23b51777a3006dd497565fa5939c7980ad6a6e0330962fe5f3ca4b5f56c34b4dcc13853932609b7b
   languageName: node
   linkType: hard
 
@@ -3465,12 +3467,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/copy-webpack-plugin@npm:^6.4.2":
-  version: 6.4.2
-  resolution: "@types/copy-webpack-plugin@npm:6.4.2"
+"@types/copy-webpack-plugin@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@types/copy-webpack-plugin@npm:8.0.0"
   dependencies:
-    "@types/webpack": ^4
-  checksum: 8c5d4f58cf127f304a3a7a35908813bcc09c20a275f217bbc62dc4cc70ea2ca7508409ea7f4e58c79493b709400a41d735c7ec35c23f265f0a1c2f144c506e98
+    "@types/node": "*"
+    tapable: ^2.0.0
+    webpack: ^5.1.0
+  checksum: 6767e3e8136f60e37ef0dbebc0400c3e6b2aa66e4d0b39fca1f1c19ce8b91df602c046c6aaee96446d84137369b9baeffc8f5bb10d62ce5c5b32fbdfd8d49447
   languageName: node
   linkType: hard
 
@@ -3610,13 +3614,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^26.0.22":
-  version: 26.0.22
-  resolution: "@types/jest@npm:26.0.22"
+"@types/jest@npm:^26.0.23":
+  version: 26.0.23
+  resolution: "@types/jest@npm:26.0.23"
   dependencies:
     jest-diff: ^26.0.0
     pretty-format: ^26.0.0
-  checksum: 4c98ed058522f6cc74bcb47b8b7b104b77b2d4e42e087171f3d2d3ae5338c21f43ec26f2a186bc229c1bd72c3f776ad07faba837f0ec27f22cf94e154516c0b3
+  checksum: a015676b78bdc51be6f6315acef10d9106ea8064e3e49143bca3c75b834b61285b45c5f5ccfd049a80107f1e2869a9183cdb5be85816c073ea8dd05852fafdc6
   languageName: node
   linkType: hard
 
@@ -3726,10 +3730,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14.14.41":
-  version: 14.14.41
-  resolution: "@types/node@npm:14.14.41"
-  checksum: 37dfb639644c8ee9b9846106834983f590d494b855e74645a4f169ea24199f7559366d25f6e72e83ba940b59eb6370e002bd53963d098d6d9fdf935a37011417
+"@types/node@npm:^14.14.44":
+  version: 14.14.44
+  resolution: "@types/node@npm:14.14.44"
+  checksum: 5c4db716325fc8a25b5b76b800acf0ff00c8fa1e7cfcb764fc79d79594939488cb9d2a756e188eb8e8a36da51e8e2be1ffe859be901b338779cb0aa12ad73b3a
   languageName: node
   linkType: hard
 
@@ -3837,14 +3841,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^17.0.3":
-  version: 17.0.3
-  resolution: "@types/react@npm:17.0.3"
+"@types/react@npm:*, @types/react@npm:^17.0.5":
+  version: 17.0.5
+  resolution: "@types/react@npm:17.0.5"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: 5bcaabadc90a23ad9008540eae98a5819b638c4cf1b968adc67be47d6a8dc8cb100061d877dae97618fb275e405dc484b37154080c7ac0ea7df5efcdd8f98c24
+  checksum: f9793e8113f14122d6ed20643b4fe27d30e10d7c80571a1d238c13f8171864f2a7b337194bf41310724498586ed4560fffd081a2d21e488afbb1aca33534189b
   languageName: node
   linkType: hard
 
@@ -3882,13 +3886,6 @@ __metadata:
   version: 1.0.6
   resolution: "@types/tapable@npm:1.0.6"
   checksum: 01709a2f8dbea665a39c008ba6995c76210fabb52434815e7632c7fff22ecad1dd49a1d75b8f5b2e9b365c6d7a6407127bed834587df4777b800110c2a74fc36
-  languageName: node
-  linkType: hard
-
-"@types/tapable@npm:^1":
-  version: 1.0.7
-  resolution: "@types/tapable@npm:1.0.7"
-  checksum: af30bb7429d590c7df1f3f5b8ef55fcf2c5498cd2d972c40b0ee543a2e7c3df988b5ac29e231b22b09b712ea1df3dbf3eb145dcbbd43544534cbfb0f1cebdfac
   languageName: node
   linkType: hard
 
@@ -3932,20 +3929,6 @@ __metadata:
     "@types/source-list-map": "*"
     source-map: ^0.7.3
   checksum: 26aba8ae682529be737eff726dcf08019460b180e9d22e80925e65240c908312096067b5547ac3dcb6d7b383a4bf0473eb68d0fd4ff483b17f3147fefce149af
-  languageName: node
-  linkType: hard
-
-"@types/webpack@npm:^4":
-  version: 4.41.27
-  resolution: "@types/webpack@npm:4.41.27"
-  dependencies:
-    "@types/anymatch": "*"
-    "@types/node": "*"
-    "@types/tapable": ^1
-    "@types/uglify-js": "*"
-    "@types/webpack-sources": "*"
-    source-map: ^0.6.0
-  checksum: 5e10ad206accc6a9ec3dbea1b79625d441dc2d93cad61daa8ba77eea0a7b659f7ca605078ec06189e9b7eb48fa244b6cfc617771e8fc579cdd9b26546e8c3120
   languageName: node
   linkType: hard
 
@@ -6105,17 +6088,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:*, classnames@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "classnames@npm:2.3.1"
+  checksum: 57d536edede609f81425d24b062d8d720a466565faf1e38d32c881e883920baa71519ac70c7b565e9cd39201fb1c1ff9bdf8aabf8e26544bac481e7924867c83
+  languageName: node
+  linkType: hard
+
 "classnames@npm:^2.2.5":
   version: 2.2.6
   resolution: "classnames@npm:2.2.6"
   checksum: 490eaeca5931846737ffd33e472a701d268d5b8bc5717dd4cf108a127b06e86e05350e06799abbbe763a0e4c945b4217f6700b7ae00ddc703505682c370e5cf2
-  languageName: node
-  linkType: hard
-
-"classnames@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "classnames@npm:2.3.1"
-  checksum: 57d536edede609f81425d24b062d8d720a466565faf1e38d32c881e883920baa71519ac70c7b565e9cd39201fb1c1ff9bdf8aabf8e26544bac481e7924867c83
   languageName: node
   linkType: hard
 
@@ -11732,15 +11715,15 @@ fsevents@^1.2.7:
     "@storybook/react": ^6.2.8
     "@swc/core": ^1.2.52
     "@swc/jest": ^0.1.2
-    "@types/classnames": ^2.2.11
-    "@types/copy-webpack-plugin": ^6.4.2
+    "@types/classnames": ^2.3.0
+    "@types/copy-webpack-plugin": ^8.0.0
     "@types/cssnano": ^4.0.0
-    "@types/jest": ^26.0.22
+    "@types/jest": ^26.0.23
     "@types/json-schema": ^7.0.7
     "@types/lodash-es": ^4.17.4
     "@types/mini-css-extract-plugin": ^1.4.3
-    "@types/node": ^14.14.41
-    "@types/react": ^17.0.3
+    "@types/node": ^14.14.44
+    "@types/react": ^17.0.5
     "@types/react-dom": ^17.0.3
     "@types/react-redux": ^7.1.16
     "@types/stylelint": ^9.10.1
@@ -11795,7 +11778,7 @@ fsevents@^1.2.7:
     stylelint-scss: ^3.19.0
     swc-loader: ^0.1.14
     tsconfig-paths-webpack-plugin: ^3.5.1
-    type-fest: ^1.0.2
+    type-fest: ^1.1.0
     typed-css-modules-webpack-plugin: "patch:typed-css-modules-webpack-plugin@^0.2.0#./patches/typed-css-modules-webpack-plugin+0.2.0.patch"
     typescript: ^4.2.4
     use-debounce: ^6.0.1
@@ -17812,10 +17795,10 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "type-fest@npm:1.0.2"
-  checksum: 5e9696dd0e6903ad5fa8413a83ddab375ca9a3529d14ca156e1ef47d54dfc5606da038485f849fcb9153fa35a52b1134e5235232cbf5f2c6837c35cc5ae62448
+"type-fest@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "type-fest@npm:1.1.0"
+  checksum: 77367093bc7fb4786bbd199b1362aa277eb66fbe4ba8834852a31c8c20fb151b69a16dc9ed7837f883ad5c1dd811954774d286b5f7379245728ef35d8592dba0
   languageName: node
   linkType: hard
 
@@ -18646,7 +18629,7 @@ typescript@^4.2.4:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.36.2":
+"webpack@npm:^5.1.0, webpack@npm:^5.36.2":
   version: 5.36.2
   resolution: "webpack@npm:5.36.2"
   dependencies:
