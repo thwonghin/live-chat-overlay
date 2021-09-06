@@ -98,7 +98,7 @@
         "webpack-cli": "^4.8.0"
     },
     "browserslist": [
-        "Chrome >= 74"
+        "Chrome >= 88"
     ],
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.36",
@@ -122,6 +122,9 @@
         "webextension-polyfill-ts": "^0.26.0"
     },
     "resolutions": {
-        "stylelint-config-rational-order/stylelint": "^13.12.0"
+        "stylelint-config-rational-order/stylelint": "^13.12.0",
+        "trim": "^1.0.1",
+        "browserslist": "^4.17.0",
+        "glob-parent": "^5.1.2"
     }
 }
