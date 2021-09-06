@@ -7,7 +7,7 @@ import { fetchInterceptor, settingsStorage } from '@/services';
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
 
 function injectStyles(): () => void {
-    const path = browser.extension.getURL('content-script.css');
+    const path = browser.runtime.getURL('content-script.css');
 
     const link = window.parent.document.createElement('link');
     link.rel = 'stylesheet';
