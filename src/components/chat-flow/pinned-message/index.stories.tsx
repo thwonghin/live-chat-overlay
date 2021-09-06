@@ -63,8 +63,7 @@ export const PinnedVeryLongChatMessage: React.FC = () => (
                 ...pinnedMessage,
                 messageParts: [
                     {
-                        text:
-                            'This is a very long message This is a very long message This is a very long message This is a very long message This is a very long message',
+                        text: 'This is a very long message This is a very long message This is a very long message This is a very long message This is a very long message',
                     },
                 ],
             }}
@@ -97,8 +96,7 @@ export const PinnedVeryLongChatMessageWithImage: React.FC = () => (
                         shortcuts: [':text-emoji:'],
                     },
                     {
-                        text:
-                            'This is a very long message This is a very long message This is a very long message This is a very long message',
+                        text: 'This is a very long message This is a very long message This is a very long message This is a very long message',
                     },
                 ],
             }}

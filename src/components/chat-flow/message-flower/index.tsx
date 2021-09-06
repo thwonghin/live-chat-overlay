@@ -21,9 +21,10 @@ const MessageFlower: React.FC<Props> = ({
     const ref = useRef<HTMLDivElement>(null);
     const rect = useRect(ref);
     const { settings } = useSettings();
-    const timeout = useMemo(() => settings.flowTimeInSec * 1000, [
-        settings.flowTimeInSec,
-    ]);
+    const timeout = useMemo(
+        () => settings.flowTimeInSec * 1000,
+        [settings.flowTimeInSec],
+    );
 
     const style = useMemo<React.CSSProperties>(
         () => ({
