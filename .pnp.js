@@ -63,7 +63,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/tapable", "npm:2.2.2"],
             ["@typescript-eslint/eslint-plugin", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:4.22.1"],
             ["@typescript-eslint/parser", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:4.22.1"],
-            ["browserslist", "npm:4.16.6"],
+            ["browserslist", "npm:4.17.0"],
             ["classnames", "npm:2.3.1"],
             ["copy-webpack-plugin", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:8.1.1"],
             ["core-js", "npm:3.12.0"],
@@ -8311,15 +8311,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:4.16.6", {
-          "packageLocation": "./.yarn/cache/browserslist-npm-4.16.6-a20cef1ca7-ebb0ab279c.zip/node_modules/browserslist/",
+        ["npm:4.17.0", {
+          "packageLocation": "./.yarn/cache/browserslist-npm-4.17.0-98801cc7f5-e7c4b78520.zip/node_modules/browserslist/",
           "packageDependencies": [
-            ["browserslist", "npm:4.16.6"],
-            ["caniuse-lite", "npm:1.0.30001223"],
-            ["colorette", "npm:1.2.2"],
-            ["electron-to-chromium", "npm:1.3.727"],
+            ["browserslist", "npm:4.17.0"],
+            ["caniuse-lite", "npm:1.0.30001255"],
+            ["colorette", "npm:1.3.0"],
+            ["electron-to-chromium", "npm:1.3.830"],
             ["escalade", "npm:3.1.1"],
-            ["node-releases", "npm:1.1.71"]
+            ["node-releases", "npm:1.1.75"]
           ],
           "linkType": "HARD",
         }]
@@ -8551,10 +8551,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:1.0.30001223", {
-          "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001223-43c403618c-0a19e4c368.zip/node_modules/caniuse-lite/",
+        ["npm:1.0.30001255", {
+          "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001255-1896e51a22-8ddc64e193.zip/node_modules/caniuse-lite/",
           "packageDependencies": [
-            ["caniuse-lite", "npm:1.0.30001223"]
+            ["caniuse-lite", "npm:1.0.30001255"]
           ],
           "linkType": "HARD",
         }]
@@ -9005,6 +9005,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/colorette-npm-1.2.2-da75bd0b32-e240f0c94b.zip/node_modules/colorette/",
           "packageDependencies": [
             ["colorette", "npm:1.2.2"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:1.3.0", {
+          "packageLocation": "./.yarn/cache/colorette-npm-1.3.0-850a0c65bc-d3bcd778d0.zip/node_modules/colorette/",
+          "packageDependencies": [
+            ["colorette", "npm:1.3.0"]
           ],
           "linkType": "HARD",
         }]
@@ -10712,10 +10719,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:1.3.727", {
-          "packageLocation": "./.yarn/cache/electron-to-chromium-npm-1.3.727-c1cfff7453-a090f19d38.zip/node_modules/electron-to-chromium/",
+        ["npm:1.3.830", {
+          "packageLocation": "./.yarn/cache/electron-to-chromium-npm-1.3.830-1af06499e1-c89e19c154.zip/node_modules/electron-to-chromium/",
           "packageDependencies": [
-            ["electron-to-chromium", "npm:1.3.727"]
+            ["electron-to-chromium", "npm:1.3.830"]
           ],
           "linkType": "HARD",
         }]
@@ -15426,7 +15433,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/tapable", "npm:2.2.2"],
             ["@typescript-eslint/eslint-plugin", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:4.22.1"],
             ["@typescript-eslint/parser", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:4.22.1"],
-            ["browserslist", "npm:4.16.6"],
+            ["browserslist", "npm:4.17.0"],
             ["classnames", "npm:2.3.1"],
             ["copy-webpack-plugin", "virtual:c37f31f1c6bdec1356b48400e9b225f698f5ca196a6649d18ab7b5c34937075088d384ff2b18d385bc1c6e273376637ef381a19c488295963de1a286f251ecc8#npm:8.1.1"],
             ["core-js", "npm:3.12.0"],
@@ -16706,6 +16713,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/node-releases-npm-1.1.71-612c3802fd-9e283003f1.zip/node_modules/node-releases/",
           "packageDependencies": [
             ["node-releases", "npm:1.1.71"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:1.1.75", {
+          "packageLocation": "./.yarn/cache/node-releases-npm-1.1.75-3d5ac48148-0ea9d84f2c.zip/node_modules/node-releases/",
+          "packageDependencies": [
+            ["node-releases", "npm:1.1.75"]
           ],
           "linkType": "HARD",
         }]

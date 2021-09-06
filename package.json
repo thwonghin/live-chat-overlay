@@ -51,7 +51,7 @@
         "@types/tapable": "^2.2.2",
         "@typescript-eslint/eslint-plugin": "^4.22.1",
         "@typescript-eslint/parser": "^4.22.1",
-        "browserslist": "^4.16.6",
+        "browserslist": "^4.17.0",
         "copy-webpack-plugin": "^8.1.1",
         "css-loader": "^5.2.4",
         "cssnano": "^5.0.2",
