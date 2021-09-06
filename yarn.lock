@@ -6496,7 +6496,7 @@ fork-ts-checker-webpack-plugin@4.1.6, fork-ts-checker-webpack-plugin@^4.1.6:
     tapable "^1.0.0"
     worker-rpc "^0.1.0"
 
-fork-ts-checker-webpack-plugin@^6.0.4, "fork-ts-checker-webpack-plugin@patch:fork-ts-checker-webpack-plugin@^6.2.6#./patches/fork-ts-checker-webpack-plugin+6.2.6.patch":
+fork-ts-checker-webpack-plugin@^6.0.4, fork-ts-checker-webpack-plugin@^6.3.3:
   version "6.3.3"
   resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-6.3.3.tgz#73a9d8e1dc5821fa19a3daedc8be7568b095c8ab"
   integrity sha512-S3uMSg8IsIvs0H6VAfojtbf6RcnEXxEpDMT2Q41M2l0m20JO8eA1t4cCJybvrasC8SvvPEtK4B8ztxxfLljhNg==
@@ -12969,7 +12969,7 @@ type-is@~1.6.17, type-is@~1.6.18:
     media-typer "0.3.0"
     mime-types "~2.1.24"
 
-"typed-css-modules-webpack-plugin@patch:typed-css-modules-webpack-plugin@^0.2.0#./patches/typed-css-modules-webpack-plugin+0.2.0.patch":
+typed-css-modules-webpack-plugin@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/typed-css-modules-webpack-plugin/-/typed-css-modules-webpack-plugin-0.2.0.tgz#ac1966fd9add2f9adee86bfda8093e98f03b2c7d"
   integrity sha512-aBd8UZrAOUVJjHbinZjL+pSExMULwdGIcAGQL/t75ip2kf3NqSKreTWQHpQZJ250bN8UPs10ryonMf315S5eQg==
