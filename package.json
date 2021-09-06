@@ -27,7 +27,8 @@
         "storybook": "tsc -p webpack && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && start-storybook -c .storybook/dist/",
         "storybook:build": "tsc -p webpack && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && build-storybook -c .storybook/dist/ --quiet",
         "prepublishOnly": "pinst --disable",
-        "postpublish": "pinst --enable"
+        "postpublish": "pinst --enable",
+        "postinstall": "patch-package"
     },
     "devDependencies": {
         "@commitlint/cli": "^12.1.1",
@@ -109,6 +110,8 @@
         "formik": "^2.2.6",
         "jss": "^10.6.0",
         "lodash-es": "^4.17.21",
+        "patch-package": "^6.4.7",
+        "postinstall-postinstall": "^2.1.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-redux": "^7.2.4",

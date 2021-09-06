@@ -1,7 +1,7 @@
-diff --git a/dist/index.d.ts b/dist/index.d.ts
-index 9c6f75575ff2c029ff2195615f83985bb6c9973e..3c9828891c387ddf4b4c31a39e0b90ffecab2429 100644
---- a/dist/index.d.ts
-+++ b/dist/index.d.ts
+diff --git a/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts b/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts
+index 9c6f755..3c98288 100644
+--- a/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts
++++ b/node_modules/typed-css-modules-webpack-plugin/dist/index.d.ts
 @@ -1,15 +1,14 @@
  import { Plugin as PostCssPlugin } from 'postcss';
 -import { Tapable } from 'tapable';

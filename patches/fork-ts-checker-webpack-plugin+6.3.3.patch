@@ -1,7 +1,7 @@
-diff --git a/lib/ForkTsCheckerWebpackPlugin.d.ts b/lib/ForkTsCheckerWebpackPlugin.d.ts
-index 1db79f389ddb403151b77ece90854fcc84bc0a01..d7d0ab71ff871e0c2deecd78606e815cae61106a 100644
---- a/lib/ForkTsCheckerWebpackPlugin.d.ts
-+++ b/lib/ForkTsCheckerWebpackPlugin.d.ts
+diff --git a/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts b/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts
+index 85c9606..b8e20fc 100644
+--- a/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts
++++ b/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts
 @@ -1,7 +1,7 @@
  import webpack from 'webpack';
  import { ForkTsCheckerWebpackPluginOptions } from './ForkTsCheckerWebpackPluginOptions';
@@ -11,7 +11,7 @@ index 1db79f389ddb403151b77ece90854fcc84bc0a01..d7d0ab71ff871e0c2deecd78606e815c
      /**
       * Current version of the plugin
       */
-@@ -13,11 +13,11 @@ declare class ForkTsCheckerWebpackPlugin implements webpack.Plugin {
+@@ -18,11 +18,11 @@ declare class ForkTsCheckerWebpackPlugin implements webpack.Plugin {
      private readonly options;
      constructor(options?: ForkTsCheckerWebpackPluginOptions);
      static getCompilerHooks(compiler: webpack.Compiler): {
