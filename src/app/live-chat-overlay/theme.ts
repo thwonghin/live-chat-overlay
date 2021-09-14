@@ -1,6 +1,6 @@
-import { createMuiTheme } from '@material-ui/core';
+import { createTheme } from '@material-ui/core';
 
-export const theme = createMuiTheme({
+export const theme = createTheme({
     typography: {
         fontFamily: '"YouTube Noto", Roboto, Arial, Helvetica, sans-serif',
     },

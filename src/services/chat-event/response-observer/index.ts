@@ -162,7 +162,8 @@ export class ResponseObserver {
     }
 
     private readonly onChatMessage = async (event: Event): Promise<void> => {
-        const customEvent = event as CustomEvent<fetchInterceptor.CustomEventDetail>;
+        const customEvent =
+            event as CustomEvent<fetchInterceptor.CustomEventDetail>;
 
         const isReplay = customEvent.detail.url.startsWith(
             youtube.GET_LIVE_CHAT_REPLAY_URL,
@@ -197,17 +198,15 @@ export class ResponseObserver {
                           .continuationContents,
                   });
 
-            const {
-                result: chatItemsWithWidth,
-                runtime: getEleRuntime,
-            } = await benchmarkAsync(
-                async () =>
-                    assignChatItemRenderedWidth({
-                        chatItems,
-                        settings: settingsStorage.storageInstance.settings,
-                    }),
-                this.isDebugging,
-            );
+            const { result: chatItemsWithWidth, runtime: getEleRuntime } =
+                await benchmarkAsync(
+                    async () =>
+                        assignChatItemRenderedWidth({
+                            chatItems,
+                            settings: settingsStorage.storageInstance.settings,
+                        }),
+                    this.isDebugging,
+                );
 
             this.chatItemProcessQueue.push(...chatItemsWithWidth);
 

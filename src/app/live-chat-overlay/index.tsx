@@ -57,9 +57,8 @@ export function injectLiveChatOverlay(
     playerControlContainer.style.alignItems = 'center';
     rightControlEle.prepend(playerControlContainer);
 
-    const jssInsertionPointContainer = window.parent.document.createElement(
-        'div',
-    );
+    const jssInsertionPointContainer =
+        window.parent.document.createElement('div');
     const jssInsertionPoint = window.parent.document.createElement('div');
     jssInsertionPointContainer.append(jssInsertionPoint);
     window.parent.document.head.append(jssInsertionPointContainer);

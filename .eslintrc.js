@@ -3,8 +3,8 @@ module.exports = {
         'xo',
         'xo/browser',
         'xo-typescript',
-        'xo-react',
-        "plugin:prettier/recommended"
+        'xo-react/space',
+        'plugin:prettier/recommended'
     ],
     parser: "@typescript-eslint/parser",
     parserOptions: {

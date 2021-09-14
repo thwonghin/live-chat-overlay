@@ -165,8 +165,7 @@ const sampleActions: Array<AddChatItemAction | AddBannerToLiveChatCommand> = [
                                                     height: 24,
                                                 },
                                                 {
-                                                    url:
-                                                        'https://sample-image-larger',
+                                                    url: 'https://sample-image-larger',
                                                     width: 48,
                                                     height: 48,
                                                 },
@@ -188,14 +187,12 @@ const sampleActions: Array<AddChatItemAction | AddBannerToLiveChatCommand> = [
                         authorPhoto: {
                             thumbnails: [
                                 {
-                                    url:
-                                        'https://sample-author-avatar/small.jpg',
+                                    url: 'https://sample-author-avatar/small.jpg',
                                     width: 32,
                                     height: 32,
                                 },
                                 {
-                                    url:
-                                        'https://sample-author-avatar/large.jpg',
+                                    url: 'https://sample-author-avatar/large.jpg',
                                     width: 64,
                                     height: 64,
                                 },

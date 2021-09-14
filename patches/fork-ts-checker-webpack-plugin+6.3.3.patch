@@ -1,0 +1,30 @@
+diff --git a/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts b/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts
+index 85c9606..b8e20fc 100644
+--- a/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts
++++ b/node_modules/fork-ts-checker-webpack-plugin/lib/ForkTsCheckerWebpackPlugin.d.ts
+@@ -1,7 +1,7 @@
+ import webpack from 'webpack';
+ import { ForkTsCheckerWebpackPluginOptions } from './ForkTsCheckerWebpackPluginOptions';
+ import { Pool } from './utils/async/pool';
+-declare class ForkTsCheckerWebpackPlugin implements webpack.Plugin {
++declare class ForkTsCheckerWebpackPlugin implements webpack.WebpackPluginInstance {
+     /**
+      * Current version of the plugin
+      */
+@@ -18,11 +18,11 @@ declare class ForkTsCheckerWebpackPlugin implements webpack.Plugin {
+     private readonly options;
+     constructor(options?: ForkTsCheckerWebpackPluginOptions);
+     static getCompilerHooks(compiler: webpack.Compiler): {
+-        start: import("tapable").AsyncSeriesWaterfallHook<import("./reporter/FilesChange").FilesChange, webpack.compilation.Compilation, any>;
+-        waiting: import("tapable").SyncHook<webpack.compilation.Compilation, any, any>;
+-        canceled: import("tapable").SyncHook<webpack.compilation.Compilation, any, any>;
+-        error: import("tapable").SyncHook<Error, webpack.compilation.Compilation, any>;
+-        issues: import("tapable").SyncWaterfallHook<import("./issue/Issue").Issue[], webpack.compilation.Compilation | undefined, void>;
++        start: import("tapable").AsyncSeriesWaterfallHook<import("./reporter/FilesChange").FilesChange, webpack.Compilation>;
++        waiting: import("tapable").SyncHook<webpack.Compilation, any, any>;
++        canceled: import("tapable").SyncHook<webpack.Compilation, any, any>;
++        error: import("tapable").SyncHook<Error, webpack.Compilation, any>;
++        issues: import("tapable").SyncWaterfallHook<import("./issue/Issue").Issue[], webpack.Compilation | undefined>;
+     };
+     apply(compiler: webpack.Compiler): void;
+ }
