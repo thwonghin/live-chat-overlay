@@ -97,7 +97,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/helper-annotate-as-pure@npm:^7.14.5, @babel/helper-annotate-as-pure@npm:^7.15.4":
+"@babel/helper-annotate-as-pure@npm:^7.0.0, @babel/helper-annotate-as-pure@npm:^7.14.5, @babel/helper-annotate-as-pure@npm:^7.15.4":
   version: 7.15.4
   resolution: "@babel/helper-annotate-as-pure@npm:7.15.4"
   dependencies:
@@ -396,7 +396,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/parser@npm:^7.7.2":
+"@babel/parser@npm:^7.7.2, @babel/parser@npm:^7.8.3":
   version: 7.15.6
   resolution: "@babel/parser@npm:7.15.6"
   bin:
@@ -1511,7 +1511,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/traverse@npm:^7.1.0, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.12.11, @babel/traverse@npm:^7.12.9, @babel/traverse@npm:^7.13.0, @babel/traverse@npm:^7.15.4, @babel/traverse@npm:^7.7.2":
+"@babel/traverse@npm:^7.1.0, @babel/traverse@npm:^7.1.6, @babel/traverse@npm:^7.12.11, @babel/traverse@npm:^7.12.9, @babel/traverse@npm:^7.13.0, @babel/traverse@npm:^7.15.4, @babel/traverse@npm:^7.4.5, @babel/traverse@npm:^7.7.2, @babel/traverse@npm:^7.8.3":
   version: 7.15.4
   resolution: "@babel/traverse@npm:7.15.4"
   dependencies:
@@ -1787,7 +1787,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/is-prop-valid@npm:0.8.8, @emotion/is-prop-valid@npm:^0.8.6":
+"@emotion/is-prop-valid@npm:0.8.8, @emotion/is-prop-valid@npm:^0.8.6, @emotion/is-prop-valid@npm:^0.8.8":
   version: 0.8.8
   resolution: "@emotion/is-prop-valid@npm:0.8.8"
   dependencies:
@@ -1851,14 +1851,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/stylis@npm:0.8.5":
+"@emotion/stylis@npm:0.8.5, @emotion/stylis@npm:^0.8.4":
   version: 0.8.5
   resolution: "@emotion/stylis@npm:0.8.5"
   checksum: 67ff5958449b2374b329fb96e83cb9025775ffe1e79153b499537c6c8b2eb64b77f32d7b5d004d646973662356ceb646afd9269001b97c54439fceea3203ce65
   languageName: node
   linkType: hard
 
-"@emotion/unitless@npm:0.7.5":
+"@emotion/unitless@npm:0.7.5, @emotion/unitless@npm:^0.7.4":
   version: 0.7.5
   resolution: "@emotion/unitless@npm:0.7.5"
   checksum: f976e5345b53fae9414a7b2e7a949aa6b52f8bdbcc84458b1ddc0729e77ba1d1dfdff9960e0da60183877873d3a631fa24d9695dd714ed94bcd3ba5196586a6b
@@ -3634,7 +3634,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/hoist-non-react-statics@npm:^3.3.0":
+"@types/hoist-non-react-statics@npm:*, @types/hoist-non-react-statics@npm:^3.3.0":
   version: 3.3.1
   resolution: "@types/hoist-non-react-statics@npm:3.3.1"
   dependencies:
@@ -3946,6 +3946,17 @@ __metadata:
   version: 2.0.1
   resolution: "@types/stack-utils@npm:2.0.1"
   checksum: 205fdbe3326b7046d7eaf5e494d8084f2659086a266f3f9cf00bccc549c8e36e407f88168ad4383c8b07099957ad669f75f2532ed4bc70be2b037330f7bae019
+  languageName: node
+  linkType: hard
+
+"@types/styled-components@npm:^5.1.14":
+  version: 5.1.14
+  resolution: "@types/styled-components@npm:5.1.14"
+  dependencies:
+    "@types/hoist-non-react-statics": "*"
+    "@types/react": "*"
+    csstype: ^3.0.2
+  checksum: 314cc98cfdc21a608973cf5c690d335c0acaa1a9b9cf1e5714a9b073967bfbc0a7def7e9fef81b921d4017b19e39c068e189ee79ce7553f24bc714c4dd5bd430
   languageName: node
   linkType: hard
 
@@ -5382,6 +5393,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-plugin-styled-components@npm:>= 1.12.0":
+  version: 1.13.2
+  resolution: "babel-plugin-styled-components@npm:1.13.2"
+  dependencies:
+    "@babel/helper-annotate-as-pure": ^7.0.0
+    "@babel/helper-module-imports": ^7.0.0
+    babel-plugin-syntax-jsx: ^6.18.0
+    lodash: ^4.17.11
+  peerDependencies:
+    styled-components: ">= 2"
+  checksum: c37e68b574dc69b0b140c25cd766b664cb369c7ceb8a3b2df9a78788ebc1aa609d181995b565570ee168e2a59e499c158b9d7c00f498d2e9323bfe00bfa1da86
+  languageName: node
+  linkType: hard
+
 "babel-plugin-syntax-jsx@npm:^6.18.0":
   version: 6.18.0
   resolution: "babel-plugin-syntax-jsx@npm:6.18.0"
@@ -5928,6 +5953,13 @@ __metadata:
   version: 6.2.0
   resolution: "camelcase@npm:6.2.0"
   checksum: 8335cfd0ecc472eae685896a42afd8c9dacd193a91f569120b931c87deb053a1ba82102031b9b48a4dbc1d18066caeacf2e4ace8c3c7f0d02936d348dc0b5a87
+  languageName: node
+  linkType: hard
+
+"camelize@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "camelize@npm:1.0.0"
+  checksum: 769f8d10071f57b974d9a51dc02f589dd7fb07ea6a7ecde1a57b52ae68657ba61fe85c60d50661b76c7dbb76b6474fbfd3356aee33cf5f025cd7fd6fb2811b73
   languageName: node
   linkType: hard
 
@@ -6793,6 +6825,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"css-color-keywords@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "css-color-keywords@npm:1.0.0"
+  checksum: 8f125e3ad477bd03c77b533044bd9e8a6f7c0da52d49bbc0bbe38327b3829d6ba04d368ca49dd9ff3b667d2fc8f1698d891c198bbf8feade1a5501bf5a296408
+  languageName: node
+  linkType: hard
+
 "css-color-names@npm:^1.0.1":
   version: 1.0.1
   resolution: "css-color-names@npm:1.0.1"
@@ -6929,6 +6968,17 @@ __metadata:
     cssesc: ^3.0.0
     fastparse: ^1.1.2
   checksum: 92560a9616a8bc073b88c678aa04f22c599ac23c5f8587e60f4861069e2d5aeb37b722af581ae3c5fbce453bed7a893d9c3e06830912e6d28badc3b8b99acd24
+  languageName: node
+  linkType: hard
+
+"css-to-react-native@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "css-to-react-native@npm:3.0.0"
+  dependencies:
+    camelize: ^1.0.0
+    css-color-keywords: ^1.0.0
+    postcss-value-parser: ^4.0.2
+  checksum: 98a2e9d4fbe9cabc8b744dfdd5ec108396ce497a7b860912a95b299bd52517461281810fcb707965a021a8be39adca9587184a26fb4e926211391a1557aca3c1
   languageName: node
   linkType: hard
 
@@ -9572,7 +9622,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -11649,6 +11699,7 @@ fsevents@^1.2.7:
     "@types/react": ^17.0.20
     "@types/react-dom": ^17.0.9
     "@types/react-redux": ^7.1.18
+    "@types/styled-components": ^5.1.14
     "@types/stylelint": ^13.13.2
     "@types/tapable": ^2.2.2
     "@typescript-eslint/eslint-plugin": ^4.31.1
@@ -11693,14 +11744,15 @@ fsevents@^1.2.7:
     sass: ^1.40.1
     sass-loader: ^12.1.0
     style-loader: ^3.2.1
+    styled-components: ^5.3.1
     stylelint: ^13.13.1
-    stylelint-config-css-modules: ^2.2.0
     stylelint-config-prettier: ^8.0.2
-    stylelint-config-rational-order: ^0.1.2
-    stylelint-config-xo-scss: ^0.14.0
+    stylelint-config-recess-order: ^2.5.0
+    stylelint-config-recommended: ^5.0.0
+    stylelint-config-styled-components: ^0.1.1
     stylelint-order: ^4.1.0
     stylelint-prettier: ^1.2.0
-    stylelint-scss: ^3.21.0
+    stylelint-processor-styled-components: ^1.10.0
     swc-loader: ^0.1.15
     ts-jest: ^27.0.5
     tsconfig-paths-webpack-plugin: ^3.5.1
@@ -11827,7 +11879,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.x, lodash@npm:^4.17.10, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.7.0":
+"lodash@npm:4.x, lodash@npm:^4.17.11, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.7.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -14429,16 +14481,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"postcss-sorting@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "postcss-sorting@npm:4.1.0"
-  dependencies:
-    lodash: ^4.17.4
-    postcss: ^7.0.0
-  checksum: 1fb411dcd9548fc1934037b4f9916484a1b69b4768a01c8f87f04d98ed83759acf438ab2ae05b1c5336c810fda685eeaafc394c6d96c6a0018951505aaac5ce7
-  languageName: node
-  linkType: hard
-
 "postcss-sorting@npm:^5.0.1":
   version: 5.0.1
   resolution: "postcss-sorting@npm:5.0.1"
@@ -14501,7 +14543,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"postcss@npm:5 - 7, postcss@npm:7.x.x, postcss@npm:^7.0.0, postcss@npm:^7.0.14, postcss@npm:^7.0.17, postcss@npm:^7.0.2, postcss@npm:^7.0.21, postcss@npm:^7.0.26, postcss@npm:^7.0.31, postcss@npm:^7.0.32, postcss@npm:^7.0.35, postcss@npm:^7.0.36, postcss@npm:^7.0.5, postcss@npm:^7.0.6":
+"postcss@npm:5 - 7, postcss@npm:7.x.x, postcss@npm:^7.0.14, postcss@npm:^7.0.17, postcss@npm:^7.0.2, postcss@npm:^7.0.21, postcss@npm:^7.0.26, postcss@npm:^7.0.31, postcss@npm:^7.0.32, postcss@npm:^7.0.35, postcss@npm:^7.0.36, postcss@npm:^7.0.5, postcss@npm:^7.0.6":
   version: 7.0.36
   resolution: "postcss@npm:7.0.36"
   dependencies:
@@ -16714,6 +16756,28 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"styled-components@npm:^5.3.1":
+  version: 5.3.1
+  resolution: "styled-components@npm:5.3.1"
+  dependencies:
+    "@babel/helper-module-imports": ^7.0.0
+    "@babel/traverse": ^7.4.5
+    "@emotion/is-prop-valid": ^0.8.8
+    "@emotion/stylis": ^0.8.4
+    "@emotion/unitless": ^0.7.4
+    babel-plugin-styled-components: ">= 1.12.0"
+    css-to-react-native: ^3.0.0
+    hoist-non-react-statics: ^3.0.0
+    shallowequal: ^1.1.0
+    supports-color: ^5.5.0
+  peerDependencies:
+    react: ">= 16.8.0"
+    react-dom: ">= 16.8.0"
+    react-is: ">= 16.8.0"
+  checksum: 2d833d573c039f4af5c422ce33f06212dfa51a821994ec1d7a697355752b422cad6e92eeff712dbd9c0339aade8eb5bce10c30dfecb3c8e707530b6dda7dda10
+  languageName: node
+  linkType: hard
+
 "stylehacks@npm:^5.0.1":
   version: 5.0.1
   resolution: "stylehacks@npm:5.0.1"
@@ -16723,15 +16787,6 @@ resolve@^2.0.0-next.3:
   peerDependencies:
     postcss: ^8.2.15
   checksum: 777dbed3987e04f713b9d74e08f66ab4c23c76cabb07c666c0ae9a06e58e8961063e17b5c7b9c23421b75e9caa9fb78084688e509624e57b19c92c174fbd964d
-  languageName: node
-  linkType: hard
-
-"stylelint-config-css-modules@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "stylelint-config-css-modules@npm:2.2.0"
-  peerDependencies:
-    stylelint: 11.x - 13.x
-  checksum: 0c1ee808efb682b9a4c3af34ffaa60234541305e85dff71422994c8518f76d40f0f3519ba6171cffaed4c79b5205e6c7488bb505b03d9497405d5d2f6d5be4e7
   languageName: node
   linkType: hard
 
@@ -16747,63 +16802,34 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"stylelint-config-rational-order@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "stylelint-config-rational-order@npm:0.1.2"
+"stylelint-config-recess-order@npm:^2.5.0":
+  version: 2.5.0
+  resolution: "stylelint-config-recess-order@npm:2.5.0"
   dependencies:
-    stylelint: ^9.10.1
-    stylelint-order: ^2.2.1
-  checksum: 87a68fd350ff96c1289dc8ddae31d17dce63805ba69fc4bdc0a4947ae7151d259f0509da8978b9df816792de524b2d0677ce04c9839570bd7a5475ff3c5f0e39
-  languageName: node
-  linkType: hard
-
-"stylelint-config-xo-scss@npm:^0.14.0":
-  version: 0.14.0
-  resolution: "stylelint-config-xo-scss@npm:0.14.0"
-  dependencies:
-    stylelint-config-xo: ^0.20.0
-    stylelint-scss: ^3.18.0
+    stylelint-order: 4.1.x
   peerDependencies:
-    stylelint: ">=13.7.0"
-  checksum: d85b58cea7cdde7e9097db904506a4e57c4466d19791561b77c76ed5fec39465a917521a3bc13ba666bdfd5c1dc2da6ec453cc2026546421777b80e7f40b75e7
+    stylelint: ">=9"
+  checksum: 66f1062416cf2ed60cb90a5f51dff066b22b9d4430d1d1f4c5977adaebed5af21e14bb9ebc8f35792df0e7ecd10d70d2a3ae12e4fdddd20d1fea54e92c0bdc8c
   languageName: node
   linkType: hard
 
-"stylelint-config-xo@npm:^0.20.0":
-  version: 0.20.0
-  resolution: "stylelint-config-xo@npm:0.20.0"
-  dependencies:
-    stylelint-declaration-block-no-ignored-properties: ^2.3.0
-    stylelint-order: ^4.1.0
+"stylelint-config-recommended@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "stylelint-config-recommended@npm:5.0.0"
   peerDependencies:
-    stylelint: ">=13.7.0"
-  checksum: a76a3c941840089c5ca2e9c04493a72eb846659cf9415cf7135a597bea1acdf049c5117f5249e0288c681634c61e8197591eaf3e781357382a129960d8978cbb
+    stylelint: ^13.13.0
+  checksum: 574468542e9f143838feff91771a5901454d6ed89c671bc561373e0509d1414d4a856e5e251c22630c18eb02819c94137eb7a091959dc225f0d91a3eb49538c4
   languageName: node
   linkType: hard
 
-"stylelint-declaration-block-no-ignored-properties@npm:^2.3.0":
-  version: 2.4.0
-  resolution: "stylelint-declaration-block-no-ignored-properties@npm:2.4.0"
-  peerDependencies:
-    stylelint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0
-  checksum: d7ec447ebe1a821d4301d43d126e312f92c295bdc8c42219854ab7f5beaaec4d4e3467535c669cba43ad05b50236cfaf20700794ff8d716b75bd776c25cf42d4
+"stylelint-config-styled-components@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "stylelint-config-styled-components@npm:0.1.1"
+  checksum: 1421187a27d11740f9ee224163231a9f3194c8055c27b0cb3204e76742c55a9397004bc70da9b3feee9988d0afe0d3c839186ef01d847a163ba7ad3299a9759a
   languageName: node
   linkType: hard
 
-"stylelint-order@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "stylelint-order@npm:2.2.1"
-  dependencies:
-    lodash: ^4.17.10
-    postcss: ^7.0.2
-    postcss-sorting: ^4.1.0
-  peerDependencies:
-    stylelint: ^9.10.1 || ^10.0.0
-  checksum: 2fbd7362bef4bf68444d1eae176e2e67c057200fa7b9f7d3085d921aa42607f9312ad86e6e475560a3b591324b5d88b3cab70bdd3e5b877dc347e139ed8f747a
-  languageName: node
-  linkType: hard
-
-"stylelint-order@npm:^4.1.0":
+"stylelint-order@npm:4.1.x, stylelint-order@npm:^4.1.0":
   version: 4.1.0
   resolution: "stylelint-order@npm:4.1.0"
   dependencies:
@@ -16828,37 +16854,19 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^3.18.0":
-  version: 3.20.1
-  resolution: "stylelint-scss@npm:3.20.1"
+"stylelint-processor-styled-components@npm:^1.10.0":
+  version: 1.10.0
+  resolution: "stylelint-processor-styled-components@npm:1.10.0"
   dependencies:
-    lodash: ^4.17.15
-    postcss-media-query-parser: ^0.2.3
-    postcss-resolve-nested-selector: ^0.1.1
-    postcss-selector-parser: ^6.0.2
-    postcss-value-parser: ^4.1.0
-  peerDependencies:
-    stylelint: ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0
-  checksum: 6814e6da6e5a6886d349d3cb13aaaf06496d6c00c9db2be482f0e9874ed78c3e877082f190fcb2db7f0ec725276ecf7f8b47d16174fb9bc7300f30870fe7c455
+    "@babel/parser": ^7.8.3
+    "@babel/traverse": ^7.8.3
+    micromatch: ^4.0.2
+    postcss: ^7.0.26
+  checksum: 3d2ac5e1aecd475f2bb52be3ec0bcbfcce2e937a29fc799d77a458fd933a0fbd91cbc0e71822b13d24cf137dafe9977d4c1420ef2d114de49fa5423b505de8a4
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^3.21.0":
-  version: 3.21.0
-  resolution: "stylelint-scss@npm:3.21.0"
-  dependencies:
-    lodash: ^4.17.15
-    postcss-media-query-parser: ^0.2.3
-    postcss-resolve-nested-selector: ^0.1.1
-    postcss-selector-parser: ^6.0.2
-    postcss-value-parser: ^4.1.0
-  peerDependencies:
-    stylelint: ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0
-  checksum: 5c16263da4a913bd05871682a4fa90769abcb6a9e3f3d1c2386c7364b2308733af53a71c3ba17dd8646bb0d1a193a19cb3e6d7818bef60057c86f3287df1dc9c
-  languageName: node
-  linkType: hard
-
-"stylelint@npm:^13.12.0, stylelint@npm:^13.13.1":
+"stylelint@npm:^13.13.1":
   version: 13.13.1
   resolution: "stylelint@npm:13.13.1"
   dependencies:
@@ -16941,7 +16949,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"supports-color@npm:^5.3.0, supports-color@npm:^5.4.0":
+"supports-color@npm:^5.3.0, supports-color@npm:^5.4.0, supports-color@npm:^5.5.0":
   version: 5.5.0
   resolution: "supports-color@npm:5.5.0"
   dependencies:

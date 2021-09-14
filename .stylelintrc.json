@@ -1,8 +1,9 @@
 {
+    "processors": ["stylelint-processor-styled-components"],
     "extends": [
-        "stylelint-config-xo-scss",
-        "stylelint-config-rational-order",
-        "stylelint-config-css-modules",
-        "stylelint-prettier/recommended"
+        "stylelint-config-recommended",
+        "stylelint-config-recess-order",
+        "stylelint-prettier/recommended",
+        "stylelint-config-styled-components"
     ]
 }
