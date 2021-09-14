@@ -1,5 +1,6 @@
 import { useCallback, useMemo, CSSProperties } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import styled from 'styled-components';
 
 import type { RootState } from '@/app/live-chat-overlay/store';
 import { chatEvents } from '@/features';
@@ -7,11 +8,24 @@ import { useSettings, useInterval, useVideoPlayerRect } from '@/hooks';
 import { settingsStorage, chatEvent } from '@/services';
 
 import { useToggleDebugMode } from './use-toggle-debug-mode';
-import classes from './index.scss';
 import MessageFlower from './message-flower';
 import ChatItemRenderer from './chat-item-renderer';
 import { UiChatItem } from './types';
 import DebugOverlay from './debug-overlay';
+
+const Container = styled.div`
+    position: relative;
+    width: 100%;
+    height: 100%;
+`;
+
+const TestRenderContainer = styled.div`
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+    visibility: hidden;
+`;
 
 interface Props {
     settings: settingsStorage.Settings;
@@ -52,11 +66,8 @@ const ChatFlowLayout: React.FC<Props> = ({
     );
 
     return (
-        <div className={classes.container} style={containerStyle}>
-            <div
-                className={classes['test-render-container']}
-                id={chatEvent.CHAT_ITEM_RENDER_ID}
-            />
+        <Container style={containerStyle}>
+            <TestRenderContainer id={chatEvent.CHAT_ITEM_RENDER_ID} />
             <div style={style}>
                 {nonStickyChatItems.map((chatItem) => {
                     const messageSettings = chatEvent.getMessageSettings(
@@ -97,7 +108,7 @@ const ChatFlowLayout: React.FC<Props> = ({
                 })}
             </div>
             {isDebugActive && <DebugOverlay />}
-        </div>
+        </Container>
     );
 };
 

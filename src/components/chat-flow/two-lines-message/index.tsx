@@ -1,10 +1,28 @@
 import * as React from 'react';
+import styled from 'styled-components';
 
 import { chatEvent, settingsStorage } from '@/services';
-import classes from './index.scss';
 
 import MessagePartsRenderer from '../message-parts-renderer';
 import AuthorChip from '../author-chip';
+
+const Container = styled.div`
+    display: flex;
+    margin-top: 0.2em;
+    border-radius: 5px;
+`;
+
+const Message = styled(MessagePartsRenderer)`
+    display: flex;
+    align-items: center;
+    padding: 1px 10px;
+    font-size: 0.8em;
+
+    img {
+        width: 1em;
+        height: 1em;
+    }
+`;
 
 interface Props {
     chatItem:
@@ -31,8 +49,7 @@ const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
         : undefined;
 
     return (
-        <div
-            className={classes.container}
+        <Container
             style={{
                 height: `${actualNumberOfLines}em`,
                 color: messageSettings.color,
@@ -53,11 +70,8 @@ const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
                 donationAmount={donationAmount}
                 authorDisplaySetting={messageSettings.authorDisplay}
             />
-            <MessagePartsRenderer
-                className={classes.message}
-                messageParts={chatItem.messageParts}
-            />
-        </div>
+            <Message messageParts={chatItem.messageParts} />
+        </Container>
     );
 };
 

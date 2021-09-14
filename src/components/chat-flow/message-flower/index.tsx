@@ -1,7 +1,17 @@
 import { useMemo, useRef, useState, useLayoutEffect } from 'react';
+import styled from 'styled-components';
 
 import { useTimeout, useRect, useSettings } from '@/hooks';
-import classes from './index.scss';
+
+const Container = styled.div`
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+    transition-timing-function: linear;
+    transition-property: transform;
+`;
 
 interface Props {
     children: React.ReactNode;
@@ -45,9 +55,9 @@ const MessageFlower: React.FC<Props> = ({
     }, []);
 
     return (
-        <div ref={ref} className={classes.container} style={style}>
+        <Container ref={ref} style={style}>
             {children}
-        </div>
+        </Container>
     );
 };
 
