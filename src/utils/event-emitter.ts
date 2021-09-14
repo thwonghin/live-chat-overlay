@@ -1,9 +1,7 @@
 export class EventEmitter<EventMap extends Record<string, unknown>> {
-    private listeners: Partial<
-        {
-            [Key in keyof EventMap]: Array<(data: EventMap[Key]) => void>;
-        }
-    > = {};
+    private listeners: Partial<{
+        [Key in keyof EventMap]: Array<(data: EventMap[Key]) => void>;
+    }> = {};
 
     public trigger<K extends keyof EventMap>(
         event: K,
