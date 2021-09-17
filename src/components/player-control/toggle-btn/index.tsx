@@ -9,7 +9,7 @@ import { useI18n } from '@/contexts/i18n';
 import BtnTooltip from '../btn-tooltip';
 
 const Button = styled.button`
-    text-align: center !important;
+    text-align: center;
 `;
 
 const iconToBtnRatio = 2 / 3;

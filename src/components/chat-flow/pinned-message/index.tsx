@@ -17,8 +17,7 @@ const Container = styled.div`
 `;
 
 const Icon = styled(FontAwesomeIcon)`
-    /* stylelint-disable-next-line declaration-no-important */
-    width: 1em !important;
+    width: 1em;
     height: 0.5em;
     padding-right: 10px;
     padding-left: 10px;
@@ -49,7 +48,6 @@ const CloseIcon = styled(Icon)`
     margin-left: auto;
 
     /* Youtube disabled all svg pointer events */
-    /* stylelint-disable-next-line declaration-no-important */
     pointer-events: all !important;
 `;
 

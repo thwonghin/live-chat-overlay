@@ -12,7 +12,7 @@ import { popup } from '@/features';
 import BtnTooltip from '../btn-tooltip';
 
 const Button = styled.button`
-    text-align: center !important;
+    text-align: center;
 `;
 
 const iconWidth = (2 / 3) * (512 / 640) * 100;

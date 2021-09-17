@@ -30,7 +30,7 @@ const NestContainer = styled.div`
 const Content = styled.div`
     width: 100%;
     height: 100%;
-    padding: 16px 16px 0 !important;
+    padding: 0 16px;
 `;
 
 interface Props {
