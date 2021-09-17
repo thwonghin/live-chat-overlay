@@ -16,7 +16,7 @@
         "lint:src": "yarn lint:script src webpack/src",
         "lint:test": "yarn lint:script tests",
         "lint:style": "stylelint './src/**/*.tsx'",
-        "lint:fix": "yarn lint:src --fix",
+        "lint:fix": "yarn lint:src --fix && yarn lint:test --fix",
         "clean": "rm -rf dist .storybook/dist webpack/dist webpack/tsconfig.tsbuildinfo",
         "build": "tsc -p webpack && webpack --config webpack/dist/webpack.config.js",
         "build:prod": "yarn build --env production",
