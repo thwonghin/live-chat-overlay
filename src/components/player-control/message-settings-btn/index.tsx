@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import cn from 'classnames';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,7 +10,10 @@ import { useI18n } from '@/contexts/i18n';
 import { popup } from '@/features';
 
 import BtnTooltip from '../btn-tooltip';
-import classes from './index.scss';
+
+const Button = styled.button`
+    text-align: center !important;
+`;
 
 const iconWidth = (2 / 3) * (512 / 640) * 100;
 
@@ -28,8 +31,8 @@ const MessageSettingsBtn: React.FC = () => {
 
     return (
         <BtnTooltip title={i18n.getMessage('messageSettingsButtonTitle')}>
-            <button
-                className={cn([classes.btn, youtube.CLASS_PLAYER_CTL_BTN])}
+            <Button
+                className={youtube.CLASS_PLAYER_CTL_BTN}
                 type="button"
                 aria-label={i18n.getMessage('messageSettingsButtonTitle')}
                 onClick={handleClick}
@@ -39,7 +42,7 @@ const MessageSettingsBtn: React.FC = () => {
                     height="100%"
                     width={`${iconWidth}%`}
                 />
-            </button>
+            </Button>
         </BtnTooltip>
     );
 };
