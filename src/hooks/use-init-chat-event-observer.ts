@@ -1,17 +1,18 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
+
 import { useDispatch, useSelector, useStore } from 'react-redux';
 
+import type { RootState } from '@/app/live-chat-overlay/store';
+import { ChatEventObserverContext } from '@/contexts/chat-observer';
+import type { InitData } from '@/definitions/youtube';
+import { chatEvents, debugInfo } from '@/features';
 import {
     useAnimationFrame,
     useVideoPlayerRect,
     useSettings,
     useVideoPlayerState,
 } from '@/hooks';
-import { ChatEventObserverContext } from '@/contexts/chat-observer';
-import { chatEvents, debugInfo } from '@/features';
 import { settingsStorage, chatEvent } from '@/services';
-import type { RootState } from '@/app/live-chat-overlay/store';
-import type { InitData } from '@/definitions/youtube';
 
 function getRenderedNumberOfLinesForChatItem({
     settings,

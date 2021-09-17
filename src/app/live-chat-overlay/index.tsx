@@ -1,18 +1,18 @@
-import { Browser } from 'webextension-polyfill-ts';
 import { StrictMode } from 'react';
+
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { ThemeProvider, StyleSheetManager } from 'styled-components';
+import { Browser } from 'webextension-polyfill-ts';
 
 import * as contexts from '@/contexts';
 import { InitData } from '@/definitions/youtube';
-
 import { youtube } from '@/utils';
 
+import App from './app';
 import { store } from './store';
 import { theme } from './theme';
-import App from './app';
 
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';

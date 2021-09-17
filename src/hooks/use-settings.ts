@@ -1,5 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
+
 import { cloneDeep } from 'lodash-es';
+
 import { settingsStorage } from '@/services';
 
 interface UseSettingsResult {

@@ -1,14 +1,13 @@
 import * as React from 'react';
 
+import ChatFlow from '@/components/chat-flow';
+import PlayerControl from '@/components/player-control';
+import PopupContainer from '@/components/popup';
+import { InitData } from '@/definitions/youtube';
 import {
     useInitChatEventObserver,
     useResetChatEventsOnPlayerRectChange,
 } from '@/hooks';
-
-import ChatFlow from '@/components/chat-flow';
-import PopupContainer from '@/components/popup';
-import PlayerControl from '@/components/player-control';
-import { InitData } from '@/definitions/youtube';
 
 interface Props {
     initData: InitData;

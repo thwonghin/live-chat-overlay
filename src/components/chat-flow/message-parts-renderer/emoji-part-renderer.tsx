@@ -1,6 +1,8 @@
 import * as React from 'react';
-import type { chatEvent } from '@/services';
+
 import { last } from 'lodash-es';
+
+import type { chatEvent } from '@/services';
 
 interface Props {
     emojiPart: chatEvent.EmojiPart;

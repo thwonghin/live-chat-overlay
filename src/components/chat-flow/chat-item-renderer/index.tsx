@@ -1,10 +1,11 @@
 import * as React from 'react';
+
 import { settingsStorage, chatEvent } from '@/services';
 
-import type { UiChatItem } from '../types';
-import TwoLinesMessage from '../two-lines-message';
-import SuperChatSticker from '../super-chat-sticker';
 import PinnedMessage from '../pinned-message';
+import SuperChatSticker from '../super-chat-sticker';
+import TwoLinesMessage from '../two-lines-message';
+import type { UiChatItem } from '../types';
 
 interface Props {
     chatItem: UiChatItem;

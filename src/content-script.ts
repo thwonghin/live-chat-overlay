@@ -1,8 +1,8 @@
 import './common';
 import { browser } from 'webextension-polyfill-ts';
 
-import { youtube } from '@/utils';
 import { fetchInterceptor, settingsStorage } from '@/services';
+import { youtube } from '@/utils';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
 

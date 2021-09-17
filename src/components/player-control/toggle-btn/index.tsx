@@ -1,10 +1,12 @@
 import { useMemo, useCallback } from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styled from 'styled-components';
+
+import { useI18n } from '@/contexts/i18n';
 import { useSettings } from '@/hooks';
 import { youtube } from '@/utils';
-import { useI18n } from '@/contexts/i18n';
 
 import BtnTooltip from '../btn-tooltip';
 

@@ -1,12 +1,12 @@
 import { first } from 'lodash-es';
 
-import { isNotNil } from '@/utils';
 import type {
     ReplayContinuationContents,
     LiveContinuationContents,
     ReplayInitData,
     InitData,
 } from '@/definitions/youtube';
+import { isNotNil } from '@/utils';
 
 import { mapAddChatItemActions, isNormalChatItem } from '../mapper';
 import { ChatItem } from '../models';

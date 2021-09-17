@@ -1,4 +1,5 @@
 import { last } from 'lodash-es';
+
 import type { UiChatItem } from '@/components/chat-flow/types';
 
 interface HasSpaceInLineParameters {

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import type { chatEvent, settingsStorage } from '@/services';
+
 import TwoLinesMessage from '.';
 
 const settings = { title: 'TwoLinesMessage' };
