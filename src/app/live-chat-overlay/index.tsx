@@ -2,10 +2,7 @@ import { Browser } from 'webextension-polyfill-ts';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import {
-    ThemeProvider as MuiThemeProvider,
-    StyledEngineProvider,
-} from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { ThemeProvider, StyleSheetManager } from 'styled-components';
 
 import * as contexts from '@/contexts';
@@ -71,23 +68,21 @@ export function injectLiveChatOverlay(
                         <contexts.chatObserver.ChatEventObserverProvider
                             chatEventPrefix={browser.runtime.id}
                         >
-                            <StyledEngineProvider injectFirst>
-                                <MuiThemeProvider theme={theme}>
-                                    <StyleSheetManager
-                                        target={styledInsertionPoint}
-                                    >
-                                        <ThemeProvider theme={theme}>
-                                            <App
-                                                initData={initData}
-                                                playerControlContainer={
-                                                    playerControlContainer
-                                                }
-                                                playerEle={videoPlayerEle}
-                                            />
-                                        </ThemeProvider>
-                                    </StyleSheetManager>
-                                </MuiThemeProvider>
-                            </StyledEngineProvider>
+                            <MuiThemeProvider theme={theme}>
+                                <StyleSheetManager
+                                    target={styledInsertionPoint}
+                                >
+                                    <ThemeProvider theme={theme}>
+                                        <App
+                                            initData={initData}
+                                            playerControlContainer={
+                                                playerControlContainer
+                                            }
+                                            playerEle={videoPlayerEle}
+                                        />
+                                    </ThemeProvider>
+                                </StyleSheetManager>
+                            </MuiThemeProvider>
                         </contexts.chatObserver.ChatEventObserverProvider>
                     </contexts.playerRect.PlayerRectProvider>
                 </contexts.i18n.I18nProvider>

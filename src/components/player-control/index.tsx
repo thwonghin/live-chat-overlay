@@ -12,7 +12,6 @@ interface Props {
 
 const PlayerControl: React.FC<Props> = ({ playerControlContainer }) => {
     const isHovering = useIsEleHovering(playerControlContainer);
-    console.log(isHovering);
 
     return ReactDOM.createPortal(
         <>
