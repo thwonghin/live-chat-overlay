@@ -13,7 +13,7 @@
         "test:unit": "jest tests/unit",
         "lint": "yarn lint:src && yarn lint:test && yarn lint:style",
         "lint:script": "eslint --ext ts,tsx",
-        "lint:src": "yarn lint:script src",
+        "lint:src": "yarn lint:script src webpack/src",
         "lint:test": "yarn lint:script tests",
         "lint:style": "stylelint './src/**/*.tsx'",
         "lint:fix": "yarn lint:script --fix && yarn lint:style --fix",

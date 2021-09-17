@@ -19,8 +19,8 @@ const StyledSlider = styled(Slider)<{ $isHidden: boolean }>`
         width: 78px;
     }
 
-    margin-right: 8px;
     width: ${({ $isHidden }) => ($isHidden ? '0 !important' : '52px')};
+    margin-right: 8px;
     color: #fff;
     will-change: width;
     transition: cubic-bezier(0.4, 0, 1, 1), width 0.2s;
