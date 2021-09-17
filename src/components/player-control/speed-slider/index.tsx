@@ -1,12 +1,11 @@
 import { useCallback } from 'react';
-import { Slider, withStyles } from '@material-ui/core';
+import { Slider } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useDebouncedCallback } from 'use-debounce';
+import styled from 'styled-components';
 
 import { useSettings } from '@/hooks';
 import { youtube } from '@/utils';
-
-import classes from './index.scss';
 
 const minValue = 3;
 const maxValue = 15;
@@ -15,51 +14,60 @@ function reverse(value: number): number {
     return maxValue - value + minValue;
 }
 
-const StyledSlider = withStyles({
-    root: {
-        [`.${youtube.CLASS_BIG_MODE} &`]: {
-            width: 78,
-        },
-        marginRight: 8,
-        width: 52,
-        color: '#fff',
-        willChange: 'width',
-        transition: 'cubic-bezier(0.4,0.0,1,1), width .2s',
-    },
-    thumb: {
-        [`.${youtube.CLASS_BIG_MODE} &`]: {
-            width: 18,
-            height: 18,
-            borderRadius: 9,
-            marginTop: -7,
-        },
-        width: 12,
-        height: 12,
-        borderRadius: 6,
-        marginTop: -5,
-        '&:hover': {
-            boxShadow: 'none !important',
-        },
-    },
-    rail: {
-        [`.${youtube.CLASS_BIG_MODE} &`]: {
-            height: 4,
-        },
-        height: 3,
-        borderRadius: 0,
-        opacity: 0.2,
-    },
-    track: {
-        [`.${youtube.CLASS_BIG_MODE} &`]: {
-            height: 4,
-        },
-        height: 3,
-        borderRadius: 0,
-    },
-    active: {
-        boxShadow: 'none !important',
-    },
-})(Slider);
+const StyledSlider = styled(Slider)<{ $isHidden: boolean }>`
+    .${youtube.CLASS_BIG_MODE} & {
+        width: 78px;
+    }
+
+    margin-right: 8px;
+    width: ${({ $isHidden }) => ($isHidden ? '0 !important' : '52px')};
+    color: #fff;
+    will-change: width;
+    transition: cubic-bezier(0.4, 0, 1, 1), width 0.2s;
+
+    & .MuiSlider-thumb {
+        .${youtube.CLASS_BIG_MODE} & {
+            width: 18px;
+            height: 18px;
+            border-radius: 9px;
+        }
+
+        display: ${({ $isHidden }) =>
+            $isHidden ? 'none !important' : 'initial'};
+        width: 12px;
+        height: 12px;
+        border-radius: 6px;
+        &:hover {
+            box-shadow: none !important;
+        }
+        &.Mui-active {
+            box-shadow: none !important;
+        }
+        &.Mui-focusVisible {
+            box-shadow: none !important;
+        }
+    }
+
+    & .MuiSlider-rail {
+        .${youtube.CLASS_BIG_MODE} & {
+            height: 4px;
+        }
+        height: 3px;
+        border-radius: 0;
+        opacity: 0.2;
+    }
+
+    & .MuiSlider-track {
+        .${youtube.CLASS_BIG_MODE} & {
+            height: 4px;
+        }
+
+        display: ${({ $isHidden }) =>
+            $isHidden ? 'none !important' : 'initial'};
+        height: 3px;
+        border-radius: 0;
+    }
+`;
 
 interface Props {
     isHidden: boolean;
@@ -69,7 +77,7 @@ const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
     const { settings, updateSettings } = useSettings();
 
     const handleChange = useCallback<
-        (event: React.ChangeEvent<unknown>, value: number | number[]) => void
+        (event: Event, value: number | number[]) => void
     >(
         (event, afterChangeValue) => {
             if (isNil(afterChangeValue)) {
@@ -98,10 +106,7 @@ const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
 
     return (
         <StyledSlider
-            classes={{
-                root: isHidden ? classes['container-hidden'] : undefined,
-                thumb: isHidden ? classes['thumb-hidden'] : undefined,
-            }}
+            $isHidden={isHidden}
             defaultValue={reverse(settings.flowTimeInSec)}
             min={minValue}
             max={maxValue}

@@ -2,12 +2,10 @@ import { Browser } from 'webextension-polyfill-ts';
 import { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import * as jss from 'jss';
 import {
-    StylesProvider,
-    jssPreset,
     ThemeProvider as MuiThemeProvider,
-} from '@material-ui/core/styles';
+    StyledEngineProvider,
+} from '@mui/material/styles';
 import { ThemeProvider, StyleSheetManager } from 'styled-components';
 
 import * as contexts from '@/contexts';
@@ -58,24 +56,12 @@ export function injectLiveChatOverlay(
     playerControlContainer.style.alignItems = 'center';
     rightControlEle.prepend(playerControlContainer);
 
-    const jssInsertionPointContainer =
-        window.parent.document.createElement('div');
-    const jssInsertionPoint = window.parent.document.createElement('div');
-    jssInsertionPoint.id = 'live-chat-overlay-jss';
-    jssInsertionPointContainer.append(jssInsertionPoint);
-    window.parent.document.head.append(jssInsertionPointContainer);
-
     const styledInsertionPointContainer =
         window.parent.document.createElement('div');
     const styledInsertionPoint = window.parent.document.createElement('div');
     styledInsertionPoint.id = 'live-chat-overlay-styled';
     styledInsertionPointContainer.append(styledInsertionPoint);
     window.parent.document.head.append(styledInsertionPoint);
-
-    const jssConfig = jss.create({
-        ...jssPreset(),
-        insertionPoint: jssInsertionPoint,
-    });
 
     ReactDOM.render(
         <StrictMode>
@@ -85,7 +71,7 @@ export function injectLiveChatOverlay(
                         <contexts.chatObserver.ChatEventObserverProvider
                             chatEventPrefix={browser.runtime.id}
                         >
-                            <StylesProvider jss={jssConfig}>
+                            <StyledEngineProvider injectFirst>
                                 <MuiThemeProvider theme={theme}>
                                     <StyleSheetManager
                                         target={styledInsertionPoint}
@@ -101,7 +87,7 @@ export function injectLiveChatOverlay(
                                         </ThemeProvider>
                                     </StyleSheetManager>
                                 </MuiThemeProvider>
-                            </StylesProvider>
+                            </StyledEngineProvider>
                         </contexts.chatObserver.ChatEventObserverProvider>
                     </contexts.playerRect.PlayerRectProvider>
                 </contexts.i18n.I18nProvider>
@@ -114,7 +100,6 @@ export function injectLiveChatOverlay(
         ReactDOM.unmountComponentAtNode(liveChatContainer);
         playerControlContainer.remove();
         liveChatContainer.remove();
-        jssInsertionPointContainer.remove();
         styledInsertionPointContainer.remove();
     };
 }
