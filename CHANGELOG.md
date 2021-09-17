@@ -1,3 +1,19 @@
+## 2.11.0 (2021-09-17)
+
+* style: organize imports (#738) ([9def77d](https://github.com/thwonghin/live-chat-overlay/commit/9def77d)), closes [#738](https://github.com/thwonghin/live-chat-overlay/issues/738)
+* chore: bump deps 2021-05-07 (#729) ([0942905](https://github.com/thwonghin/live-chat-overlay/commit/0942905)), closes [#729](https://github.com/thwonghin/live-chat-overlay/issues/729)
+* chore: fine tune swc config (#725) ([996fa5c](https://github.com/thwonghin/live-chat-overlay/commit/996fa5c)), closes [#725](https://github.com/thwonghin/live-chat-overlay/issues/725)
+* chore: misc (#731) ([4bcae9c](https://github.com/thwonghin/live-chat-overlay/commit/4bcae9c)), closes [#731](https://github.com/thwonghin/live-chat-overlay/issues/731)
+* chore: remove webpack build workaround (#737) ([081db63](https://github.com/thwonghin/live-chat-overlay/commit/081db63)), closes [#737](https://github.com/thwonghin/live-chat-overlay/issues/737)
+* chore: upgrade mui to 5 (#734) ([db0926d](https://github.com/thwonghin/live-chat-overlay/commit/db0926d)), closes [#734](https://github.com/thwonghin/live-chat-overlay/issues/734)
+* chore: upgrade packages (#735) ([65fbdb0](https://github.com/thwonghin/live-chat-overlay/commit/65fbdb0)), closes [#735](https://github.com/thwonghin/live-chat-overlay/issues/735)
+* chore: upgrade yarn to berry (#732) ([9ddcb13](https://github.com/thwonghin/live-chat-overlay/commit/9ddcb13)), closes [#732](https://github.com/thwonghin/live-chat-overlay/issues/732)
+* refactor: use styled components part 1 (#733) ([884e5e2](https://github.com/thwonghin/live-chat-overlay/commit/884e5e2)), closes [#733](https://github.com/thwonghin/live-chat-overlay/issues/733)
+* refactor: use styled-components for all styles (#736) ([ef2cc92](https://github.com/thwonghin/live-chat-overlay/commit/ef2cc92)), closes [#736](https://github.com/thwonghin/live-chat-overlay/issues/736)
+* test: do type check when test (#724) ([c1c64c7](https://github.com/thwonghin/live-chat-overlay/commit/c1c64c7)), closes [#724](https://github.com/thwonghin/live-chat-overlay/issues/724)
+
+
+
 ## <small>2.10.1 (2021-04-17)</small>
 
 * chore: [security] bump ssri from 6.0.1 to 6.0.2 (#717) ([8d5d828](https://github.com/thwonghin/live-chat-overlay/commit/8d5d828)), closes [#717](https://github.com/thwonghin/live-chat-overlay/issues/717)
