@@ -100,6 +100,7 @@ const config = (
             ],
         },
         plugins: [
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             ...(shouldSkipPreChecking
                 ? []
                 : [
@@ -119,14 +120,14 @@ const config = (
                           },
                       }) as any,
                   ]),
-            (new CopyWebpackPlugin({
+            new CopyWebpackPlugin({
                 patterns: [
                     {
                         context: 'public',
                         from: '**/*',
                     },
                 ],
-            }) as unknown) as webpack.WebpackPluginInstance,
+            }) as unknown as webpack.WebpackPluginInstance,
             new MiniCssExtractPlugin({
                 filename: '[name].css',
             }),
