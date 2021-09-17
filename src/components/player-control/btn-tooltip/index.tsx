@@ -8,8 +8,8 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
 ))`
     & .${tooltipClasses.tooltip} {
         padding: 5px 9px;
-        font-weight: 500;
         font-size: 1.2rem;
+        font-weight: 500;
         line-height: 15px;
         background-color: rgb(28 28 28 / 90%);
         border-radius: 2px;
