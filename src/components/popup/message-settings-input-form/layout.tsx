@@ -1,11 +1,20 @@
 import * as React from 'react';
 import { TextField, Button, FormHelperText } from '@mui/material';
 import { useFormik } from 'formik';
+import styled from 'styled-components';
 
 import type { settingsStorage } from '@/services';
 import { useI18n } from '@/contexts/i18n';
 
-import classes from './index.scss';
+const ContainerForm = styled.form`
+    width: 100%;
+`;
+
+const Row = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+`;
 
 interface Props {
     globalOpacity: number;
@@ -33,11 +42,11 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
     const i18n = useI18n();
 
     return (
-        <form className={classes.container} onSubmit={formik.handleSubmit}>
+        <ContainerForm onSubmit={formik.handleSubmit}>
             <FormHelperText>
                 {i18n.getMessage('colorInputHelperText')}
             </FormHelperText>
-            <div className={classes.row}>
+            <Row>
                 <TextField
                     variant="standard"
                     color="secondary"
@@ -55,8 +64,8 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     }}
                     onChange={formik.handleChange}
                 />
-            </div>
-            <div className={classes.row}>
+            </Row>
+            <Row>
                 <TextField
                     variant="standard"
                     color="secondary"
@@ -86,8 +95,8 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     }}
                     onChange={formik.handleChange}
                 />
-            </div>
-            <div className={classes.row}>
+            </Row>
+            <Row>
                 <TextField
                     variant="standard"
                     color="secondary"
@@ -121,8 +130,8 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     }}
                     onChange={formik.handleChange}
                 />
-            </div>
-            <div className={classes.row}>
+            </Row>
+            <Row>
                 <TextField
                     variant="standard"
                     color="secondary"
@@ -153,16 +162,16 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     }}
                     onChange={formik.handleChange}
                 />
-            </div>
-            <div className={classes.row}>
+            </Row>
+            <Row>
                 <Button type="submit" color="primary" variant="contained">
                     {i18n.getMessage('applyButtonText')}
                 </Button>
                 <Button type="button" onClick={formik.handleReset}>
                     {i18n.getMessage('resetButtonText')}
                 </Button>
-            </div>
-        </form>
+            </Row>
+        </ContainerForm>
     );
 };
 
