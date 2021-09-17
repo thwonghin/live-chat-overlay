@@ -1,9 +1,9 @@
-import * as helpers from '@/services/chat-event/mapper/helpers';
-import { chatEvent } from '@/services';
 import type {
     AddChatItemAction,
     AddBannerToLiveChatCommand,
 } from '@/definitions/youtube';
+import { chatEvent } from '@/services';
+import * as helpers from '@/services/chat-event/mapper/helpers';
 
 const avatars = [
     {
