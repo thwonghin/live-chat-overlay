@@ -21,7 +21,7 @@ jobs:
         with:
           install-command: yarn --immutable
       - name: Build Project
-        run: yarn build:release
+        run: yarn build:prod
       - name: Update version
         run: |
           export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\/v//')
