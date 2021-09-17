@@ -6,24 +6,8 @@ import { fetchInterceptor, settingsStorage } from '@/services';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
 
-function injectStyles(): () => void {
-    const path = browser.runtime.getURL('content-script.css');
-
-    const link = window.parent.document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = path;
-
-    window.parent.document.head.append(link);
-
-    return () => {
-        link.remove();
-    };
-}
-
 async function init(): Promise<void> {
     await settingsStorage.storageInstance.init(browser);
-    const cleanupStyles = injectStyles();
     const detechFetchInterceptor = fetchInterceptor.attach(browser.runtime.id);
     const initData = await youtube.getInitData(browser.runtime.id);
 
@@ -34,7 +18,6 @@ async function init(): Promise<void> {
     function cleanup(): void {
         cleanupLiveChat();
         detechFetchInterceptor();
-        cleanupStyles();
     }
 
     window.addEventListener('unload', cleanup);

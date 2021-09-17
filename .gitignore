@@ -1,8 +1,6 @@
 node_modules
 yarn-error.log
 dist
-/src/**/*.css.d.ts
-/src/**/*.scss.d.ts
 *.tsbuildinfo
 /sample
 /storybook-static
