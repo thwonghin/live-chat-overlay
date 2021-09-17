@@ -51,13 +51,6 @@ const config = (
         },
         module: {
             rules: [
-                // TODO: remove this workaround for https://github.com/webpack/webpack/issues/11467
-                {
-                    test: /\.m?js/,
-                    resolve: {
-                        fullySpecified: false,
-                    },
-                },
                 {
                     test: /\.(js|jsx|ts|tsx)$/i,
                     use: 'swc-loader',
