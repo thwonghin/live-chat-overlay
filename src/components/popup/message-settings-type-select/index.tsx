@@ -1,6 +1,6 @@
 import type { I18n } from 'webextension-polyfill-ts';
 import { useCallback, useMemo } from 'react';
-import { Select, FormLabel, MenuItem } from '@material-ui/core';
+import { Select, FormLabel, MenuItem, SelectChangeEvent } from '@mui/material';
 
 import { assertNever } from '@/utils';
 import type { settingsStorage } from '@/services';
@@ -54,7 +54,7 @@ interface Props {
 
 const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
     const handleChange = useCallback(
-        (event: React.ChangeEvent<{ value: unknown }>) => {
+        (event: SelectChangeEvent<settingsStorage.MessageSettingsKey>) => {
             onChange(event.target.value as settingsStorage.MessageSettingsKey);
         },
         [onChange],
@@ -76,6 +76,7 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
                 {i18n.getMessage('messageTypeSelectLabel')}
             </FormLabel>
             <Select
+                variant="standard"
                 color="secondary"
                 value={value}
                 MenuProps={{
