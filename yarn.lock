@@ -3559,15 +3559,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/classnames@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "@types/classnames@npm:2.3.1"
-  dependencies:
-    classnames: "*"
-  checksum: 09a17ea08fcb83380921efdfdac94cfa162f87025cae0bf6f4ba508c2fa5f436459ce7612905a3f968fdddb68c03b8e6ff08e762ed2d0c110c5c4fceb244dc55
-  languageName: node
-  linkType: hard
-
 "@types/color-convert@npm:^2.0.0":
   version: 2.0.0
   resolution: "@types/color-convert@npm:2.0.0"
@@ -6143,13 +6134,6 @@ __metadata:
     isobject: ^3.0.0
     static-extend: ^0.1.1
   checksum: be108900801e639e50f96a7e4bfa8867c753a7750a7603879f3981f8b0a89cba657497a2d5f40cd4ea557ff15d535a100818bb486baf6e26fe5d7872e75f1078
-  languageName: node
-  linkType: hard
-
-"classnames@npm:*, classnames@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "classnames@npm:2.3.1"
-  checksum: 14db8889d56c267a591f08b0834989fe542d47fac659af5a539e110cc4266694e8de86e4e3bbd271157dbd831361310a8293e0167141e80b0f03a0f175c80960
   languageName: node
   linkType: hard
 
@@ -11277,7 +11261,6 @@ fsevents@^1.2.7:
     "@storybook/manager-webpack5": ^6.3.8
     "@storybook/react": ^6.3.8
     "@swc/core": ^1.2.88
-    "@types/classnames": ^2.3.1
     "@types/copy-webpack-plugin": ^8.0.1
     "@types/jest": ^27.0.1
     "@types/json-schema": ^7.0.9
@@ -11291,7 +11274,6 @@ fsevents@^1.2.7:
     "@typescript-eslint/eslint-plugin": ^4.31.1
     "@typescript-eslint/parser": ^4.31.1
     browserslist: ^4.17.0
-    classnames: ^2.3.1
     copy-webpack-plugin: ^9.0.1
     core-js: 3.17.3
     dot-json: ^1.2.2
