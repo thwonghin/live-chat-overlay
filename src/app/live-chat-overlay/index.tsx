@@ -6,8 +6,9 @@ import * as jss from 'jss';
 import {
     StylesProvider,
     jssPreset,
-    ThemeProvider,
+    ThemeProvider as MuiThemeProvider,
 } from '@material-ui/core/styles';
+import { ThemeProvider, StyleSheetManager } from 'styled-components';
 
 import * as contexts from '@/contexts';
 import { InitData } from '@/definitions/youtube';
@@ -60,8 +61,16 @@ export function injectLiveChatOverlay(
     const jssInsertionPointContainer =
         window.parent.document.createElement('div');
     const jssInsertionPoint = window.parent.document.createElement('div');
+    jssInsertionPoint.id = 'live-chat-overlay-jss';
     jssInsertionPointContainer.append(jssInsertionPoint);
     window.parent.document.head.append(jssInsertionPointContainer);
+
+    const styledInsertionPointContainer =
+        window.parent.document.createElement('div');
+    const styledInsertionPoint = window.parent.document.createElement('div');
+    styledInsertionPoint.id = 'live-chat-overlay-styled';
+    styledInsertionPointContainer.append(styledInsertionPoint);
+    window.parent.document.head.append(styledInsertionPoint);
 
     const jssConfig = jss.create({
         ...jssPreset(),
@@ -77,15 +86,21 @@ export function injectLiveChatOverlay(
                             chatEventPrefix={browser.runtime.id}
                         >
                             <StylesProvider jss={jssConfig}>
-                                <ThemeProvider theme={theme}>
-                                    <App
-                                        initData={initData}
-                                        playerControlContainer={
-                                            playerControlContainer
-                                        }
-                                        playerEle={videoPlayerEle}
-                                    />
-                                </ThemeProvider>
+                                <MuiThemeProvider theme={theme}>
+                                    <StyleSheetManager
+                                        target={styledInsertionPoint}
+                                    >
+                                        <ThemeProvider theme={theme}>
+                                            <App
+                                                initData={initData}
+                                                playerControlContainer={
+                                                    playerControlContainer
+                                                }
+                                                playerEle={videoPlayerEle}
+                                            />
+                                        </ThemeProvider>
+                                    </StyleSheetManager>
+                                </MuiThemeProvider>
                             </StylesProvider>
                         </contexts.chatObserver.ChatEventObserverProvider>
                     </contexts.playerRect.PlayerRectProvider>
@@ -100,5 +115,6 @@ export function injectLiveChatOverlay(
         playerControlContainer.remove();
         liveChatContainer.remove();
         jssInsertionPointContainer.remove();
+        styledInsertionPointContainer.remove();
     };
 }

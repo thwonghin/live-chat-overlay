@@ -1,8 +1,7 @@
 import * as React from 'react';
-import cn from 'classnames';
+import styled from 'styled-components';
 
 import type { chatEvent, settingsStorage } from '@/services';
-import classes from './index.scss';
 
 interface Props {
     avatars: chatEvent.Thumbnail[];
@@ -11,29 +10,50 @@ interface Props {
     donationAmount?: string;
 }
 
+const Container = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 1px 10px;
+`;
+
+const AuthorAvatar = styled.img<{ $hasMarginRight: boolean }>`
+    width: 0.6em;
+    height: 0.6em;
+    margin-right: ${({ $hasMarginRight }) => ($hasMarginRight ? '10px' : 0)};
+    border-radius: 0.3em;
+`;
+
+const AuthorName = styled.span<{ $hasMarginRight: boolean }>`
+    margin-right: ${({ $hasMarginRight }) => ($hasMarginRight ? '10px' : 0)};
+    font-size: 0.6em;
+    white-space: nowrap;
+`;
+
+const Donation = styled.span`
+    font-size: 0.6em;
+`;
+
 const AuthorChip: React.FC<Props> = ({
     avatars,
     name,
     authorDisplaySetting,
     donationAmount,
 }) => {
-    const isAvatorShown =
+    const isAvatarShown =
         authorDisplaySetting === 'all' ||
         authorDisplaySetting === 'avatar-only';
     const isNameShown =
         authorDisplaySetting === 'all' || authorDisplaySetting === 'name-only';
 
-    if (!isAvatorShown && !isNameShown && !donationAmount) {
+    if (!isAvatarShown && !isNameShown && !donationAmount) {
         return null;
     }
 
     return (
-        <div className={classes.author}>
-            {isAvatorShown && (
-                <img
-                    className={cn(classes['author-avator'], {
-                        [classes.mr]: isNameShown || Boolean(donationAmount),
-                    })}
+        <Container>
+            {isAvatarShown && (
+                <AuthorAvatar
+                    $hasMarginRight={isNameShown || Boolean(donationAmount)}
                     src={avatars[0]?.url}
                     width={avatars[0]?.width}
                     height={avatars[0]?.height}
@@ -41,18 +61,12 @@ const AuthorChip: React.FC<Props> = ({
                 />
             )}
             {isNameShown && (
-                <span
-                    className={cn(classes['author-name'], {
-                        [classes.mr]: Boolean(donationAmount),
-                    })}
-                >
+                <AuthorName $hasMarginRight={Boolean(donationAmount)}>
                     {name}
-                </span>
+                </AuthorName>
             )}
-            {Boolean(donationAmount) && (
-                <span className={classes.donation}>{donationAmount}</span>
-            )}
-        </div>
+            {Boolean(donationAmount) && <Donation>{donationAmount}</Donation>}
+        </Container>
     );
 };
 
