@@ -22,4 +22,4 @@ Read [LICENSE](LICENSE) file.
 - Run `yarn start` to start webpack server in development environment. Then you can import '/dist' folder as extension.
 - Run `yarn build:prod` to build in optimized settings.
 - Run `yarn storybook` to start [storybook](https://storybook.js.org/).
-- Please follow [Convertional Commit](https://www.conventionalcommits.org/en/v1.0.0/) for commit messages. [Commitlint](https://github.com/conventional-changelog/commitlint) is used to check for incorrect format.
+- Please follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) for commit messages. [Commitlint](https://github.com/conventional-changelog/commitlint) is used to check for incorrect format.
