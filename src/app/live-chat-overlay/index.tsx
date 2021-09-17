@@ -58,7 +58,7 @@ export function injectLiveChatOverlay(
     const styledInsertionPoint = window.parent.document.createElement('div');
     styledInsertionPoint.id = 'live-chat-overlay-styled';
     styledInsertionPointContainer.append(styledInsertionPoint);
-    window.parent.document.head.append(styledInsertionPoint);
+    window.parent.document.head.append(styledInsertionPointContainer);
 
     ReactDOM.render(
         <StrictMode>

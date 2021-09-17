@@ -2,12 +2,7 @@ import * as path from 'path';
 import * as webpack from 'webpack';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import { TypedCssModulesPlugin } from 'typed-css-modules-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
-import postcssPresetEnv from 'postcss-preset-env';
-import cssNano from 'cssnano';
-import stylelint from 'stylelint';
 
 const rootDir = path.resolve(__dirname, '../..');
 const srcDir = path.resolve(rootDir, 'src');
@@ -44,7 +39,7 @@ const config = (
             plugins: [
                 new TsconfigPathsPlugin({ configFile: tsconfigPath }) as any,
             ],
-            extensions: ['.ts', '.tsx', '.js', '.jsx', '.css'],
+            extensions: ['.ts', '.tsx', '.js', '.jsx'],
         },
         entry: {
             'content-script': path.resolve(srcDir, 'content-script.ts'),
@@ -66,37 +61,6 @@ const config = (
                     test: /\.(js|jsx|ts|tsx)$/i,
                     use: 'swc-loader',
                 },
-                {
-                    test: /\.s[ac]ss$/i,
-                    use: [
-                        webpackEnv.storybook
-                            ? 'style-loader'
-                            : MiniCssExtractPlugin.loader,
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                modules: true,
-                            },
-                        },
-                        {
-                            loader: 'postcss-loader',
-                            options: {
-                                postcssOptions: {
-                                    plugins: [
-                                        ...(shouldSkipPreChecking
-                                            ? []
-                                            : [stylelint]),
-                                        postcssPresetEnv(),
-                                        ...(mode === 'production'
-                                            ? [cssNano()]
-                                            : []),
-                                    ],
-                                },
-                            },
-                        },
-                        'sass-loader',
-                    ],
-                },
             ],
         },
         plugins: [
@@ -104,9 +68,6 @@ const config = (
             ...(shouldSkipPreChecking
                 ? []
                 : [
-                      new TypedCssModulesPlugin({
-                          globPattern: 'src/**/*.scss',
-                      }),
                       new ForkTsCheckerWebpackPlugin({
                           async: true,
                           eslint: {
@@ -128,9 +89,6 @@ const config = (
                     },
                 ],
             }) as unknown as webpack.WebpackPluginInstance,
-            new MiniCssExtractPlugin({
-                filename: '[name].css',
-            }),
             // Webpack 5 removed node.js polyfills, but React still using it
             new webpack.DefinePlugin({
                 'process.env': {

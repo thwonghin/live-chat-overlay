@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react';
-import cn from 'classnames';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
 import { useSettings } from '@/hooks';
@@ -7,7 +7,10 @@ import { youtube } from '@/utils';
 import { useI18n } from '@/contexts/i18n';
 
 import BtnTooltip from '../btn-tooltip';
-import classes from './index.scss';
+
+const Button = styled.button`
+    text-align: center;
+`;
 
 const iconToBtnRatio = 2 / 3;
 const faCommentSlashHeight = 640;
@@ -52,14 +55,14 @@ const ToggleBtn: React.FC = () => {
 
     return (
         <BtnTooltip title={title}>
-            <button
-                className={cn([classes.btn, youtube.CLASS_PLAYER_CTL_BTN])}
+            <Button
+                className={youtube.CLASS_PLAYER_CTL_BTN}
                 aria-label={title}
                 type="button"
                 onClick={handleClick}
             >
                 {icon}
-            </button>
+            </Button>
         </BtnTooltip>
     );
 };

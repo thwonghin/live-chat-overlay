@@ -1,12 +1,15 @@
 import type { I18n } from 'webextension-polyfill-ts';
 import { useCallback, useMemo } from 'react';
 import { Select, FormLabel, MenuItem, SelectChangeEvent } from '@mui/material';
+import styled from 'styled-components';
 
 import { assertNever } from '@/utils';
 import type { settingsStorage } from '@/services';
 import { useI18n } from '@/contexts/i18n';
 
-import classes from './index.scss';
+const StyledFormLabel = styled(FormLabel)`
+    margin-right: 8px;
+`;
 
 function getStringByMessageKey(
     i18n: I18n.Static,
@@ -72,9 +75,9 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
 
     return (
         <div>
-            <FormLabel className={classes.label}>
+            <StyledFormLabel>
                 {i18n.getMessage('messageTypeSelectLabel')}
-            </FormLabel>
+            </StyledFormLabel>
             <Select
                 variant="standard"
                 color="secondary"

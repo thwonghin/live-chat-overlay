@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import cn from 'classnames';
+import styled from 'styled-components';
 
 import { youtube } from '@/utils';
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
@@ -7,7 +7,31 @@ import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-
 import { useNativeStopKeydownPropagation } from '@/hooks';
 import type { settingsStorage } from '@/services';
 
-import classes from './index.scss';
+const Container = styled.div<{ $isHidden: boolean }>`
+    right: 12px;
+    bottom: 49px;
+    z-index: 71;
+    width: 340px;
+    height: 364px;
+
+    .${youtube.CLASS_BIG_MODE} & {
+        right: 24px;
+        bottom: 70px;
+    }
+
+    ${({ $isHidden }) => ($isHidden ? 'display: none;' : '')}
+`;
+
+const NestContainer = styled.div`
+    width: 100%;
+    height: 100%;
+`;
+
+const Content = styled.div`
+    width: 100%;
+    height: 100%;
+    padding: 0 16px;
+`;
 
 interface Props {
     isHidden: boolean;
@@ -24,22 +48,13 @@ const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
     useNativeStopKeydownPropagation(containerRef);
 
     return (
-        <div
+        <Container
             ref={containerRef}
-            className={cn([
-                youtube.CLASS_POPUP,
-                classes.container,
-                {
-                    [classes['container-hidden']]: isHidden,
-                },
-            ])}
+            $isHidden={isHidden}
+            className={youtube.CLASS_POPUP}
         >
-            <div
-                className={cn([youtube.CLASS_PANEL, classes['nest-container']])}
-            >
-                <div
-                    className={cn([youtube.CLASS_PANEL_MENU, classes.content])}
-                >
+            <NestContainer className={youtube.CLASS_PANEL}>
+                <Content className={youtube.CLASS_PANEL_MENU}>
                     <MessageSettingsTypeSelect
                         value={selectedMessageType}
                         onChange={setSelectedMessageType}
@@ -47,9 +62,9 @@ const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
                     <MessageSettingsInputForm
                         messageSettingsKey={selectedMessageType}
                     />
-                </div>
-            </div>
-        </div>
+                </Content>
+            </NestContainer>
+        </Container>
     );
 };
 

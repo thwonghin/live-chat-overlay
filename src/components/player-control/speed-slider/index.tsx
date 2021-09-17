@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Slider } from '@mui/material';
+import { Slider, sliderClasses } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useDebouncedCallback } from 'use-debounce';
 import styled from 'styled-components';
@@ -17,55 +17,48 @@ function reverse(value: number): number {
 const StyledSlider = styled(Slider)<{ $isHidden: boolean }>`
     .${youtube.CLASS_BIG_MODE} & {
         width: 78px;
+        height: 4px;
     }
 
-    width: ${({ $isHidden }) => ($isHidden ? '0 !important' : '52px')};
+    width: ${({ $isHidden }) => ($isHidden ? '0' : '52px')};
+    height: 3px;
     margin-right: 8px;
     color: #fff;
+    border-radius: 0;
     will-change: width;
     transition: cubic-bezier(0.4, 0, 1, 1), width 0.2s;
 
-    & .MuiSlider-thumb {
+    & .${sliderClasses.thumb} {
         .${youtube.CLASS_BIG_MODE} & {
             width: 18px;
             height: 18px;
             border-radius: 9px;
         }
 
-        display: ${({ $isHidden }) =>
-            $isHidden ? 'none !important' : 'initial'};
+        display: ${({ $isHidden }) => ($isHidden ? 'none' : 'initial')};
         width: 12px;
         height: 12px;
         border-radius: 6px;
         &:hover {
-            box-shadow: none !important;
+            box-shadow: none;
         }
-        &.Mui-active {
-            box-shadow: none !important;
+        &.${sliderClasses.active} {
+            box-shadow: none;
         }
-        &.Mui-focusVisible {
-            box-shadow: none !important;
+        &.${sliderClasses.focusVisible} {
+            box-shadow: none;
         }
     }
 
-    & .MuiSlider-rail {
-        .${youtube.CLASS_BIG_MODE} & {
-            height: 4px;
-        }
-        height: 3px;
-        border-radius: 0;
+    & .${sliderClasses.rail} {
+        height: inherit;
         opacity: 0.2;
     }
 
-    & .MuiSlider-track {
-        .${youtube.CLASS_BIG_MODE} & {
-            height: 4px;
-        }
-
-        display: ${({ $isHidden }) =>
-            $isHidden ? 'none !important' : 'initial'};
-        height: 3px;
-        border-radius: 0;
+    & .${sliderClasses.track} {
+        display: ${({ $isHidden }) => ($isHidden ? 'none' : 'initial')};
+        height: inherit;
+        border: none;
     }
 `;
 
