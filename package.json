@@ -20,7 +20,6 @@
         "clean": "rm -rf dist .storybook/dist webpack/dist webpack/tsconfig.tsbuildinfo",
         "build": "tsc -p webpack && webpack --config webpack/dist/webpack.config.js",
         "build:prod": "yarn build --env production",
-        "build:release": "yarn build --env release",
         "start": "yarn build --env development --watch",
         "postversion": "npx conventional-changelog-cli -p live-chat-overlay -i CHANGELOG.md -s && git add CHANGELOG.md",
         "version:set": "dot-json dist/manifest.json version",

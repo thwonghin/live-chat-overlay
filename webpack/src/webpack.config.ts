@@ -9,7 +9,7 @@ const rootDir = path.resolve(__dirname, '../..');
 const srcDir = path.resolve(rootDir, 'src');
 const distDir = path.resolve(rootDir, 'dist');
 
-type WebpackEnv = 'production' | 'development' | 'release' | 'storybook';
+type WebpackEnv = 'production' | 'development' | 'storybook';
 
 const config = (
     webpackEnv: Partial<Record<WebpackEnv, boolean>>,
@@ -19,14 +19,13 @@ const config = (
             return 'development';
         }
 
-        if (webpackEnv.production || webpackEnv.release) {
+        if (webpackEnv.production) {
             return 'production';
         }
 
         return 'none';
     }
 
-    const shouldSkipPreChecking = webpackEnv === 'release';
     const mode = getMode();
     const tsconfigPath = path.resolve(
         rootDir,
@@ -58,23 +57,18 @@ const config = (
             ],
         },
         plugins: [
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            ...(shouldSkipPreChecking
-                ? []
-                : [
-                      new ForkTsCheckerWebpackPlugin({
-                          async: true,
-                          eslint: {
-                              files: ['src/**/*.tsx', 'src/**/*.ts'],
-                              enabled: true,
-                          },
-                          typescript: {
-                              enabled: true,
-                              configFile: tsconfigPath,
-                              mode: 'write-references',
-                          },
-                      }) as any,
-                  ]),
+            new ForkTsCheckerWebpackPlugin({
+                async: true,
+                eslint: {
+                    files: ['src/**/*.tsx', 'src/**/*.ts'],
+                    enabled: true,
+                },
+                typescript: {
+                    enabled: true,
+                    configFile: tsconfigPath,
+                    mode: 'write-references',
+                },
+            }),
             new CopyWebpackPlugin({
                 patterns: [
                     {
@@ -82,7 +76,7 @@ const config = (
                         from: '**/*',
                     },
                 ],
-            }) as unknown as webpack.WebpackPluginInstance,
+            }),
             // Webpack 5 removed node.js polyfills, but React still using it
             new webpack.DefinePlugin({
                 'process.env': {
