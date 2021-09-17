@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
-import type { settingsStorage } from '@/services';
+
 import { useSettings } from '@/hooks';
+import type { settingsStorage } from '@/services';
 
 import Layout from './layout';
 

@@ -1,9 +1,10 @@
 import * as React from 'react';
+
 import { chatEvent } from '@/services';
 import { assertNever } from '@/utils';
 
-import TextPartRenderer from './text-part-renderer';
 import EmojiPartRenderer from './emoji-part-renderer';
+import TextPartRenderer from './text-part-renderer';
 
 interface Props {
     className?: string;

@@ -1,5 +1,6 @@
-import { assertNever, colorFromDecimal } from '@/utils';
 import type * as liveChatResponse from '@/definitions/youtube';
+import { assertNever, colorFromDecimal } from '@/utils';
+
 import * as chatModel from '../models';
 
 function getAuthorTypeFromBadges(

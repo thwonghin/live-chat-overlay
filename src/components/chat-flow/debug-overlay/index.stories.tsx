@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { DebugOverlayLayout } from './index';
 
 const settings = { title: 'DebugOverlay' };

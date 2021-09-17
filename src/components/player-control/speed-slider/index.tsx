@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
+
 import { Slider, sliderClasses } from '@mui/material';
 import { isNil } from 'lodash-es';
-import { useDebouncedCallback } from 'use-debounce';
 import styled from 'styled-components';
+import { useDebouncedCallback } from 'use-debounce';
 
 import { useSettings } from '@/hooks';
 import { youtube } from '@/utils';

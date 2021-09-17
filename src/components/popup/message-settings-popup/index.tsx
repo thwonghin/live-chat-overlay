@@ -1,11 +1,12 @@
 import { useRef, useState } from 'react';
+
 import styled from 'styled-components';
 
-import { youtube } from '@/utils';
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
 import { useNativeStopKeydownPropagation } from '@/hooks';
 import type { settingsStorage } from '@/services';
+import { youtube } from '@/utils';
 
 const Container = styled.div<{ $isHidden: boolean }>`
     right: 12px;

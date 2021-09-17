@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import type { chatEvent, settingsStorage } from '@/services';
+
 import PinnedMessage from '.';
 
 const settings = { title: 'PinnedMessage' };

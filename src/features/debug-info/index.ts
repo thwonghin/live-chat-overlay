@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { State } from './types';
 import { calculateBenchmark } from './helpers';
+import { State } from './types';
 
 const initialState: State = {
     isDebugging: false,

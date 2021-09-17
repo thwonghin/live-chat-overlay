@@ -1,13 +1,13 @@
 import { useCallback } from 'react';
+
+import { faPalette } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPalette } from '@fortawesome/free-solid-svg-icons';
 
-import { youtube } from '@/utils';
 import { useI18n } from '@/contexts/i18n';
-
 import { popup } from '@/features';
+import { youtube } from '@/utils';
 
 import BtnTooltip from '../btn-tooltip';
 

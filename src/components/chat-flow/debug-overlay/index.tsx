@@ -1,9 +1,10 @@
 import * as React from 'react';
+
 import { useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components';
 
 import type { RootState } from '@/app/live-chat-overlay/store';
-import type { debugInfo } from '@/features/';
+import type { debugInfo } from '@/features';
 
 interface ChatEventDebugInfo {
     messagesCount: number;

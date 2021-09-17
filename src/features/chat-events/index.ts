@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { settingsStorage, chatEvent } from '@/services';
 import { UiChatItem } from '@/components/chat-flow/types';
+import { settingsStorage, chatEvent } from '@/services';
 
-import { State } from './types';
 import { getLineNumber } from './helpers';
+import { State } from './types';
 
 const initialState: State = {
     lastLineNumber: null,

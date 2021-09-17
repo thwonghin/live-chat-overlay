@@ -1,4 +1,5 @@
 import { useCallback, useMemo, CSSProperties } from 'react';
+
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components';
 
@@ -7,11 +8,11 @@ import { chatEvents } from '@/features';
 import { useSettings, useInterval, useVideoPlayerRect } from '@/hooks';
 import { settingsStorage, chatEvent } from '@/services';
 
-import { useToggleDebugMode } from './use-toggle-debug-mode';
-import MessageFlower from './message-flower';
 import ChatItemRenderer from './chat-item-renderer';
-import { UiChatItem } from './types';
 import DebugOverlay from './debug-overlay';
+import MessageFlower from './message-flower';
+import { UiChatItem } from './types';
+import { useToggleDebugMode } from './use-toggle-debug-mode';
 
 const Container = styled.div`
     position: relative;

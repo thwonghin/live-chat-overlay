@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
+
 import ReactDOM from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { popup } from '@/features';
 import type { RootState } from '@/app/live-chat-overlay/store';
+import { popup } from '@/features';
 
 import MessageSettingsPopup from './message-settings-popup';
 

@@ -1,10 +1,11 @@
 import * as React from 'react';
+
 import styled from 'styled-components';
 
 import { chatEvent, settingsStorage } from '@/services';
 
-import MessagePartsRenderer from '../message-parts-renderer';
 import AuthorChip from '../author-chip';
+import MessagePartsRenderer from '../message-parts-renderer';
 
 const Container = styled.div`
     display: flex;

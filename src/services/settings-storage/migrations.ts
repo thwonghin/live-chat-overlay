@@ -1,7 +1,7 @@
 import { Browser } from 'webextension-polyfill-ts';
 
-import type { Settings } from './types';
 import { SETTINGS_STORAGE_KEY } from './const';
+import type { Settings } from './types';
 
 export const migrations: Array<{
     name: string;

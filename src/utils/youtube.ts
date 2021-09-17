@@ -1,5 +1,5 @@
-import { appendScript, functionToString } from '@/utils';
 import type { InitData, YotubeChatResponse } from '@/definitions/youtube';
+import { appendScript, functionToString } from '@/utils';
 
 export const CLASS_BIG_MODE = 'ytp-big-mode';
 export const CLASS_PLAYER_CTL_BTN = 'ytp-button';

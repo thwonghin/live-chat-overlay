@@ -1,6 +1,8 @@
+import type * as liveChatResponse from '@/definitions/youtube';
 import type { settingsStorage } from '@/services';
 import { isNotNil, assertNever } from '@/utils';
-import type * as liveChatResponse from '@/definitions/youtube';
+
+import * as chatModel from '../models';
 import {
     mapLiveChatTextMessageRenderer,
     mapLiveChatPaidMessageItemRenderer,
@@ -8,7 +10,6 @@ import {
     mapLiveChatPaidStickerRenderer,
     mapPinnedLiveChatTextMessageRenderer,
 } from './helpers';
-import * as chatModel from '../models';
 
 interface MapActionsParameters {
     actions: Array<
