@@ -157,6 +157,7 @@ export interface LiveChatMembershipItemRenderer {
     authorName?: AuthorName;
     authorPhoto: AuthorPhoto;
     authorBadges: AuthorBadge[];
+    message?: Message;
     contextMenuEndpoint: ContextMenuEndpoint;
     contextMenuAccessibility: ContextMenuAccessibility;
 }
