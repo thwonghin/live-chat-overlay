@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { isNil } from 'lodash-es';
 
 import { UiChatItem } from '@/components/chat-flow/types';
 import { settingsStorage, chatEvent } from '@/services';
@@ -32,7 +33,7 @@ const slice = createSlice({
                 return state;
             }
 
-            if (!chatItem.width) {
+            if (isNil(chatItem.width)) {
                 throw new Error('Unknown width');
             }
 
