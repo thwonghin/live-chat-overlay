@@ -1,3 +1,4 @@
+import { isNil } from 'lodash-es';
 import ReactDOM from 'react-dom';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
@@ -66,8 +67,8 @@ export async function assignChatItemRenderedWidth({
         const rect = containerEle?.children[index]?.getBoundingClientRect();
 
         const width = rect?.width;
-        if (!width) {
-            throw new Error('Unknown error');
+        if (isNil(width)) {
+            throw new Error('Missing width');
         }
 
         return {
