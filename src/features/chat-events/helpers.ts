@@ -1,4 +1,4 @@
-import { last } from 'lodash-es';
+import { last, isNil } from 'lodash-es';
 
 import type { UiChatItem } from '@/components/chat-flow/types';
 
@@ -21,7 +21,7 @@ function hasSpaceInLine({
     const lastMessageFlowedTime =
         (addTimestamp - lastMessageInLine.addTimestamp) / 1000;
     const lastMessageWidth = lastMessageInLine.width;
-    if (!lastMessageWidth) {
+    if (isNil(lastMessageWidth)) {
         throw new Error('Unknown width');
     }
 
