@@ -1,3 +1,16 @@
+## 2.12.0 (2021-09-22)
+
+* ci: manually cache yarn install (#746) ([5b7c22a](https://github.com/thwonghin/live-chat-overlay/commit/5b7c22a)), closes [#746](https://github.com/thwonghin/live-chat-overlay/issues/746)
+* ci: remove build release (#739) ([02e9505](https://github.com/thwonghin/live-chat-overlay/commit/02e9505)), closes [#739](https://github.com/thwonghin/live-chat-overlay/issues/739)
+* chore: update tsconfig (#744) ([1a4ef42](https://github.com/thwonghin/live-chat-overlay/commit/1a4ef42)), closes [#744](https://github.com/thwonghin/live-chat-overlay/issues/744)
+* chore: upgrade deps 2021-09-22 (#742) ([342f340](https://github.com/thwonghin/live-chat-overlay/commit/342f340)), closes [#742](https://github.com/thwonghin/live-chat-overlay/issues/742)
+* chore: upgrade node version to 16.9.1 (#743) ([2d41211](https://github.com/thwonghin/live-chat-overlay/commit/2d41211)), closes [#743](https://github.com/thwonghin/live-chat-overlay/issues/743)
+* chore: use swc jest (#745) ([f8003b0](https://github.com/thwonghin/live-chat-overlay/commit/f8003b0)), closes [#745](https://github.com/thwonghin/live-chat-overlay/issues/745)
+* fix: random error getting ele width (#741) ([cc1a392](https://github.com/thwonghin/live-chat-overlay/commit/cc1a392)), closes [#741](https://github.com/thwonghin/live-chat-overlay/issues/741)
+* feat: support membership superchat (#740) ([b2a4138](https://github.com/thwonghin/live-chat-overlay/commit/b2a4138)), closes [#740](https://github.com/thwonghin/live-chat-overlay/issues/740)
+
+
+
 ## 2.11.0 (2021-09-17)
 
 * style: organize imports (#738) ([9def77d](https://github.com/thwonghin/live-chat-overlay/commit/9def77d)), closes [#738](https://github.com/thwonghin/live-chat-overlay/issues/738)
