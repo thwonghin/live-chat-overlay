@@ -121,7 +121,7 @@ export function mapLiveChatMembershipItemRenderer({
 }: MapLiveChatMembershipItemRendererParameters): chatModel.MembershipItem {
     return {
         id: renderer.id,
-        messageParts: (renderer.headerSubtext?.runs ?? []).map(mapMessagePart),
+        messageParts: (renderer.message?.runs ?? []).map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
         videoTimestampInMs:
             videoTimestampInMs ??
