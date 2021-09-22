@@ -125,7 +125,7 @@ async function init(inputBrowser: Browser): Promise<void> {
     browser = inputBrowser;
     try {
         await runMigrations();
-    } catch (error: unknown) {
+    } catch (error) {
         console.error(
             'Fail to run migration, fallback to default settings...',
             error,

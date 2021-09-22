@@ -20,6 +20,7 @@ module.exports = {
         "unicorn/no-array-callback-reference": "off",
         "react-hooks/exhaustive-deps": "error",
         "node/file-extension-in-import": "off",
+        "@typescript-eslint/no-implicit-any-catch": "off", // using 'useUnknownInCatchVariables' in tsconfig by default
         "import/order": [
             "error",
             {
