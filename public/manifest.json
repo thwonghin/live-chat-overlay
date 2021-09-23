@@ -3,20 +3,31 @@
     "version": "1.0.0",
     "description": "__MSG_extensionDescription__",
     "homepage_url": "https://github.com/thwonghin/live-chat-overlay",
-    "manifest_version": 2,
-    "minimum_chrome_version": "74",
+    "manifest_version": 3,
+    "minimum_chrome_version": "88",
     "icons": {
         "128": "icon.png"
     },
     "default_locale": "en",
     "permissions": ["storage"],
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'self'"
+    },
     "content_scripts": [
         {
             "run_at": "document_start",
-            "matches": ["https://www.youtube.com/*"],
+            "matches": ["https://www.youtube.com/live_chat*"],
             "all_frames": true,
             "js": ["content-script.js"]
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "get-live-chat-init-data.js",
+                "live-chat-fetch-interceptor.js"
+            ],
+            "matches": ["https://www.youtube.com/*"]
         }
     ]
 }

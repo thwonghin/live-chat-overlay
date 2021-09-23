@@ -1,15 +1,18 @@
 import './common';
 import { browser } from 'webextension-polyfill-ts';
 
-import { fetchInterceptor, settingsStorage } from '@/services';
-import { youtube } from '@/utils';
+import { settingsStorage } from '@/services';
+import { youtube, injectScript } from '@/utils';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
 
 async function init(): Promise<void> {
     await settingsStorage.storageInstance.init(browser);
-    const detechFetchInterceptor = fetchInterceptor.attach(browser.runtime.id);
-    const initData = await youtube.getInitData(browser.runtime.id);
+    injectScript(browser.runtime.getURL('live-chat-fetch-interceptor.js'));
+
+    const initData = await youtube.getInitData(
+        browser.runtime.getURL('get-live-chat-init-data.js'),
+    );
 
     await youtube.waitForPlayerReady();
 
@@ -17,12 +20,9 @@ async function init(): Promise<void> {
 
     function cleanup(): void {
         cleanupLiveChat();
-        detechFetchInterceptor();
     }
 
     window.addEventListener('unload', cleanup);
 }
 
-if (youtube.isInsideLiveChatFrame()) {
-    document.addEventListener('DOMContentLoaded', init);
-}
+document.addEventListener('DOMContentLoaded', init);

@@ -34,6 +34,7 @@ const config = (
 
     const config: webpack.Configuration = {
         mode,
+        devtool: mode === 'development' ? 'inline-cheap-source-map' : false,
         stats: mode === 'production' ? 'errors-only' : 'normal',
         resolve: {
             plugins: [
@@ -43,6 +44,14 @@ const config = (
         },
         entry: {
             'content-script': path.resolve(srcDir, 'content-script.ts'),
+            'get-live-chat-init-data': path.resolve(
+                srcDir,
+                'get-live-chat-init-data.ts',
+            ),
+            'live-chat-fetch-interceptor': path.resolve(
+                srcDir,
+                'live-chat-fetch-interceptor.ts',
+            ),
         },
         output: {
             path: distDir,

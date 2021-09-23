@@ -65,9 +65,7 @@ export function injectLiveChatOverlay(
             <Provider store={store}>
                 <contexts.i18n.I18nProvider browser={browser}>
                     <contexts.playerRect.PlayerRectProvider>
-                        <contexts.chatObserver.ChatEventObserverProvider
-                            chatEventPrefix={browser.runtime.id}
-                        >
+                        <contexts.chatObserver.ChatEventObserverProvider>
                             <MuiThemeProvider theme={theme}>
                                 <StyleSheetManager
                                     target={styledInsertionPoint}

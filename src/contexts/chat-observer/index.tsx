@@ -1,25 +1,18 @@
 import * as React from 'react';
 
+import { LIVE_CHAT_API_INTERCEPT_EVENT } from '@/constants';
 import { chatEvent } from '@/services';
 import { youtube } from '@/utils';
 
 export const ChatEventObserverContext =
     React.createContext<chatEvent.ResponseObserver>(
         new chatEvent.ResponseObserver(
-            '_chat_message',
+            LIVE_CHAT_API_INTERCEPT_EVENT,
             document.createElement('video'),
         ),
     );
 
-interface Props {
-    chatEventPrefix: string;
-    children: React.ReactNode;
-}
-
-export const ChatEventObserverProvider: React.FC<Props> = ({
-    chatEventPrefix,
-    children,
-}) => {
+export const ChatEventObserverProvider: React.FC = ({ children }) => {
     const video = React.useMemo(() => youtube.getVideoEle(), []);
     if (!video) {
         throw new Error('Video element not found');
@@ -28,10 +21,10 @@ export const ChatEventObserverProvider: React.FC<Props> = ({
     const observer = React.useMemo(
         () =>
             new chatEvent.ResponseObserver(
-                `${chatEventPrefix}_chat_message`,
+                LIVE_CHAT_API_INTERCEPT_EVENT,
                 video,
             ),
-        [chatEventPrefix, video],
+        [video],
     );
 
     return (
