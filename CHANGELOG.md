@@ -1,3 +1,9 @@
+## <small>2.13.1 (2021-09-23)</small>
+
+* fix: missing entry point script (#748) ([61e7512](https://github.com/thwonghin/live-chat-overlay/commit/61e7512)), closes [#748](https://github.com/thwonghin/live-chat-overlay/issues/748)
+
+
+
 ## 2.13.0 (2021-09-23)
 
 * chore: migrate to manifest v3 (#747) ([5ffd8a8](https://github.com/thwonghin/live-chat-overlay/commit/5ffd8a8)), closes [#747](https://github.com/thwonghin/live-chat-overlay/issues/747)
