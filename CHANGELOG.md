@@ -1,3 +1,9 @@
+## 2.13.0 (2021-09-23)
+
+* chore: migrate to manifest v3 (#747) ([5ffd8a8](https://github.com/thwonghin/live-chat-overlay/commit/5ffd8a8)), closes [#747](https://github.com/thwonghin/live-chat-overlay/issues/747)
+
+
+
 ## 2.12.0 (2021-09-22)
 
 * ci: manually cache yarn install (#746) ([5b7c22a](https://github.com/thwonghin/live-chat-overlay/commit/5b7c22a)), closes [#746](https://github.com/thwonghin/live-chat-overlay/issues/746)
