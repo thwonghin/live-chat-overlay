@@ -21,26 +21,14 @@ export function isNotNil<T>(value?: T | null): value is NonNullable<T> {
     return !isNil(value);
 }
 
-export function functionToString(
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    func: Function,
-    ...parameters: string[]
-): string {
-    return `(${func.toString()})(${parameters
-        .map((parameter) => `'${parameter}'`)
-        .join(',')})`;
-}
-
-export function appendScript(doc: Document, script: string): () => void {
-    const scriptTag = doc.createElement('script');
-    scriptTag.type = 'text/javascript';
-    scriptTag.innerHTML = script;
-
-    doc.body.append(scriptTag);
-
-    return (): void => {
+export function injectScript(scriptSrc: string) {
+    const scriptTag = document.createElement('script');
+    scriptTag.src = scriptSrc;
+    scriptTag.addEventListener('load', () => {
         scriptTag.remove();
-    };
+    });
+
+    document.head.appendChild(scriptTag);
 }
 
 interface BenchmarkResult<T> {

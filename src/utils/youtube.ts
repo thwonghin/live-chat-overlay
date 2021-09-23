@@ -1,5 +1,7 @@
 import type { InitData, YotubeChatResponse } from '@/definitions/youtube';
-import { appendScript, functionToString } from '@/utils';
+import { injectScript } from '@/utils';
+
+import { LIVE_CHAT_INIT_DATA } from '../constants';
 
 export const CLASS_BIG_MODE = 'ytp-big-mode';
 export const CLASS_PLAYER_CTL_BTN = 'ytp-button';
@@ -102,44 +104,14 @@ export function isInsideLiveChatFrame(): boolean {
     return window.location.href.startsWith('https://www.youtube.com/live_chat');
 }
 
-function dispatchInitData(prefix: string): void {
-    // Window.ytInitialData is mutated, need to get from raw HTML
-    const initialDataTag = [...document.querySelectorAll('script')].find(
-        (tag) =>
-            !tag.innerHTML.includes(prefix) &&
-            tag.innerHTML.includes('window["ytInitialData"] ='),
-    );
-
-    if (!initialDataTag) {
-        return;
-    }
-
-    const innerHTML = initialDataTag.innerHTML.trim();
-    const startIndex = innerHTML.indexOf('{"responseContext"');
-    const initData = innerHTML.slice(startIndex, -1);
-
-    const event = new CustomEvent<{ data: InitData }>(`${prefix}_init_data`, {
-        detail: {
-            data: JSON.parse(initData) as InitData,
-        },
-    });
-
-    setTimeout(() => window.dispatchEvent(event), 0);
-}
-
-export async function getInitData(prefix: string): Promise<InitData> {
+export async function getInitData(scriptSrc: string): Promise<InitData> {
     return new Promise((resolve) => {
-        const removeScript = appendScript(
-            document,
-            functionToString(dispatchInitData, prefix),
-        );
-
-        window.addEventListener(`${prefix}_init_data`, (event) => {
+        window.addEventListener(LIVE_CHAT_INIT_DATA, (event) => {
             const customEvent = event as CustomEvent<{ data: InitData }>;
 
-            removeScript();
             resolve(customEvent.detail.data);
         });
+        injectScript(scriptSrc);
     });
 }
 
