@@ -1,3 +1,4 @@
+import './common';
 import { InitData } from '@/definitions/youtube';
 
 import { LIVE_CHAT_INIT_DATA } from './constants';
