@@ -7,7 +7,7 @@
     "author": "Hin Wong <thwong.henry@gmail.com>",
     "license": "MIT",
     "engines": {
-        "node": ">=16.9.1"
+        "node": ">=18.16.0"
     },
     "scripts": {
         "test:unit": "tsc -p tests && jest tests/unit",
@@ -113,5 +113,8 @@
         "patchedDependencies": {
             "fork-ts-checker-webpack-plugin@6.3.3": "patches/fork-ts-checker-webpack-plugin@6.3.3.patch"
         }
+    },
+    "volta": {
+        "node": "18.16.0"
     }
 }

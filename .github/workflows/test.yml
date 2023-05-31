@@ -21,7 +21,7 @@ jobs:
       - name: Use Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16.9.1'
+          node-version-file: '.nvmrc'
           cache: 'pnpm'
       - name: Install dependencies
         run: |
