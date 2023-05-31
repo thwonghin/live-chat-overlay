@@ -12,20 +12,22 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
       - name: Use Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16.9.1'
-          cache: 'yarn'
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
       - name: Install dependencies
         run: |
-          yarn --immutable
+          pnpm i --frozen-lockfile
       - name: Build Project
-        run: yarn build:prod
+        run: pnpm build:prod
       - name: Update version
         run: |
           export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\/v//')
-          yarn version:set $VER
+          pnpm version:set $VER
       - uses: actions/upload-artifact@v3
         with:
           name: built-extension

@@ -16,26 +16,28 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
       - name: Use Node
         uses: actions/setup-node@v3
         with:
-          node-version: '16.9.1'
-          cache: 'yarn'
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
       - name: Install dependencies
         run: |
-          yarn --immutable
+          pnpm i --frozen-lockfile
       # - name: Check Dependency Vulnerabilities
       #   run: |
-      #     yarn npm audit
+      #     pnpm npm audit
       - name: Lint & Test
         run: |
-          yarn lint && yarn test:unit --ci
+          pnpm lint && pnpm test:unit --ci
       - name: Build
         run: |
-          yarn build:prod
-      - name: Build Storybook
-        run: |
-          yarn storybook:build
+          pnpm build:prod
+      # - name: Build Storybook
+      #   run: |
+      #     pnpm storybook:build
   commitlint:
     name: Commit Lint
     runs-on: ubuntu-20.04
