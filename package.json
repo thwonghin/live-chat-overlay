@@ -7,7 +7,7 @@
     "author": "Hin Wong <thwong.henry@gmail.com>",
     "license": "MIT",
     "engines": {
-        "node": ">=18.16.0"
+        "node": ">=16.20.0"
     },
     "scripts": {
         "test:unit": "tsc -p tests && jest tests/unit",
@@ -116,6 +116,6 @@
         }
     },
     "volta": {
-        "node": "18.16.0"
+        "node": "16.20.0"
     }
 }

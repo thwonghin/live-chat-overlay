@@ -13,7 +13,7 @@ overrides:
 
 patchedDependencies:
   fork-ts-checker-webpack-plugin@6.3.3:
-    hash: mnro6itz2fttskedp2lxq2b2t4
+    hash: mfmc5a3qzhaxzjtbrr64waes7i
     path: patches/fork-ts-checker-webpack-plugin@6.3.3.patch
 
 dependencies:
@@ -171,7 +171,7 @@ devDependencies:
     version: 4.2.0(eslint@7.32.0)
   fork-ts-checker-webpack-plugin:
     specifier: ^6.3.3
-    version: 6.3.3(patch_hash=mnro6itz2fttskedp2lxq2b2t4)(eslint@7.32.0)(typescript@4.4.3)(webpack@5.53.0)
+    version: 6.3.3(patch_hash=mfmc5a3qzhaxzjtbrr64waes7i)(eslint@7.32.0)(typescript@4.4.3)(webpack@5.53.0)
   husky:
     specifier: 7.0.2
     version: 7.0.2
@@ -2923,7 +2923,7 @@ packages:
       core-js: 3.18.0
       css-loader: 5.2.7(webpack@5.53.0)
       dotenv-webpack: 7.1.1(webpack@5.53.0)
-      fork-ts-checker-webpack-plugin: 6.3.3(patch_hash=mnro6itz2fttskedp2lxq2b2t4)(eslint@7.32.0)(typescript@4.4.3)(webpack@5.53.0)
+      fork-ts-checker-webpack-plugin: 6.3.3(patch_hash=mfmc5a3qzhaxzjtbrr64waes7i)(eslint@7.32.0)(typescript@4.4.3)(webpack@5.53.0)
       fs-extra: 9.1.0
       glob: 7.2.3
       glob-promise: 3.4.0(glob@7.2.3)
@@ -3161,7 +3161,7 @@ packages:
       express: 4.18.2
       file-system-cache: 1.1.0
       find-up: 5.0.0
-      fork-ts-checker-webpack-plugin: 6.3.3(patch_hash=mnro6itz2fttskedp2lxq2b2t4)(eslint@7.32.0)(typescript@4.4.3)(webpack@4.46.0)
+      fork-ts-checker-webpack-plugin: 6.3.3(patch_hash=mfmc5a3qzhaxzjtbrr64waes7i)(eslint@7.32.0)(typescript@4.4.3)(webpack@4.46.0)
       glob: 7.2.3
       glob-base: 0.3.0
       interpret: 2.2.0
@@ -7815,7 +7815,7 @@ packages:
       - supports-color
     dev: true
 
-  /fork-ts-checker-webpack-plugin@6.3.3(patch_hash=mnro6itz2fttskedp2lxq2b2t4)(eslint@7.32.0)(typescript@4.4.3)(webpack@4.46.0):
+  /fork-ts-checker-webpack-plugin@6.3.3(patch_hash=mfmc5a3qzhaxzjtbrr64waes7i)(eslint@7.32.0)(typescript@4.4.3)(webpack@4.46.0):
     resolution: {integrity: sha512-S3uMSg8IsIvs0H6VAfojtbf6RcnEXxEpDMT2Q41M2l0m20JO8eA1t4cCJybvrasC8SvvPEtK4B8ztxxfLljhNg==}
     engines: {node: '>=10', yarn: '>=1.0.0'}
     peerDependencies:
@@ -7848,7 +7848,7 @@ packages:
     dev: true
     patched: true
 
-  /fork-ts-checker-webpack-plugin@6.3.3(patch_hash=mnro6itz2fttskedp2lxq2b2t4)(eslint@7.32.0)(typescript@4.4.3)(webpack@5.53.0):
+  /fork-ts-checker-webpack-plugin@6.3.3(patch_hash=mfmc5a3qzhaxzjtbrr64waes7i)(eslint@7.32.0)(typescript@4.4.3)(webpack@5.53.0):
     resolution: {integrity: sha512-S3uMSg8IsIvs0H6VAfojtbf6RcnEXxEpDMT2Q41M2l0m20JO8eA1t4cCJybvrasC8SvvPEtK4B8ztxxfLljhNg==}
     engines: {node: '>=10', yarn: '>=1.0.0'}
     peerDependencies:
