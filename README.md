@@ -19,7 +19,7 @@ Read [LICENSE](LICENSE) file.
 ## Development
 
 - You could use [`nvm`](https://github.com/nvm-sh/nvm) to make sure the node.js version is correct for this project. The node.js version is stated in [package.json](package.json)
-- Run `yarn start` to start webpack server in development environment. Then you can import '/dist' folder as extension.
-- Run `yarn build:prod` to build in optimized settings.
-- Run `yarn storybook` to start [storybook](https://storybook.js.org/).
+- Run `pnpm start` to start webpack server in development environment. Then you can import '/dist' folder as extension.
+- Run `pnpm build:prod` to build in optimized settings.
+- Run `pnpm storybook` to start [storybook](https://storybook.js.org/).
 - Please follow [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/) for commit messages. [Commitlint](https://github.com/conventional-changelog/commitlint) is used to check for incorrect format.

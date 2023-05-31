@@ -11,23 +11,20 @@
     },
     "scripts": {
         "test:unit": "tsc -p tests && jest tests/unit",
-        "lint": "yarn lint:src && yarn lint:test && yarn lint:style",
+        "lint": "pnpm lint:src && pnpm lint:test && pnpm lint:style",
         "lint:script": "eslint --ext ts,tsx",
-        "lint:src": "yarn lint:script src webpack/src",
-        "lint:test": "yarn lint:script tests",
+        "lint:src": "pnpm lint:script src webpack/src",
+        "lint:test": "pnpm lint:script tests",
         "lint:style": "stylelint './src/**/*.tsx'",
-        "lint:fix": "yarn lint:src --fix && yarn lint:test --fix",
+        "lint:fix": "pnpm lint:src --fix && pnpm lint:test --fix",
         "clean": "rm -rf dist .storybook/dist webpack/dist webpack/tsconfig.tsbuildinfo",
         "build": "tsc -p webpack && webpack --config webpack/dist/webpack.config.js",
-        "build:prod": "yarn build --env production",
-        "start": "yarn build --env development --watch",
+        "build:prod": "pnpm build --env production",
+        "start": "pnpm build --env development --watch",
         "postversion": "npx conventional-changelog-cli -p live-chat-overlay -i CHANGELOG.md -s && git add CHANGELOG.md",
         "version:set": "dot-json dist/manifest.json version",
         "storybook": "tsc -p webpack && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && start-storybook -c .storybook/dist/",
-        "storybook:build": "tsc -p webpack && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && build-storybook -c .storybook/dist/ --quiet",
-        "prepublishOnly": "pinst --disable",
-        "postpublish": "pinst --enable",
-        "postinstall": "patch-package"
+        "storybook:build": "tsc -p webpack && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && build-storybook -c .storybook/dist/ --quiet"
     },
     "devDependencies": {
         "@commitlint/cli": "^13.1.0",
@@ -96,8 +93,6 @@
         "core-js": "3.18.0",
         "formik": "^2.2.9",
         "lodash-es": "^4.17.21",
-        "patch-package": "^6.4.7",
-        "postinstall-postinstall": "^2.1.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-redux": "^7.2.5",
@@ -107,11 +102,16 @@
         "use-debounce": "^7.0.0",
         "webextension-polyfill-ts": "^0.26.0"
     },
+    "packageManager": "pnpm@8.6.0",
     "resolutions": {
-        "stylelint-config-rational-order/stylelint": "^13.12.0",
         "trim": "^1.0.1",
         "browserslist": "^4.17.0",
         "glob-parent": "^5.1.2",
         "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+    },
+    "pnpm": {
+        "patchedDependencies": {
+            "fork-ts-checker-webpack-plugin@6.3.3": "patches/fork-ts-checker-webpack-plugin@6.3.3.patch"
+        }
     }
 }

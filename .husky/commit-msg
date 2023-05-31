@@ -2,5 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 echo '$ commit-msg' 
-echo '$ yarn commitlint -e $1'
-yarn commitlint -e $1
+echo '$ pnpm commitlint -e $1'
+pnpm commitlint -e $1
