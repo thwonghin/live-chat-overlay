@@ -9,6 +9,7 @@ overrides:
   browserslist: ^4.17.0
   glob-parent: ^5.1.2
   '@mui/styled-engine': npm:@mui/styled-engine-sc@latest
+  '@types/eslint': '7'
 
 patchedDependencies:
   fork-ts-checker-webpack-plugin@6.3.3:
@@ -3851,12 +3852,12 @@ packages:
   /@types/eslint-scope@3.7.4:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
     dependencies:
-      '@types/eslint': 8.40.0
+      '@types/eslint': 7.29.0
       '@types/estree': 0.0.50
     dev: true
 
-  /@types/eslint@8.40.0:
-    resolution: {integrity: sha512-nbq2mvc/tBrK9zQQuItvjJl++GTN5j06DaPtp3hZCpngmG6Q3xoyEmd0TwZI0gAy/G1X0zhGBbr2imsGFdFV0g==}
+  /@types/eslint@7.29.0:
+    resolution: {integrity: sha512-VNcvioYDH8/FxaeTKkM4/TiTwt6pBV9E3OfGmvaw8tPl0rrHCJ4Ll15HRT+pMiFAf/MLQvAzC+6RzUMEL9Ceng==}
     dependencies:
       '@types/estree': 0.0.50
       '@types/json-schema': 7.0.9

@@ -107,7 +107,8 @@
         "trim": "^1.0.1",
         "browserslist": "^4.17.0",
         "glob-parent": "^5.1.2",
-        "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
+        "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
+        "@types/eslint": "7"
     },
     "pnpm": {
         "patchedDependencies": {
