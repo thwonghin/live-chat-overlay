@@ -39,8 +39,8 @@ const Message = styled(MessagePartsRenderer)<{ $isTruncated: boolean }>`
         $isTruncated
             ? css`
                   overflow: hidden;
-                  white-space: nowrap;
                   text-overflow: ellipsis;
+                  white-space: nowrap;
               `
             : ''}
 `;
