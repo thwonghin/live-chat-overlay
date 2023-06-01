@@ -23,7 +23,7 @@ jobs:
         run: |
           pnpm i --frozen-lockfile
       - name: Build Project
-        run: pnpm build:prod
+        run: pnpm build
       - uses: actions/upload-artifact@v3
         with:
           name: built-extension
