@@ -28,7 +28,7 @@ jobs:
           pnpm i --frozen-lockfile
       - name: Check Dependency Vulnerabilities
         run: |
-          pnpm npm audit
+          pnpm audit
       - name: Lint & Test
         run: |
           pnpm lint && pnpm test:unit --ci
