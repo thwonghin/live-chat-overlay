@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+import CopyPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import * as webpack from 'webpack';
@@ -73,14 +73,14 @@ const config = (
                     mode: 'write-references',
                 },
             }),
-            new CopyWebpackPlugin({
+            new CopyPlugin({
                 patterns: [
                     {
                         context: 'public',
                         from: '**/*',
                     },
                 ],
-            }),
+            }) as any,
             // Webpack 5 removed node.js polyfills, but React still using it
             new webpack.DefinePlugin({
                 'process.env': {
