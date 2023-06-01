@@ -14,7 +14,7 @@
         "test:unit": "tsc -p tests && jest tests/unit",
         "lint": "pnpm lint:src && pnpm lint:test && pnpm lint:style",
         "lint:script": "eslint --ext ts,tsx",
-        "lint:src": "pnpm lint:script src webpack/src",
+        "lint:src": "pnpm lint:script src",
         "lint:test": "pnpm lint:script tests",
         "lint:style": "stylelint './src/**/*.tsx'",
         "lint:fix": "pnpm lint:src --fix && pnpm lint:test --fix",
