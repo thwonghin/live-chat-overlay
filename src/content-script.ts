@@ -1,5 +1,5 @@
 import './common';
-import { browser } from 'webextension-polyfill-ts';
+import browser from 'webextension-polyfill';
 
 import { settingsStorage } from '@/services';
 import { youtube, injectScript } from '@/utils';

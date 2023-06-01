@@ -73,7 +73,7 @@ const config = (
                 async: true,
                 typescript: {
                     configFile: tsconfigPath,
-                    mode: 'write-references',
+                    mode: 'readonly',
                 },
             }),
             new CopyPlugin({

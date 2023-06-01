@@ -1,5 +1,5 @@
 import { defaultsDeep } from 'lodash-es';
-import type { Browser } from 'webextension-polyfill-ts';
+import type { Browser } from 'webextension-polyfill';
 
 import { catchWithFallback, EventEmitter, promiseSeries } from '@/utils';
 
