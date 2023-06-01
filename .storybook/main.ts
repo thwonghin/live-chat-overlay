@@ -1,7 +1,4 @@
-import type { StorybookConfig } from '@storybook/react-webpack5';
-import configFunc from '../webpack/dist/webpack.config';
-
-const custom = configFunc({ storybook: true });
+import type { StorybookConfig } from '@storybook/react-vite';
 
 const config: StorybookConfig = {
     stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
@@ -12,23 +9,12 @@ const config: StorybookConfig = {
         'storybook-addon-swc',
     ],
     framework: {
-        name: '@storybook/react-webpack5',
+        name: '@storybook/react-vite',
         options: {},
     },
     docs: {
         autodocs: 'tag',
     },
-    webpackFinal: (config) => ({
-        ...config,
-        resolve: {
-            ...config.resolve,
-            plugins: custom.resolve?.plugins,
-            extensions: [
-                ...(config?.resolve?.extensions ?? []),
-                ...(custom.resolve?.extensions ?? []),
-            ],
-        },
-    }),
 };
 
 export default config;
