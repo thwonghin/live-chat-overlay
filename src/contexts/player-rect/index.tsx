@@ -1,11 +1,11 @@
-import { useRef, createContext } from 'react';
+import { useRef, createContext, type PropsWithChildren } from 'react';
 
 import { useRect } from '@/hooks';
 import type { RectResult } from '@/hooks';
 import { youtube } from '@/utils';
 
 export function useVideoPlayerRect(): RectResult {
-    const playerRef = useRef(youtube.getVideoPlayerEle());
+    const playerRef = useRef(youtube.getVideoPlayerEle() ?? null);
     return useRect(playerRef);
 }
 
@@ -18,11 +18,9 @@ export const PlayerRectContext = createContext<RectResult>({
     width: 0,
 });
 
-interface Props {
-    children: React.ReactNode;
-}
-
-export const PlayerRectProvider: React.FC<Props> = ({ children }) => {
+export const PlayerRectProvider: React.FC<PropsWithChildren> = ({
+    children,
+}) => {
     const rect = useVideoPlayerRect();
 
     return (

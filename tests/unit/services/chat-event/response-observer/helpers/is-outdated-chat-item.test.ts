@@ -2,10 +2,10 @@ import { isOutdatedChatItem } from '@/services/chat-event/response-observer/help
 
 const chatItemVideoTimestamp = 5000;
 
-interface TestParameters {
+type TestParameters = {
     currentPlayerTime: number;
     expectedResult: boolean;
-}
+};
 
 describe('isOutdatedChatItem', () => {
     describe('when the factor is 1', () => {

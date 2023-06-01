@@ -1,7 +1,7 @@
 import type * as liveChatResponse from '@/definitions/youtube';
 import { assertNever, colorFromDecimal } from '@/utils';
 
-import * as chatModel from '../models';
+import type * as chatModel from '../models';
 
 function getAuthorTypeFromBadges(
     authorBadges?: liveChatResponse.AuthorBadge[],
@@ -81,7 +81,7 @@ function mapAuthorBadges(
         .flatMap(
             (v) =>
                 v.liveChatAuthorBadgeRenderer.customThumbnail?.thumbnails.flatMap(
-                    (_) => _.url,
+                    (x) => x.url,
                 ) ?? [],
         );
 }
@@ -104,13 +104,13 @@ export function calculateVideoTimestampMsFromLiveTimestamp(parameters: {
     );
 }
 
-interface MapLiveChatMembershipItemRendererParameters {
+type MapLiveChatMembershipItemRendererParameters = {
     renderer: liveChatResponse.LiveChatMembershipItemRenderer;
     liveDelayInMs: number;
     currentTimestampMs: number;
     playerTimestampMs: number;
     videoTimestampInMs?: number;
-}
+};
 
 export function mapLiveChatMembershipItemRenderer({
     renderer,
@@ -141,13 +141,13 @@ export function mapLiveChatMembershipItemRenderer({
     };
 }
 
-interface MapLiveChatPaidMessageItemRendererParameters {
+type MapLiveChatPaidMessageItemRendererParameters = {
     renderer: liveChatResponse.LiveChatPaidMessageRenderer;
     liveDelayInMs: number;
     currentTimestampMs: number;
     playerTimestampMs: number;
     videoTimestampInMs?: number;
-}
+};
 
 export function mapLiveChatPaidMessageItemRenderer({
     renderer,
@@ -175,13 +175,13 @@ export function mapLiveChatPaidMessageItemRenderer({
     };
 }
 
-interface MapLiveChatPaidStickerRendererParameters {
+type MapLiveChatPaidStickerRendererParameters = {
     renderer: liveChatResponse.LiveChatPaidStickerRenderer;
     liveDelayInMs: number;
     currentTimestampMs: number;
     playerTimestampMs: number;
     videoTimestampInMs?: number;
-}
+};
 
 export function mapLiveChatPaidStickerRenderer({
     renderer,
@@ -209,13 +209,13 @@ export function mapLiveChatPaidStickerRenderer({
     };
 }
 
-interface MapLiveChatTextMessageRendererParameters {
+type MapLiveChatTextMessageRendererParameters = {
     renderer: liveChatResponse.LiveChatTextMessageRenderer;
     liveDelayInMs: number;
     currentTimestampMs: number;
     playerTimestampMs: number;
     videoTimestampInMs?: number;
-}
+};
 
 export function mapLiveChatTextMessageRenderer({
     renderer,

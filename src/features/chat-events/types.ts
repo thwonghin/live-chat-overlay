@@ -1,10 +1,10 @@
-import { UiChatItem } from '@/components/chat-flow/types';
+import { type UiChatItem } from '@/components/chat-flow/types';
 
 export type ChatItemState = 'added' | 'finished';
 
-export interface State {
-    lastLineNumber: number | null;
+export type State = {
+    lastLineNumber: number | undefined;
     chatItems: UiChatItem[];
     chatItemStateById: Record<string, ChatItemState>;
     chatItemsByLineNumber: Record<number, UiChatItem[]>;
-}
+};

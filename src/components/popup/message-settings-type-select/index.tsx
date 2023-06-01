@@ -1,6 +1,11 @@
 import { useCallback, useMemo } from 'react';
 
-import { Select, FormLabel, MenuItem, SelectChangeEvent } from '@mui/material';
+import {
+    Select,
+    FormLabel,
+    MenuItem,
+    type SelectChangeEvent,
+} from '@mui/material';
 import styled from 'styled-components';
 import type { I18n } from 'webextension-polyfill-ts';
 
@@ -51,10 +56,10 @@ const supportedTypes: settingsStorage.MessageSettingsKey[] = [
     'pinned',
 ];
 
-interface Props {
+type Props = {
     value: settingsStorage.MessageSettingsKey;
     onChange: (value: settingsStorage.MessageSettingsKey) => void;
-}
+};
 
 const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
     const handleChange = useCallback(

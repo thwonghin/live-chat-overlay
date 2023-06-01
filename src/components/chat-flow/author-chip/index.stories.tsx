@@ -15,7 +15,7 @@ const avatars = [
 ];
 const name = 'Author Name';
 
-const Container: React.FC = ({ children }) => (
+const Container: React.FC<React.PropsWithChildren> = ({ children }) => (
     <div style={{ fontSize: 40 }}>{children}</div>
 );
 

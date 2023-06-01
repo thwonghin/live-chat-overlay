@@ -46,7 +46,7 @@ const messageSettings: settingsStorage.MessageSettings = {
     isSticky: false,
 };
 
-const Container: React.FC = ({ children }) => (
+const Container: React.FC<React.PropsWithChildren> = ({ children }) => (
     <div style={{ fontSize: 40, position: 'absolute' }}>{children}</div>
 );
 

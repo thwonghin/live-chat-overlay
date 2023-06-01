@@ -8,6 +8,7 @@ export function assertNever(type: never): never {
 }
 
 // Reference from Youtube livechat.js
+/* eslint-disable no-bitwise */
 export function colorFromDecimal(decimal: number): string {
     return `rgba(${[
         (decimal >> 16) & 255,
@@ -16,8 +17,9 @@ export function colorFromDecimal(decimal: number): string {
         ((decimal >> 24) & 255) / 255,
     ].join(',')})`;
 }
+/* eslint-enable no-bitwise */
 
-export function isNotNil<T>(value?: T | null): value is NonNullable<T> {
+export function isNotNil<T>(value?: T | undefined): value is NonNullable<T> {
     return !isNil(value);
 }
 
@@ -31,10 +33,10 @@ export function injectScript(scriptSrc: string) {
     document.head.appendChild(scriptTag);
 }
 
-interface BenchmarkResult<T> {
+type BenchmarkResult<T> = {
     result: T;
     runtime: number;
-}
+};
 
 export function benchmark<T>(
     callback: () => T,

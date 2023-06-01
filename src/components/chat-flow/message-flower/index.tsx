@@ -14,12 +14,12 @@ const Container = styled.div`
     transition-property: transform;
 `;
 
-interface Props {
+type Props = {
     children: React.ReactNode;
     top: number;
     containerWidth: number;
     onDone: () => void;
-}
+};
 
 const MessageFlower: React.FC<Props> = ({
     children,

@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { calculateBenchmark } from './helpers';
-import { State } from './types';
+import { type State } from './types';
 
 const initialState: State = {
     isDebugging: false,

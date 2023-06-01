@@ -1,24 +1,22 @@
-import { Except } from 'type-fest';
-
-export interface Thumbnail {
+export type Thumbnail = {
     url: string;
     width: number;
     height: number;
-}
+};
 
-export interface TextPart {
+export type TextPart = {
     text: string;
-}
+};
 
-export interface EmojiPart {
+export type EmojiPart = {
     id: string;
     thumbnails: Thumbnail[];
     shortcuts: string[];
-}
+};
 
 export type MessagePart = TextPart | EmojiPart;
 
-export interface NormalChatItem {
+export type NormalChatItem = {
     id: string;
     width?: number;
     messageParts: MessagePart[];
@@ -28,9 +26,9 @@ export interface NormalChatItem {
     authorBadges: string[];
     authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you' | 'verified';
     chatType: 'normal';
-}
+};
 
-export type SuperChatItem = Except<
+export type SuperChatItem = Omit<
     NormalChatItem,
     'authorType' | 'chatType' | 'authorBadges'
 > & {
@@ -39,7 +37,7 @@ export type SuperChatItem = Except<
     chatType: 'super-chat';
 };
 
-export type SuperStickerItem = Except<
+export type SuperStickerItem = Omit<
     SuperChatItem,
     'chatType' | 'messageParts'
 > & {
@@ -47,14 +45,11 @@ export type SuperStickerItem = Except<
     chatType: 'super-sticker';
 };
 
-export type MembershipItem = Except<
-    NormalChatItem,
-    'authorType' | 'chatType'
-> & {
+export type MembershipItem = Omit<NormalChatItem, 'authorType' | 'chatType'> & {
     chatType: 'membership';
 };
 
-export type PinnedChatItem = Except<NormalChatItem, 'chatType'> & {
+export type PinnedChatItem = Omit<NormalChatItem, 'chatType'> & {
     chatType: 'pinned';
 };
 

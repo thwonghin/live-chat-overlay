@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { isNil } from 'lodash-es';
 
-import { UiChatItem } from '@/components/chat-flow/types';
+import { type UiChatItem } from '@/components/chat-flow/types';
 import { settingsStorage, chatEvent } from '@/services';
 
 import { getLineNumber } from './helpers';
-import { State } from './types';
+import { type State } from './types';
 
 const initialState: State = {
-    lastLineNumber: null,
+    lastLineNumber: undefined,
     chatItems: [],
     chatItemStateById: {},
     chatItemsByLineNumber: {},
@@ -74,10 +74,10 @@ const slice = createSlice({
                 displayNumberOfLines: numberOfLines,
             });
 
-            if (lineNumber === null) {
+            if (lineNumber === undefined) {
                 return {
                     ...state,
-                    lastLineNumber: null,
+                    lastLineNumber: undefined,
                 };
             }
 

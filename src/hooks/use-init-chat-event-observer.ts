@@ -12,7 +12,7 @@ import {
     useSettings,
     useVideoPlayerState,
 } from '@/hooks';
-import { settingsStorage, chatEvent } from '@/services';
+import { type settingsStorage, chatEvent } from '@/services';
 
 function getRenderedNumberOfLinesForChatItem({
     settings,

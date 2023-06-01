@@ -15,31 +15,39 @@ export const GET_LIVE_CHAT_URL =
     'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat';
 export const GET_LIVE_CHAT_REPLAY_URL = `${GET_LIVE_CHAT_URL}_replay`;
 
-export function getVideoPlayerContainer(): HTMLElement | null {
-    return window.parent.document.querySelector(
-        '#ytd-player .html5-video-container',
+export function getVideoPlayerContainer(): HTMLElement | undefined {
+    return (
+        window.parent.document.querySelector<HTMLElement>(
+            '#ytd-player .html5-video-container',
+        ) ?? undefined
     );
 }
 
-export function getVideoPlayerEle(): HTMLDivElement | null {
-    return window.parent.document.querySelector(
-        '#ytd-player .html5-video-player',
+export function getVideoPlayerEle(): HTMLDivElement | undefined {
+    return (
+        window.parent.document.querySelector<HTMLDivElement>(
+            '#ytd-player .html5-video-player',
+        ) ?? undefined
     );
 }
 
-export function getRightControlEle(): HTMLElement | null {
-    return window.parent.document.querySelector(
-        '#ytd-player .ytp-right-controls',
+export function getRightControlEle(): HTMLElement | undefined {
+    return (
+        window.parent.document.querySelector<HTMLElement>(
+            '#ytd-player .ytp-right-controls',
+        ) ?? undefined
     );
 }
 
-export function getVideoEle(): HTMLVideoElement | null {
-    return window.parent.document.querySelector(
-        '#ytd-player .html5-video-player video',
+export function getVideoEle(): HTMLVideoElement | undefined {
+    return (
+        window.parent.document.querySelector<HTMLVideoElement>(
+            '#ytd-player .html5-video-player video',
+        ) ?? undefined
     );
 }
 
-export function getLiveChatEle(): HTMLElement | null {
+export function getLiveChatEle(): HTMLElement | undefined {
     const ele = document.querySelector('#item-scroller #items');
     return ele as HTMLElement;
 }

@@ -26,18 +26,18 @@ jobs:
       - name: Install dependencies
         run: |
           pnpm i --frozen-lockfile
-      # - name: Check Dependency Vulnerabilities
-      #   run: |
-      #     pnpm npm audit
+      - name: Check Dependency Vulnerabilities
+        run: |
+          pnpm audit
       - name: Lint & Test
         run: |
           pnpm lint && pnpm test:unit --ci
       - name: Build
         run: |
           pnpm build:prod
-      # - name: Build Storybook
-      #   run: |
-      #     pnpm storybook:build
+      - name: Build Storybook
+        run: |
+          pnpm storybook:build
   commitlint:
     name: Commit Lint
     runs-on: ubuntu-20.04

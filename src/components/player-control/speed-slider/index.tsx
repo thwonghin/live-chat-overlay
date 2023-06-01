@@ -63,9 +63,9 @@ const StyledSlider = styled(Slider)<{ $isHidden: boolean }>`
     }
 `;
 
-interface Props {
+type Props = {
     isHidden: boolean;
-}
+};
 
 const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
     const { settings, updateSettings } = useSettings();

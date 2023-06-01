@@ -3,7 +3,7 @@ import { mapValues } from 'lodash-es';
 import type { Benchmark } from '@/features/debug-info';
 import { calculateBenchmark } from '@/features/debug-info/helpers';
 
-interface TestParameters {
+type TestParameters = {
     condition: string;
     min: number;
     max: number;
@@ -14,7 +14,7 @@ interface TestParameters {
     nextAvg: number;
     nextCount: number;
     value: number;
-}
+};
 
 describe('calculateBenchmark', () => {
     describe.each`

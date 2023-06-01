@@ -5,9 +5,9 @@ import type { settingsStorage } from '@/services';
 
 import Layout from './layout';
 
-interface Props {
+type Props = {
     messageSettingsKey: settingsStorage.MessageSettingsKey;
-}
+};
 
 const MessageSettingsInputForm: React.FC<Props> = ({ messageSettingsKey }) => {
     const { settings, updateSettings } = useSettings();

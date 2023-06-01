@@ -6,8 +6,8 @@ export type UiChatItem = chatEvent.ChatItem & {
     numberOfLines: number;
 };
 
-export interface Thumbnail {
+export type Thumbnail = {
     url: string;
     width: number;
     height: number;
-}
+};

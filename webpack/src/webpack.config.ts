@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import * as path from 'path';
 
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+// eslint-disable-next-line import/default
+import CopyPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 import * as webpack from 'webpack';
@@ -15,6 +17,7 @@ const config = (
     webpackEnv: Partial<Record<WebpackEnv, boolean>>,
 ): webpack.Configuration => {
     function getMode(): 'production' | 'development' | 'none' {
+        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         if (webpackEnv.development || webpackEnv.storybook) {
             return 'development';
         }
@@ -68,24 +71,19 @@ const config = (
         plugins: [
             new ForkTsCheckerWebpackPlugin({
                 async: true,
-                eslint: {
-                    files: ['src/**/*.tsx', 'src/**/*.ts'],
-                    enabled: true,
-                },
                 typescript: {
-                    enabled: true,
                     configFile: tsconfigPath,
                     mode: 'write-references',
                 },
             }),
-            new CopyWebpackPlugin({
+            new CopyPlugin({
                 patterns: [
                     {
                         context: 'public',
                         from: '**/*',
                     },
                 ],
-            }),
+            }) as any,
             // Webpack 5 removed node.js polyfills, but React still using it
             new webpack.DefinePlugin({
                 'process.env': {

@@ -9,7 +9,7 @@ import type {
 import { isNotNil } from '@/utils';
 
 import { mapAddChatItemActions, isNormalChatItem } from '../mapper';
-import { ChatItem } from '../models';
+import { type ChatItem } from '../models';
 
 export function mapChatItemsFromReplayResponse(parameters: {
     currentTimestampMs: number;
@@ -42,7 +42,7 @@ export function mapChatItemsFromReplayResponse(parameters: {
 
 function getTimeoutMs(
     continuationContents: LiveContinuationContents,
-): number | null {
+): number | undefined {
     return (
         first(
             continuationContents.liveChatContinuation.continuations
@@ -52,7 +52,7 @@ function getTimeoutMs(
                         value.invalidationContinuationData,
                 )
                 .filter((v): v is NonNullable<typeof v> => Boolean(v)),
-        )?.timeoutMs ?? null
+        )?.timeoutMs ?? undefined
     );
 }
 
@@ -73,10 +73,10 @@ export function mapChatItemsFromLiveResponse(parameters: {
     });
 }
 
-interface IsTimeToDispatchParameters {
+type IsTimeToDispatchParameters = {
     currentPlayerTimeInMsc: number;
     chatItem: ChatItem;
-}
+};
 
 export function isTimeToDispatch({
     currentPlayerTimeInMsc,
@@ -99,11 +99,11 @@ export function getOutdatedFactor(chatItem: ChatItem): number {
     return 3;
 }
 
-interface IsOutdatedChatItemParameters {
+type IsOutdatedChatItemParameters = {
     currentPlayerTimeInMsc: number;
     chatItemAtVideoTimestampInMs: number;
     factor: number;
-}
+};
 
 export function isOutdatedChatItem({
     currentPlayerTimeInMsc,

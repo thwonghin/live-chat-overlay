@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import type { State, PopupType } from './types';
 
 const initialState: State = {
-    currentPopup: null,
+    currentPopup: undefined,
 };
 
 const slice = createSlice({
@@ -14,7 +14,7 @@ const slice = createSlice({
             if (state.currentPopup === action.payload) {
                 return {
                     ...state,
-                    currentPopup: null,
+                    currentPopup: undefined,
                 };
             }
 
@@ -26,7 +26,7 @@ const slice = createSlice({
         reset(state) {
             return {
                 ...state,
-                currentPopup: null,
+                currentPopup: undefined,
             };
         },
     },

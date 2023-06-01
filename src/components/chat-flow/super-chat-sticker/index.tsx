@@ -21,10 +21,10 @@ const Message = styled.span`
     justify-content: flex-end;
 `;
 
-interface Props {
+type Props = {
     chatItem: chatEvent.SuperStickerItem;
     messageSettings: settingsStorage.MessageSettings;
-}
+};
 
 const SuperChatSticker: React.FC<Props> = ({ chatItem, messageSettings }) => {
     const imageSize = `${0.8 * messageSettings.numberOfLines}em`;

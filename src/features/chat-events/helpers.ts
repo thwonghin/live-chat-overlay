@@ -2,14 +2,14 @@ import { last, isNil } from 'lodash-es';
 
 import type { UiChatItem } from '@/components/chat-flow/types';
 
-interface HasSpaceInLineParameters {
+type HasSpaceInLineParameters = {
     lastMessageInLine: UiChatItem;
     elementWidth: number;
     addTimestamp: number;
     flowTimeInSec: number;
     containerWidth: number;
     lineNumber: number;
-}
+};
 
 function hasSpaceInLine({
     lastMessageInLine,
@@ -37,7 +37,7 @@ function hasSpaceInLine({
     return speed * remainingTime < containerWidth && lastMessagePos > 0;
 }
 
-interface GetLineNumberParameters {
+type GetLineNumberParameters = {
     chatItemsByLineNumber: Record<number, UiChatItem[]>;
     elementWidth: number;
     maxLineNumber: number;
@@ -45,7 +45,7 @@ interface GetLineNumberParameters {
     flowTimeInSec: number;
     containerWidth: number;
     displayNumberOfLines: number;
-}
+};
 
 export function getLineNumber({
     chatItemsByLineNumber,
@@ -55,7 +55,7 @@ export function getLineNumber({
     flowTimeInSec,
     containerWidth,
     displayNumberOfLines,
-}: GetLineNumberParameters): number | null {
+}: GetLineNumberParameters): number | undefined {
     for (
         let lineNumber = 0;
         lineNumber < maxLineNumber - displayNumberOfLines - 1;
@@ -87,5 +87,5 @@ export function getLineNumber({
         }
     }
 
-    return null;
+    return undefined;
 }

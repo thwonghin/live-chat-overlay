@@ -1,10 +1,10 @@
 import type { RefObject } from 'react';
 import { useState, useEffect } from 'react';
 
-interface UseClickOutsideParameters {
+type UseClickOutsideParameters = {
     refs: Array<RefObject<HTMLElement>>;
     doc: Document;
-}
+};
 
 export function useClickOutside({
     refs,

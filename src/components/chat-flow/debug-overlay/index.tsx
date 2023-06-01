@@ -6,21 +6,21 @@ import styled from 'styled-components';
 import type { RootState } from '@/app/live-chat-overlay/store';
 import type { debugInfo } from '@/features';
 
-interface ChatEventDebugInfo {
+type ChatEventDebugInfo = {
     messagesCount: number;
     messageByLineNumber: Array<{
         row: number;
         count: number;
     }>;
     doneItemsCount: number;
-}
+};
 
-interface RoundedBenchmark {
+type RoundedBenchmark = {
     min: string;
     max: string;
     avg: string;
     count: number;
-}
+};
 
 function roundBenchmark(benchmark: debugInfo.Benchmark): RoundedBenchmark {
     return {
@@ -71,14 +71,14 @@ const BenchmarkContainer = styled.div`
     text-align: right;
 `;
 
-interface DebugOverlayLayoutProps {
+type DebugOverlayLayoutProps = {
     chatEventDebugInfo: ChatEventDebugInfo;
     getEleWidthBenchmark: RoundedBenchmark;
     processXhrBenchmark: RoundedBenchmark;
     processChatEventBenchmark: RoundedBenchmark;
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
-}
+};
 
 export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
     chatEventDebugInfo,

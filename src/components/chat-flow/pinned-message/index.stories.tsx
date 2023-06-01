@@ -27,7 +27,7 @@ const pinnedMessage: chatEvent.PinnedChatItem = {
     authorType: 'owner',
 };
 
-const Container: React.FC = ({ children }) => (
+const Container: React.FC<React.PropsWithChildren> = ({ children }) => (
     <div style={{ fontSize: 40, position: 'absolute', width: '100%' }}>
         {children}
     </div>

@@ -8,7 +8,6 @@ import type { fetchInterceptor } from '@/services';
 import { settingsStorage } from '@/services';
 import { benchmark, benchmarkAsync, EventEmitter, youtube } from '@/utils';
 
-import type { ChatItem } from '../models';
 import { assignChatItemRenderedWidth } from './get-chat-item-render-container-ele';
 import {
     mapChatItemsFromReplayResponse,
@@ -18,6 +17,7 @@ import {
     getOutdatedFactor,
     isReplayInitData,
 } from './helpers';
+import type { ChatItem } from '../models';
 
 export { CHAT_ITEM_RENDER_ID } from './get-chat-item-render-container-ele';
 

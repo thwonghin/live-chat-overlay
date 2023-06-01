@@ -1,5 +1,5 @@
 import './common';
-import { InitData } from '@/definitions/youtube';
+import { type InitData } from '@/definitions/youtube';
 
 import { LIVE_CHAT_INIT_DATA } from './constants';
 
@@ -15,9 +15,9 @@ function dispatchInitData(): void {
         return;
     }
 
-    const innerHTML = initialDataTag.innerHTML.trim();
-    const startIndex = innerHTML.indexOf('{"responseContext"');
-    const initData = innerHTML.slice(startIndex, -1);
+    const innerHtml = initialDataTag.innerHTML.trim();
+    const startIndex = innerHtml.indexOf('{"responseContext"');
+    const initData = innerHtml.slice(startIndex, -1);
 
     const event = new CustomEvent<{ data: InitData }>(LIVE_CHAT_INIT_DATA, {
         detail: {
