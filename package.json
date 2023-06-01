@@ -27,8 +27,8 @@
         "storybook:build": "tsc -p webpack && tsc -p .storybook && cp .storybook/src/preview-head.html .storybook/dist/ && build-storybook -c .storybook/dist/ --quiet"
     },
     "devDependencies": {
-        "@commitlint/cli": "^13.1.0",
-        "@commitlint/config-conventional": "^13.1.0",
+        "@commitlint/cli": "^17.6.5",
+        "@commitlint/config-conventional": "^17.6.5",
         "@storybook/builder-webpack5": "^6.3.8",
         "@storybook/manager-webpack5": "^6.3.8",
         "@storybook/react": "^6.3.8",
