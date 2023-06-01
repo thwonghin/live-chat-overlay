@@ -6,6 +6,7 @@
     "repository": "git@github.com:thwonghin/live-chat-overlay.git",
     "author": "Hin Wong <thwong.henry@gmail.com>",
     "license": "MIT",
+    "type": "module",
     "engines": {
         "node": ">=18.16.0"
     },
@@ -18,11 +19,9 @@
         "lint:style": "stylelint './src/**/*.tsx'",
         "lint:fix": "pnpm lint:src --fix && pnpm lint:test --fix",
         "clean": "rm -rf dist .storybook/dist webpack/dist webpack/tsconfig.tsbuildinfo",
-        "build": "tsc -p webpack && webpack --config webpack/dist/webpack.config.js",
-        "build:prod": "pnpm build --env production",
-        "start": "pnpm build --env development --watch",
+        "dev": "vite dev",
+        "build": "vite build",
         "postversion": "npx conventional-changelog-cli -p live-chat-overlay -i CHANGELOG.md -s && git add CHANGELOG.md",
-        "version:set": "dot-json dist/manifest.json version",
         "storybook": "storybook dev -p 6006",
         "storybook:build": "storybook build --quiet"
     },
@@ -51,8 +50,8 @@
         "@types/webextension-polyfill": "^0.10.0",
         "@typescript-eslint/eslint-plugin": "^5.59.8",
         "@typescript-eslint/parser": "^5.59.8",
+        "@vitejs/plugin-react-swc": "^3.2.0",
         "copy-webpack-plugin": "^11.0.0",
-        "dot-json": "^1.3.0",
         "eslint": "^8.41.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-config-xo": "^0.43.1",
@@ -81,6 +80,9 @@
         "swc-loader": "^0.2.3",
         "tsconfig-paths-webpack-plugin": "^4.0.1",
         "typescript": "^5.0.4",
+        "vite": "^4.3.9",
+        "vite-plugin-web-extension": "^3.0.9",
+        "vite-tsconfig-paths": "^4.2.0",
         "webpack": "^5.85.0",
         "webpack-cli": "^5.1.1"
     },
