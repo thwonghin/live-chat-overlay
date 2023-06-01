@@ -1,4 +1,4 @@
-import { type Browser } from 'webextension-polyfill-ts';
+import { type Browser } from 'webextension-polyfill';
 
 import { SETTINGS_STORAGE_KEY } from './const';
 import type { Settings } from './types';

@@ -6,6 +6,7 @@
     "repository": "git@github.com:thwonghin/live-chat-overlay.git",
     "author": "Hin Wong <thwong.henry@gmail.com>",
     "license": "MIT",
+    "type": "module",
     "engines": {
         "node": ">=18.16.0"
     },
@@ -13,16 +14,14 @@
         "test:unit": "tsc -p tests && jest tests/unit",
         "lint": "pnpm lint:src && pnpm lint:test && pnpm lint:style",
         "lint:script": "eslint --ext ts,tsx",
-        "lint:src": "pnpm lint:script src webpack/src",
+        "lint:src": "pnpm lint:script src",
         "lint:test": "pnpm lint:script tests",
         "lint:style": "stylelint './src/**/*.tsx'",
         "lint:fix": "pnpm lint:src --fix && pnpm lint:test --fix",
-        "clean": "rm -rf dist .storybook/dist webpack/dist webpack/tsconfig.tsbuildinfo",
-        "build": "tsc -p webpack && webpack --config webpack/dist/webpack.config.js",
-        "build:prod": "pnpm build --env production",
-        "start": "pnpm build --env development --watch",
+        "clean": "rm -rf dist .storybook/dist",
+        "dev": "vite dev",
+        "build": "vite build",
         "postversion": "npx conventional-changelog-cli -p live-chat-overlay -i CHANGELOG.md -s && git add CHANGELOG.md",
-        "version:set": "dot-json dist/manifest.json version",
         "storybook": "storybook dev -p 6006",
         "storybook:build": "storybook build --quiet"
     },
@@ -37,10 +36,11 @@
         "@storybook/addon-links": "^7.0.18",
         "@storybook/blocks": "^7.0.18",
         "@storybook/react": "^7.0.18",
-        "@storybook/react-webpack5": "^7.0.18",
+        "@storybook/react-vite": "^7.0.18",
         "@storybook/testing-library": "^0.0.14-next.2",
         "@swc/core": "^1.3.61",
         "@swc/jest": "^0.2.26",
+        "@swc/plugin-styled-components": "^1.5.67",
         "@types/jest": "^29.5.2",
         "@types/lodash-es": "^4.17.7",
         "@types/node": "^18.16.16",
@@ -48,10 +48,10 @@
         "@types/react-dom": "^18.2.4",
         "@types/react-redux": "^7.1.25",
         "@types/styled-components": "^5.1.26",
+        "@types/webextension-polyfill": "^0.10.0",
         "@typescript-eslint/eslint-plugin": "^5.59.8",
         "@typescript-eslint/parser": "^5.59.8",
-        "copy-webpack-plugin": "^11.0.0",
-        "dot-json": "^1.3.0",
+        "@vitejs/plugin-react-swc": "3.2.0",
         "eslint": "^8.41.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-config-xo": "^0.43.1",
@@ -64,7 +64,6 @@
         "eslint-plugin-react": "^7.32.2",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-storybook": "^0.6.12",
-        "fork-ts-checker-webpack-plugin": "^8.0.0",
         "husky": "8.0.3",
         "jest": "^29.5.0",
         "lodash": "^4.17.21",
@@ -78,10 +77,10 @@
         "stylelint-order": "^6.0.3",
         "stylelint-prettier": "^3.0.0",
         "swc-loader": "^0.2.3",
-        "tsconfig-paths-webpack-plugin": "^4.0.1",
         "typescript": "^5.0.4",
-        "webpack": "^5.85.0",
-        "webpack-cli": "^5.1.1"
+        "vite": "^4.3.9",
+        "vite-plugin-web-extension": "^3.0.9",
+        "vite-tsconfig-paths": "^4.2.0"
     },
     "browserslist": [
         "Chrome >= 88"
@@ -102,17 +101,20 @@
         "redux": "^4.2.1",
         "styled-components": "^5.3.11",
         "use-debounce": "^9.0.4",
-        "webextension-polyfill-ts": "^0.26.0"
+        "webextension-polyfill": "^0.10.0"
     },
     "packageManager": "pnpm@8.6.0",
     "resolutions": {
-        "trim": "^1.0.1",
-        "glob-parent": "^5.1.2",
-        "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-        "@types/eslint": "7",
-        "@types/webpack": "5"
+        "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
     },
     "volta": {
         "node": "18.16.0"
+    },
+    "pnpm": {
+        "auditConfig": {
+            "ignoreCves": [
+                "CVE-2023-28155"
+            ]
+        }
     }
 }

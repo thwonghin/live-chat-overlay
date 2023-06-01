@@ -7,7 +7,7 @@ import {
     type SelectChangeEvent,
 } from '@mui/material';
 import styled from 'styled-components';
-import type { I18n } from 'webextension-polyfill-ts';
+import type { I18n } from 'webextension-polyfill';
 
 import { useI18n } from '@/contexts/i18n';
 import type { settingsStorage } from '@/services';

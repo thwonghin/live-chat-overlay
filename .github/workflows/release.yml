@@ -23,11 +23,7 @@ jobs:
         run: |
           pnpm i --frozen-lockfile
       - name: Build Project
-        run: pnpm build:prod
-      - name: Update version
-        run: |
-          export VER=$(echo "$GITHUB_REF" | sed -e 's/refs\/tags\/v//')
-          pnpm version:set $VER
+        run: pnpm build
       - uses: actions/upload-artifact@v3
         with:
           name: built-extension

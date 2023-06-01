@@ -18,14 +18,14 @@
             "run_at": "document_start",
             "matches": ["https://www.youtube.com/live_chat*"],
             "all_frames": true,
-            "js": ["content-script.js"]
+            "js": ["src/content-script.ts"]
         }
     ],
     "web_accessible_resources": [
         {
             "resources": [
-                "get-live-chat-init-data.js",
-                "live-chat-fetch-interceptor.js"
+                "src/get-live-chat-init-data.ts",
+                "src/live-chat-fetch-interceptor.ts"
             ],
             "matches": ["https://www.youtube.com/*"]
         }

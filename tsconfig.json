@@ -2,12 +2,18 @@
     "compilerOptions": {
         "target": "esnext",
         "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": false,
         "downlevelIteration": true,
         "strict": true,
-        "module": "esnext",
-        "moduleResolution": "node",
+        "skipLibCheck": true,
+        "useDefineForClassFields": true,
+        "module": "ESNext",
+        "moduleResolution": "Node",
         "noEmit": true,
         "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
         "baseUrl": ".",
         "noUncheckedIndexedAccess": true,
         "noPropertyAccessFromIndexSignature": true,
@@ -18,5 +24,6 @@
             "@/*": ["src/*"]
         }
     },
-    "include": ["./src"]
+    "include": ["./src"],
+    "references": [{ "path": "./tsconfig.node.json" }]
 }

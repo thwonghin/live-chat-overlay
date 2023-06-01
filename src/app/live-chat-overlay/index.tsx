@@ -4,7 +4,7 @@ import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider, StyleSheetManager } from 'styled-components';
-import type { Browser } from 'webextension-polyfill-ts';
+import type { Browser } from 'webextension-polyfill';
 
 import * as contexts from '@/contexts';
 import type { InitData } from '@/definitions/youtube';
