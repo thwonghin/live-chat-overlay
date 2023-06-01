@@ -111,11 +111,6 @@
         "@types/eslint": "7",
         "@types/webpack": "5"
     },
-    "pnpm": {
-        "patchedDependencies": {
-            "fork-ts-checker-webpack-plugin@6.3.3": "patches/fork-ts-checker-webpack-plugin@6.3.3.patch"
-        }
-    },
     "volta": {
         "node": "18.16.0"
     }
