@@ -7,7 +7,7 @@
     "author": "Hin Wong <thwong.henry@gmail.com>",
     "license": "MIT",
     "engines": {
-        "node": ">=16.20.0"
+        "node": ">=18.16.0"
     },
     "scripts": {
         "test:unit": "tsc -p tests && jest tests/unit",
@@ -38,7 +38,7 @@
         "@types/jest": "^27.0.2",
         "@types/json-schema": "^7.0.9",
         "@types/lodash-es": "^4.17.5",
-        "@types/node": "^16.9.6",
+        "@types/node": "^18.16.16",
         "@types/react": "^17.0.24",
         "@types/react-dom": "^17.0.9",
         "@types/react-redux": "^7.1.18",
@@ -59,7 +59,7 @@
         "eslint-plugin-prettier": "^4.0.0",
         "eslint-plugin-react": "^7.26.0",
         "eslint-plugin-react-hooks": "^4.2.0",
-        "fork-ts-checker-webpack-plugin": "^6.3.3",
+        "fork-ts-checker-webpack-plugin": "^8.0.0",
         "husky": "7.0.2",
         "jest": "^27.2.1",
         "lodash": "^4.17.21",
@@ -74,10 +74,10 @@
         "stylelint-prettier": "^1.2.0",
         "stylelint-processor-styled-components": "^1.10.0",
         "swc-loader": "^0.2.3",
-        "tsconfig-paths-webpack-plugin": "^3.5.1",
-        "typescript": "^4.4.3",
-        "webpack": "^5.53.0",
-        "webpack-cli": "^4.8.0"
+        "tsconfig-paths-webpack-plugin": "^4.0.1",
+        "typescript": "^5.0.4",
+        "webpack": "^5.85.0",
+        "webpack-cli": "^5.1.1"
     },
     "browserslist": [
         "Chrome >= 88"
@@ -89,7 +89,7 @@
         "@mui/material": "^5.0.1",
         "@mui/styled-engine-sc": "^5.0.0",
         "@reduxjs/toolkit": "^1.6.1",
-        "@types/styled-components": "^5.1.14",
+        "@types/styled-components": "^5.1.26",
         "core-js": "3.18.0",
         "formik": "^2.2.9",
         "lodash-es": "^4.17.21",
@@ -108,7 +108,8 @@
         "browserslist": "^4.17.0",
         "glob-parent": "^5.1.2",
         "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-        "@types/eslint": "7"
+        "@types/eslint": "7",
+        "@types/webpack": "5"
     },
     "pnpm": {
         "patchedDependencies": {
@@ -116,6 +117,6 @@
         }
     },
     "volta": {
-        "node": "16.20.0"
+        "node": "18.16.0"
     }
 }

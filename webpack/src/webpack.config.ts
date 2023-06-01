@@ -68,12 +68,7 @@ const config = (
         plugins: [
             new ForkTsCheckerWebpackPlugin({
                 async: true,
-                eslint: {
-                    files: ['src/**/*.tsx', 'src/**/*.ts'],
-                    enabled: true,
-                },
                 typescript: {
-                    enabled: true,
                     configFile: tsconfigPath,
                     mode: 'write-references',
                 },

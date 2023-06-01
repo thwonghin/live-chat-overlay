@@ -3,6 +3,18 @@ export interface CustomEventDetail {
     url: string;
 }
 
+function getUrlFromFetchParam(url: RequestInfo | URL): string {
+    if (typeof url === 'string') {
+        return url;
+    }
+
+    if (url instanceof URL) {
+        return url.toString();
+    }
+
+    return url.url;
+}
+
 export function initInterceptor(
     eventName: string,
     urlPrefix: string,
@@ -11,7 +23,7 @@ export function initInterceptor(
 
     window.fetch = async (url, ...args) => {
         const fetchResult = await originalFetch(url, ...args);
-        const requestUrl = typeof url === 'string' ? url : url.url;
+        const requestUrl = getUrlFromFetchParam(url);
 
         if (requestUrl.startsWith(urlPrefix)) {
             const clonedResult = fetchResult.clone();
