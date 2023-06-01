@@ -6,7 +6,6 @@ settings:
 
 overrides:
   trim: ^1.0.1
-  browserslist: ^4.17.0
   glob-parent: ^5.1.2
   '@mui/styled-engine': npm:@mui/styled-engine-sc@latest
   '@types/eslint': '7'
@@ -93,9 +92,6 @@ devDependencies:
   '@types/jest':
     specifier: ^27.0.2
     version: 27.0.2
-  '@types/json-schema':
-    specifier: ^7.0.9
-    version: 7.0.9
   '@types/lodash-es':
     specifier: ^4.17.5
     version: 4.17.5
@@ -111,18 +107,12 @@ devDependencies:
   '@types/react-redux':
     specifier: ^7.1.18
     version: 7.1.18
-  '@types/tapable':
-    specifier: ^2.2.2
-    version: 2.2.2
   '@typescript-eslint/eslint-plugin':
     specifier: ^4.31.2
     version: 4.31.2(@typescript-eslint/parser@4.31.2)(eslint@7.32.0)(typescript@5.0.4)
   '@typescript-eslint/parser':
     specifier: ^4.31.2
     version: 4.31.2(eslint@7.32.0)(typescript@5.0.4)
-  browserslist:
-    specifier: ^4.17.0
-    version: 4.17.0
   copy-webpack-plugin:
     specifier: ^11.0.0
     version: 11.0.0(webpack@5.85.0)
@@ -331,7 +321,7 @@ packages:
       '@babel/compat-data': 7.22.3
       '@babel/core': 7.22.1
       '@babel/helper-validator-option': 7.21.0
-      browserslist: 4.17.0
+      browserslist: 4.21.7
       lru-cache: 5.1.1
       semver: 6.3.0
     dev: true
@@ -4121,12 +4111,6 @@ packages:
     resolution: {integrity: sha512-ipixuVrh2OdNmauvtT51o3d8z12p6LtFW9in7U79der/kwejjdNchQC5UMn5u/KxNoM7VHHOs/l8KS8uHxhODQ==}
     dev: true
 
-  /@types/tapable@2.2.2:
-    resolution: {integrity: sha512-ujqOVJEeLcwpDVJPnp/k3u1UXmTKq5urJq9fO8aUKg8Vlel5RNOFbVKEfqfh6wGfF/M+HiTJlBJMLC1aDfyf0Q==}
-    dependencies:
-      tapable: 2.2.1
-    dev: true
-
   /@types/unist@2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
     dev: true
@@ -5524,6 +5508,17 @@ packages:
       pako: 1.0.11
     dev: true
 
+  /browserslist@4.14.2:
+    resolution: {integrity: sha512-HI4lPveGKUR0x2StIz+2FXfDk9SfVMrxn6PLh1JeGUwcuoDkdKZebWiyLRJ68iIPDpMI4JLVDf7S7XzslgWOhw==}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+    dependencies:
+      caniuse-lite: 1.0.30001492
+      electron-to-chromium: 1.4.415
+      escalade: 3.1.1
+      node-releases: 1.1.77
+    dev: true
+
   /browserslist@4.17.0:
     resolution: {integrity: sha512-g2BJ2a0nEYvEFQC208q8mVAhfNwpZ5Mu8BwgtCdZKO3qx98HChmeg448fPdUzld8aFmfLgVh7yymqV+q1lJZ5g==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -5534,6 +5529,17 @@ packages:
       electron-to-chromium: 1.4.415
       escalade: 3.1.1
       node-releases: 1.1.77
+    dev: true
+
+  /browserslist@4.21.7:
+    resolution: {integrity: sha512-BauCXrQ7I2ftSqd2mvKHGo85XR0u7Ru3C/Hxsy/0TkfCtjrmAbPdzLGasmoiBxplpDXlPvdjX9u7srIMfgasNA==}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+    dependencies:
+      caniuse-lite: 1.0.30001492
+      electron-to-chromium: 1.4.415
+      node-releases: 2.0.12
+      update-browserslist-db: 1.0.11(browserslist@4.21.7)
     dev: true
 
   /bser@2.1.1:
@@ -6166,7 +6172,7 @@ packages:
   /core-js-compat@3.30.2:
     resolution: {integrity: sha512-nriW1nuJjUgvkEjIot1Spwakz52V9YkYHZAQG6A1eCgC8AA1p0zngrQEP9R0+V6hji5XilWKG1Bd0YRppmGimA==}
     dependencies:
-      browserslist: 4.17.0
+      browserslist: 4.21.7
     dev: true
 
   /core-js-pure@3.30.2:
@@ -10802,6 +10808,10 @@ packages:
     resolution: {integrity: sha512-rB1DUFUNAN4Gn9keO2K1efO35IDK7yKHCdCaIMvFO7yUYmmZYeDjnGKle26G4rwj+LKRQpjyUUvMkPglwGCYNQ==}
     dev: true
 
+  /node-releases@2.0.12:
+    resolution: {integrity: sha512-QzsYKWhXTWx8h1kIvqfnC++o0pEmpRQA/aenALsL2F4pqNVr7YzcdMlDij5WBnwftRbJCNJL/O7zdKaxKPHqgQ==}
+    dev: true
+
   /normalize-package-data@2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
     dependencies:
@@ -11909,7 +11919,7 @@ packages:
     dependencies:
       '@babel/code-frame': 7.10.4
       address: 1.1.2
-      browserslist: 4.17.0
+      browserslist: 4.14.2
       chalk: 2.4.2
       cross-spawn: 7.0.3
       detect-port-alt: 1.1.6
@@ -11951,7 +11961,7 @@ packages:
     dependencies:
       '@babel/code-frame': 7.10.4
       address: 1.1.2
-      browserslist: 4.17.0
+      browserslist: 4.14.2
       chalk: 2.4.2
       cross-spawn: 7.0.3
       detect-port-alt: 1.1.6
@@ -14122,6 +14132,17 @@ packages:
     engines: {node: '>=4'}
     dev: true
     optional: true
+
+  /update-browserslist-db@1.0.11(browserslist@4.21.7):
+    resolution: {integrity: sha512-dCwEFf0/oT85M1fHBg4F0jtLwJrutGoHSQXCh7u4o2t1drG+c0a9Flnqww6XUKSfQMPpJBRjU8d4RXB09qtvaA==}
+    hasBin: true
+    peerDependencies:
+      browserslist: '>= 4.21.0'
+    dependencies:
+      browserslist: 4.21.7
+      escalade: 3.1.1
+      picocolors: 1.0.0
+    dev: true
 
   /uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
