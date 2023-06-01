@@ -2,7 +2,6 @@ import type * as liveChatResponse from '@/definitions/youtube';
 import type { settingsStorage } from '@/services';
 import { isNotNil, assertNever } from '@/utils';
 
-import * as chatModel from '../models';
 import {
     mapLiveChatTextMessageRenderer,
     mapLiveChatPaidMessageItemRenderer,
@@ -10,8 +9,9 @@ import {
     mapLiveChatPaidStickerRenderer,
     mapPinnedLiveChatTextMessageRenderer,
 } from './helpers';
+import type * as chatModel from '../models';
 
-interface MapActionsParameters {
+type MapActionsParameters = {
     actions: Array<
         | liveChatResponse.AddChatItemAction
         | liveChatResponse.AddBannerToLiveChatCommand
@@ -20,7 +20,7 @@ interface MapActionsParameters {
     currentTimestampMs: number;
     playerTimestampMs: number;
     videoTimestampInMs?: number;
-}
+};
 
 export function mapAddChatItemActions({
     actions,

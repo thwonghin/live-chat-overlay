@@ -1,6 +1,6 @@
 export type AuthorDisplayMethod = 'avatar-only' | 'name-only' | 'all' | 'none';
 
-export interface MessageSettings {
+export type MessageSettings = {
     color: string;
     weight: number;
     opacity: number;
@@ -10,7 +10,7 @@ export interface MessageSettings {
     numberOfLines: number;
     authorDisplay: AuthorDisplayMethod;
     isSticky: boolean;
-}
+};
 
 export type MessageSettingsKey =
     | 'moderator'
@@ -23,10 +23,10 @@ export type MessageSettingsKey =
     | 'super-chat'
     | 'pinned';
 
-export interface Settings {
+export type Settings = {
     isEnabled: boolean;
     totalNumberOfLines: number;
     flowTimeInSec: number;
     globalOpacity: number;
     messageSettings: Record<MessageSettingsKey, MessageSettings>;
-}
+};

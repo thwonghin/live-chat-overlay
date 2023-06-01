@@ -1,22 +1,22 @@
-export interface Thumbnail {
+export type Thumbnail = {
     url: string;
     width: number;
     height: number;
-}
+};
 
-export interface TextPart {
+export type TextPart = {
     text: string;
-}
+};
 
-export interface EmojiPart {
+export type EmojiPart = {
     id: string;
     thumbnails: Thumbnail[];
     shortcuts: string[];
-}
+};
 
 export type MessagePart = TextPart | EmojiPart;
 
-export interface NormalChatItem {
+export type NormalChatItem = {
     id: string;
     width?: number;
     messageParts: MessagePart[];
@@ -26,7 +26,7 @@ export interface NormalChatItem {
     authorBadges: string[];
     authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you' | 'verified';
     chatType: 'normal';
-}
+};
 
 export type SuperChatItem = Omit<
     NormalChatItem,
@@ -45,10 +45,7 @@ export type SuperStickerItem = Omit<
     chatType: 'super-sticker';
 };
 
-export type MembershipItem = Omit<
-    NormalChatItem,
-    'authorType' | 'chatType'
-> & {
+export type MembershipItem = Omit<NormalChatItem, 'authorType' | 'chatType'> & {
     chatType: 'membership';
 };
 

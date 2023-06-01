@@ -1,49 +1,49 @@
-interface LiveChatReplayContinuationData {
+type LiveChatReplayContinuationData = {
     timeUntilLastMessageMsec: number;
     continuation: string;
-}
+};
 
-interface PlayerSeekContinuationData {
+type PlayerSeekContinuationData = {
     continuation: string;
-}
+};
 
-interface InvalidationContinuationData {
-    continuation: string;
-    timeoutMs: number;
-}
-
-interface TimedContinuationData {
+type InvalidationContinuationData = {
     continuation: string;
     timeoutMs: number;
-}
+};
 
-interface Continuation {
+type TimedContinuationData = {
+    continuation: string;
+    timeoutMs: number;
+};
+
+type Continuation = {
     liveChatReplayContinuationData?: LiveChatReplayContinuationData;
     playerSeekContinuationData?: PlayerSeekContinuationData;
     timedContinuationData?: TimedContinuationData; // Live
     invalidationContinuationData?: InvalidationContinuationData; // Member only Live
-}
+};
 
-interface Thumbnail {
+type Thumbnail = {
     url: string;
     width: number;
     height: number;
-}
+};
 
-interface AccessibilityData {
+type AccessibilityData = {
     label: string;
-}
+};
 
-interface Accessibility {
+type Accessibility = {
     accessibilityData: AccessibilityData;
-}
+};
 
-interface Image {
+type Image = {
     thumbnails: Thumbnail[];
     accessibility: Accessibility;
-}
+};
 
-export interface EmojiRun {
+export type EmojiRun = {
     emoji: {
         emojiId: string;
         shortcuts: string[];
@@ -51,69 +51,69 @@ export interface EmojiRun {
         image: Image;
         isCustomEmoji: boolean;
     };
-}
+};
 
-export interface TextRun {
+export type TextRun = {
     text: string;
-}
+};
 
 export type MessageRun = EmojiRun | TextRun;
 
-export interface Message {
+export type Message = {
     runs: MessageRun[];
-}
+};
 
-interface AuthorName {
+type AuthorName = {
     simpleText: string;
-}
+};
 
-interface AuthorPhoto {
+type AuthorPhoto = {
     thumbnails: Thumbnail[];
-}
+};
 
-interface WebCommandMetadata {
+type WebCommandMetadata = {
     ignoreNavigation: boolean;
-}
+};
 
-interface CommandMetadata {
+type CommandMetadata = {
     webCommandMetadata: WebCommandMetadata;
-}
+};
 
-interface LiveChatItemContextMenuEndpoint {
+type LiveChatItemContextMenuEndpoint = {
     params: string;
-}
+};
 
-interface ContextMenuEndpoint {
+type ContextMenuEndpoint = {
     commandMetadata: CommandMetadata;
     liveChatItemContextMenuEndpoint: LiveChatItemContextMenuEndpoint;
-}
+};
 
-interface CustomThumbnail {
+type CustomThumbnail = {
     thumbnails: Array<{ url: string }>;
-}
+};
 
-export interface LiveChatAuthorBadgeRenderer {
+export type LiveChatAuthorBadgeRenderer = {
     customThumbnail?: CustomThumbnail;
     tooltip: string;
     accessibility: Accessibility;
     icon?: {
         iconType: string;
     };
-}
+};
 
-export interface AuthorBadge {
+export type AuthorBadge = {
     liveChatAuthorBadgeRenderer: LiveChatAuthorBadgeRenderer;
-}
+};
 
-interface ContextMenuAccessibility {
+type ContextMenuAccessibility = {
     accessibilityData: AccessibilityData;
-}
+};
 
-interface TimestampText {
+type TimestampText = {
     simpleText: string;
-}
+};
 
-export interface LiveChatTextMessageRenderer {
+export type LiveChatTextMessageRenderer = {
     message: Message;
     authorName?: AuthorName;
     authorPhoto: AuthorPhoto;
@@ -124,13 +124,13 @@ export interface LiveChatTextMessageRenderer {
     authorExternalChannelId: string;
     contextMenuAccessibility: ContextMenuAccessibility;
     timestampText?: TimestampText;
-}
+};
 
-interface PurchaseAmountText {
+type PurchaseAmountText = {
     simpleText: string;
-}
+};
 
-export interface LiveChatPaidMessageRenderer {
+export type LiveChatPaidMessageRenderer = {
     id: string;
     timestampUsec: string;
     authorName?: AuthorName;
@@ -147,9 +147,9 @@ export interface LiveChatPaidMessageRenderer {
     timestampColor: number;
     contextMenuAccessibility: ContextMenuAccessibility;
     timestampText: TimestampText;
-}
+};
 
-export interface LiveChatMembershipItemRenderer {
+export type LiveChatMembershipItemRenderer = {
     id: string;
     timestampUsec: string;
     authorExternalChannelId: string;
@@ -160,14 +160,14 @@ export interface LiveChatMembershipItemRenderer {
     message?: Message;
     contextMenuEndpoint: ContextMenuEndpoint;
     contextMenuAccessibility: ContextMenuAccessibility;
-}
+};
 
-export interface Sticker {
+export type Sticker = {
     thumbnails: Thumbnail[];
     accessibility: Accessibility;
-}
+};
 
-export interface LiveChatPaidStickerRenderer {
+export type LiveChatPaidStickerRenderer = {
     id: string;
     contextMenuEndpoint: ContextMenuEndpoint;
     contextMenuAccessibility: ContextMenuAccessibility;
@@ -184,23 +184,23 @@ export interface LiveChatPaidStickerRenderer {
     stickerDisplayHeight: number;
     backgroundColor: number;
     authorNameTextColor: number;
-}
+};
 
-export interface Item {
+export type Item = {
     liveChatTextMessageRenderer?: LiveChatTextMessageRenderer;
     liveChatPaidMessageRenderer?: LiveChatPaidMessageRenderer;
     liveChatMembershipItemRenderer?: LiveChatMembershipItemRenderer;
     liveChatPaidStickerRenderer?: LiveChatPaidStickerRenderer;
     liveChatViewerEngagementMessageRenderer?: unknown;
     liveChatPlaceholderItemRenderer?: unknown;
-}
+};
 
-export interface AddChatItemAction {
+export type AddChatItemAction = {
     item?: Item;
     clientId: string;
-}
+};
 
-export interface AddBannerToLiveChatCommand {
+export type AddBannerToLiveChatCommand = {
     bannerRenderer: {
         liveChatBannerRenderer: {
             contents: {
@@ -208,26 +208,26 @@ export interface AddBannerToLiveChatCommand {
             };
         };
     };
-}
+};
 
-interface Amount {
+type Amount = {
     simpleText: string;
-}
+};
 
-interface Renderer {
+type Renderer = {
     liveChatPaidMessageRenderer: LiveChatPaidMessageRenderer;
-}
+};
 
-interface ShowLiveChatItemEndpoint {
+type ShowLiveChatItemEndpoint = {
     renderer: Renderer;
-}
+};
 
-interface ShowItemEndpoint {
+type ShowItemEndpoint = {
     commandMetadata: CommandMetadata;
     showLiveChatItemEndpoint: ShowLiveChatItemEndpoint;
-}
+};
 
-export interface LiveChatTickerPaidMessageItemRenderer {
+export type LiveChatTickerPaidMessageItemRenderer = {
     id: string;
     amount: Amount;
     amountTextColor: number;
@@ -238,71 +238,71 @@ export interface LiveChatTickerPaidMessageItemRenderer {
     showItemEndpoint: ShowItemEndpoint;
     authorExternalChannelId: string;
     fullDurationSec: number;
-}
+};
 
-interface Action {
+type Action = {
     addChatItemAction?: AddChatItemAction;
     addBannerToLiveChatCommand?: AddBannerToLiveChatCommand;
-}
+};
 
-export interface ReplayAction {
+export type ReplayAction = {
     replayChatItemAction?: {
         actions?: Action[];
         videoOffsetTimeMsec: string;
     };
-}
+};
 
-interface LiveLiveChatContinuation {
+type LiveLiveChatContinuation = {
     continuations: Continuation[];
     actions?: Action[];
-}
+};
 
-interface ReplayLiveChatContinuation {
+type ReplayLiveChatContinuation = {
     continuations: Continuation[];
     actions?: ReplayAction[];
-}
+};
 
-interface InitDataAttributes {
+type InitDataAttributes = {
     viewerName: string;
-}
+};
 
 type InitLiveChatContinuation = LiveLiveChatContinuation & InitDataAttributes;
 type InitReplayLiveChatContinuation = ReplayLiveChatContinuation &
     InitDataAttributes;
 
-interface InitLiveContinuationContents {
+type InitLiveContinuationContents = {
     liveChatContinuation: InitLiveChatContinuation;
-}
+};
 
-interface InitReplayContinuationContents {
+type InitReplayContinuationContents = {
     liveChatContinuation: InitReplayLiveChatContinuation;
     isReplay: true;
-}
+};
 
-interface LiveContinuationContents {
+type LiveContinuationContents = {
     liveChatContinuation: LiveLiveChatContinuation;
-}
+};
 
-interface ReplayContinuationContents {
+type ReplayContinuationContents = {
     liveChatContinuation: ReplayLiveChatContinuation;
-}
+};
 
-export interface LiveResponse {
+export type LiveResponse = {
     continuationContents: LiveContinuationContents;
-}
+};
 
-export interface ReplayResponse {
+export type ReplayResponse = {
     continuationContents: ReplayContinuationContents;
-}
+};
 
 export type YotubeChatResponse = LiveResponse | ReplayResponse;
 
-export interface LiveInitData {
+export type LiveInitData = {
     continuationContents: InitLiveContinuationContents;
-}
+};
 
-export interface ReplayInitData {
+export type ReplayInitData = {
     continuationContents: InitReplayContinuationContents;
-}
+};
 
 export type InitData = LiveInitData | ReplayInitData;

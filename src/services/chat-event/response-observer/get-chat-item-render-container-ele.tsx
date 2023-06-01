@@ -2,9 +2,9 @@ import { isNil } from 'lodash-es';
 import ReactDOM from 'react-dom';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import { settingsStorage, chatEvent } from '@/services';
+import { type settingsStorage, chatEvent } from '@/services';
 
-import { ChatItem } from '../models';
+import { type ChatItem } from '../models';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 
@@ -25,10 +25,10 @@ function getChatItemRenderContainerEle(): HTMLElement {
     return chatItemRenderContainerEle;
 }
 
-interface GetChatItemRenderedWidthParameters {
+type GetChatItemRenderedWidthParameters = {
     chatItems: ChatItem[];
     settings: settingsStorage.Settings;
-}
+};
 
 export async function assignChatItemRenderedWidth({
     chatItems,

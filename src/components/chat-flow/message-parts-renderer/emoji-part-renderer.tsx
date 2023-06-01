@@ -4,9 +4,9 @@ import { last } from 'lodash-es';
 
 import type { chatEvent } from '@/services';
 
-interface Props {
+type Props = {
     emojiPart: chatEvent.EmojiPart;
-}
+};
 
 const EmojiPartRenderer: React.FC<Props> = ({ emojiPart }) => {
     const thumbnail = last(emojiPart.thumbnails);

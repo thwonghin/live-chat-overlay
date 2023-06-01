@@ -6,10 +6,10 @@ import { assertNever } from '@/utils';
 import EmojiPartRenderer from './emoji-part-renderer';
 import TextPartRenderer from './text-part-renderer';
 
-interface Props {
+type Props = {
     className?: string;
     messageParts: chatEvent.MessagePart[];
-}
+};
 
 const MessagePartsRenderer: React.FC<Props> = ({ messageParts, className }) => {
     return (

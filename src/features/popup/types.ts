@@ -1,5 +1,5 @@
 export type PopupType = 'message-settings';
 
-export interface State {
-    currentPopup: PopupType | null;
-}
+export type State = {
+    currentPopup: PopupType | undefined;
+};

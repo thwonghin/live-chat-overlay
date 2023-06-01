@@ -1,7 +1,7 @@
-export interface CustomEventDetail {
+export type CustomEventDetail = {
     response: unknown;
     url: string;
-}
+};
 
 function getUrlFromFetchParam(url: RequestInfo | URL): string {
     if (typeof url === 'string') {

@@ -1,4 +1,4 @@
-import { Tooltip, tooltipClasses, TooltipProps } from '@mui/material';
+import { Tooltip, tooltipClasses, type TooltipProps } from '@mui/material';
 import styled from 'styled-components';
 
 import { youtube } from '@/utils';
@@ -21,10 +21,10 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
     }
 `;
 
-interface Props {
+type Props = {
     title: string;
     children: React.ReactElement;
-}
+};
 
 const BtnTooltip: React.FC<Props> = ({ title, children }) => {
     return (

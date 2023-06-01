@@ -18,9 +18,9 @@ export const PlayerRectContext = createContext<RectResult>({
     width: 0,
 });
 
-interface Props {
+type Props = {
     children: React.ReactNode;
-}
+};
 
 export const PlayerRectProvider: React.FC<Props> = ({ children }) => {
     const rect = useVideoPlayerRect();

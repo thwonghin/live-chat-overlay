@@ -8,10 +8,10 @@ export function useI18n(): I18n.Static {
     return React.useContext(I18nContext);
 }
 
-interface Props {
+type Props = {
     browser: Browser;
     children: React.ReactNode;
-}
+};
 
 export const I18nProvider: React.FC<Props> = ({ browser, children }) => {
     return (

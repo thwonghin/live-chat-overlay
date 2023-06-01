@@ -4,14 +4,14 @@ import { cloneDeep } from 'lodash-es';
 
 import { settingsStorage } from '@/services';
 
-interface UseSettingsResult {
+type UseSettingsResult = {
     settings: settingsStorage.Settings;
     updateSettings: (
         updateFn: (
             previousSettings: settingsStorage.Settings,
         ) => settingsStorage.Settings,
     ) => void;
-}
+};
 
 export function useSettings(): UseSettingsResult {
     const [settings, setSettings] = useState(

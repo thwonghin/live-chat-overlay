@@ -63,6 +63,7 @@ const defaultSettings: Settings = {
             numberOfLines: 1,
             authorDisplay: 'all',
         },
+        // eslint-disable-next-line @typescript-eslint/naming-convention
         'super-chat': {
             ...commonMessageSettings,
             numberOfLines: 2,

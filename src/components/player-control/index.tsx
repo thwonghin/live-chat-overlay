@@ -7,9 +7,9 @@ import SpeedSlider from '@/components/player-control/speed-slider';
 import ToggleBtn from '@/components/player-control/toggle-btn';
 import { useIsEleHovering } from '@/hooks';
 
-interface Props {
+type Props = {
     playerControlContainer: HTMLSpanElement;
-}
+};
 
 const PlayerControl: React.FC<Props> = ({ playerControlContainer }) => {
     const isHovering = useIsEleHovering(playerControlContainer);

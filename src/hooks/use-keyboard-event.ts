@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 
-interface UseKeyboardEventParameters {
+type UseKeyboardEventParameters = {
     shouldAlt: boolean;
     shouldCtrl: boolean;
     key: number;
     attached: HTMLElement;
     onChange: () => void;
-}
+};
 
 export function useKeyboardEvent({
     shouldAlt,

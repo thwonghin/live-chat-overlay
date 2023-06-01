@@ -17,7 +17,7 @@ const Row = styled.div`
     padding: 8px 0;
 `;
 
-interface Props {
+type Props = {
     globalOpacity: number;
     messageSettings: settingsStorage.MessageSettings;
     onSubmit: (value: {
@@ -25,7 +25,7 @@ interface Props {
         messageSettings: settingsStorage.MessageSettings;
     }) => void;
     isBackgroundColorEditable: boolean;
-}
+};
 
 const MessageSettingsInputFormLayout: React.FC<Props> = ({
     globalOpacity,

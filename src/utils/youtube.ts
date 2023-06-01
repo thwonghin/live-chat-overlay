@@ -15,31 +15,31 @@ export const GET_LIVE_CHAT_URL =
     'https://www.youtube.com/youtubei/v1/live_chat/get_live_chat';
 export const GET_LIVE_CHAT_REPLAY_URL = `${GET_LIVE_CHAT_URL}_replay`;
 
-export function getVideoPlayerContainer(): HTMLElement | null {
+export function getVideoPlayerContainer(): HTMLElement | undefined {
     return window.parent.document.querySelector(
         '#ytd-player .html5-video-container',
     );
 }
 
-export function getVideoPlayerEle(): HTMLDivElement | null {
+export function getVideoPlayerEle(): HTMLDivElement | undefined {
     return window.parent.document.querySelector(
         '#ytd-player .html5-video-player',
     );
 }
 
-export function getRightControlEle(): HTMLElement | null {
+export function getRightControlEle(): HTMLElement | undefined {
     return window.parent.document.querySelector(
         '#ytd-player .ytp-right-controls',
     );
 }
 
-export function getVideoEle(): HTMLVideoElement | null {
+export function getVideoEle(): HTMLVideoElement | undefined {
     return window.parent.document.querySelector(
         '#ytd-player .html5-video-player video',
     );
 }
 
-export function getLiveChatEle(): HTMLElement | null {
+export function getLiveChatEle(): HTMLElement | undefined {
     const ele = document.querySelector('#item-scroller #items');
     return ele as HTMLElement;
 }

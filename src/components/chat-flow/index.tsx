@@ -1,4 +1,4 @@
-import { useCallback, useMemo, CSSProperties } from 'react';
+import { useCallback, useMemo, type CSSProperties } from 'react';
 
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components';
@@ -6,12 +6,12 @@ import styled from 'styled-components';
 import type { RootState } from '@/app/live-chat-overlay/store';
 import { chatEvents } from '@/features';
 import { useSettings, useInterval, useVideoPlayerRect } from '@/hooks';
-import { settingsStorage, chatEvent } from '@/services';
+import { type settingsStorage, chatEvent } from '@/services';
 
 import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';
 import MessageFlower from './message-flower';
-import { UiChatItem } from './types';
+import { type UiChatItem } from './types';
 import { useToggleDebugMode } from './use-toggle-debug-mode';
 
 const Container = styled.div`
@@ -28,14 +28,14 @@ const TestRenderContainer = styled.div`
     visibility: hidden;
 `;
 
-interface Props {
+type Props = {
     settings: settingsStorage.Settings;
     nonStickyChatItems: UiChatItem[];
     stickyChatItems: UiChatItem[];
     onDone: (chatItem: UiChatItem) => void;
     onRemove: (chatItem: UiChatItem) => void;
     isDebugActive: boolean;
-}
+};
 
 const ChatFlowLayout: React.FC<Props> = ({
     nonStickyChatItems,

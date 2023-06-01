@@ -4,7 +4,7 @@ import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled, { css } from 'styled-components';
 
-import { chatEvent, settingsStorage } from '@/services';
+import { type chatEvent, type settingsStorage } from '@/services';
 
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
@@ -52,11 +52,11 @@ const CloseIcon = styled(Icon)`
     pointer-events: all !important;
 `;
 
-interface Props {
+type Props = {
     chatItem: chatEvent.PinnedChatItem;
     messageSettings: settingsStorage.MessageSettings;
     onClickClose?: React.MouseEventHandler;
-}
+};
 
 const PinnedMessage: React.FC<Props> = ({
     chatItem,

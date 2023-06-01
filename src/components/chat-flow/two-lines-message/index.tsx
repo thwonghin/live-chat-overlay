@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { chatEvent, settingsStorage } from '@/services';
+import { chatEvent, type settingsStorage } from '@/services';
 
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
@@ -25,13 +25,13 @@ const Message = styled(MessagePartsRenderer)`
     }
 `;
 
-interface Props {
+type Props = {
     chatItem:
         | chatEvent.NormalChatItem
         | chatEvent.MembershipItem
         | chatEvent.SuperChatItem;
     messageSettings: settingsStorage.MessageSettings;
-}
+};
 
 const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
     const actualNumberOfLines =

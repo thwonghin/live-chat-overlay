@@ -34,10 +34,10 @@ const Content = styled.div`
     padding: 0 16px;
 `;
 
-interface Props {
+type Props = {
     isHidden: boolean;
     playerControlContainer: HTMLSpanElement;
-}
+};
 
 const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
     const containerRef = useRef<HTMLDivElement>(null);

@@ -1,4 +1,4 @@
-import { Benchmark } from './types';
+import { type Benchmark } from './types';
 
 export function calculateBenchmark(
     oldBenchmark: Benchmark,

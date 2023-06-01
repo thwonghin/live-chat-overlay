@@ -4,12 +4,12 @@ import styled from 'styled-components';
 
 import type { chatEvent, settingsStorage } from '@/services';
 
-interface Props {
+type Props = {
     avatars: chatEvent.Thumbnail[];
     name: string;
     authorDisplaySetting: settingsStorage.MessageSettings['authorDisplay'];
     donationAmount?: string;
-}
+};
 
 const Container = styled.div`
     display: flex;

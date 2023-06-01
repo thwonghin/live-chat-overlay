@@ -2,16 +2,16 @@ import { useState, useCallback } from 'react';
 
 import { useKeyboardEvent } from './use-keyboard-event';
 
-interface UseKeyboardToggleParameters {
+type UseKeyboardToggleParameters = {
     shouldAlt: boolean;
     shouldCtrl: boolean;
     key: number;
     attached: HTMLElement;
-}
+};
 
-interface UseKeyboardToggleResult {
+type UseKeyboardToggleResult = {
     isActive: boolean;
-}
+};
 
 export function useKeyboardToggle({
     shouldAlt,

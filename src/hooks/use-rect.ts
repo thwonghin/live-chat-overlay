@@ -46,7 +46,7 @@ export function useRect<T extends HTMLElement>(
         handleResize();
 
         if (typeof ResizeObserver === 'function') {
-            let resizeObserver: ResizeObserver | null = new ResizeObserver(
+            let resizeObserver: ResizeObserver | undefined = new ResizeObserver(
                 () => {
                     handleResize();
                 },

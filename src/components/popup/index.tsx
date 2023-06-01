@@ -8,16 +8,16 @@ import { popup } from '@/features';
 
 import MessageSettingsPopup from './message-settings-popup';
 
-interface Props {
+type Props = {
     playerControlContainer: HTMLSpanElement;
     playerEle: HTMLDivElement;
-}
+};
 
 const PopupContainer: React.FC<Props> = ({
     playerControlContainer,
     playerEle,
 }) => {
-    const currentPopup = useSelector<RootState, popup.PopupType | null>(
+    const currentPopup = useSelector<RootState, popup.PopupType | undefined>(
         (state) => state.popup.currentPopup,
     );
     const dispatch = useDispatch();
