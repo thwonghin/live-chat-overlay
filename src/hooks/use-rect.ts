@@ -59,7 +59,7 @@ export function useRect<T extends HTMLElement>(
                 }
 
                 resizeObserver.disconnect();
-                resizeObserver = null;
+                resizeObserver = undefined;
             };
         }
 

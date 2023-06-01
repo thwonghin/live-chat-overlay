@@ -12,6 +12,7 @@
         "noUncheckedIndexedAccess": true,
         "noPropertyAccessFromIndexSignature": true,
         "noImplicitOverride": true,
+        "strictPropertyInitialization": true,
         "jsx": "react-jsx",
         "paths": {
             "@/*": ["src/*"]

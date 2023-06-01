@@ -12,7 +12,9 @@ export const ChatEventObserverContext =
         ),
     );
 
-export const ChatEventObserverProvider: React.FC = ({ children }) => {
+export const ChatEventObserverProvider: React.FC<React.PropsWithChildren> = ({
+    children,
+}) => {
     const video = React.useMemo(() => youtube.getVideoEle(), []);
     if (!video) {
         throw new Error('Video element not found');

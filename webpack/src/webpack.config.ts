@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-
 import * as path from 'path';
 
 // eslint-disable-next-line import/default

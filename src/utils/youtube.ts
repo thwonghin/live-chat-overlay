@@ -16,26 +16,34 @@ export const GET_LIVE_CHAT_URL =
 export const GET_LIVE_CHAT_REPLAY_URL = `${GET_LIVE_CHAT_URL}_replay`;
 
 export function getVideoPlayerContainer(): HTMLElement | undefined {
-    return window.parent.document.querySelector(
-        '#ytd-player .html5-video-container',
+    return (
+        window.parent.document.querySelector<HTMLElement>(
+            '#ytd-player .html5-video-container',
+        ) ?? undefined
     );
 }
 
 export function getVideoPlayerEle(): HTMLDivElement | undefined {
-    return window.parent.document.querySelector(
-        '#ytd-player .html5-video-player',
+    return (
+        window.parent.document.querySelector<HTMLDivElement>(
+            '#ytd-player .html5-video-player',
+        ) ?? undefined
     );
 }
 
 export function getRightControlEle(): HTMLElement | undefined {
-    return window.parent.document.querySelector(
-        '#ytd-player .ytp-right-controls',
+    return (
+        window.parent.document.querySelector<HTMLElement>(
+            '#ytd-player .ytp-right-controls',
+        ) ?? undefined
     );
 }
 
 export function getVideoEle(): HTMLVideoElement | undefined {
-    return window.parent.document.querySelector(
-        '#ytd-player .html5-video-player video',
+    return (
+        window.parent.document.querySelector<HTMLVideoElement>(
+            '#ytd-player .html5-video-player video',
+        ) ?? undefined
     );
 }
 
