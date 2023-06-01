@@ -7,6 +7,7 @@ module.exports = {
         'plugin:import/recommended',
         'plugin:import/typescript',
         'plugin:prettier/recommended',
+        'plugin:storybook/recommended',
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -20,7 +21,8 @@ module.exports = {
         'unicorn/no-array-callback-reference': 'off',
         'react-hooks/exhaustive-deps': 'error',
         'node/file-extension-in-import': 'off',
-        '@typescript-eslint/no-implicit-any-catch': 'off', // using 'useUnknownInCatchVariables' in tsconfig by default
+        '@typescript-eslint/no-implicit-any-catch': 'off',
+        // using 'useUnknownInCatchVariables' in tsconfig by default
         'import/order': [
             'error',
             {
