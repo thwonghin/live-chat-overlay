@@ -6,7 +6,6 @@ settings:
 
 overrides:
   '@mui/styled-engine': npm:@mui/styled-engine-sc@latest
-  '@types/eslint': '7'
 
 dependencies:
   '@fortawesome/fontawesome-svg-core':

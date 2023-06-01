@@ -105,8 +105,7 @@
     },
     "packageManager": "pnpm@8.6.0",
     "resolutions": {
-        "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-        "@types/eslint": "7"
+        "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
     },
     "volta": {
         "node": "18.16.0"

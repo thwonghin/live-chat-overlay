@@ -34,7 +34,7 @@ jobs:
           pnpm lint && pnpm test:unit --ci
       - name: Build
         run: |
-          pnpm build:prod
+          pnpm build
       - name: Build Storybook
         run: |
           pnpm storybook:build
