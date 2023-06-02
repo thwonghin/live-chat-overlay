@@ -1,6 +1,6 @@
 {
     "name": "live-chat-overlay",
-    "version": "2.13.3",
+    "version": "2.13.4",
     "description": "Web Extension for Overlay Live Chat on Youtube",
     "main": "dist/content-script.js",
     "repository": "git@github.com:thwonghin/live-chat-overlay.git",
@@ -22,7 +22,6 @@
         "dev": "vite dev",
         "build": "vite build",
         "release": "pnpx standard-version",
-        "postversion": "npx conventional-changelog-cli -p live-chat-overlay -i CHANGELOG.md -s && git add CHANGELOG.md",
         "storybook": "storybook dev -p 6006",
         "storybook:build": "storybook build --quiet"
     },
