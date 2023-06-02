@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { ThemeProvider, StyleSheetManager } from 'styled-components';
 import type { Browser } from 'webextension-polyfill';
@@ -60,7 +60,9 @@ export function injectLiveChatOverlay(
     styledInsertionPointContainer.append(styledInsertionPoint);
     window.parent.document.head.append(styledInsertionPointContainer);
 
-    ReactDOM.render(
+    const root = createRoot(liveChatContainer);
+
+    root.render(
         <StrictMode>
             <Provider store={store}>
                 <contexts.i18n.I18nProvider browser={browser}>
@@ -86,11 +88,10 @@ export function injectLiveChatOverlay(
                 </contexts.i18n.I18nProvider>
             </Provider>
         </StrictMode>,
-        liveChatContainer,
     );
 
     return () => {
-        ReactDOM.unmountComponentAtNode(liveChatContainer);
+        root.unmount();
         playerControlContainer.remove();
         liveChatContainer.remove();
         styledInsertionPointContainer.remove();
