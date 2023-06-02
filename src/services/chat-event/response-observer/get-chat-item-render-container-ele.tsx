@@ -1,5 +1,5 @@
 import { isNil } from 'lodash-es';
-import ReactDOM from 'react-dom';
+import { type Root, createRoot } from 'react-dom/client';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
 import { type settingsStorage, chatEvent } from '@/services';
@@ -8,10 +8,16 @@ import { type ChatItem } from '../models';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 
-let chatItemRenderContainerEle: HTMLElement;
+let renderRoot: {
+    root: Root;
+    ele: HTMLElement;
+};
 
-function getChatItemRenderContainerEle(): HTMLElement {
-    if (!chatItemRenderContainerEle) {
+function getChatItemRenderContainerRoot(): {
+    root: Root;
+    ele: HTMLElement;
+} {
+    if (!renderRoot) {
         const containerEle = window.parent.document.querySelector<HTMLElement>(
             `#${CHAT_ITEM_RENDER_ID}`,
         );
@@ -19,10 +25,13 @@ function getChatItemRenderContainerEle(): HTMLElement {
             throw new Error('Cannot find chat item render container');
         }
 
-        chatItemRenderContainerEle = containerEle;
+        renderRoot = {
+            ele: containerEle,
+            root: createRoot(containerEle),
+        };
     }
 
-    return chatItemRenderContainerEle;
+    return renderRoot;
 }
 
 type GetChatItemRenderedWidthParameters = {
@@ -34,16 +43,34 @@ export async function assignChatItemRenderedWidth({
     chatItems,
     settings,
 }: GetChatItemRenderedWidthParameters): Promise<ChatItem[]> {
-    const containerEle = getChatItemRenderContainerEle();
+    const { root } = getChatItemRenderContainerRoot();
 
-    await new Promise<void>((resolve) => {
-        ReactDOM.render(
+    const chatElements = await new Promise<
+        Partial<Record<string, HTMLElement>>
+    >((resolve) => {
+        const chatElements: Partial<Record<string, HTMLElement>> = {};
+
+        root.render(
             <>
                 {chatItems.map((chatItem) => {
                     const messageSettings = chatEvent.getMessageSettings(
                         chatItem,
                         settings,
                     );
+
+                    // eslint-disable-next-line @typescript-eslint/ban-types
+                    const onRender = (ele: HTMLElement | null) => {
+                        if (ele) {
+                            chatElements[chatItem.id] = ele;
+                            if (
+                                Object.keys(chatElements).length ===
+                                chatItems.length
+                            ) {
+                                resolve(chatElements);
+                            }
+                        }
+                    };
+
                     return (
                         <ChatItemRenderer
                             key={chatItem.id}
@@ -54,17 +81,16 @@ export async function assignChatItemRenderedWidth({
                                 lineNumber: 0,
                             }}
                             messageSettings={messageSettings}
+                            onRender={onRender}
                         />
                     );
                 })}
             </>,
-            containerEle,
-            resolve,
         );
     });
 
-    return chatItems.map((chatItem, index) => {
-        const rect = containerEle?.children[index]?.getBoundingClientRect();
+    return chatItems.map((chatItem) => {
+        const rect = chatElements[chatItem.id]?.getBoundingClientRect();
 
         const width = rect?.width;
         if (isNil(width)) {

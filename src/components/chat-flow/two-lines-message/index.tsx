@@ -31,9 +31,15 @@ type Props = {
         | chatEvent.MembershipItem
         | chatEvent.SuperChatItem;
     messageSettings: settingsStorage.MessageSettings;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    onRender?: (ele: HTMLElement | null) => void;
 };
 
-const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
+const TwoLinesMessage: React.FC<Props> = ({
+    onRender,
+    chatItem,
+    messageSettings,
+}) => {
     const actualNumberOfLines =
         chatItem.messageParts.length > 0 ? messageSettings.numberOfLines : 1;
 
@@ -51,6 +57,7 @@ const TwoLinesMessage: React.FC<Props> = ({ chatItem, messageSettings }) => {
 
     return (
         <Container
+            ref={onRender}
             style={{
                 height: `${actualNumberOfLines}em`,
                 color: messageSettings.color,
