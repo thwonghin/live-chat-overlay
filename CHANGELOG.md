@@ -1,8 +1,13 @@
-## <small>2.13.1 (2021-09-23)</small>
+# Changelog
 
-* fix: missing entry point script (#748) ([61e7512](https://github.com/thwonghin/live-chat-overlay/commit/61e7512)), closes [#748](https://github.com/thwonghin/live-chat-overlay/issues/748)
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [2.13.3](https://github.com/thwonghin/live-chat-overlay/compare/v2.13.1...v2.13.3) (2023-06-02)
 
 
+### Bug Fixes
+
+* live chat delay ([#759](https://github.com/thwonghin/live-chat-overlay/issues/759)) ([18aac6c](https://github.com/thwonghin/live-chat-overlay/commit/18aac6cfdbbe38b75e291b0c3bcb15fd9867c553))
 
 ## 2.13.0 (2021-09-23)
 
@@ -442,6 +447,3 @@
 * Update theme ([f9256f4](https://github.com/thwonghin/live-chat-overlay/commit/f9256f4))
 * Update version placeholder ([0e71773](https://github.com/thwonghin/live-chat-overlay/commit/0e71773))
 * Use scss & update message text relative to player size ([e0f7a19](https://github.com/thwonghin/live-chat-overlay/commit/e0f7a19))
-
-
-
