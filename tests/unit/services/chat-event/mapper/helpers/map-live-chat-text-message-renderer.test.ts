@@ -118,7 +118,6 @@ describe('mapLiveChatTextMessageRenderer', () => {
     it('should map member type chat correctly', () => {
         const result = mapLiveChatTextMessageRenderer({
             renderer: getFixture(),
-            liveDelayInMs: 1000,
             currentTimestampMs: 160000000000,
             playerTimestampMs: 1500,
         });
@@ -158,7 +157,7 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1340000004000,
+            videoTimestampInMs: 1340000001500,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'member',
@@ -172,7 +171,6 @@ describe('mapLiveChatTextMessageRenderer', () => {
 
         const result = mapLiveChatTextMessageRenderer({
             renderer: fixture,
-            liveDelayInMs: 1000,
             currentTimestampMs: 160000000000,
             playerTimestampMs: 1500,
         });
@@ -212,7 +210,7 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1340000004000,
+            videoTimestampInMs: 1340000001500,
             authorName: 'Sample Author',
             authorBadges: [],
             authorType: 'guest',
@@ -238,7 +236,6 @@ describe('mapLiveChatTextMessageRenderer', () => {
 
         const result = mapLiveChatTextMessageRenderer({
             renderer: fixture,
-            liveDelayInMs: 1000,
             currentTimestampMs: 160000000000,
             playerTimestampMs: 1500,
         });
@@ -278,7 +275,7 @@ describe('mapLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1340000004000,
+            videoTimestampInMs: 1340000001500,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'moderator',
@@ -291,7 +288,6 @@ describe('mapLiveChatTextMessageRenderer', () => {
 
         const result = mapLiveChatTextMessageRenderer({
             renderer: fixture,
-            liveDelayInMs: 0,
             currentTimestampMs: 160000000000,
             playerTimestampMs: 1500,
             videoTimestampInMs: 100000000,

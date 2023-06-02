@@ -158,7 +158,6 @@ describe('mapLiveChatMembershipItemRenderer', () => {
         it('should map member type chat correctly', () => {
             const result = mapLiveChatMembershipItemRenderer({
                 renderer: getNewJoinerFixture(),
-                liveDelayInMs: 1000,
                 currentTimestampMs: 160000000000,
                 playerTimestampMs: 1500,
             });
@@ -198,7 +197,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
                         height: 64,
                     },
                 ],
-                videoTimestampInMs: 1340000004000,
+                videoTimestampInMs: 1340000001500,
                 authorName: 'Sample Author',
                 authorBadges: ['https://badge-url', 'https://badge-url-2'],
                 chatType: 'membership',
@@ -209,7 +208,6 @@ describe('mapLiveChatMembershipItemRenderer', () => {
             const result = mapLiveChatMembershipItemRenderer({
                 renderer: getNewJoinerFixture(),
                 videoTimestampInMs: 100000000,
-                liveDelayInMs: 0,
                 currentTimestampMs: 160000000000,
                 playerTimestampMs: 1500,
             });
@@ -261,7 +259,6 @@ describe('mapLiveChatMembershipItemRenderer', () => {
         it('should map member type chat correctly', () => {
             const result = mapLiveChatMembershipItemRenderer({
                 renderer: getSuperChatFixture(),
-                liveDelayInMs: 1000,
                 currentTimestampMs: 160000000000,
                 playerTimestampMs: 1500,
             });
@@ -301,7 +298,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
                         height: 64,
                     },
                 ],
-                videoTimestampInMs: 1340000004000,
+                videoTimestampInMs: 1340000001500,
                 authorName: 'Sample Author',
                 authorBadges: ['https://badge-url', 'https://badge-url-2'],
                 chatType: 'membership',
@@ -312,7 +309,6 @@ describe('mapLiveChatMembershipItemRenderer', () => {
             const result = mapLiveChatMembershipItemRenderer({
                 renderer: getSuperChatFixture(),
                 videoTimestampInMs: 100000000,
-                liveDelayInMs: 0,
                 currentTimestampMs: 160000000000,
                 playerTimestampMs: 1500,
             });

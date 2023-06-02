@@ -30,7 +30,6 @@ export function mapChatItemsFromReplayResponse(parameters: {
 
             const items = mapAddChatItemActions({
                 actions,
-                liveDelayInMs: 0,
                 currentTimestampMs: parameters.currentTimestampMs,
                 playerTimestampMs: parameters.playerTimestampMs,
                 videoTimestampInMs: Number(a.videoOffsetTimeMsec),
@@ -67,7 +66,6 @@ export function mapChatItemsFromLiveResponse(parameters: {
         )
             .map((v) => v.addChatItemAction ?? v.addBannerToLiveChatCommand)
             .filter(isNotNil),
-        liveDelayInMs: getTimeoutMs(parameters.continuationContents) ?? 0,
         currentTimestampMs: parameters.currentTimestampMs,
         playerTimestampMs: parameters.playerTimestampMs,
     });

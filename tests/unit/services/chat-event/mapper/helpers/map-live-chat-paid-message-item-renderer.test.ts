@@ -91,7 +91,6 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
     it('should map to correct result', () => {
         const result = mapLiveChatPaidMessageItemRenderer({
             renderer: getFixture(),
-            liveDelayInMs: 1000,
             currentTimestampMs: 160000000000,
             playerTimestampMs: 1500,
         });
@@ -131,7 +130,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1431023797124.462,
+            videoTimestampInMs: 1431023794624.462,
             authorName: 'Sample Author',
             chatType: 'super-chat',
             color: 'rgba(230,33,23,1)',
@@ -143,7 +142,6 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
         const result = mapLiveChatPaidMessageItemRenderer({
             renderer: getFixture(),
             videoTimestampInMs: 100000000,
-            liveDelayInMs: 0,
             currentTimestampMs: 160000000000,
             playerTimestampMs: 1500,
         });
@@ -191,12 +189,11 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
         });
     });
 
-    it('should handle empty message corretly', () => {
+    it('should handle empty message correctly', () => {
         const sample = getFixture();
         sample.message = undefined;
         const result = mapLiveChatPaidMessageItemRenderer({
             renderer: sample,
-            liveDelayInMs: 1000,
             currentTimestampMs: 160000000000,
             playerTimestampMs: 1500,
         });
@@ -216,7 +213,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1431023797124.462,
+            videoTimestampInMs: 1431023794624.462,
             authorName: 'Sample Author',
             chatType: 'super-chat',
             color: 'rgba(230,33,23,1)',

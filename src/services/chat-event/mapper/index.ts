@@ -16,7 +16,6 @@ type MapActionsParameters = {
         | liveChatResponse.AddChatItemAction
         | liveChatResponse.AddBannerToLiveChatCommand
     >;
-    liveDelayInMs: number;
     currentTimestampMs: number;
     playerTimestampMs: number;
     videoTimestampInMs?: number;
@@ -24,7 +23,6 @@ type MapActionsParameters = {
 
 export function mapAddChatItemActions({
     actions,
-    liveDelayInMs,
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
@@ -35,7 +33,6 @@ export function mapAddChatItemActions({
                 if (action.item?.liveChatPaidMessageRenderer) {
                     return mapLiveChatPaidMessageItemRenderer({
                         renderer: action.item.liveChatPaidMessageRenderer,
-                        liveDelayInMs,
                         currentTimestampMs,
                         playerTimestampMs,
                         videoTimestampInMs,
@@ -45,7 +42,6 @@ export function mapAddChatItemActions({
                 if (action.item?.liveChatPaidStickerRenderer) {
                     return mapLiveChatPaidStickerRenderer({
                         renderer: action.item.liveChatPaidStickerRenderer,
-                        liveDelayInMs,
                         currentTimestampMs,
                         playerTimestampMs,
                         videoTimestampInMs,
@@ -55,7 +51,6 @@ export function mapAddChatItemActions({
                 if (action.item?.liveChatMembershipItemRenderer) {
                     return mapLiveChatMembershipItemRenderer({
                         renderer: action.item.liveChatMembershipItemRenderer,
-                        liveDelayInMs,
                         currentTimestampMs,
                         playerTimestampMs,
                         videoTimestampInMs,
@@ -65,7 +60,6 @@ export function mapAddChatItemActions({
                 if (action.item?.liveChatTextMessageRenderer) {
                     return mapLiveChatTextMessageRenderer({
                         renderer: action.item.liveChatTextMessageRenderer,
-                        liveDelayInMs,
                         currentTimestampMs,
                         playerTimestampMs,
                         videoTimestampInMs,
@@ -89,7 +83,6 @@ export function mapAddChatItemActions({
                     renderer:
                         action.bannerRenderer.liveChatBannerRenderer.contents
                             .liveChatTextMessageRenderer,
-                    liveDelayInMs,
                     currentTimestampMs,
                     playerTimestampMs,
                     videoTimestampInMs,
