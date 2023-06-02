@@ -22,15 +22,22 @@ const Message = styled.span`
 `;
 
 type Props = {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    onRender?: (ele: HTMLElement | null) => void;
     chatItem: chatEvent.SuperStickerItem;
     messageSettings: settingsStorage.MessageSettings;
 };
 
-const SuperChatSticker: React.FC<Props> = ({ chatItem, messageSettings }) => {
+const SuperChatSticker: React.FC<Props> = ({
+    onRender,
+    chatItem,
+    messageSettings,
+}) => {
     const imageSize = `${0.8 * messageSettings.numberOfLines}em`;
 
     return (
         <Container
+            ref={onRender}
             style={{
                 height: `${messageSettings.numberOfLines}em`,
                 color: messageSettings.color,

@@ -56,12 +56,15 @@ type Props = {
     chatItem: chatEvent.PinnedChatItem;
     messageSettings: settingsStorage.MessageSettings;
     onClickClose?: React.MouseEventHandler;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    onRender?: (ele: HTMLElement | null) => void;
 };
 
 const PinnedMessage: React.FC<Props> = ({
     chatItem,
     messageSettings,
     onClickClose,
+    onRender,
 }) => {
     const [isExpended, setIsExpended] = React.useState(false);
 
@@ -84,6 +87,7 @@ const PinnedMessage: React.FC<Props> = ({
 
     return (
         <Container
+            ref={onRender}
             style={{
                 color: messageSettings.color,
                 fontWeight: messageSettings.weight,
