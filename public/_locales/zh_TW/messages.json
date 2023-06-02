@@ -3,7 +3,7 @@
         "message": "Live Chat Overlay"
     },
     "extensionDescription": {
-        "message": "把直播評論顯示在 Youtube 直播影片之上"
+        "message": "在 YouTube 的直播畫面上顯示即時聊天"
     },
     "toggleButtonHideTitle": {
         "message": "隱藏評論"
