@@ -2,7 +2,8 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { isNil } from 'lodash-es';
 
 import { type UiChatItem } from '@/components/chat-flow/types';
-import { settingsStorage, chatEvent } from '@/services';
+import { type chatEvent } from '@/services';
+import { rootStore } from '@/stores';
 
 import { getLineNumber } from './helpers';
 import { type State } from './types';
@@ -38,12 +39,8 @@ const slice = createSlice({
             }
 
             const addTimestamp = Date.now();
-            const { settings } = settingsStorage.storageInstance;
-
-            const messageSettings = chatEvent.getMessageSettings(
-                chatItem,
-                settings,
-            );
+            const { settings } = rootStore.settingsStore;
+            const messageSettings = settings.getMessageSettings(chatItem);
 
             if (messageSettings.isSticky) {
                 const uiChatItem: UiChatItem = {
@@ -179,9 +176,10 @@ const slice = createSlice({
             };
         },
         resetNonStickyItems(state): State {
-            const { settings } = settingsStorage.storageInstance;
+            const { settings } = rootStore.settingsStore;
+
             const filtered = state.chatItems.filter(
-                (item) => chatEvent.getMessageSettings(item, settings).isSticky,
+                (item) => settings.getMessageSettings(item).isSticky,
             );
             const newChatItemStateById = Object.fromEntries(
                 filtered.map(({ id }) => [

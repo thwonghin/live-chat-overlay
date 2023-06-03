@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { AuthorDisplayMethod } from '@/models/settings';
+
 import AuthorChip from './index';
 
 const settings = { title: 'AuthorChip' };
@@ -21,7 +23,11 @@ const Container: React.FC<React.PropsWithChildren> = ({ children }) => (
 
 export const WithAllDisplay: React.FC = () => (
     <Container>
-        <AuthorChip avatars={avatars} name={name} authorDisplaySetting="all" />
+        <AuthorChip
+            avatars={avatars}
+            name={name}
+            authorDisplaySetting={AuthorDisplayMethod.ALL}
+        />
     </Container>
 );
 
@@ -30,7 +36,7 @@ export const WithNameOnly: React.FC = () => (
         <AuthorChip
             avatars={avatars}
             name={name}
-            authorDisplaySetting="name-only"
+            authorDisplaySetting={AuthorDisplayMethod.NAME_ONLY}
         />
     </Container>
 );
@@ -40,14 +46,18 @@ export const WithAvatarOnly: React.FC = () => (
         <AuthorChip
             avatars={avatars}
             name={name}
-            authorDisplaySetting="avatar-only"
+            authorDisplaySetting={AuthorDisplayMethod.AVATAR_ONLY}
         />
     </Container>
 );
 
 export const WithNone: React.FC = () => (
     <Container>
-        <AuthorChip avatars={avatars} name={name} authorDisplaySetting="none" />
+        <AuthorChip
+            avatars={avatars}
+            name={name}
+            authorDisplaySetting={AuthorDisplayMethod.NONE}
+        />
     </Container>
 );
 
@@ -56,7 +66,7 @@ export const WithAllDisplayAndDonation: React.FC = () => (
         <AuthorChip
             avatars={avatars}
             name={name}
-            authorDisplaySetting="all"
+            authorDisplaySetting={AuthorDisplayMethod.ALL}
             donationAmount="HK$ 100"
         />
     </Container>
@@ -67,7 +77,7 @@ export const WithNameOnlyAndDonation: React.FC = () => (
         <AuthorChip
             avatars={avatars}
             name={name}
-            authorDisplaySetting="name-only"
+            authorDisplaySetting={AuthorDisplayMethod.NAME_ONLY}
             donationAmount="HK$ 100"
         />
     </Container>
@@ -78,7 +88,7 @@ export const WithAvatarOnlyAndDonation: React.FC = () => (
         <AuthorChip
             avatars={avatars}
             name={name}
-            authorDisplaySetting="avatar-only"
+            authorDisplaySetting={AuthorDisplayMethod.AVATAR_ONLY}
             donationAmount="HK$ 100"
         />
     </Container>
@@ -89,7 +99,7 @@ export const WithNoneAndDonation: React.FC = () => (
         <AuthorChip
             avatars={avatars}
             name={name}
-            authorDisplaySetting="none"
+            authorDisplaySetting={AuthorDisplayMethod.NONE}
             donationAmount="HK$ 100"
         />
     </Container>

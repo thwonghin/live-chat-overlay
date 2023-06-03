@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import type { chatEvent, settingsStorage } from '@/services';
+import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
+import type { chatEvent } from '@/services';
 
 import PinnedMessage from '.';
 
@@ -33,7 +34,7 @@ const Container: React.FC<React.PropsWithChildren> = ({ children }) => (
     </div>
 );
 
-const messageSettings: settingsStorage.MessageSettings = {
+const messageSettings: MessageSettings = {
     color: 'white',
     weight: 700,
     opacity: 0.8,
@@ -41,7 +42,7 @@ const messageSettings: settingsStorage.MessageSettings = {
     strokeColor: 'black',
     strokeWidth: 0.03,
     numberOfLines: 1,
-    authorDisplay: 'all',
+    authorDisplay: AuthorDisplayMethod.ALL,
     isSticky: true,
 };
 

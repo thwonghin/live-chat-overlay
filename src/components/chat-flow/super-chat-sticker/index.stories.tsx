@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import type { chatEvent, settingsStorage } from '@/services';
+import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
+import type { chatEvent } from '@/services';
 
 import SuperChatSticker from '.';
 
@@ -34,7 +35,7 @@ const superStickerItem: chatEvent.SuperStickerItem = {
     chatType: 'super-sticker',
 };
 
-const messageSettings: settingsStorage.MessageSettings = {
+const messageSettings: MessageSettings = {
     color: 'white',
     weight: 700,
     opacity: 0.8,
@@ -42,7 +43,7 @@ const messageSettings: settingsStorage.MessageSettings = {
     strokeColor: 'black',
     strokeWidth: 0.03,
     numberOfLines: 2,
-    authorDisplay: 'all',
+    authorDisplay: AuthorDisplayMethod.ALL,
     isSticky: false,
 };
 
@@ -77,7 +78,7 @@ export const TwoLinesSuperChatStickerWithoutAuthorDisplay: React.FC = () => (
             chatItem={superStickerItem}
             messageSettings={{
                 ...messageSettings,
-                authorDisplay: 'none',
+                authorDisplay: AuthorDisplayMethod.NONE,
             }}
         />
     </Container>
@@ -90,7 +91,7 @@ export const OneLineSuperChatStickerWithoutAuthorDisplay: React.FC = () => (
             messageSettings={{
                 ...messageSettings,
                 numberOfLines: 1,
-                authorDisplay: 'none',
+                authorDisplay: AuthorDisplayMethod.NONE,
             }}
         />
     </Container>

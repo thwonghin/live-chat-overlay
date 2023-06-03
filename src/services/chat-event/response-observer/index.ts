@@ -5,7 +5,6 @@ import type {
     InitData,
 } from '@/definitions/youtube';
 import type { fetchInterceptor } from '@/services';
-import { settingsStorage } from '@/services';
 import { benchmark, benchmarkAsync, EventEmitter, youtube } from '@/utils';
 
 import { assignChatItemRenderedWidth } from './get-chat-item-render-container-ele';
@@ -200,11 +199,7 @@ export class ResponseObserver {
 
             const { result: chatItemsWithWidth, runtime: getEleRuntime } =
                 await benchmarkAsync(
-                    async () =>
-                        assignChatItemRenderedWidth({
-                            chatItems,
-                            settings: settingsStorage.storageInstance.settings,
-                        }),
+                    async () => assignChatItemRenderedWidth(chatItems),
                     this.isDebugging,
                 );
 

@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { chatEvent, type settingsStorage } from '@/services';
+import { type MessageSettings } from '@/models/settings';
+import { chatEvent } from '@/services';
 
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
@@ -30,15 +31,15 @@ type Props = {
         | chatEvent.NormalChatItem
         | chatEvent.MembershipItem
         | chatEvent.SuperChatItem;
-    messageSettings: settingsStorage.MessageSettings;
+    messageSettings: MessageSettings;
     // eslint-disable-next-line @typescript-eslint/ban-types
     onRender?: (ele: HTMLElement | null) => void;
 };
 
 const TwoLinesMessage: React.FC<Props> = ({
     onRender,
-    chatItem,
     messageSettings,
+    chatItem,
 }) => {
     const actualNumberOfLines =
         chatItem.messageParts.length > 0 ? messageSettings.numberOfLines : 1;

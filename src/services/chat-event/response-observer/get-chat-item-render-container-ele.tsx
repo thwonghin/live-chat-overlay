@@ -1,8 +1,11 @@
+import React, { useCallback } from 'react';
+
 import { isNil } from 'lodash-es';
 import { type Root, createRoot } from 'react-dom/client';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import { type settingsStorage, chatEvent } from '@/services';
+import { SettingsProvider } from '@/contexts/settings';
+import { type SettingsModel } from '@/models/settings';
 
 import { type ChatItem } from '../models';
 
@@ -34,15 +37,35 @@ function getChatItemRenderContainerRoot(): {
     return renderRoot;
 }
 
-type GetChatItemRenderedWidthParameters = {
-    chatItems: ChatItem[];
-    settings: settingsStorage.Settings;
+const ChatItemRendererForWidth: React.FC<{
+    chatItem: ChatItem;
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    onRender: (chatItem: ChatItem, ele: HTMLElement | null) => void;
+}> = ({ chatItem, onRender }) => {
+    const handleRender = useCallback(
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        (ele: HTMLElement | null) => {
+            onRender(chatItem, ele);
+        },
+        [onRender, chatItem],
+    );
+
+    return (
+        <ChatItemRenderer
+            chatItem={{
+                ...chatItem,
+                numberOfLines: 0,
+                addTimestamp: 0,
+                lineNumber: 0,
+            }}
+            onRender={handleRender}
+        />
+    );
 };
 
-export async function assignChatItemRenderedWidth({
-    chatItems,
-    settings,
-}: GetChatItemRenderedWidthParameters): Promise<ChatItem[]> {
+export async function assignChatItemRenderedWidth(
+    chatItems: ChatItem[],
+): Promise<ChatItem[]> {
     const { root } = getChatItemRenderContainerRoot();
 
     const chatElements = await new Promise<
@@ -50,42 +73,26 @@ export async function assignChatItemRenderedWidth({
     >((resolve) => {
         const chatElements: Partial<Record<string, HTMLElement>> = {};
 
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        const handleRender = (chatItem: ChatItem, ele: HTMLElement | null) => {
+            if (ele) {
+                chatElements[chatItem.id] = ele;
+                if (Object.keys(chatElements).length === chatItems.length) {
+                    resolve(chatElements);
+                }
+            }
+        };
+
         root.render(
-            <>
-                {chatItems.map((chatItem) => {
-                    const messageSettings = chatEvent.getMessageSettings(
-                        chatItem,
-                        settings,
-                    );
-
-                    // eslint-disable-next-line @typescript-eslint/ban-types
-                    const onRender = (ele: HTMLElement | null) => {
-                        if (ele) {
-                            chatElements[chatItem.id] = ele;
-                            if (
-                                Object.keys(chatElements).length ===
-                                chatItems.length
-                            ) {
-                                resolve(chatElements);
-                            }
-                        }
-                    };
-
-                    return (
-                        <ChatItemRenderer
-                            key={chatItem.id}
-                            chatItem={{
-                                ...chatItem,
-                                numberOfLines: 0,
-                                addTimestamp: 0,
-                                lineNumber: 0,
-                            }}
-                            messageSettings={messageSettings}
-                            onRender={onRender}
-                        />
-                    );
-                })}
-            </>,
+            <SettingsProvider>
+                {chatItems.map((chatItem) => (
+                    <ChatItemRendererForWidth
+                        key={chatItem.id}
+                        chatItem={chatItem}
+                        onRender={handleRender}
+                    />
+                ))}
+            </SettingsProvider>,
         );
     });
 

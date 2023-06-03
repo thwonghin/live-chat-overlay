@@ -2,10 +2,11 @@ import { useMemo, useCallback } from 'react';
 
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
 import { useI18n } from '@/contexts/i18n';
-import { useSettings } from '@/hooks';
+import { useSettings } from '@/contexts/settings';
 import { youtube } from '@/utils';
 
 import BtnTooltip from '../btn-tooltip';
@@ -20,8 +21,8 @@ const faCommentHeight = 512;
 const withSlashIconRatio =
     iconToBtnRatio * (faCommentHeight / faCommentSlashHeight);
 
-const ToggleBtn: React.FC = () => {
-    const { settings, updateSettings } = useSettings();
+const ToggleBtn: React.FC = observer(() => {
+    const settings = useSettings();
 
     const i18n = useI18n();
 
@@ -47,12 +48,9 @@ const ToggleBtn: React.FC = () => {
     const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
         (event) => {
             event.preventDefault();
-            updateSettings((previousSettings) => ({
-                ...previousSettings,
-                isEnabled: !previousSettings.isEnabled,
-            }));
+            settings.isEnabled = !settings.isEnabled;
         },
-        [updateSettings],
+        [settings],
     );
 
     return (
@@ -67,6 +65,6 @@ const ToggleBtn: React.FC = () => {
             </Button>
         </BtnTooltip>
     );
-};
+});
 
 export default ToggleBtn;

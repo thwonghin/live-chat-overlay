@@ -4,24 +4,25 @@ import { useDispatch, useSelector, useStore } from 'react-redux';
 
 import type { RootState } from '@/app/live-chat-overlay/store';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
+import { useSettings } from '@/contexts/settings';
 import type { InitData } from '@/definitions/youtube';
 import { chatEvents, debugInfo } from '@/features';
 import {
     useAnimationFrame,
     useVideoPlayerRect,
-    useSettings,
     useVideoPlayerState,
 } from '@/hooks';
-import { type settingsStorage, chatEvent } from '@/services';
+import { chatEvent } from '@/services';
+import { SettingsModel } from '@/models/settings';
 
 function getRenderedNumberOfLinesForChatItem({
     settings,
     chatItem,
 }: {
-    settings: settingsStorage.Settings;
+    settings: SettingsModel;
     chatItem: chatEvent.ChatItem;
 }): number {
-    const messageSettings = chatEvent.getMessageSettings(chatItem, settings);
+    const messageSettings = settings.getMessageSettings(chatItem);
 
     return chatEvent.isSuperChatItem(chatItem) &&
         chatItem.messageParts.length === 0
@@ -31,7 +32,7 @@ function getRenderedNumberOfLinesForChatItem({
 
 export function useInitChatEventObserver(initData: InitData): void {
     const dispatch = useDispatch();
-    const { settings } = useSettings();
+    const settings = useSettings();
     const chatEventObserver = useContext(ChatEventObserverContext);
     const { isPaused, isSeeking } = useVideoPlayerState();
     const store = useStore<RootState>();

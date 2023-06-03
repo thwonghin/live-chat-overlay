@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import type { chatEvent, settingsStorage } from '@/services';
+import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
+import type { chatEvent } from '@/services';
 
 import TwoLinesMessage from '.';
 
@@ -48,7 +49,7 @@ const normalMessageItem: chatEvent.NormalChatItem = {
     authorType: 'owner',
 };
 
-const messageSettings: settingsStorage.MessageSettings = {
+const messageSettings: MessageSettings = {
     color: 'white',
     weight: 700,
     opacity: 0.8,
@@ -56,7 +57,7 @@ const messageSettings: settingsStorage.MessageSettings = {
     strokeColor: 'black',
     strokeWidth: 0.03,
     numberOfLines: 2,
-    authorDisplay: 'all',
+    authorDisplay: AuthorDisplayMethod.ALL,
     isSticky: false,
 };
 
@@ -133,7 +134,7 @@ export const TwoLinesSuperChatMessageWithoutAuthorDisplay: React.FC = () => (
             chatItem={superChatItem}
             messageSettings={{
                 ...messageSettings,
-                authorDisplay: 'none',
+                authorDisplay: AuthorDisplayMethod.NONE,
             }}
         />
     </Container>
@@ -146,7 +147,7 @@ export const OneLineSuperChatMessageWithoutAuthorDisplay: React.FC = () => (
             messageSettings={{
                 ...messageSettings,
                 numberOfLines: 1,
-                authorDisplay: 'none',
+                authorDisplay: AuthorDisplayMethod.NONE,
             }}
         />
     </Container>
@@ -158,7 +159,7 @@ export const TwoLinesMembershipMessageWithoutAuthorDisplay: React.FC = () => (
             chatItem={membershipItem}
             messageSettings={{
                 ...messageSettings,
-                authorDisplay: 'none',
+                authorDisplay: AuthorDisplayMethod.NONE,
             }}
         />
     </Container>
@@ -171,7 +172,7 @@ export const OneLineMembershipMessageWithoutAuthorDisplay: React.FC = () => (
             messageSettings={{
                 ...messageSettings,
                 numberOfLines: 1,
-                authorDisplay: 'none',
+                authorDisplay: AuthorDisplayMethod.NONE,
             }}
         />
     </Container>
@@ -183,7 +184,7 @@ export const TwoLinesNormalMessageWithoutAuthorDisplay: React.FC = () => (
             chatItem={normalMessageItem}
             messageSettings={{
                 ...messageSettings,
-                authorDisplay: 'none',
+                authorDisplay: AuthorDisplayMethod.NONE,
             }}
         />
     </Container>
@@ -196,7 +197,7 @@ export const OneLineNormalMessageWithoutAuthorDisplay: React.FC = () => (
             messageSettings={{
                 ...messageSettings,
                 numberOfLines: 1,
-                authorDisplay: 'none',
+                authorDisplay: AuthorDisplayMethod.NONE,
             }}
         />
     </Container>

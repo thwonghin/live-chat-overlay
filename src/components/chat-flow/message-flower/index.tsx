@@ -2,7 +2,8 @@ import { useMemo, useRef, useState, useLayoutEffect } from 'react';
 
 import styled from 'styled-components';
 
-import { useTimeout, useRect, useSettings } from '@/hooks';
+import { useSettings } from '@/contexts/settings';
+import { useTimeout, useRect } from '@/hooks';
 
 const Container = styled.div`
     position: absolute;
@@ -31,7 +32,7 @@ const MessageFlower: React.FC<Props> = ({
 
     const ref = useRef<HTMLDivElement>(null);
     const rect = useRect(ref);
-    const { settings } = useSettings();
+    const settings = useSettings();
     const timeout = useMemo(
         () => settings.flowTimeInSec * 1000,
         [settings.flowTimeInSec],

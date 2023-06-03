@@ -1,12 +1,14 @@
 import { useCallback, useMemo, type CSSProperties } from 'react';
 
+import { observer } from 'mobx-react-lite';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components';
 
 import type { RootState } from '@/app/live-chat-overlay/store';
+import { useSettings } from '@/contexts/settings';
 import { chatEvents } from '@/features';
-import { useSettings, useInterval, useVideoPlayerRect } from '@/hooks';
-import { type settingsStorage, chatEvent } from '@/services';
+import { useInterval, useVideoPlayerRect } from '@/hooks';
+import { chatEvent } from '@/services';
 
 import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';
@@ -29,7 +31,6 @@ const TestRenderContainer = styled.div`
 `;
 
 type Props = {
-    settings: settingsStorage.Settings;
     nonStickyChatItems: UiChatItem[];
     stickyChatItems: UiChatItem[];
     onDone: (chatItem: UiChatItem) => void;
@@ -37,84 +38,75 @@ type Props = {
     isDebugActive: boolean;
 };
 
-const ChatFlowLayout: React.FC<Props> = ({
-    nonStickyChatItems,
-    stickyChatItems,
-    onDone,
-    onRemove,
-    settings,
-    isDebugActive,
-}) => {
-    const style = useMemo<React.CSSProperties>(
-        () => ({
-            visibility: settings.isEnabled ? 'visible' : 'hidden',
-            opacity: settings.globalOpacity,
-        }),
-        [settings.isEnabled, settings.globalOpacity],
-    );
+const ChatFlowLayout: React.FC<Props> = observer(
+    ({
+        nonStickyChatItems,
+        stickyChatItems,
+        onDone,
+        onRemove,
+        isDebugActive,
+    }) => {
+        const settings = useSettings();
 
-    const videoPlayerRect = useVideoPlayerRect();
-    const containerWidth = videoPlayerRect.width;
-    const lineHeight = useMemo(
-        () => videoPlayerRect.height / settings.totalNumberOfLines,
-        [settings.totalNumberOfLines, videoPlayerRect.height],
-    );
-    const containerStyle = useMemo<CSSProperties>(
-        () => ({
-            fontSize: lineHeight,
-        }),
-        [lineHeight],
-    );
+        const style = useMemo<React.CSSProperties>(
+            () => ({
+                visibility: settings.isEnabled ? 'visible' : 'hidden',
+                opacity: settings.globalOpacity,
+            }),
+            [settings.isEnabled, settings.globalOpacity],
+        );
 
-    return (
-        <Container style={containerStyle}>
-            <TestRenderContainer id={chatEvent.CHAT_ITEM_RENDER_ID} />
-            <div style={style}>
-                {nonStickyChatItems.map((chatItem) => {
-                    const messageSettings = chatEvent.getMessageSettings(
-                        chatItem,
-                        settings,
-                    );
-                    return (
-                        <MessageFlower
-                            key={chatItem.id}
-                            top={lineHeight * chatItem.lineNumber}
-                            containerWidth={containerWidth}
-                            onDone={() => {
-                                onDone(chatItem);
-                            }}
-                        >
+        const videoPlayerRect = useVideoPlayerRect();
+        const containerWidth = videoPlayerRect.width;
+        const lineHeight = useMemo(
+            () => videoPlayerRect.height / settings.totalNumberOfLines,
+            [settings.totalNumberOfLines, videoPlayerRect.height],
+        );
+        const containerStyle = useMemo<CSSProperties>(
+            () => ({
+                fontSize: lineHeight,
+            }),
+            [lineHeight],
+        );
+
+        return (
+            <Container style={containerStyle}>
+                <TestRenderContainer id={chatEvent.CHAT_ITEM_RENDER_ID} />
+                <div style={style}>
+                    {nonStickyChatItems.map((chatItem) => {
+                        return (
+                            <MessageFlower
+                                key={chatItem.id}
+                                top={lineHeight * chatItem.lineNumber}
+                                containerWidth={containerWidth}
+                                onDone={() => {
+                                    onDone(chatItem);
+                                }}
+                            >
+                                <ChatItemRenderer chatItem={chatItem} />
+                            </MessageFlower>
+                        );
+                    })}
+                    {stickyChatItems.map((chatItem) => {
+                        return (
                             <ChatItemRenderer
+                                key={chatItem.id}
                                 chatItem={chatItem}
-                                messageSettings={messageSettings}
+                                onClickClose={() => {
+                                    onRemove(chatItem);
+                                }}
                             />
-                        </MessageFlower>
-                    );
-                })}
-                {stickyChatItems.map((chatItem) => {
-                    const messageSettings = chatEvent.getMessageSettings(
-                        chatItem,
-                        settings,
-                    );
-                    return (
-                        <ChatItemRenderer
-                            key={chatItem.id}
-                            chatItem={chatItem}
-                            messageSettings={messageSettings}
-                            onClickClose={() => {
-                                onRemove(chatItem);
-                            }}
-                        />
-                    );
-                })}
-            </div>
-            {isDebugActive && <DebugOverlay />}
-        </Container>
-    );
-};
+                        );
+                    })}
+                </div>
+                {isDebugActive && <DebugOverlay />}
+            </Container>
+        );
+    },
+);
 
-const ChatFlow: React.FC = () => {
-    const { settings } = useSettings();
+const ChatFlow: React.FC = observer(() => {
+    const settings = useSettings();
 
     useToggleDebugMode();
 
@@ -128,8 +120,7 @@ const ChatFlow: React.FC = () => {
     >(
         (rootState) =>
             rootState.chatEvents.chatItems.filter(
-                (chatItem) =>
-                    !chatEvent.getMessageSettings(chatItem, settings).isSticky,
+                (chatItem) => !settings.getMessageSettings(chatItem).isSticky,
             ),
         shallowEqual,
     );
@@ -140,8 +131,7 @@ const ChatFlow: React.FC = () => {
     >(
         (rootState) =>
             rootState.chatEvents.chatItems.filter(
-                (chatItem) =>
-                    chatEvent.getMessageSettings(chatItem, settings).isSticky,
+                (chatItem) => settings.getMessageSettings(chatItem).isSticky,
             ),
         shallowEqual,
     );
@@ -170,12 +160,11 @@ const ChatFlow: React.FC = () => {
         <ChatFlowLayout
             nonStickyChatItems={nonStickyChatItems}
             stickyChatItems={stickyChatItems}
-            settings={settings}
             isDebugActive={isDebugActive}
             onDone={onMessageDone}
             onRemove={onRemoveMessage}
         />
     );
-};
+});
 
 export default ChatFlow;

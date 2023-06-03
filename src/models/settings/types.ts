@@ -1,4 +1,11 @@
-export type AuthorDisplayMethod = 'avatar-only' | 'name-only' | 'all' | 'none';
+/* eslint-disable @typescript-eslint/naming-convention */
+export enum AuthorDisplayMethod {
+    AVATAR_ONLY = 'avatar-only',
+    NAME_ONLY = 'name-only',
+    ALL = 'all',
+    NONE = 'none',
+}
+/* eslint-enable @typescript-eslint/naming-convention */
 
 export type MessageSettings = {
     color: string;

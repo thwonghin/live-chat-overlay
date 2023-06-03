@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import styled from 'styled-components';
 
 import { useI18n } from '@/contexts/i18n';
-import type { settingsStorage } from '@/services';
+import { type MessageSettings } from '@/models/settings';
 
 const ContainerForm = styled.form`
     width: 100%;
@@ -19,10 +19,10 @@ const Row = styled.div`
 
 type Props = {
     globalOpacity: number;
-    messageSettings: settingsStorage.MessageSettings;
+    messageSettings: MessageSettings;
     onSubmit: (value: {
         globalOpacity: number;
-        messageSettings: settingsStorage.MessageSettings;
+        messageSettings: MessageSettings;
     }) => void;
     isBackgroundColorEditable: boolean;
 };

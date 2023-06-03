@@ -1,6 +1,5 @@
 import type * as liveChatResponse from '@/definitions/youtube';
-import type { settingsStorage } from '@/services';
-import { isNotNil, assertNever } from '@/utils';
+import { isNotNil } from '@/utils';
 
 import {
     mapLiveChatTextMessageRenderer,
@@ -122,30 +121,6 @@ export function isPinnedItem(
     chatItem: chatModel.ChatItem,
 ): chatItem is chatModel.PinnedChatItem {
     return chatItem.chatType === 'pinned';
-}
-
-export function getMessageSettings(
-    chatItem: chatModel.ChatItem,
-    settings: settingsStorage.Settings,
-): settingsStorage.MessageSettings {
-    const { messageSettings } = settings;
-    if (isNormalChatItem(chatItem)) {
-        return messageSettings[chatItem.authorType];
-    }
-
-    if (isMembershipItem(chatItem)) {
-        return messageSettings.membership;
-    }
-
-    if (isSuperChatItem(chatItem) || isSuperStickerItem(chatItem)) {
-        return messageSettings['super-chat'];
-    }
-
-    if (isPinnedItem(chatItem)) {
-        return messageSettings.pinned;
-    }
-
-    return assertNever(chatItem);
 }
 
 export function isTextMessagePart(
