@@ -17,24 +17,24 @@ type Props = {
     playerEle: HTMLDivElement;
 };
 
-const App: React.FC<Props> = observer(
-    ({ initData, playerControlContainer, playerEle }) => {
-        useResetChatEventsOnPlayerRectChange();
-        useInitChatEventObserver(initData);
+const App: React.FC<Props> = ({
+    initData,
+    playerControlContainer,
+    playerEle,
+}) => {
+    useResetChatEventsOnPlayerRectChange();
+    useInitChatEventObserver(initData);
 
-        return (
-            <>
-                <ChatFlow />
-                <PopupContainer
-                    playerControlContainer={playerControlContainer}
-                    playerEle={playerEle}
-                />
-                <PlayerControl
-                    playerControlContainer={playerControlContainer}
-                />
-            </>
-        );
-    },
-);
+    return (
+        <>
+            <ChatFlow />
+            <PopupContainer
+                playerControlContainer={playerControlContainer}
+                playerEle={playerEle}
+            />
+            <PlayerControl playerControlContainer={playerControlContainer} />
+        </>
+    );
+};
 
 export default App;
