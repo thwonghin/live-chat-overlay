@@ -12,8 +12,8 @@ import {
     useVideoPlayerRect,
     useVideoPlayerState,
 } from '@/hooks';
+import { type SettingsModel } from '@/models/settings';
 import { chatEvent } from '@/services';
-import { SettingsModel } from '@/models/settings';
 
 function getRenderedNumberOfLinesForChatItem({
     settings,
