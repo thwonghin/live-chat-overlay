@@ -91,10 +91,10 @@ export function getOutdatedFactor(chatItem: ChatItem): number {
         isNormalChatItem(chatItem) &&
         removableAuthorType.includes(chatItem.authorType)
     ) {
-        return 1;
+        return 3;
     }
 
-    return 3;
+    return 6;
 }
 
 type IsOutdatedChatItemParameters = {
