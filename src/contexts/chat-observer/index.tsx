@@ -4,13 +4,11 @@ import { LIVE_CHAT_API_INTERCEPT_EVENT } from '@/constants';
 import { chatEvent } from '@/services';
 import { youtube } from '@/utils';
 
+import { useDebugInfoStore } from '../debug-info';
+
 export const ChatEventObserverContext =
-    React.createContext<chatEvent.ResponseObserver>(
-        new chatEvent.ResponseObserver(
-            LIVE_CHAT_API_INTERCEPT_EVENT,
-            document.createElement('video'),
-        ),
-    );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    React.createContext<chatEvent.ResponseObserver>({} as any);
 
 export const ChatEventObserverProvider: React.FC<React.PropsWithChildren> = ({
     children,
@@ -20,13 +18,16 @@ export const ChatEventObserverProvider: React.FC<React.PropsWithChildren> = ({
         throw new Error('Video element not found');
     }
 
+    const debugInfoStore = useDebugInfoStore();
+
     const observer = React.useMemo(
         () =>
             new chatEvent.ResponseObserver(
                 LIVE_CHAT_API_INTERCEPT_EVENT,
                 video,
+                debugInfoStore,
             ),
-        [video],
+        [video, debugInfoStore],
     );
 
     return (

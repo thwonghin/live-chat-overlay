@@ -1,10 +1,12 @@
 import * as React from 'react';
 
+import { observer } from 'mobx-react-lite';
 import { useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components';
 
 import type { RootState } from '@/app/live-chat-overlay/store';
-import type { debugInfo } from '@/features';
+import { useDebugInfoStore } from '@/contexts/debug-info';
+import type { Benchmark } from '@/models/debug-info/types';
 
 type ChatEventDebugInfo = {
     messagesCount: number;
@@ -22,7 +24,7 @@ type RoundedBenchmark = {
     count: number;
 };
 
-function roundBenchmark(benchmark: debugInfo.Benchmark): RoundedBenchmark {
+function roundBenchmark(benchmark: Benchmark): RoundedBenchmark {
     return {
         min: benchmark.min.toFixed(2),
         max: benchmark.max.toFixed(2),
@@ -155,7 +157,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
     );
 };
 
-const DebugOverlay: React.FC = () => {
+const DebugOverlay = observer(() => {
     const chatEventDebugInfo = useSelector<RootState, ChatEventDebugInfo>(
         (state) => ({
             messagesCount: state.chatEvents.chatItems.length,
@@ -174,37 +176,39 @@ const DebugOverlay: React.FC = () => {
         shallowEqual,
     );
 
-    const getEleWidthBenchmark = useSelector<RootState, RoundedBenchmark>(
-        (rootState) =>
-            roundBenchmark(rootState.debugInfo.getChatItemEleWidthBenchmark),
-        shallowEqual,
+    const {
+        debugInfoModel: {
+            getChatItemEleWidthBenchmark,
+            processXhrBenchmark,
+            processChatEventBenchmark,
+            processChatEventQueueLength,
+            outdatedRemovedChatEventCount,
+        },
+    } = useDebugInfoStore();
+
+    const roundedGetEleWidthBenchmark = React.useMemo(
+        () => roundBenchmark(getChatItemEleWidthBenchmark),
+        [getChatItemEleWidthBenchmark],
     );
-    const processXhrBenchmark = useSelector<RootState, RoundedBenchmark>(
-        (rootState) => roundBenchmark(rootState.debugInfo.processXhrBenchmark),
-        shallowEqual,
+    const roundedProcessXhrBenchmark = React.useMemo(
+        () => roundBenchmark(processXhrBenchmark),
+        [processXhrBenchmark],
     );
-    const processChatEventBenchmark = useSelector<RootState, RoundedBenchmark>(
-        (rootState) =>
-            roundBenchmark(rootState.debugInfo.processChatEventBenchmark),
-        shallowEqual,
-    );
-    const processChatEventQueueLength = useSelector<RootState, number>(
-        (rootState) => rootState.debugInfo.processChatEventQueueLength,
-    );
-    const outdatedRemovedChatEventCount = useSelector<RootState, number>(
-        (rootState) => rootState.debugInfo.outdatedRemovedChatEventCount,
+    const roundedProcessChatEventBenchmark = React.useMemo(
+        () => roundBenchmark(processChatEventBenchmark),
+        [processChatEventBenchmark],
     );
 
     return (
         <DebugOverlayLayout
             chatEventDebugInfo={chatEventDebugInfo}
-            getEleWidthBenchmark={getEleWidthBenchmark}
-            processChatEventBenchmark={processChatEventBenchmark}
-            processXhrBenchmark={processXhrBenchmark}
+            getEleWidthBenchmark={roundedGetEleWidthBenchmark}
+            processChatEventBenchmark={roundedProcessXhrBenchmark}
+            processXhrBenchmark={roundedProcessChatEventBenchmark}
             processChatEventQueueLength={processChatEventQueueLength}
             outdatedRemovedChatEventCount={outdatedRemovedChatEventCount}
         />
     );
-};
+});
 
 export default DebugOverlay;

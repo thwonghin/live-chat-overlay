@@ -5,6 +5,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components';
 
 import type { RootState } from '@/app/live-chat-overlay/store';
+import { useDebugInfoStore } from '@/contexts/debug-info';
 import { useSettings } from '@/contexts/settings';
 import { chatEvents } from '@/features';
 import { useInterval, useVideoPlayerRect } from '@/hooks';
@@ -35,18 +36,12 @@ type Props = {
     stickyChatItems: UiChatItem[];
     onDone: (chatItem: UiChatItem) => void;
     onRemove: (chatItem: UiChatItem) => void;
-    isDebugActive: boolean;
 };
 
 const ChatFlowLayout: React.FC<Props> = observer(
-    ({
-        nonStickyChatItems,
-        stickyChatItems,
-        onDone,
-        onRemove,
-        isDebugActive,
-    }) => {
+    ({ nonStickyChatItems, stickyChatItems, onDone, onRemove }) => {
         const settings = useSettings();
+        const debugInfoStore = useDebugInfoStore();
 
         const style = useMemo<React.CSSProperties>(
             () => ({
@@ -99,7 +94,7 @@ const ChatFlowLayout: React.FC<Props> = observer(
                         );
                     })}
                 </div>
-                {isDebugActive && <DebugOverlay />}
+                {debugInfoStore.isDebugging && <DebugOverlay />}
             </Container>
         );
     },
@@ -109,10 +104,6 @@ const ChatFlow: React.FC = observer(() => {
     const settings = useSettings();
 
     useToggleDebugMode();
-
-    const isDebugActive = useSelector<RootState, boolean>(
-        (rootState) => rootState.debugInfo.isDebugging,
-    );
 
     const nonStickyChatItems = useSelector<
         RootState,
@@ -160,7 +151,6 @@ const ChatFlow: React.FC = observer(() => {
         <ChatFlowLayout
             nonStickyChatItems={nonStickyChatItems}
             stickyChatItems={stickyChatItems}
-            isDebugActive={isDebugActive}
             onDone={onMessageDone}
             onRemove={onRemoveMessage}
         />

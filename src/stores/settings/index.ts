@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from 'mobx';
+import { makeAutoObservable, reaction, runInAction } from 'mobx';
 import { type Browser } from 'webextension-polyfill';
 
 import { type Settings, SettingsModel } from '@/models/settings';
@@ -71,7 +71,9 @@ class SettingsStore {
         }, undefined);
 
         if (storedSettings) {
-            this.settings.setRawSettings(storedSettings);
+            runInAction(() => {
+                this.settings.setRawSettings(storedSettings);
+            });
         }
     }
 

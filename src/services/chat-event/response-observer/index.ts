@@ -1,3 +1,5 @@
+import { autorun, reaction, runInAction } from 'mobx';
+
 import type {
     YotubeChatResponse,
     ReplayResponse,
@@ -5,6 +7,7 @@ import type {
     InitData,
 } from '@/definitions/youtube';
 import type { fetchInterceptor } from '@/services';
+import type { DebugInfoStore } from '@/stores/debug-info';
 import { benchmark, benchmarkAsync, EventEmitter, youtube } from '@/utils';
 
 import { assignChatItemRenderedWidth } from './get-chat-item-render-container-ele';
@@ -39,15 +42,16 @@ export class ResponseObserver {
 
     private isStarted = false;
 
-    private isDebugging = false;
-
     private chatItemProcessQueue: ChatItem[] = [];
 
     constructor(
         readonly chatEventName: string,
         private readonly videoPlayer: HTMLVideoElement,
+        private readonly debugInfoStore: DebugInfoStore,
     ) {
         this.eventEmitter = new EventEmitter();
+
+        reaction(() => this.debugInfoStore.isDebugging, this.watchDebugStore);
     }
 
     public on: ResponseObserverEventEmitter['on'] = (...args) => {
@@ -88,10 +92,10 @@ export class ResponseObserver {
                     currentPlayerTimeInMsc,
                 })
             );
-        }, this.isDebugging);
+        }, this.debugInfoStore.isDebugging);
 
         if (!isTime) {
-            this.emitDebugInfoEvent({
+            this.updateDebugInfo({
                 processChatEventMs: runtime,
                 processChatEventQueueLength: this.chatItemProcessQueue.length,
             });
@@ -99,7 +103,7 @@ export class ResponseObserver {
         }
 
         const chatItem = this.chatItemProcessQueue.shift();
-        this.emitDebugInfoEvent({
+        this.updateDebugInfo({
             processChatEventMs: runtime,
             processChatEventQueueLength: this.chatItemProcessQueue.length,
         });
@@ -128,20 +132,15 @@ export class ResponseObserver {
     public reset(): void {
         this.chatItemProcessQueue = [];
 
-        this.emitDebugInfoEvent({
+        this.updateDebugInfo({
             processChatEventQueueLength: 0,
         });
     }
 
     public startDebug(): void {
-        this.isDebugging = true;
-        this.emitDebugInfoEvent({
+        this.updateDebugInfo({
             processChatEventQueueLength: this.chatItemProcessQueue.length,
         });
-    }
-
-    public stopDebug(): void {
-        this.isDebugging = false;
     }
 
     private getCurrentTimeInfo(): {
@@ -154,11 +153,49 @@ export class ResponseObserver {
         };
     }
 
-    private emitDebugInfoEvent(debugInfo: DebugInfo) {
-        if (this.isDebugging) {
-            this.eventEmitter.trigger('debug', debugInfo);
+    private updateDebugInfo(info: DebugInfo) {
+        if (!this.debugInfoStore.isDebugging) {
+            return;
         }
+
+        runInAction(() => {
+            if (info.processChatEventMs) {
+                this.debugInfoStore.debugInfoModel.addProcessChatEventMetric(
+                    info.processChatEventMs,
+                );
+            }
+
+            if (info.processXhrResponseMs) {
+                this.debugInfoStore.debugInfoModel.addProcessXhrMetric(
+                    info.processXhrResponseMs,
+                );
+            }
+
+            if (info.processChatEventQueueLength) {
+                this.debugInfoStore.debugInfoModel.updateProcessChatEventQueueLength(
+                    info.processChatEventQueueLength,
+                );
+            }
+
+            if (info.outdatedChatEventCount) {
+                this.debugInfoStore.debugInfoModel.addOutdatedRemovedChatEventCount(
+                    info.outdatedChatEventCount,
+                );
+            }
+
+            if (info.getEleWidthBenchmark) {
+                this.debugInfoStore.debugInfoModel.addChatItemEleWidthMetric(
+                    info.getEleWidthBenchmark,
+                );
+            }
+        });
     }
+
+    private readonly watchDebugStore = () => {
+        if (this.debugInfoStore.isDebugging) {
+            this.startDebug();
+        }
+    };
 
     private readonly onChatMessage = async (event: Event): Promise<void> => {
         const customEvent =
@@ -200,18 +237,18 @@ export class ResponseObserver {
             const { result: chatItemsWithWidth, runtime: getEleRuntime } =
                 await benchmarkAsync(
                     async () => assignChatItemRenderedWidth(chatItems),
-                    this.isDebugging,
+                    this.debugInfoStore.isDebugging,
                 );
 
             this.chatItemProcessQueue.push(...chatItemsWithWidth);
 
-            this.emitDebugInfoEvent({
+            this.updateDebugInfo({
                 getEleWidthBenchmark: getEleRuntime,
                 processChatEventQueueLength: this.chatItemProcessQueue.length,
             });
-        }, this.isDebugging);
+        }, this.debugInfoStore.isDebugging);
 
-        this.emitDebugInfoEvent({
+        this.updateDebugInfo({
             processXhrResponseMs: runtime,
             processChatEventQueueLength: this.chatItemProcessQueue.length,
         });
@@ -241,7 +278,7 @@ export class ResponseObserver {
 
         const afterCount = this.chatItemProcessQueue.length;
 
-        this.emitDebugInfoEvent({
+        this.updateDebugInfo({
             outdatedChatEventCount: beforeCount - afterCount,
         });
     }

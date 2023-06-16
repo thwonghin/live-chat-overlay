@@ -7,6 +7,7 @@ import { ThemeProvider, StyleSheetManager } from 'styled-components';
 import type { Browser } from 'webextension-polyfill';
 
 import * as contexts from '@/contexts';
+import { DebugInfoStoreProvider } from '@/contexts/debug-info';
 import { SettingsProvider } from '@/contexts/settings';
 import type { InitData } from '@/definitions/youtube';
 import { youtube } from '@/utils';
@@ -67,27 +68,29 @@ export function injectLiveChatOverlay(
         <StrictMode>
             <Provider store={store}>
                 <SettingsProvider>
-                    <contexts.i18n.I18nProvider browser={browser}>
-                        <contexts.playerRect.PlayerRectProvider>
-                            <contexts.chatObserver.ChatEventObserverProvider>
-                                <MuiThemeProvider theme={theme}>
-                                    <StyleSheetManager
-                                        target={styledInsertionPoint}
-                                    >
-                                        <ThemeProvider theme={theme}>
-                                            <App
-                                                initData={initData}
-                                                playerControlContainer={
-                                                    playerControlContainer
-                                                }
-                                                playerEle={videoPlayerEle}
-                                            />
-                                        </ThemeProvider>
-                                    </StyleSheetManager>
-                                </MuiThemeProvider>
-                            </contexts.chatObserver.ChatEventObserverProvider>
-                        </contexts.playerRect.PlayerRectProvider>
-                    </contexts.i18n.I18nProvider>
+                    <DebugInfoStoreProvider>
+                        <contexts.i18n.I18nProvider browser={browser}>
+                            <contexts.playerRect.PlayerRectProvider>
+                                <contexts.chatObserver.ChatEventObserverProvider>
+                                    <MuiThemeProvider theme={theme}>
+                                        <StyleSheetManager
+                                            target={styledInsertionPoint}
+                                        >
+                                            <ThemeProvider theme={theme}>
+                                                <App
+                                                    initData={initData}
+                                                    playerControlContainer={
+                                                        playerControlContainer
+                                                    }
+                                                    playerEle={videoPlayerEle}
+                                                />
+                                            </ThemeProvider>
+                                        </StyleSheetManager>
+                                    </MuiThemeProvider>
+                                </contexts.chatObserver.ChatEventObserverProvider>
+                            </contexts.playerRect.PlayerRectProvider>
+                        </contexts.i18n.I18nProvider>
+                    </DebugInfoStoreProvider>
                 </SettingsProvider>
             </Provider>
         </StrictMode>,

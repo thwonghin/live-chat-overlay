@@ -5,8 +5,7 @@ export type Benchmark = {
     count: number;
 };
 
-export type State = {
-    isDebugging: boolean;
+export type DebugInfo = {
     getChatItemEleWidthBenchmark: Benchmark;
     processXhrBenchmark: Benchmark;
     processChatEventBenchmark: Benchmark;

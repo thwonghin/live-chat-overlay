@@ -1,12 +1,14 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
 
-import { useDispatch, useSelector, useStore } from 'react-redux';
+import { runInAction } from 'mobx';
+import { useDispatch, useStore } from 'react-redux';
 
 import type { RootState } from '@/app/live-chat-overlay/store';
 import { ChatEventObserverContext } from '@/contexts/chat-observer';
+import { useDebugInfoStore } from '@/contexts/debug-info';
 import { useSettings } from '@/contexts/settings';
 import type { InitData } from '@/definitions/youtube';
-import { chatEvents, debugInfo } from '@/features';
+import { chatEvents } from '@/features';
 import {
     useAnimationFrame,
     useVideoPlayerRect,
@@ -33,12 +35,10 @@ function getRenderedNumberOfLinesForChatItem({
 export function useInitChatEventObserver(initData: InitData): void {
     const dispatch = useDispatch();
     const settings = useSettings();
+    const debugInfoStore = useDebugInfoStore();
     const chatEventObserver = useContext(ChatEventObserverContext);
     const { isPaused, isSeeking } = useVideoPlayerState();
     const store = useStore<RootState>();
-    const isDebugging = useSelector<RootState, boolean>(
-        (rootState) => rootState.debugInfo.isDebugging,
-    );
     const { width: playerWidth } = useVideoPlayerRect();
     const chatItemBufferRef = useRef<chatEvent.ChatItem>();
 
@@ -78,56 +78,6 @@ export function useInitChatEventObserver(initData: InitData): void {
     useAnimationFrame(processChatItem);
 
     useEffect(() => {
-        function handleDebugInfo(info: chatEvent.DebugInfo) {
-            if (info.processChatEventMs) {
-                dispatch(
-                    debugInfo.actions.addProcessChatEventMetric(
-                        info.processChatEventMs,
-                    ),
-                );
-            }
-
-            if (info.processXhrResponseMs) {
-                dispatch(
-                    debugInfo.actions.addProcessXhrMetric(
-                        info.processXhrResponseMs,
-                    ),
-                );
-            }
-
-            if (info.processChatEventQueueLength) {
-                dispatch(
-                    debugInfo.actions.updateProcessChatEventQueueLength(
-                        info.processChatEventQueueLength,
-                    ),
-                );
-            }
-
-            if (info.outdatedChatEventCount) {
-                dispatch(
-                    debugInfo.actions.addOutdatedRemovedChatEventCount(
-                        info.outdatedChatEventCount,
-                    ),
-                );
-            }
-
-            if (info.getEleWidthBenchmark) {
-                dispatch(
-                    debugInfo.actions.addChatItemEleWidthMetric(
-                        info.getEleWidthBenchmark,
-                    ),
-                );
-            }
-        }
-
-        chatEventObserver.on('debug', handleDebugInfo);
-
-        return () => {
-            chatEventObserver.off('debug', handleDebugInfo);
-        };
-    }, [chatEventObserver, dispatch]);
-
-    useEffect(() => {
         if (isPaused) {
             chatEventObserver.stop();
         } else {
@@ -147,21 +97,15 @@ export function useInitChatEventObserver(initData: InitData): void {
     }, [initData, chatEventObserver]);
 
     useEffect(() => {
-        if (isDebugging) {
-            chatEventObserver.startDebug();
-        } else {
-            chatEventObserver.stopDebug();
-        }
-    }, [isDebugging, chatEventObserver]);
-
-    useEffect(() => {
         chatEventObserver.start();
 
         return (): void => {
-            chatEventObserver.stop();
-            chatEventObserver.reset();
-            dispatch(chatEvents.actions.reset());
-            dispatch(debugInfo.actions.reset());
+            runInAction(() => {
+                chatEventObserver.stop();
+                chatEventObserver.reset();
+                dispatch(chatEvents.actions.reset());
+                debugInfoStore.reset();
+            });
         };
-    }, [chatEventObserver, dispatch]);
+    }, [chatEventObserver, dispatch, debugInfoStore]);
 }
