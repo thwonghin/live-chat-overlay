@@ -78,6 +78,7 @@
         "stylelint-order": "^6.0.3",
         "stylelint-prettier": "^3.0.0",
         "swc-loader": "^0.2.3",
+        "type-fest": "^3.11.1",
         "typescript": "^5.0.4",
         "vite": "^4.3.9",
         "vite-plugin-web-extension": "^3.0.9",
