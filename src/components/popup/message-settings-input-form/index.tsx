@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 
+import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 
 import { useStore } from '@/contexts/root-store';
@@ -25,9 +26,11 @@ const MessageSettingsInputForm: React.FC<Props> = observer(
                 globalOpacity: number;
                 messageSettings: MessageSettings;
             }) => {
-                settings.globalOpacity = value.globalOpacity;
-                settings.messageSettings[messageSettingsKey] =
-                    value.messageSettings;
+                runInAction(() => {
+                    settings.globalOpacity = value.globalOpacity;
+                    settings.messageSettings[messageSettingsKey] =
+                        value.messageSettings;
+                });
             },
             [settings, messageSettingsKey],
         );
