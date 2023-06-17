@@ -25,6 +25,7 @@ import {
 } from './helpers';
 import type { DebugInfoStore } from '../debug-info';
 import type { SettingsStore } from '../settings';
+import type { UiStore } from '../ui';
 
 export { CHAT_ITEM_RENDER_ID } from './get-chat-item-render-container-ele';
 
@@ -59,11 +60,18 @@ export class ChatItemStore {
     constructor(
         private readonly chatEventName: string,
         private readonly videoEle: HTMLVideoElement,
-        private readonly videoPlayerEle: HTMLDivElement,
+        private readonly uiStore: UiStore,
         private readonly settingsStore: SettingsStore,
         private readonly debugInfoStore: DebugInfoStore,
     ) {
         reaction(() => this.debugInfoStore.isDebugging, this.watchDebugStore);
+        reaction(
+            () => [
+                this.uiStore.playerState.width,
+                this.uiStore.playerState.height,
+            ],
+            this.resetNonStickyChatItems,
+        );
         makeAutoObservable(this);
     }
 
@@ -110,16 +118,6 @@ export class ChatItemStore {
         });
     }
 
-    public resetNonStickyChatItems(): void {
-        this.chatItemsByLineNumber.clear();
-        this.chatItemStatusById.clear();
-
-        // Add back sticky status
-        this.stickyChatItems.forEach((chatItem) => {
-            this.chatItemStatusById.set(chatItem.value.id, true);
-        });
-    }
-
     public startDebug(): void {
         this.updateDebugInfo({
             processChatEventQueueLength: this.chatItemProcessQueue.length,
@@ -133,6 +131,18 @@ export class ChatItemStore {
             (chatItem) => chatItem.value.id !== id,
         );
     }
+
+    private readonly resetNonStickyChatItems = (): void => {
+        runInAction(() => {
+            this.chatItemsByLineNumber.clear();
+            this.chatItemStatusById.clear();
+
+            // Add back sticky status
+            this.stickyChatItems.forEach((chatItem) => {
+                this.chatItemStatusById.set(chatItem.value.id, true);
+            });
+        });
+    };
 
     private createAllIntervals() {
         this.clearAllIntervals();
@@ -365,7 +375,7 @@ export class ChatItemStore {
             elementWidth: chatItem.width,
             maxLineNumber: settings.totalNumberOfLines,
             flowTimeInSec: settings.flowTimeInSec,
-            containerWidth: this.getPlayerWidth(),
+            containerWidth: this.uiStore.playerState.width,
             displayNumberOfLines: chatItem.numberOfLines,
         });
 
@@ -420,11 +430,6 @@ export class ChatItemStore {
                 outdatedChatEventCount: beforeCount - afterCount,
             });
         });
-    }
-
-    private getPlayerWidth(): number {
-        const rect = this.videoPlayerEle.getBoundingClientRect();
-        return rect.width;
     }
 
     private readonly cleanDisplayedChatItems = (): void => {

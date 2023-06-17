@@ -8,6 +8,5 @@ export * from './use-keyboard-toggle';
 export * from './use-native-stop-keydown-propagation';
 export * from './use-rect';
 export * from './use-timeout';
-export * from './use-video-player-rect';
 export * from './use-video-player-state';
 export * from './use-animation-frame';

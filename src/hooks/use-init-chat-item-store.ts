@@ -6,22 +6,9 @@ import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
 import { useVideoPlayerState } from '@/hooks';
 
-import { useVideoPlayerRect } from './use-video-player-rect';
-
-function useResetChatEventsOnPlayerRectChange(): void {
-    const { chatItemStore } = useStore();
-    const rect = useVideoPlayerRect();
-
-    useEffect(() => {
-        chatItemStore.resetNonStickyChatItems();
-    }, [rect.width, rect.height, chatItemStore]);
-}
-
 export function useInitChatItemStore(initData: InitData): void {
     const { debugInfoStore, chatItemStore } = useStore();
     const { isPaused, isSeeking } = useVideoPlayerState();
-
-    useResetChatEventsOnPlayerRectChange();
 
     useEffect(() => {
         if (isPaused) {

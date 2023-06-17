@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
-import { useInitChatItemStore, useVideoPlayerRect } from '@/hooks';
+import { useInitChatItemStore } from '@/hooks';
 import type { ChatItemModel } from '@/models/chat-item';
 import { CHAT_ITEM_RENDER_ID } from '@/stores/chat-item';
 
@@ -40,6 +40,7 @@ const ChatFlow: React.FC<Props> = observer(({ initData }) => {
         debugInfoStore,
         settingsStore: { settings },
         chatItemStore,
+        uiStore: { playerState },
     } = store;
 
     const { chatItemsByLineNumber, stickyChatItems } = chatItemStore;
@@ -59,11 +60,10 @@ const ChatFlow: React.FC<Props> = observer(({ initData }) => {
         [settings.isEnabled, settings.globalOpacity],
     );
 
-    const videoPlayerRect = useVideoPlayerRect();
-    const containerWidth = videoPlayerRect.width;
+    const containerWidth = playerState.width;
     const lineHeight = useMemo(
-        () => videoPlayerRect.height / settings.totalNumberOfLines,
-        [settings.totalNumberOfLines, videoPlayerRect.height],
+        () => playerState.height / settings.totalNumberOfLines,
+        [settings.totalNumberOfLines, playerState.height],
     );
     const containerStyle = useMemo<CSSProperties>(
         () => ({

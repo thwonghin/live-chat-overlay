@@ -12,7 +12,7 @@ import { UiStore } from './ui';
 export class RootStore {
     settingsStore = new SettingsStore(browser);
     debugInfoStore = new DebugInfoStore();
-    uiStore = new UiStore();
+    uiStore: UiStore;
     chatItemStore: ChatItemStore;
 
     constructor() {
@@ -27,10 +27,11 @@ export class RootStore {
             throw new Error('Video player element not found');
         }
 
+        this.uiStore = new UiStore(videoPlayerEle);
         this.chatItemStore = new ChatItemStore(
             LIVE_CHAT_API_INTERCEPT_EVENT,
             videoEle,
-            videoPlayerEle,
+            this.uiStore,
             this.settingsStore,
             this.debugInfoStore,
         );

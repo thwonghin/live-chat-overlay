@@ -6,7 +6,6 @@ import { ThemeProvider, StyleSheetManager } from 'styled-components';
 import type { Browser } from 'webextension-polyfill';
 
 import * as contexts from '@/contexts';
-import { StoreProvider } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
 import { youtube } from '@/utils';
 
@@ -63,25 +62,23 @@ export function injectLiveChatOverlay(
 
     root.render(
         <StrictMode>
-            <StoreProvider>
+            <contexts.rootStore.StoreProvider>
                 <contexts.i18n.I18nProvider browser={browser}>
-                    <contexts.playerRect.PlayerRectProvider>
-                        <MuiThemeProvider theme={theme}>
-                            <StyleSheetManager target={styledInsertionPoint}>
-                                <ThemeProvider theme={theme}>
-                                    <App
-                                        initData={initData}
-                                        playerControlContainer={
-                                            playerControlContainer
-                                        }
-                                        playerEle={videoPlayerEle}
-                                    />
-                                </ThemeProvider>
-                            </StyleSheetManager>
-                        </MuiThemeProvider>
-                    </contexts.playerRect.PlayerRectProvider>
+                    <MuiThemeProvider theme={theme}>
+                        <StyleSheetManager target={styledInsertionPoint}>
+                            <ThemeProvider theme={theme}>
+                                <App
+                                    initData={initData}
+                                    playerControlContainer={
+                                        playerControlContainer
+                                    }
+                                    playerEle={videoPlayerEle}
+                                />
+                            </ThemeProvider>
+                        </StyleSheetManager>
+                    </MuiThemeProvider>
                 </contexts.i18n.I18nProvider>
-            </StoreProvider>
+            </contexts.rootStore.StoreProvider>
         </StrictMode>,
     );
 
