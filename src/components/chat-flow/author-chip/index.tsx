@@ -2,12 +2,13 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import type { chatEvent, settingsStorage } from '@/services';
+import type { Thumbnail } from '@/models/chat-item/types';
+import type { MessageSettings } from '@/models/settings';
 
 type Props = {
-    avatars: chatEvent.Thumbnail[];
+    avatars: Thumbnail[];
     name: string;
-    authorDisplaySetting: settingsStorage.MessageSettings['authorDisplay'];
+    authorDisplaySetting: MessageSettings['authorDisplay'];
     donationAmount?: string;
 };
 

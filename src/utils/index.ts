@@ -85,3 +85,21 @@ export async function promiseSeries(
         await promise();
     }
 }
+
+export function filterInPlace<T>(
+    array: T[],
+    predicate: (item: T) => boolean,
+): void {
+    let j = 0;
+
+    for (const item of array) {
+        if (predicate(item)) {
+            array[j] = item;
+            j++;
+        }
+    }
+
+    while (j < array.length) {
+        array.pop();
+    }
+}

@@ -2,10 +2,11 @@ import { useCallback } from 'react';
 
 import { Slider, sliderClasses } from '@mui/material';
 import { isNil } from 'lodash-es';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { useSettings } from '@/hooks';
+import { useStore } from '@/contexts/root-store';
 import { youtube } from '@/utils';
 
 const minValue = 3;
@@ -67,8 +68,10 @@ type Props = {
     isHidden: boolean;
 };
 
-const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
-    const { settings, updateSettings } = useSettings();
+const SpeedSlider: React.FC<Props> = observer(({ isHidden }) => {
+    const {
+        settingsStore: { settings },
+    } = useStore();
 
     const handleChange = useCallback<
         (event: Event, value: number | number[]) => void
@@ -87,13 +90,10 @@ const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
             }
 
             setTimeout(() => {
-                updateSettings((previousSettings) => ({
-                    ...previousSettings,
-                    flowTimeInSec: reverse(updatedValue),
-                }));
+                settings.flowTimeInSec = reverse(updatedValue);
             }, 0);
         },
-        [updateSettings],
+        [settings],
     );
 
     const debouncedHandleChange = useDebouncedCallback(handleChange, 500);
@@ -108,6 +108,6 @@ const SpeedSlider: React.FC<Props> = ({ isHidden }) => {
             onChange={debouncedHandleChange}
         />
     );
-};
+});
 
 export default SpeedSlider;

@@ -1,13 +1,13 @@
 import './common';
 import browser from 'webextension-polyfill';
 
-import { settingsStorage } from '@/services';
 import { youtube, injectScript } from '@/utils';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
+import { rootStore } from './stores';
 
 async function init(): Promise<void> {
-    await settingsStorage.storageInstance.init(browser);
+    await rootStore.settingsStore.init();
     injectScript(browser.runtime.getURL('src/live-chat-fetch-interceptor.js'));
 
     const initData = await youtube.getInitData(

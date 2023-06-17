@@ -1,4 +1,4 @@
-import type { InitData, YotubeChatResponse } from '@/definitions/youtube';
+import type { InitData, YoutubeChatResponse } from '@/definitions/youtube';
 import { injectScript } from '@/utils';
 
 import { LIVE_CHAT_INIT_DATA } from '../constants';
@@ -124,7 +124,7 @@ export async function getInitData(scriptSrc: string): Promise<InitData> {
 }
 
 export function isInitData(
-    data: InitData | YotubeChatResponse,
+    data: InitData | YoutubeChatResponse,
 ): data is InitData {
     return 'viewerName' in data.continuationContents.liveChatContinuation;
 }

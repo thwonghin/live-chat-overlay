@@ -2,7 +2,8 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import type { chatEvent, settingsStorage } from '@/services';
+import type { SuperStickerItem } from '@/models/chat-item/types';
+import type { MessageSettings } from '@/models/settings';
 
 import AuthorChip from '../author-chip';
 
@@ -24,14 +25,14 @@ const Message = styled.span`
 type Props = {
     // eslint-disable-next-line @typescript-eslint/ban-types
     onRender?: (ele: HTMLElement | null) => void;
-    chatItem: chatEvent.SuperStickerItem;
-    messageSettings: settingsStorage.MessageSettings;
+    messageSettings: MessageSettings;
+    chatItem: SuperStickerItem;
 };
 
 const SuperChatSticker: React.FC<Props> = ({
     onRender,
-    chatItem,
     messageSettings,
+    chatItem,
 }) => {
     const imageSize = `${0.8 * messageSettings.numberOfLines}em`;
 

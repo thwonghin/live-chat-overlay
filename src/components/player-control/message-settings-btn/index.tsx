@@ -2,11 +2,10 @@ import { useCallback } from 'react';
 
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { useI18n } from '@/contexts/i18n';
-import { popup } from '@/features';
+import { useStore } from '@/contexts/root-store';
 import { youtube } from '@/utils';
 
 import BtnTooltip from '../btn-tooltip';
@@ -18,15 +17,14 @@ const Button = styled.button`
 const iconWidth = (2 / 3) * (512 / 640) * 100;
 
 const MessageSettingsBtn: React.FC = () => {
-    const dispatch = useDispatch();
+    const { uiStore } = useStore();
     const i18n = useI18n();
     const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
         (event) => {
             event.preventDefault();
-
-            dispatch(popup.actions.togglePopup('message-settings'));
+            uiStore.togglePopup('message-settings');
         },
-        [dispatch],
+        [uiStore],
     );
 
     return (

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
 import { useNativeStopKeydownPropagation } from '@/hooks';
-import type { settingsStorage } from '@/services';
+import { type MessageSettingsKey } from '@/models/settings';
 import { youtube } from '@/utils';
 
 const Container = styled.div<{ $isHidden: boolean }>`
@@ -42,7 +42,7 @@ type Props = {
 const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [selectedMessageType, setSelectedMessageType] =
-        useState<settingsStorage.MessageSettingsKey>('guest');
+        useState<MessageSettingsKey>('guest');
 
     // Workaround for cannot stop event propagation: use native event handler
     // https://github.com/facebook/react/issues/11387#issuecomment-524113945

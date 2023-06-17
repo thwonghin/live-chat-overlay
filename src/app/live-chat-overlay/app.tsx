@@ -4,10 +4,6 @@ import ChatFlow from '@/components/chat-flow';
 import PlayerControl from '@/components/player-control';
 import PopupContainer from '@/components/popup';
 import type { InitData } from '@/definitions/youtube';
-import {
-    useInitChatEventObserver,
-    useResetChatEventsOnPlayerRectChange,
-} from '@/hooks';
 
 type Props = {
     initData: InitData;
@@ -20,12 +16,9 @@ const App: React.FC<Props> = ({
     playerControlContainer,
     playerEle,
 }) => {
-    useResetChatEventsOnPlayerRectChange();
-    useInitChatEventObserver(initData);
-
     return (
         <>
-            <ChatFlow />
+            <ChatFlow initData={initData} />
             <PopupContainer
                 playerControlContainer={playerControlContainer}
                 playerEle={playerEle}

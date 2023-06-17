@@ -1,19 +1,11 @@
 import * as React from 'react';
 
-import { useSelector, shallowEqual } from 'react-redux';
+import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
-import type { RootState } from '@/app/live-chat-overlay/store';
-import type { debugInfo } from '@/features';
-
-type ChatEventDebugInfo = {
-    messagesCount: number;
-    messageByLineNumber: Array<{
-        row: number;
-        count: number;
-    }>;
-    doneItemsCount: number;
-};
+import { useStore } from '@/contexts/root-store';
+import type { ChatItemModel } from '@/models/chat-item';
+import type { Benchmark } from '@/models/debug-info/types';
 
 type RoundedBenchmark = {
     min: string;
@@ -22,7 +14,7 @@ type RoundedBenchmark = {
     count: number;
 };
 
-function roundBenchmark(benchmark: debugInfo.Benchmark): RoundedBenchmark {
+function roundBenchmark(benchmark: Benchmark): RoundedBenchmark {
     return {
         min: benchmark.min.toFixed(2),
         max: benchmark.max.toFixed(2),
@@ -72,39 +64,33 @@ const BenchmarkContainer = styled.div`
 `;
 
 type DebugOverlayLayoutProps = {
-    chatEventDebugInfo: ChatEventDebugInfo;
+    chatItemsByLineNumber: Map<number, ChatItemModel[]>;
     getEleWidthBenchmark: RoundedBenchmark;
     processXhrBenchmark: RoundedBenchmark;
     processChatEventBenchmark: RoundedBenchmark;
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
+    cleanedChatItemCount: number;
 };
 
 export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
-    chatEventDebugInfo,
+    chatItemsByLineNumber,
     getEleWidthBenchmark,
     processChatEventBenchmark,
     processXhrBenchmark,
     processChatEventQueueLength,
     outdatedRemovedChatEventCount,
+    cleanedChatItemCount,
 }) => {
     return (
         <>
             <DebugContainer>
-                <DebugText>
-                    {`Messages Count: ${chatEventDebugInfo.messagesCount}`}
-                </DebugText>
-                <DebugText>
-                    {`Done Items Count: ${chatEventDebugInfo.doneItemsCount}`}
-                </DebugText>
-                {chatEventDebugInfo.messageByLineNumber.length > 0 && (
-                    <DebugText>Message Count By Position:</DebugText>
-                )}
-                {chatEventDebugInfo.messageByLineNumber.map(
-                    ({ row, count }) => (
-                        <DebugText key={row}>
-                            {`${row + 1}: ${count}`}
-                        </DebugText>
+                <DebugText>Message Count By Position:</DebugText>
+                {Array.from(chatItemsByLineNumber.entries()).map(
+                    ([lineNumber, chatItems]) => (
+                        <DebugText key={lineNumber}>{`${lineNumber + 1}: ${
+                            (chatItems ?? []).length
+                        }`}</DebugText>
                     ),
                 )}
             </DebugContainer>
@@ -150,61 +136,53 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 <DebugText>
                     {`Removed Outdated Chat Event: ${outdatedRemovedChatEventCount}`}
                 </DebugText>
+                <DebugText>
+                    {`Cleaned Chat Item: ${cleanedChatItemCount}`}
+                </DebugText>
             </BenchmarkContainer>
         </>
     );
 };
 
-const DebugOverlay: React.FC = () => {
-    const chatEventDebugInfo = useSelector<RootState, ChatEventDebugInfo>(
-        (state) => ({
-            messagesCount: state.chatEvents.chatItems.length,
-            messageByLineNumber: Object.entries(
-                state.chatEvents.chatItemsByLineNumber,
-            ).map(([key, value]) => {
-                return {
-                    row: Number(key),
-                    count: (value ?? []).length,
-                };
-            }),
-            doneItemsCount: Object.values(
-                state.chatEvents.chatItemStateById,
-            ).filter((chatItemState) => chatItemState === 'finished').length,
-        }),
-        shallowEqual,
-    );
+const DebugOverlay = observer(() => {
+    const {
+        debugInfoStore: {
+            debugInfoModel: {
+                getChatItemEleWidthBenchmark,
+                processXhrBenchmark,
+                processChatEventBenchmark,
+                processChatEventQueueLength,
+                outdatedRemovedChatEventCount,
+                cleanedChatItemCount,
+            },
+        },
+        chatItemStore: { chatItemsByLineNumber },
+    } = useStore();
 
-    const getEleWidthBenchmark = useSelector<RootState, RoundedBenchmark>(
-        (rootState) =>
-            roundBenchmark(rootState.debugInfo.getChatItemEleWidthBenchmark),
-        shallowEqual,
+    const roundedGetEleWidthBenchmark = React.useMemo(
+        () => roundBenchmark(getChatItemEleWidthBenchmark),
+        [getChatItemEleWidthBenchmark],
     );
-    const processXhrBenchmark = useSelector<RootState, RoundedBenchmark>(
-        (rootState) => roundBenchmark(rootState.debugInfo.processXhrBenchmark),
-        shallowEqual,
+    const roundedProcessXhrBenchmark = React.useMemo(
+        () => roundBenchmark(processXhrBenchmark),
+        [processXhrBenchmark],
     );
-    const processChatEventBenchmark = useSelector<RootState, RoundedBenchmark>(
-        (rootState) =>
-            roundBenchmark(rootState.debugInfo.processChatEventBenchmark),
-        shallowEqual,
-    );
-    const processChatEventQueueLength = useSelector<RootState, number>(
-        (rootState) => rootState.debugInfo.processChatEventQueueLength,
-    );
-    const outdatedRemovedChatEventCount = useSelector<RootState, number>(
-        (rootState) => rootState.debugInfo.outdatedRemovedChatEventCount,
+    const roundedProcessChatEventBenchmark = React.useMemo(
+        () => roundBenchmark(processChatEventBenchmark),
+        [processChatEventBenchmark],
     );
 
     return (
         <DebugOverlayLayout
-            chatEventDebugInfo={chatEventDebugInfo}
-            getEleWidthBenchmark={getEleWidthBenchmark}
-            processChatEventBenchmark={processChatEventBenchmark}
-            processXhrBenchmark={processXhrBenchmark}
+            chatItemsByLineNumber={chatItemsByLineNumber}
+            getEleWidthBenchmark={roundedGetEleWidthBenchmark}
+            processChatEventBenchmark={roundedProcessXhrBenchmark}
+            processXhrBenchmark={roundedProcessChatEventBenchmark}
             processChatEventQueueLength={processChatEventQueueLength}
             outdatedRemovedChatEventCount={outdatedRemovedChatEventCount}
+            cleanedChatItemCount={cleanedChatItemCount}
         />
     );
-};
+});
 
 export default DebugOverlay;

@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import type { chatEvent } from '@/services';
+import type { TextPart } from '@/models/chat-item/types';
 
 type Props = {
-    textPart: chatEvent.TextPart;
+    textPart: TextPart;
 };
 
 const TextPartRenderer: React.FC<Props> = ({ textPart }) => {

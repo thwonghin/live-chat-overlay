@@ -1,47 +1,50 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 
-import { useDispatch } from 'react-redux';
+import { action, runInAction } from 'mobx';
 
-import { debugInfo } from '@/features';
+import { useStore } from '@/contexts/root-store';
 import { useKeyboardToggle, useKeyboardEvent } from '@/hooks';
 
-const dKey = 68;
-const rKey = 82;
+const D_KEY = 68;
+const R_KEY = 82;
 
 export function useToggleDebugMode(): void {
-    const dispatch = useDispatch();
+    const { debugInfoStore } = useStore();
 
     const { isActive } = useKeyboardToggle({
         shouldAlt: true,
         shouldCtrl: true,
-        key: dKey,
+        key: D_KEY,
         attached: window.parent.document.body,
     });
 
-    const handleRefreshEvent = useCallback(
-        () => dispatch(debugInfo.actions.resetMetrics()),
-        [dispatch],
-    );
+    const handleRefreshEvent = action(() => {
+        debugInfoStore.resetMetrics();
+    });
 
     useKeyboardEvent({
         shouldAlt: true,
         shouldCtrl: true,
-        key: rKey,
+        key: R_KEY,
         attached: window.parent.document.body,
         onChange: handleRefreshEvent,
     });
 
     useEffect(() => {
-        if (isActive) {
-            dispatch(debugInfo.actions.startDebug());
-        } else {
-            dispatch(debugInfo.actions.stopDebug());
-        }
-    }, [isActive, dispatch]);
+        runInAction(() => {
+            if (isActive) {
+                debugInfoStore.isDebugging = true;
+            } else {
+                debugInfoStore.isDebugging = false;
+            }
+        });
+    }, [isActive, debugInfoStore]);
 
     useEffect(() => {
         return () => {
-            dispatch(debugInfo.actions.reset());
+            runInAction(() => {
+                debugInfoStore.reset();
+            });
         };
-    }, [dispatch]);
+    }, [debugInfoStore]);
 }
