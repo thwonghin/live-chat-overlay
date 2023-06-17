@@ -27,10 +27,9 @@ export class RootStore {
             throw new Error('Video player element not found');
         }
 
-        this.uiStore = new UiStore(videoPlayerEle);
+        this.uiStore = new UiStore(videoPlayerEle, videoEle);
         this.chatItemStore = new ChatItemStore(
             LIVE_CHAT_API_INTERCEPT_EVENT,
-            videoEle,
             this.uiStore,
             this.settingsStore,
             this.debugInfoStore,

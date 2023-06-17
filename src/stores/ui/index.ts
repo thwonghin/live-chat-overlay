@@ -10,8 +10,11 @@ export class UiStore {
 
     private resizeObserver: ResizeObserver | undefined;
 
-    constructor(private readonly videoPlayerEle: HTMLDivElement) {
-        this.playerState = new PlayerStateModel(videoPlayerEle);
+    constructor(
+        private readonly videoPlayerEle: HTMLDivElement,
+        private readonly videoEle: HTMLVideoElement,
+    ) {
+        this.playerState = new PlayerStateModel(videoPlayerEle, videoEle);
         makeAutoObservable(this);
     }
 
@@ -25,14 +28,16 @@ export class UiStore {
 
     startListening() {
         this.initResizeObserver();
+        this.addVideoStateChangeListener();
     }
 
     resetPopup() {
         this.currentPopup = undefined;
     }
 
-    resetPlayerState() {
+    stopListening() {
         this.disconnectResizeObserver();
+        this.removeVideoStateChangeListener();
     }
 
     private initResizeObserver() {
@@ -50,4 +55,24 @@ export class UiStore {
         this.resizeObserver.disconnect();
         this.resizeObserver = undefined;
     }
+
+    private addVideoStateChangeListener() {
+        this.videoEle.addEventListener('seeking', this.onVideoStateChange);
+        this.videoEle.addEventListener('pause', this.onVideoStateChange);
+        this.videoEle.addEventListener('play', this.onVideoStateChange);
+        this.videoEle.addEventListener('playing', this.onVideoStateChange);
+        this.videoEle.addEventListener('seeked', this.onVideoStateChange);
+    }
+
+    private removeVideoStateChangeListener() {
+        this.videoEle.removeEventListener('seeking', this.onVideoStateChange);
+        this.videoEle.removeEventListener('pause', this.onVideoStateChange);
+        this.videoEle.removeEventListener('play', this.onVideoStateChange);
+        this.videoEle.removeEventListener('playing', this.onVideoStateChange);
+        this.videoEle.removeEventListener('seeked', this.onVideoStateChange);
+    }
+
+    private readonly onVideoStateChange = () => {
+        this.playerState.assignVideoStates();
+    };
 }

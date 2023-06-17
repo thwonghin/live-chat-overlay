@@ -1,4 +1,10 @@
-import { makeAutoObservable, reaction, observable, runInAction } from 'mobx';
+import {
+    makeAutoObservable,
+    reaction,
+    observable,
+    runInAction,
+    type IReactionDisposer,
+} from 'mobx';
 
 import type {
     YoutubeChatResponse,
@@ -55,23 +61,14 @@ export class ChatItemStore {
     private tickId: number | undefined = undefined;
     private cleanDisplayedIntervalId: number | undefined = undefined;
     private readonly chatItemProcessQueue: ChatItemModel[] = [];
+    private readonly reactionDisposers: IReactionDisposer[] = [];
 
-    // eslint-disable-next-line max-params
     constructor(
         private readonly chatEventName: string,
-        private readonly videoEle: HTMLVideoElement,
         private readonly uiStore: UiStore,
         private readonly settingsStore: SettingsStore,
         private readonly debugInfoStore: DebugInfoStore,
     ) {
-        reaction(() => this.debugInfoStore.isDebugging, this.watchDebugStore);
-        reaction(
-            () => [
-                this.uiStore.playerState.width,
-                this.uiStore.playerState.height,
-            ],
-            this.resetNonStickyChatItems,
-        );
         makeAutoObservable(this);
     }
 
@@ -87,6 +84,35 @@ export class ChatItemStore {
 
         this.isStarted = true;
         window.addEventListener(this.chatEventName, this.onChatMessage);
+
+        this.reactionDisposers.push(
+            reaction(
+                () => this.debugInfoStore.isDebugging,
+                this.watchDebugStore,
+            ),
+        );
+        this.reactionDisposers.push(
+            reaction(
+                () => [
+                    this.uiStore.playerState.width,
+                    this.uiStore.playerState.height,
+                ],
+                this.resetNonStickyChatItems,
+            ),
+        );
+        this.reactionDisposers.push(
+            reaction(
+                () => this.uiStore.playerState.isPaused,
+                this.onPlayerPauseOrResume,
+            ),
+        );
+        this.reactionDisposers.push(
+            reaction(
+                () => this.uiStore.playerState.isSeeking,
+                this.onPlayerSeek,
+            ),
+        );
+
         this.createAllIntervals();
     }
 
@@ -97,6 +123,9 @@ export class ChatItemStore {
 
         this.isStarted = false;
         window.removeEventListener(this.chatEventName, this.onChatMessage);
+        this.reactionDisposers.forEach((disposer) => {
+            disposer();
+        });
         this.clearAllIntervals();
     }
 
@@ -131,6 +160,20 @@ export class ChatItemStore {
             (chatItem) => chatItem.value.id !== id,
         );
     }
+
+    private readonly onPlayerPauseOrResume = (): void => {
+        if (this.uiStore.playerState.isPaused) {
+            this.pause();
+        } else {
+            this.resume();
+        }
+    };
+
+    private readonly onPlayerSeek = (): void => {
+        if (this.uiStore.playerState.isSeeking) {
+            this.reset();
+        }
+    };
 
     private readonly resetNonStickyChatItems = (): void => {
         runInAction(() => {
@@ -173,7 +216,8 @@ export class ChatItemStore {
         currentTimestampMs: number;
     } {
         return {
-            playerTimestampMs: this.videoEle.currentTime * 1000,
+            playerTimestampMs:
+                this.uiStore.playerState.videoCurrentTimeInSecs * 1000,
             currentTimestampMs: Date.now(),
         };
     }
@@ -310,7 +354,8 @@ export class ChatItemStore {
      * @returns {boolean} - Whether we can continue to dequeue
      */
     private dequeueChatItem(): boolean {
-        const currentPlayerTimeInMsc = (this.videoEle.currentTime ?? 0) * 1000;
+        const currentPlayerTimeInMsc =
+            this.uiStore.playerState.videoCurrentTimeInSecs * 1000;
 
         const currentTimeInUsec = Date.now() * 1000;
         this.cleanOutdatedChatItems({
