@@ -279,20 +279,20 @@ type InitReplayContinuationContents = {
     isReplay: true;
 };
 
-type LiveContinuationContents = {
+export type LiveContinuationContents = {
     liveChatContinuation: LiveLiveChatContinuation;
 };
 
-type ReplayContinuationContents = {
+export type ReplayContinuationContents = {
     liveChatContinuation: ReplayLiveChatContinuation;
 };
 
 export type LiveResponse = {
-    continuationContents: LiveContinuationContents;
+    continuationContents?: LiveContinuationContents;
 };
 
 export type ReplayResponse = {
-    continuationContents: ReplayContinuationContents;
+    continuationContents?: ReplayContinuationContents;
 };
 
 export type YoutubeChatResponse = LiveResponse | ReplayResponse;

@@ -126,5 +126,7 @@ export async function getInitData(scriptSrc: string): Promise<InitData> {
 export function isInitData(
     data: InitData | YoutubeChatResponse,
 ): data is InitData {
-    return 'viewerName' in data.continuationContents.liveChatContinuation;
+    return (
+        'viewerName' in (data.continuationContents?.liveChatContinuation ?? {})
+    );
 }
