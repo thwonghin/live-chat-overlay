@@ -128,7 +128,7 @@ export class ChatItemStore {
         this.chatItemStatusById.delete(id);
         filterInPlace(
             this.stickyChatItems,
-            (chatItem) => chatItem.value.id === id,
+            (chatItem) => chatItem.value.id !== id,
         );
     }
 
