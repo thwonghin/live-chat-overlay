@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
-import { useInitChatItemStore } from '@/hooks';
+import { useInitStores } from '@/hooks';
 import type { ChatItemModel } from '@/models/chat-item';
 import { CHAT_ITEM_RENDER_ID } from '@/stores/chat-item';
 
@@ -33,7 +33,7 @@ type Props = {
 };
 
 const ChatFlow: React.FC<Props> = observer(({ initData }) => {
-    useInitChatItemStore(initData);
+    useInitStores(initData);
     useToggleDebugMode();
     const store = useStore();
     const {

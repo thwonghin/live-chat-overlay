@@ -12,7 +12,6 @@ export class UiStore {
 
     constructor(private readonly videoPlayerEle: HTMLDivElement) {
         this.playerState = new PlayerStateModel(videoPlayerEle);
-        this.initResizeObserver();
         makeAutoObservable(this);
     }
 
@@ -24,8 +23,15 @@ export class UiStore {
         }
     }
 
-    reset() {
+    startListening() {
+        this.initResizeObserver();
+    }
+
+    resetPopup() {
         this.currentPopup = undefined;
+    }
+
+    resetPlayerState() {
         this.disconnectResizeObserver();
     }
 

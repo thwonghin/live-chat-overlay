@@ -6,8 +6,8 @@ import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
 import { useVideoPlayerState } from '@/hooks';
 
-export function useInitChatItemStore(initData: InitData): void {
-    const { debugInfoStore, chatItemStore } = useStore();
+export function useInitStores(initData: InitData): void {
+    const { debugInfoStore, chatItemStore, uiStore } = useStore();
     const { isPaused, isSeeking } = useVideoPlayerState();
 
     useEffect(() => {
@@ -43,4 +43,12 @@ export function useInitChatItemStore(initData: InitData): void {
             });
         };
     }, [chatItemStore, debugInfoStore]);
+
+    useEffect(() => {
+        uiStore.startListening();
+
+        return () => {
+            uiStore.resetPlayerState();
+        };
+    }, [uiStore]);
 }

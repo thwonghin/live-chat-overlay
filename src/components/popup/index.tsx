@@ -16,6 +16,13 @@ const PopupContainer: React.FC<Props> = observer(
     ({ playerControlContainer, playerEle }) => {
         const { uiStore } = useStore();
 
+        useEffect(
+            () => () => {
+                uiStore.resetPopup();
+            },
+            [uiStore],
+        );
+
         return ReactDOM.createPortal(
             <MessageSettingsPopup
                 isHidden={uiStore.currentPopup !== 'message-settings'}
