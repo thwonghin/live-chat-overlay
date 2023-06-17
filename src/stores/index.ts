@@ -2,7 +2,6 @@ import { makeAutoObservable } from 'mobx';
 import browser from 'webextension-polyfill';
 
 import { LIVE_CHAT_API_INTERCEPT_EVENT } from '@/constants';
-import { youtube } from '@/utils';
 
 import { ChatItemStore } from './chat-item';
 import { DebugInfoStore } from './debug-info';
@@ -15,18 +14,7 @@ export class RootStore {
     uiStore: UiStore;
     chatItemStore: ChatItemStore;
 
-    constructor() {
-        const videoEle = youtube.getVideoEle();
-        const videoPlayerEle = youtube.getVideoPlayerEle();
-
-        if (!videoEle) {
-            throw new Error('Video element not found');
-        }
-
-        if (!videoPlayerEle) {
-            throw new Error('Video player element not found');
-        }
-
+    constructor(videoEle: HTMLVideoElement, videoPlayerEle: HTMLDivElement) {
         this.uiStore = new UiStore(videoPlayerEle, videoEle);
         this.chatItemStore = new ChatItemStore(
             LIVE_CHAT_API_INTERCEPT_EVENT,
@@ -36,8 +24,16 @@ export class RootStore {
         );
         makeAutoObservable(this);
     }
+
+    async init() {
+        await this.settingsStore.init();
+        this.uiStore.init();
+        this.chatItemStore.init();
+    }
+
+    cleanup() {
+        this.settingsStore.cleanup();
+        this.uiStore.cleanup();
+        this.chatItemStore.cleanup();
+    }
 }
-
-const rootStore = new RootStore();
-
-export { rootStore };

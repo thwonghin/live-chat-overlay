@@ -1,8 +1,5 @@
 import * as React from 'react';
 
-import { observer } from 'mobx-react-lite';
-
-import { useStore } from '@/contexts/root-store';
 import type { ChatItemModel } from '@/models/chat-item';
 import {
     isMembershipItem,
@@ -23,54 +20,51 @@ type Props = {
     onClickClose?: React.MouseEventHandler;
 };
 
-const ChatItemRenderer: React.FC<Props> = observer(
-    ({ onRender, chatItem, onClickClose }) => {
-        const {
-            settingsStore: { settings },
-        } = useStore();
-        const messageSettings = settings.getMessageSettings(chatItem.value);
-
-        return (
-            <>
-                {isSuperStickerItem(chatItem.value) && (
-                    <SuperChatSticker
-                        chatItem={chatItem.value}
-                        messageSettings={messageSettings}
-                        onRender={onRender}
-                    />
-                )}
-                {isNormalChatItem(chatItem.value) && (
-                    <TwoLinesMessage
-                        chatItem={chatItem.value}
-                        messageSettings={messageSettings}
-                        onRender={onRender}
-                    />
-                )}
-                {isSuperChatItem(chatItem.value) && (
-                    <TwoLinesMessage
-                        chatItem={chatItem.value}
-                        messageSettings={messageSettings}
-                        onRender={onRender}
-                    />
-                )}
-                {isMembershipItem(chatItem.value) && (
-                    <TwoLinesMessage
-                        chatItem={chatItem.value}
-                        messageSettings={messageSettings}
-                        onRender={onRender}
-                    />
-                )}
-                {isPinnedItem(chatItem.value) && (
-                    <PinnedMessage
-                        chatItem={chatItem.value}
-                        messageSettings={messageSettings}
-                        onClickClose={onClickClose}
-                        onRender={onRender}
-                    />
-                )}
-            </>
-        );
-    },
-);
+const ChatItemRenderer: React.FC<Props> = ({
+    onRender,
+    chatItem,
+    onClickClose,
+}) => {
+    return (
+        <>
+            {isSuperStickerItem(chatItem.value) && (
+                <SuperChatSticker
+                    chatItem={chatItem.value}
+                    messageSettings={chatItem.messageSettings}
+                    onRender={onRender}
+                />
+            )}
+            {isNormalChatItem(chatItem.value) && (
+                <TwoLinesMessage
+                    chatItem={chatItem.value}
+                    messageSettings={chatItem.messageSettings}
+                    onRender={onRender}
+                />
+            )}
+            {isSuperChatItem(chatItem.value) && (
+                <TwoLinesMessage
+                    chatItem={chatItem.value}
+                    messageSettings={chatItem.messageSettings}
+                    onRender={onRender}
+                />
+            )}
+            {isMembershipItem(chatItem.value) && (
+                <TwoLinesMessage
+                    chatItem={chatItem.value}
+                    messageSettings={chatItem.messageSettings}
+                    onRender={onRender}
+                />
+            )}
+            {isPinnedItem(chatItem.value) && (
+                <PinnedMessage
+                    chatItem={chatItem.value}
+                    messageSettings={chatItem.messageSettings}
+                    onClickClose={onClickClose}
+                    onRender={onRender}
+                />
+            )}
+        </>
+    );
+};
 
 export default ChatItemRenderer;

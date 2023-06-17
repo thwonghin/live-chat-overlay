@@ -11,7 +11,7 @@ export class UiStore {
     private resizeObserver: ResizeObserver | undefined;
 
     constructor(
-        private readonly videoPlayerEle: HTMLDivElement,
+        public readonly videoPlayerEle: HTMLDivElement,
         private readonly videoEle: HTMLVideoElement,
     ) {
         this.playerState = new PlayerStateModel(videoPlayerEle, videoEle);
@@ -26,16 +26,13 @@ export class UiStore {
         }
     }
 
-    startListening() {
+    init() {
         this.initResizeObserver();
         this.addVideoStateChangeListener();
     }
 
-    resetPopup() {
+    cleanup() {
         this.currentPopup = undefined;
-    }
-
-    stopListening() {
         this.disconnectResizeObserver();
         this.removeVideoStateChangeListener();
     }

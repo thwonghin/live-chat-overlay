@@ -1,4 +1,9 @@
-import { makeAutoObservable, reaction, runInAction } from 'mobx';
+import {
+    type IReactionDisposer,
+    makeAutoObservable,
+    reaction,
+    runInAction,
+} from 'mobx';
 import { type Browser } from 'webextension-polyfill';
 
 import { type Settings, SettingsModel } from '@/models/settings';
@@ -9,15 +14,11 @@ import { migrations } from './migrations';
 
 class SettingsStore {
     settings: SettingsModel;
+    private readonly reactionDisposers: IReactionDisposer[] = [];
 
-    constructor(public browser: Browser) {
+    constructor(private readonly browser: Browser) {
         this.settings = new SettingsModel();
-        reaction(
-            () => this.settings,
-            async () => {
-                await this.updateSettingsInStorage();
-            },
-        );
+
         makeAutoObservable(this);
     }
 
@@ -32,6 +33,21 @@ class SettingsStore {
         }
 
         await this.loadFromStorage();
+
+        this.reactionDisposers.push(
+            reaction(
+                () => this.settings,
+                async () => {
+                    await this.updateSettingsInStorage();
+                },
+            ),
+        );
+    }
+
+    public cleanup() {
+        this.reactionDisposers.forEach((disposer) => {
+            disposer();
+        });
     }
 
     private async runMigrations() {

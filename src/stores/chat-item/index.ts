@@ -8,8 +8,6 @@ import {
 
 import type {
     YoutubeChatResponse,
-    ReplayResponse,
-    LiveResponse,
     InitData,
     ReplayContinuationContents,
     LiveContinuationContents,
@@ -56,8 +54,8 @@ export class ChatItemStore {
     public readonly stickyChatItems = observable.array<ChatItemModel>();
 
     private readonly chatItemStatusById = new Map<string, boolean>();
+    private isInitiated = false;
     private mode = Mode.LIVE;
-    private isStarted = false;
     private tickId: number | undefined = undefined;
     private cleanDisplayedIntervalId: number | undefined = undefined;
     private readonly chatItemProcessQueue: ChatItemModel[] = [];
@@ -75,14 +73,10 @@ export class ChatItemStore {
     public async importInitData(initData: InitData): Promise<void> {
         this.mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
         await this.processChatItems(initData);
+        this.isInitiated = true;
     }
 
-    public start(): void {
-        if (this.isStarted) {
-            return;
-        }
-
-        this.isStarted = true;
+    public init(): void {
         window.addEventListener(this.chatEventName, this.onChatMessage);
 
         this.reactionDisposers.push(
@@ -116,12 +110,7 @@ export class ChatItemStore {
         this.createAllIntervals();
     }
 
-    public stop(): void {
-        if (!this.isStarted) {
-            return;
-        }
-
-        this.isStarted = false;
+    public cleanup(): void {
         window.removeEventListener(this.chatEventName, this.onChatMessage);
         this.reactionDisposers.forEach((disposer) => {
             disposer();
@@ -341,6 +330,10 @@ export class ChatItemStore {
     }
 
     private readonly dequeueAvailableChatItems = () => {
+        if (!this.isInitiated) {
+            return;
+        }
+
         runInAction(() => {
             while (this.dequeueChatItem()) {
                 continue;
@@ -400,7 +393,7 @@ export class ChatItemStore {
 
         const addTimestamp = Date.now();
         const { settings } = this.settingsStore;
-        const messageSettings = settings.getMessageSettings(chatItem.value);
+        const { messageSettings } = chatItem;
 
         if (messageSettings.isSticky) {
             chatItem.assignDisplayMeta(-1, addTimestamp);

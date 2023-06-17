@@ -1,6 +1,5 @@
 import { type PropsWithChildren, createContext, useContext } from 'react';
 
-import { rootStore } from '@/stores';
 import type { RootStore } from '@/stores';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -8,10 +7,15 @@ const StoreContext = createContext<RootStore>({} as any);
 
 export const useStore = () => useContext(StoreContext);
 
-export const StoreProvider: React.FC<PropsWithChildren> = ({ children }) => {
+type Props = {
+    store: RootStore;
+};
+
+export const StoreProvider: React.FC<PropsWithChildren<Props>> = ({
+    store,
+    children,
+}) => {
     return (
-        <StoreContext.Provider value={rootStore}>
-            {children}
-        </StoreContext.Provider>
+        <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
     );
 };

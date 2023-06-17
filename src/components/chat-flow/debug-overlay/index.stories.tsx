@@ -14,7 +14,7 @@ export const DebugOverlay: React.FC = () => {
             <DebugOverlayLayout
                 chatItemsByLineNumber={
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                    new Map([[1, [new ChatItemModel({} as any, 1)]]])
+                    new Map([[1, [new ChatItemModel({} as any, {} as any, 1)]]])
                 }
                 getEleWidthBenchmark={{
                     min: '100.00',

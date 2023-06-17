@@ -3,7 +3,6 @@ import React, { useCallback } from 'react';
 import { type Root, createRoot } from 'react-dom/client';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import { StoreProvider } from '@/contexts/root-store';
 import type { ChatItemModel } from '@/models/chat-item';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
@@ -78,7 +77,7 @@ export async function assignChatItemRenderedWidth(
         };
 
         root.render(
-            <StoreProvider>
+            <>
                 {chatItemModels.map((chatItem) => (
                     <ChatItemRendererForWidth
                         key={chatItem.value.id}
@@ -86,7 +85,7 @@ export async function assignChatItemRenderedWidth(
                         onRender={handleRender}
                     />
                 ))}
-            </StoreProvider>,
+            </>,
         );
     });
 }
