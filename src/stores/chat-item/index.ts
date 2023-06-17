@@ -5,6 +5,8 @@ import type {
     ReplayResponse,
     LiveResponse,
     InitData,
+    ReplayContinuationContents,
+    LiveContinuationContents,
 } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { fetchInterceptor } from '@/services';
@@ -35,7 +37,7 @@ type DebugInfo = Partial<{
     getEleWidthBenchmark: number;
 }>;
 
-const DEQUEUE_INTERVAL = 1000 / 5; // 5 FPS
+const DEQUEUE_INTERVAL = 1000 / 60; // 5 FPS
 const CLEAN_INTERVAL = 1000;
 
 export class ChatItemStore {
@@ -136,7 +138,7 @@ export class ChatItemStore {
         this.clearAllIntervals();
 
         this.tickId = window.setInterval(
-            this.dequeueChatItem,
+            this.dequeueAvailableChatItems,
             DEQUEUE_INTERVAL,
         );
 
@@ -236,6 +238,12 @@ export class ChatItemStore {
         response: YoutubeChatResponse | InitData,
     ): Promise<void> {
         await runInAction(async () => {
+            const { continuationContents } = response;
+
+            if (!continuationContents) {
+                return;
+            }
+
             if (youtube.isInitData(response)) {
                 this.reset();
             }
@@ -246,12 +254,12 @@ export class ChatItemStore {
                     this.mode === Mode.REPLAY
                         ? mapChatItemsFromReplayResponse(
                               timeInfo,
-                              (response as ReplayResponse).continuationContents,
+                              continuationContents as ReplayContinuationContents,
                               this.settingsStore.settings,
                           )
                         : mapChatItemsFromLiveResponse(
                               timeInfo,
-                              (response as LiveResponse).continuationContents,
+                              continuationContents as LiveContinuationContents,
                               this.settingsStore.settings,
                           );
 
@@ -278,105 +286,112 @@ export class ChatItemStore {
         });
     }
 
-    private readonly dequeueChatItem = () => {
-        runInAction((): void => {
-            const currentPlayerTimeInMsc =
-                (this.videoEle.currentTime ?? 0) * 1000;
-
-            const currentTimeInUsec = Date.now() * 1000;
-            this.cleanOutdatedChatItems({
-                currentPlayerTimeInMsc,
-                currentTimeInUsec,
-            });
-
-            const chatItem = this.chatItemProcessQueue[0];
-
-            if (!chatItem) {
-                return;
+    private readonly dequeueAvailableChatItems = () => {
+        runInAction(() => {
+            while (this.dequeueChatItem()) {
+                continue;
             }
+        });
+    };
 
-            const { result: isTime, runtime } = benchmark(() => {
-                return (
-                    chatItem.value.chatType === 'pinned' ||
-                    isTimeToDispatch({
-                        chatItem: chatItem.value,
-                        currentPlayerTimeInMsc,
-                    })
-                );
-            }, this.debugInfoStore.isDebugging);
+    /**
+     * Dequeue a chat item from processed item queue
+     *
+     * @returns {boolean} - Whether we can continue to dequeue
+     */
+    private dequeueChatItem(): boolean {
+        const currentPlayerTimeInMsc = (this.videoEle.currentTime ?? 0) * 1000;
 
-            if (!isTime) {
-                this.updateDebugInfo({
-                    processChatEventMs: runtime,
-                    processChatEventQueueLength:
-                        this.chatItemProcessQueue.length,
-                });
-                return;
-            }
+        const currentTimeInUsec = Date.now() * 1000;
+        this.cleanOutdatedChatItems({
+            currentPlayerTimeInMsc,
+            currentTimeInUsec,
+        });
 
-            // Somehow duplicated
-            if (this.chatItemStatusById.get(chatItem.value.id)) {
-                this.chatItemProcessQueue.shift();
-                return;
-            }
+        const chatItem = this.chatItemProcessQueue[0];
 
+        if (!chatItem) {
+            return false;
+        }
+
+        const { result: isTime, runtime } = benchmark(() => {
+            return (
+                chatItem.value.chatType === 'pinned' ||
+                isTimeToDispatch({
+                    chatItem: chatItem.value,
+                    currentPlayerTimeInMsc,
+                })
+            );
+        }, this.debugInfoStore.isDebugging);
+
+        if (!isTime) {
             this.updateDebugInfo({
                 processChatEventMs: runtime,
                 processChatEventQueueLength: this.chatItemProcessQueue.length,
             });
+            return false;
+        }
 
-            const addTimestamp = Date.now();
-            const { settings } = this.settingsStore;
-            const messageSettings = settings.getMessageSettings(chatItem.value);
-
-            if (messageSettings.isSticky) {
-                chatItem.assignDisplayMeta(-1, addTimestamp);
-                this.chatItemStatusById.set(chatItem.value.id, true);
-                this.stickyChatItems.push(chatItem);
-                this.chatItemProcessQueue.shift();
-                return;
-            }
-
-            if (!chatItem.width) {
-                throw new Error(`Unknown width for ${chatItem.value.id}`);
-            }
-
-            const lineNumber = getLineNumber({
-                chatItemsByLineNumber: this.chatItemsByLineNumber,
-                addTimestamp,
-                elementWidth: chatItem.width,
-                maxLineNumber: settings.totalNumberOfLines,
-                flowTimeInSec: settings.flowTimeInSec,
-                containerWidth: this.getPlayerWidth(),
-                displayNumberOfLines: chatItem.numberOfLines,
-            });
-
-            // No place to insert
-            if (lineNumber === undefined) {
-                return;
-            }
-
-            chatItem.assignDisplayMeta(lineNumber, addTimestamp);
-
-            for (
-                let i = lineNumber;
-                i < lineNumber + chatItem.numberOfLines;
-                i++
-            ) {
-                let chatItems = this.chatItemsByLineNumber.get(i);
-
-                if (!chatItems) {
-                    chatItems = observable.array();
-                    this.chatItemsByLineNumber.set(i, chatItems);
-                }
-
-                chatItems.push(chatItem);
-            }
-
-            this.chatItemStatusById.set(chatItem.value.id, true);
+        // Somehow duplicated
+        if (this.chatItemStatusById.get(chatItem.value.id)) {
             this.chatItemProcessQueue.shift();
+            return true;
+        }
+
+        this.updateDebugInfo({
+            processChatEventMs: runtime,
+            processChatEventQueueLength: this.chatItemProcessQueue.length,
         });
-    };
+
+        const addTimestamp = Date.now();
+        const { settings } = this.settingsStore;
+        const messageSettings = settings.getMessageSettings(chatItem.value);
+
+        if (messageSettings.isSticky) {
+            chatItem.assignDisplayMeta(-1, addTimestamp);
+            this.chatItemStatusById.set(chatItem.value.id, true);
+            this.stickyChatItems.push(chatItem);
+            this.chatItemProcessQueue.shift();
+            return true;
+        }
+
+        if (!chatItem.width) {
+            throw new Error(`Unknown width for ${chatItem.value.id}`);
+        }
+
+        const lineNumber = getLineNumber({
+            chatItemsByLineNumber: this.chatItemsByLineNumber,
+            addTimestamp,
+            elementWidth: chatItem.width,
+            maxLineNumber: settings.totalNumberOfLines,
+            flowTimeInSec: settings.flowTimeInSec,
+            containerWidth: this.getPlayerWidth(),
+            displayNumberOfLines: chatItem.numberOfLines,
+        });
+
+        // No place to insert
+        if (lineNumber === undefined) {
+            return false;
+        }
+
+        chatItem.assignDisplayMeta(lineNumber, addTimestamp);
+
+        for (let i = lineNumber; i < lineNumber + chatItem.numberOfLines; i++) {
+            let chatItems = this.chatItemsByLineNumber.get(i);
+
+            if (!chatItems) {
+                chatItems = observable.array();
+                this.chatItemsByLineNumber.set(i, chatItems);
+            }
+
+            chatItems.push(chatItem);
+        }
+
+        this.chatItemStatusById.set(chatItem.value.id, true);
+        this.chatItemProcessQueue.shift();
+
+        return true;
+    }
 
     private cleanOutdatedChatItems(parameters: {
         currentTimeInUsec: number;
