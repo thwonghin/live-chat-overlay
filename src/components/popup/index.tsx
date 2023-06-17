@@ -1,10 +1,9 @@
 import { useEffect } from 'react';
 
+import { observer } from 'mobx-react-lite';
 import ReactDOM from 'react-dom';
-import { useSelector, useDispatch } from 'react-redux';
 
-import type { RootState } from '@/app/live-chat-overlay/store';
-import { popup } from '@/features';
+import { useStore } from '@/contexts/root-store';
 
 import MessageSettingsPopup from './message-settings-popup';
 
@@ -13,29 +12,25 @@ type Props = {
     playerEle: HTMLDivElement;
 };
 
-const PopupContainer: React.FC<Props> = ({
-    playerControlContainer,
-    playerEle,
-}) => {
-    const currentPopup = useSelector<RootState, popup.PopupType | undefined>(
-        (state) => state.popup.currentPopup,
-    );
-    const dispatch = useDispatch();
+const PopupContainer: React.FC<Props> = observer(
+    ({ playerControlContainer, playerEle }) => {
+        const { uiStore } = useStore();
 
-    useEffect(
-        () => () => {
-            dispatch(popup.actions.reset());
-        },
-        [dispatch],
-    );
+        useEffect(
+            () => () => {
+                uiStore.reset();
+            },
+            [uiStore],
+        );
 
-    return ReactDOM.createPortal(
-        <MessageSettingsPopup
-            isHidden={currentPopup !== 'message-settings'}
-            playerControlContainer={playerControlContainer}
-        />,
-        playerEle,
-    );
-};
+        return ReactDOM.createPortal(
+            <MessageSettingsPopup
+                isHidden={uiStore.currentPopup !== 'message-settings'}
+                playerControlContainer={playerControlContainer}
+            />,
+            playerEle,
+        );
+    },
+);
 
 export default PopupContainer;

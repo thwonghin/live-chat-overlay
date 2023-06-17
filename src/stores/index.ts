@@ -7,12 +7,12 @@ import { youtube } from '@/utils';
 import { ChatItemStore } from './chat-item';
 import { DebugInfoStore } from './debug-info';
 import { SettingsStore } from './settings';
+import { UiStore } from './ui';
 
 export class RootStore {
     settingsStore = new SettingsStore(browser);
-
     debugInfoStore = new DebugInfoStore();
-
+    uiStore = new UiStore();
     chatItemStore: ChatItemStore;
 
     constructor() {
