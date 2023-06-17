@@ -222,7 +222,12 @@ export class ChatItemStore {
 
         const response = customEvent.detail.response as
             | YoutubeChatResponse
-            | InitData;
+            | InitData
+            | undefined;
+
+        if (!response) {
+            return;
+        }
 
         await this.processChatItems(response);
     };
