@@ -2,59 +2,67 @@ import * as React from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { useSettings } from '@/contexts/settings';
-import { chatEvent } from '@/services';
+import { useStore } from '@/contexts/root-store';
+import type { ChatItemModel } from '@/models/chat-item';
+import {
+    isMembershipItem,
+    isNormalChatItem,
+    isPinnedItem,
+    isSuperChatItem,
+    isSuperStickerItem,
+} from '@/models/chat-item/mapper';
 
 import PinnedMessage from '../pinned-message';
 import SuperChatSticker from '../super-chat-sticker';
 import TwoLinesMessage from '../two-lines-message';
-import type { UiChatItem } from '../types';
 
 type Props = {
     // eslint-disable-next-line @typescript-eslint/ban-types
     onRender?: (ele: HTMLElement | null) => void;
-    chatItem: UiChatItem;
+    chatItem: ChatItemModel;
     onClickClose?: React.MouseEventHandler;
 };
 
 const ChatItemRenderer: React.FC<Props> = observer(
     ({ onRender, chatItem, onClickClose }) => {
-        const settings = useSettings();
-        const messageSettings = settings.getMessageSettings(chatItem);
+        const {
+            settingsStore: { settings },
+        } = useStore();
+        const messageSettings = settings.getMessageSettings(chatItem.value);
 
         return (
             <>
-                {chatEvent.isSuperStickerItem(chatItem) && (
+                {isSuperStickerItem(chatItem.value) && (
                     <SuperChatSticker
-                        chatItem={chatItem}
+                        chatItem={chatItem.value}
                         messageSettings={messageSettings}
                         onRender={onRender}
                     />
                 )}
-                {chatEvent.isNormalChatItem(chatItem) && (
+                {isNormalChatItem(chatItem.value) && (
                     <TwoLinesMessage
-                        chatItem={chatItem}
+                        chatItem={chatItem.value}
                         messageSettings={messageSettings}
                         onRender={onRender}
                     />
                 )}
-                {chatEvent.isSuperChatItem(chatItem) && (
+                {isSuperChatItem(chatItem.value) && (
                     <TwoLinesMessage
-                        chatItem={chatItem}
+                        chatItem={chatItem.value}
                         messageSettings={messageSettings}
                         onRender={onRender}
                     />
                 )}
-                {chatEvent.isMembershipItem(chatItem) && (
+                {isMembershipItem(chatItem.value) && (
                     <TwoLinesMessage
-                        chatItem={chatItem}
+                        chatItem={chatItem.value}
                         messageSettings={messageSettings}
                         onRender={onRender}
                     />
                 )}
-                {chatEvent.isPinnedItem(chatItem) && (
+                {isPinnedItem(chatItem.value) && (
                     <PinnedMessage
-                        chatItem={chatItem}
+                        chatItem={chatItem.value}
                         messageSettings={messageSettings}
                         onClickClose={onClickClose}
                         onRender={onRender}

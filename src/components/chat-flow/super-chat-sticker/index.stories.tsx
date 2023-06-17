@@ -1,7 +1,7 @@
 import * as React from 'react';
 
+import type { SuperStickerItem } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
-import type { chatEvent } from '@/services';
 
 import SuperChatSticker from '.';
 
@@ -24,7 +24,7 @@ const stickers = [
     },
 ];
 
-const superStickerItem: chatEvent.SuperStickerItem = {
+const superStickerItem: SuperStickerItem = {
     id: 'super-chat-sticker',
     stickers,
     avatars,

@@ -1,13 +1,14 @@
 import { defaultsDeep } from 'lodash-es';
+import { makeAutoObservable } from 'mobx';
 
 import {
-    type ChatItem,
     isMembershipItem,
     isNormalChatItem,
     isPinnedItem,
     isSuperChatItem,
     isSuperStickerItem,
-} from '@/services/chat-event';
+} from '@/models/chat-item/mapper';
+import type { ChatItem } from '@/models/chat-item/types';
 import { assertNever } from '@/utils';
 
 import {
@@ -80,6 +81,10 @@ class SettingsModel implements Settings {
             isSticky: true,
         },
     };
+
+    constructor() {
+        makeAutoObservable(this);
+    }
 
     setRawSettings(settings: Settings): this {
         Object.assign(this, defaultsDeep(settings, this));

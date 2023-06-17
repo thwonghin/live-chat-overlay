@@ -1,5 +1,7 @@
+import { makeAutoObservable } from 'mobx';
+
 import { calculateBenchmark } from './helpers';
-import { type DebugInfo } from './types';
+import type { DebugInfo } from './types';
 
 const DEFAULT_DEBUG_INFO: Readonly<DebugInfo> = Object.freeze({
     getChatItemEleWidthBenchmark: {
@@ -22,6 +24,7 @@ const DEFAULT_DEBUG_INFO: Readonly<DebugInfo> = Object.freeze({
     },
     processChatEventQueueLength: 0,
     outdatedRemovedChatEventCount: 0,
+    cleanedChatItemCount: 0,
 });
 
 export class DebugInfoModel implements DebugInfo {
@@ -37,6 +40,12 @@ export class DebugInfoModel implements DebugInfo {
 
     outdatedRemovedChatEventCount =
         DEFAULT_DEBUG_INFO.outdatedRemovedChatEventCount;
+
+    cleanedChatItemCount = DEFAULT_DEBUG_INFO.cleanedChatItemCount;
+
+    constructor() {
+        makeAutoObservable(this);
+    }
 
     addChatItemEleWidthMetric(value: number) {
         this.getChatItemEleWidthBenchmark = calculateBenchmark(
@@ -65,6 +74,10 @@ export class DebugInfoModel implements DebugInfo {
 
     addOutdatedRemovedChatEventCount(count: number) {
         this.outdatedRemovedChatEventCount += count;
+    }
+
+    addCleanedChatItemCount(count: number) {
+        this.cleanedChatItemCount += count;
     }
 
     reset() {

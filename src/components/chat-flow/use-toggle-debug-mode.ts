@@ -2,14 +2,14 @@ import { useEffect } from 'react';
 
 import { action, runInAction } from 'mobx';
 
-import { useDebugInfoStore } from '@/contexts/debug-info';
+import { useStore } from '@/contexts/root-store';
 import { useKeyboardToggle, useKeyboardEvent } from '@/hooks';
 
 const D_KEY = 68;
 const R_KEY = 82;
 
 export function useToggleDebugMode(): void {
-    const debugInfoStore = useDebugInfoStore();
+    const { debugInfoStore } = useStore();
 
     const { isActive } = useKeyboardToggle({
         shouldAlt: true,

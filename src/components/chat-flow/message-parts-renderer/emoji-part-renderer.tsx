@@ -2,10 +2,10 @@ import * as React from 'react';
 
 import { last } from 'lodash-es';
 
-import type { chatEvent } from '@/services';
+import type { EmojiPart } from '@/models/chat-item/types';
 
 type Props = {
-    emojiPart: chatEvent.EmojiPart;
+    emojiPart: EmojiPart;
 };
 
 const EmojiPartRenderer: React.FC<Props> = ({ emojiPart }) => {

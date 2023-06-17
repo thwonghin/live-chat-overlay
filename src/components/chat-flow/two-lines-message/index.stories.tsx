@@ -1,7 +1,11 @@
 import * as React from 'react';
 
+import type {
+    MembershipItem,
+    NormalChatItem,
+    SuperChatItem,
+} from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
-import type { chatEvent } from '@/services';
 
 import TwoLinesMessage from '.';
 
@@ -17,7 +21,7 @@ const avatars = [
 ];
 const authorName = 'Author Name';
 
-const superChatItem: chatEvent.SuperChatItem = {
+const superChatItem: SuperChatItem = {
     id: 'super-chat-message',
     messageParts: [{ text: 'This is a super chat message' }],
     avatars,
@@ -28,7 +32,7 @@ const superChatItem: chatEvent.SuperChatItem = {
     chatType: 'super-chat',
 };
 
-const membershipItem: chatEvent.MembershipItem = {
+const membershipItem: MembershipItem = {
     id: 'membership',
     authorBadges: [],
     messageParts: [{ text: 'Someone becomes a member.' }],
@@ -38,7 +42,7 @@ const membershipItem: chatEvent.MembershipItem = {
     chatType: 'membership',
 };
 
-const normalMessageItem: chatEvent.NormalChatItem = {
+const normalMessageItem: NormalChatItem = {
     id: 'super-chat-sticker',
     authorBadges: [],
     messageParts: [{ text: 'This is a normal message' }],

@@ -2,8 +2,17 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
+import {
+    isMembershipItem,
+    isNormalChatItem,
+    isSuperChatItem,
+} from '@/models/chat-item/mapper';
+import type {
+    NormalChatItem,
+    MembershipItem,
+    SuperChatItem,
+} from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
-import { chatEvent } from '@/services';
 
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
@@ -27,10 +36,7 @@ const Message = styled(MessagePartsRenderer)`
 `;
 
 type Props = {
-    chatItem:
-        | chatEvent.NormalChatItem
-        | chatEvent.MembershipItem
-        | chatEvent.SuperChatItem;
+    chatItem: NormalChatItem | MembershipItem | SuperChatItem;
     messageSettings: MessageSettings;
     // eslint-disable-next-line @typescript-eslint/ban-types
     onRender?: (ele: HTMLElement | null) => void;
@@ -47,12 +53,11 @@ const TwoLinesMessage: React.FC<Props> = ({
     const flexDirection = actualNumberOfLines === 2 ? 'column' : 'row';
 
     const bgColor =
-        chatEvent.isNormalChatItem(chatItem) ||
-        chatEvent.isMembershipItem(chatItem)
+        isNormalChatItem(chatItem) || isMembershipItem(chatItem)
             ? messageSettings.bgColor
             : chatItem.color;
 
-    const donationAmount = chatEvent.isSuperChatItem(chatItem)
+    const donationAmount = isSuperChatItem(chatItem)
         ? chatItem.donationAmount
         : undefined;
 

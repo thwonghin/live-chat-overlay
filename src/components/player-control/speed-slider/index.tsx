@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { useSettings } from '@/contexts/settings';
+import { useStore } from '@/contexts/root-store';
 import { youtube } from '@/utils';
 
 const minValue = 3;
@@ -69,7 +69,9 @@ type Props = {
 };
 
 const SpeedSlider: React.FC<Props> = observer(({ isHidden }) => {
-    const settings = useSettings();
+    const {
+        settingsStore: { settings },
+    } = useStore();
 
     const handleChange = useCallback<
         (event: Event, value: number | number[]) => void

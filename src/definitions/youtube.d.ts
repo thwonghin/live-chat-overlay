@@ -295,7 +295,7 @@ export type ReplayResponse = {
     continuationContents: ReplayContinuationContents;
 };
 
-export type YotubeChatResponse = LiveResponse | ReplayResponse;
+export type YoutubeChatResponse = LiveResponse | ReplayResponse;
 
 export type LiveInitData = {
     continuationContents: InitLiveContinuationContents;

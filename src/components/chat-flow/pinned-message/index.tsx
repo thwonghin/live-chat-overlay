@@ -4,8 +4,8 @@ import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled, { css } from 'styled-components';
 
+import type { PinnedChatItem } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
-import { type chatEvent } from '@/services';
 
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
@@ -54,7 +54,7 @@ const CloseIcon = styled(Icon)`
 `;
 
 type Props = {
-    chatItem: chatEvent.PinnedChatItem;
+    chatItem: PinnedChatItem;
     messageSettings: MessageSettings;
     onClickClose?: React.MouseEventHandler;
     // eslint-disable-next-line @typescript-eslint/ban-types

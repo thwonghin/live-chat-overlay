@@ -1,7 +1,7 @@
 import * as React from 'react';
 
+import type { PinnedChatItem } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
-import type { chatEvent } from '@/services';
 
 import PinnedMessage from '.';
 
@@ -17,7 +17,7 @@ const avatars = [
 ];
 const authorName = 'Author Name';
 
-const pinnedMessage: chatEvent.PinnedChatItem = {
+const pinnedMessage: PinnedChatItem = {
     id: 'pinned-chat',
     authorBadges: [],
     messageParts: [{ text: 'This is a pinned message' }],

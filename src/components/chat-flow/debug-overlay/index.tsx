@@ -1,21 +1,11 @@
 import * as React from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { useSelector, shallowEqual } from 'react-redux';
 import styled from 'styled-components';
 
-import type { RootState } from '@/app/live-chat-overlay/store';
-import { useDebugInfoStore } from '@/contexts/debug-info';
+import { useStore } from '@/contexts/root-store';
+import type { ChatItemModel } from '@/models/chat-item';
 import type { Benchmark } from '@/models/debug-info/types';
-
-type ChatEventDebugInfo = {
-    messagesCount: number;
-    messageByLineNumber: Array<{
-        row: number;
-        count: number;
-    }>;
-    doneItemsCount: number;
-};
 
 type RoundedBenchmark = {
     min: string;
@@ -74,39 +64,33 @@ const BenchmarkContainer = styled.div`
 `;
 
 type DebugOverlayLayoutProps = {
-    chatEventDebugInfo: ChatEventDebugInfo;
+    chatItemsByLineNumber: Map<number, ChatItemModel[]>;
     getEleWidthBenchmark: RoundedBenchmark;
     processXhrBenchmark: RoundedBenchmark;
     processChatEventBenchmark: RoundedBenchmark;
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
+    cleanedChatItemCount: number;
 };
 
 export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
-    chatEventDebugInfo,
+    chatItemsByLineNumber,
     getEleWidthBenchmark,
     processChatEventBenchmark,
     processXhrBenchmark,
     processChatEventQueueLength,
     outdatedRemovedChatEventCount,
+    cleanedChatItemCount,
 }) => {
     return (
         <>
             <DebugContainer>
-                <DebugText>
-                    {`Messages Count: ${chatEventDebugInfo.messagesCount}`}
-                </DebugText>
-                <DebugText>
-                    {`Done Items Count: ${chatEventDebugInfo.doneItemsCount}`}
-                </DebugText>
-                {chatEventDebugInfo.messageByLineNumber.length > 0 && (
-                    <DebugText>Message Count By Position:</DebugText>
-                )}
-                {chatEventDebugInfo.messageByLineNumber.map(
-                    ({ row, count }) => (
-                        <DebugText key={row}>
-                            {`${row + 1}: ${count}`}
-                        </DebugText>
+                <DebugText>Message Count By Position:</DebugText>
+                {Array.from(chatItemsByLineNumber.entries()).map(
+                    ([lineNumber, chatItems]) => (
+                        <DebugText key={lineNumber}>{`${lineNumber + 1}: ${
+                            (chatItems ?? []).length
+                        }`}</DebugText>
                     ),
                 )}
             </DebugContainer>
@@ -152,39 +136,28 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 <DebugText>
                     {`Removed Outdated Chat Event: ${outdatedRemovedChatEventCount}`}
                 </DebugText>
+                <DebugText>
+                    {`Cleaned Chat Item: ${cleanedChatItemCount}`}
+                </DebugText>
             </BenchmarkContainer>
         </>
     );
 };
 
 const DebugOverlay = observer(() => {
-    const chatEventDebugInfo = useSelector<RootState, ChatEventDebugInfo>(
-        (state) => ({
-            messagesCount: state.chatEvents.chatItems.length,
-            messageByLineNumber: Object.entries(
-                state.chatEvents.chatItemsByLineNumber,
-            ).map(([key, value]) => {
-                return {
-                    row: Number(key),
-                    count: (value ?? []).length,
-                };
-            }),
-            doneItemsCount: Object.values(
-                state.chatEvents.chatItemStateById,
-            ).filter((chatItemState) => chatItemState === 'finished').length,
-        }),
-        shallowEqual,
-    );
-
     const {
-        debugInfoModel: {
-            getChatItemEleWidthBenchmark,
-            processXhrBenchmark,
-            processChatEventBenchmark,
-            processChatEventQueueLength,
-            outdatedRemovedChatEventCount,
+        debugInfoStore: {
+            debugInfoModel: {
+                getChatItemEleWidthBenchmark,
+                processXhrBenchmark,
+                processChatEventBenchmark,
+                processChatEventQueueLength,
+                outdatedRemovedChatEventCount,
+                cleanedChatItemCount,
+            },
         },
-    } = useDebugInfoStore();
+        chatItemStore: { chatItemsByLineNumber },
+    } = useStore();
 
     const roundedGetEleWidthBenchmark = React.useMemo(
         () => roundBenchmark(getChatItemEleWidthBenchmark),
@@ -201,12 +174,13 @@ const DebugOverlay = observer(() => {
 
     return (
         <DebugOverlayLayout
-            chatEventDebugInfo={chatEventDebugInfo}
+            chatItemsByLineNumber={chatItemsByLineNumber}
             getEleWidthBenchmark={roundedGetEleWidthBenchmark}
             processChatEventBenchmark={roundedProcessXhrBenchmark}
             processXhrBenchmark={roundedProcessChatEventBenchmark}
             processChatEventQueueLength={processChatEventQueueLength}
             outdatedRemovedChatEventCount={outdatedRemovedChatEventCount}
+            cleanedChatItemCount={cleanedChatItemCount}
         />
     );
 });

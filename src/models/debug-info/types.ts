@@ -11,4 +11,5 @@ export type DebugInfo = {
     processChatEventBenchmark: Benchmark;
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
+    cleanedChatItemCount: number;
 };

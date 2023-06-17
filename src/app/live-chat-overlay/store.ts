@@ -1,9 +1,8 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
-import { popup, chatEvents } from '@/features';
+import { popup } from '@/features';
 
 const rootReducer = combineReducers({
-    chatEvents: chatEvents.reducer,
     popup: popup.reducer,
 });
 

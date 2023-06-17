@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
 import { useI18n } from '@/contexts/i18n';
-import { useSettings } from '@/contexts/settings';
+import { useStore } from '@/contexts/root-store';
 import { youtube } from '@/utils';
 
 import BtnTooltip from '../btn-tooltip';
@@ -22,7 +22,9 @@ const withSlashIconRatio =
     iconToBtnRatio * (faCommentHeight / faCommentSlashHeight);
 
 const ToggleBtn: React.FC = observer(() => {
-    const settings = useSettings();
+    const {
+        settingsStore: { settings },
+    } = useStore();
 
     const i18n = useI18n();
 

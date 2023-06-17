@@ -1,4 +1,4 @@
-import { isOutdatedChatItem } from '@/services/chat-event/response-observer/helpers';
+import { isOutdatedChatItem } from '@/stores/chat-item/helpers';
 
 const chatItemVideoTimestamp = 5000;
 

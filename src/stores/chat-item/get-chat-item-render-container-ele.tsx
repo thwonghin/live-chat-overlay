@@ -1,13 +1,10 @@
 import React, { useCallback } from 'react';
 
-import { isNil } from 'lodash-es';
 import { type Root, createRoot } from 'react-dom/client';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
-import { SettingsProvider } from '@/contexts/settings';
-import { type SettingsModel } from '@/models/settings';
-
-import { type ChatItem } from '../models';
+import { StoreProvider } from '@/contexts/root-store';
+import type { ChatItemModel } from '@/models/chat-item';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 
@@ -38,9 +35,9 @@ function getChatItemRenderContainerRoot(): {
 }
 
 const ChatItemRendererForWidth: React.FC<{
-    chatItem: ChatItem;
+    chatItem: ChatItemModel;
     // eslint-disable-next-line @typescript-eslint/ban-types
-    onRender: (chatItem: ChatItem, ele: HTMLElement | null) => void;
+    onRender: (chatItem: ChatItemModel, ele: HTMLElement | null) => void;
 }> = ({ chatItem, onRender }) => {
     const handleRender = useCallback(
         // eslint-disable-next-line @typescript-eslint/ban-types
@@ -50,63 +47,46 @@ const ChatItemRendererForWidth: React.FC<{
         [onRender, chatItem],
     );
 
-    return (
-        <ChatItemRenderer
-            chatItem={{
-                ...chatItem,
-                numberOfLines: 0,
-                addTimestamp: 0,
-                lineNumber: 0,
-            }}
-            onRender={handleRender}
-        />
-    );
+    return <ChatItemRenderer chatItem={chatItem} onRender={handleRender} />;
 };
 
 export async function assignChatItemRenderedWidth(
-    chatItems: ChatItem[],
-): Promise<ChatItem[]> {
+    chatItemModels: ChatItemModel[],
+): Promise<void> {
     const { root } = getChatItemRenderContainerRoot();
 
-    const chatElements = await new Promise<
-        Partial<Record<string, HTMLElement>>
-    >((resolve) => {
-        const chatElements: Partial<Record<string, HTMLElement>> = {};
+    const totalChatItemCount = chatItemModels.length;
+    let currentCount = 0;
 
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        const handleRender = (chatItem: ChatItem, ele: HTMLElement | null) => {
+    await new Promise<void>((resolve) => {
+        const handleRender = (
+            chatItem: ChatItemModel,
+            // eslint-disable-next-line @typescript-eslint/ban-types
+            ele: HTMLElement | null,
+        ) => {
             if (ele) {
-                chatElements[chatItem.id] = ele;
-                if (Object.keys(chatElements).length === chatItems.length) {
-                    resolve(chatElements);
+                chatItem.width =
+                    ele.getBoundingClientRect()?.width ?? undefined;
+                if (chatItem.width !== undefined) {
+                    currentCount++;
+                }
+
+                if (currentCount === totalChatItemCount) {
+                    resolve();
                 }
             }
         };
 
         root.render(
-            <SettingsProvider>
-                {chatItems.map((chatItem) => (
+            <StoreProvider>
+                {chatItemModels.map((chatItem) => (
                     <ChatItemRendererForWidth
-                        key={chatItem.id}
+                        key={chatItem.value.id}
                         chatItem={chatItem}
                         onRender={handleRender}
                     />
                 ))}
-            </SettingsProvider>,
+            </StoreProvider>,
         );
-    });
-
-    return chatItems.map((chatItem) => {
-        const rect = chatElements[chatItem.id]?.getBoundingClientRect();
-
-        const width = rect?.width;
-        if (isNil(width)) {
-            throw new Error('Missing width');
-        }
-
-        return {
-            ...chatItem,
-            width,
-        };
     });
 }

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { useSettings } from '@/contexts/settings';
+import { useStore } from '@/contexts/root-store';
 import {
     type MessageSettingsKey,
     type MessageSettings,
@@ -16,7 +16,9 @@ type Props = {
 
 const MessageSettingsInputForm: React.FC<Props> = observer(
     ({ messageSettingsKey }) => {
-        const settings = useSettings();
+        const {
+            settingsStore: { settings },
+        } = useStore();
 
         const handleSubmit = useCallback(
             (value: {

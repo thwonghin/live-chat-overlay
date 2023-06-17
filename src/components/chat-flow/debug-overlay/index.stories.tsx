@@ -1,6 +1,8 @@
 import * as React from 'react';
 
-import { DebugOverlayLayout } from './index';
+import { ChatItemModel } from '@/models/chat-item';
+
+import { DebugOverlayLayout } from '.';
 
 const settings = { title: 'DebugOverlay' };
 
@@ -10,16 +12,10 @@ export const DebugOverlay: React.FC = () => {
     return (
         <div style={{ width: 800, height: 800, position: 'relative' }}>
             <DebugOverlayLayout
-                chatEventDebugInfo={{
-                    messageByLineNumber: [
-                        {
-                            row: 1,
-                            count: 1,
-                        },
-                    ],
-                    doneItemsCount: 100,
-                    messagesCount: 100,
-                }}
+                chatItemsByLineNumber={
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    new Map([[1, [new ChatItemModel({} as any, 1)]]])
+                }
                 getEleWidthBenchmark={{
                     min: '100.00',
                     max: '200.00',
@@ -39,7 +35,8 @@ export const DebugOverlay: React.FC = () => {
                     count: 10,
                 }}
                 processChatEventQueueLength={100}
-                outdatedRemovedChatEventCount={100}
+                outdatedRemovedChatEventCount={200}
+                cleanedChatItemCount={300}
             />
         </div>
     );

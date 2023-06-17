@@ -1,11 +1,20 @@
 import type * as liveChatResponse from '@/definitions/youtube';
 import { assertNever, colorFromDecimal } from '@/utils';
 
-import type * as chatModel from '../models';
+import type {
+    NormalChatItem,
+    TextPart,
+    EmojiPart,
+    MessagePart,
+    MembershipItem,
+    SuperChatItem,
+    SuperStickerItem,
+    PinnedChatItem,
+} from '../types';
 
 function getAuthorTypeFromBadges(
     authorBadges?: liveChatResponse.AuthorBadge[],
-): chatModel.NormalChatItem['authorType'] {
+): NormalChatItem['authorType'] {
     if (!authorBadges) {
         return 'guest';
     }
@@ -18,7 +27,7 @@ function getAuthorTypeFromBadges(
         return 'member';
     }
 
-    return resolvedIconType.toLowerCase() as chatModel.NormalChatItem['authorType'];
+    return resolvedIconType.toLowerCase() as NormalChatItem['authorType'];
 }
 
 function isTextMessageRun(
@@ -33,17 +42,13 @@ function isEmojiMessageRun(
     return 'emoji' in run;
 }
 
-function mapTextMessagePart(
-    textRun: liveChatResponse.TextRun,
-): chatModel.TextPart {
+function mapTextMessagePart(textRun: liveChatResponse.TextRun): TextPart {
     return {
         text: textRun.text,
     };
 }
 
-function mapEmojiMessagePart(
-    emojiRun: liveChatResponse.EmojiRun,
-): chatModel.EmojiPart {
+function mapEmojiMessagePart(emojiRun: liveChatResponse.EmojiRun): EmojiPart {
     return {
         id: emojiRun.emoji.emojiId,
         thumbnails: emojiRun.emoji.image.thumbnails.map((v) => ({
@@ -55,9 +60,7 @@ function mapEmojiMessagePart(
     };
 }
 
-function mapMessagePart(
-    messageRun: liveChatResponse.MessageRun,
-): chatModel.MessagePart {
+function mapMessagePart(messageRun: liveChatResponse.MessageRun): MessagePart {
     if (isTextMessageRun(messageRun)) {
         return mapTextMessagePart(messageRun);
     }
@@ -108,7 +111,7 @@ export function mapLiveChatMembershipItemRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatMembershipItemRendererParameters): chatModel.MembershipItem {
+}: MapLiveChatMembershipItemRendererParameters): MembershipItem {
     return {
         id: renderer.id,
         messageParts: (
@@ -142,7 +145,7 @@ export function mapLiveChatPaidMessageItemRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatPaidMessageItemRendererParameters): chatModel.SuperChatItem {
+}: MapLiveChatPaidMessageItemRendererParameters): SuperChatItem {
     return {
         id: renderer.id,
         messageParts: (renderer.message?.runs ?? []).map(mapMessagePart),
@@ -173,7 +176,7 @@ export function mapLiveChatPaidStickerRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatPaidStickerRendererParameters): chatModel.SuperStickerItem {
+}: MapLiveChatPaidStickerRendererParameters): SuperStickerItem {
     return {
         id: renderer.id,
         avatars: renderer.authorPhoto.thumbnails,
@@ -204,7 +207,7 @@ export function mapLiveChatTextMessageRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatTextMessageRendererParameters): chatModel.NormalChatItem {
+}: MapLiveChatTextMessageRendererParameters): NormalChatItem {
     return {
         id: renderer.id,
         messageParts: renderer.message.runs.map(mapMessagePart),
@@ -228,7 +231,7 @@ export function mapPinnedLiveChatTextMessageRenderer({
     currentTimestampMs,
     playerTimestampMs,
     videoTimestampInMs,
-}: MapLiveChatTextMessageRendererParameters): chatModel.PinnedChatItem {
+}: MapLiveChatTextMessageRendererParameters): PinnedChatItem {
     return {
         ...mapLiveChatTextMessageRenderer({
             renderer,

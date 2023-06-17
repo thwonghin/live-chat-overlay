@@ -2,8 +2,8 @@ import * as React from 'react';
 
 import styled from 'styled-components';
 
-import { type MessageSettings } from '@/models/settings';
-import type { chatEvent } from '@/services';
+import type { SuperStickerItem } from '@/models/chat-item/types';
+import type { MessageSettings } from '@/models/settings';
 
 import AuthorChip from '../author-chip';
 
@@ -26,7 +26,7 @@ type Props = {
     // eslint-disable-next-line @typescript-eslint/ban-types
     onRender?: (ele: HTMLElement | null) => void;
     messageSettings: MessageSettings;
-    chatItem: chatEvent.SuperStickerItem;
+    chatItem: SuperStickerItem;
 };
 
 const SuperChatSticker: React.FC<Props> = ({
