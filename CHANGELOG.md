@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.13.6](https://github.com/thwonghin/live-chat-overlay/compare/v2.13.5...v2.13.6) (2023-06-17)
+
+
+### Bug Fixes
+
+* do not continue if chat response is empty ([#763](https://github.com/thwonghin/live-chat-overlay/issues/763)) ([a435548](https://github.com/thwonghin/live-chat-overlay/commit/a4355485c559eca3402fd86b582126a81952d81d))
+* more frequent chat ([#764](https://github.com/thwonghin/live-chat-overlay/issues/764)) ([5c8ad8f](https://github.com/thwonghin/live-chat-overlay/commit/5c8ad8fff0030d0506f89f416a798c3c2ea495ca))
+* wrap setting updates in action ([#765](https://github.com/thwonghin/live-chat-overlay/issues/765)) ([7a94ff0](https://github.com/thwonghin/live-chat-overlay/commit/7a94ff04741342bf7612a1b330d7e152456907ae))
+
 ### [2.13.5](https://github.com/thwonghin/live-chat-overlay/compare/v2.13.4...v2.13.5) (2023-06-13)
 
 
