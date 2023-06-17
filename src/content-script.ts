@@ -4,10 +4,9 @@ import browser from 'webextension-polyfill';
 import { youtube, injectScript } from '@/utils';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
-import { rootStore } from './stores';
+import { RootStore } from './stores';
 
 async function init(): Promise<void> {
-    await rootStore.settingsStore.init();
     injectScript(browser.runtime.getURL('src/live-chat-fetch-interceptor.js'));
 
     const initData = await youtube.getInitData(
@@ -16,10 +15,24 @@ async function init(): Promise<void> {
 
     await youtube.waitForPlayerReady();
 
-    const cleanupLiveChat = injectLiveChatOverlay(initData, browser);
+    const videoPlayerEle = youtube.getVideoPlayerEle();
+    if (!videoPlayerEle) {
+        throw new Error('Video Player Ele not found');
+    }
+
+    const videoEle = youtube.getVideoEle();
+    if (!videoEle) {
+        throw new Error('Video Ele not found');
+    }
+
+    const store = new RootStore(videoEle, videoPlayerEle);
+    await store.init();
+
+    const cleanupLiveChat = injectLiveChatOverlay(initData, browser, store);
 
     function cleanup(): void {
         cleanupLiveChat();
+        store.cleanup();
     }
 
     window.addEventListener('unload', cleanup);

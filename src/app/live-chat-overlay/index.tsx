@@ -6,8 +6,8 @@ import { ThemeProvider, StyleSheetManager } from 'styled-components';
 import type { Browser } from 'webextension-polyfill';
 
 import * as contexts from '@/contexts';
-import { StoreProvider } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
+import type { RootStore } from '@/stores';
 import { youtube } from '@/utils';
 
 import App from './app';
@@ -19,6 +19,7 @@ const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 export function injectLiveChatOverlay(
     initData: InitData,
     browser: Browser,
+    store: RootStore,
 ): () => void {
     const videoPlayerContainer = youtube.getVideoPlayerContainer();
     if (!videoPlayerContainer) {
@@ -31,11 +32,6 @@ export function injectLiveChatOverlay(
     }
 
     rightControlEle.style.display = 'flex';
-
-    const videoPlayerEle = youtube.getVideoPlayerEle();
-    if (!videoPlayerEle) {
-        throw new Error('Video Player Ele not found');
-    }
 
     const liveChatContainer = window.parent.document.createElement('div');
     liveChatContainer.id = OVERLAY_CONTAINER;
@@ -63,25 +59,22 @@ export function injectLiveChatOverlay(
 
     root.render(
         <StrictMode>
-            <StoreProvider>
+            <contexts.rootStore.StoreProvider store={store}>
                 <contexts.i18n.I18nProvider browser={browser}>
-                    <contexts.playerRect.PlayerRectProvider>
-                        <MuiThemeProvider theme={theme}>
-                            <StyleSheetManager target={styledInsertionPoint}>
-                                <ThemeProvider theme={theme}>
-                                    <App
-                                        initData={initData}
-                                        playerControlContainer={
-                                            playerControlContainer
-                                        }
-                                        playerEle={videoPlayerEle}
-                                    />
-                                </ThemeProvider>
-                            </StyleSheetManager>
-                        </MuiThemeProvider>
-                    </contexts.playerRect.PlayerRectProvider>
+                    <MuiThemeProvider theme={theme}>
+                        <StyleSheetManager target={styledInsertionPoint}>
+                            <ThemeProvider theme={theme}>
+                                <App
+                                    initData={initData}
+                                    playerControlContainer={
+                                        playerControlContainer
+                                    }
+                                />
+                            </ThemeProvider>
+                        </StyleSheetManager>
+                    </MuiThemeProvider>
                 </contexts.i18n.I18nProvider>
-            </StoreProvider>
+            </contexts.rootStore.StoreProvider>
         </StrictMode>,
     );
 

@@ -9,26 +9,18 @@ import MessageSettingsPopup from './message-settings-popup';
 
 type Props = {
     playerControlContainer: HTMLSpanElement;
-    playerEle: HTMLDivElement;
 };
 
 const PopupContainer: React.FC<Props> = observer(
-    ({ playerControlContainer, playerEle }) => {
+    ({ playerControlContainer }) => {
         const { uiStore } = useStore();
-
-        useEffect(
-            () => () => {
-                uiStore.reset();
-            },
-            [uiStore],
-        );
 
         return ReactDOM.createPortal(
             <MessageSettingsPopup
                 isHidden={uiStore.currentPopup !== 'message-settings'}
                 playerControlContainer={playerControlContainer}
             />,
-            playerEle,
+            uiStore.videoPlayerEle,
         );
     },
 );

@@ -8,21 +8,13 @@ import type { InitData } from '@/definitions/youtube';
 type Props = {
     initData: InitData;
     playerControlContainer: HTMLSpanElement;
-    playerEle: HTMLDivElement;
 };
 
-const App: React.FC<Props> = ({
-    initData,
-    playerControlContainer,
-    playerEle,
-}) => {
+const App: React.FC<Props> = ({ initData, playerControlContainer }) => {
     return (
         <>
             <ChatFlow initData={initData} />
-            <PopupContainer
-                playerControlContainer={playerControlContainer}
-                playerEle={playerEle}
-            />
+            <PopupContainer playerControlContainer={playerControlContainer} />
             <PlayerControl playerControlContainer={playerControlContainer} />
         </>
     );

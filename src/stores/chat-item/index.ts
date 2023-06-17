@@ -1,9 +1,13 @@
-import { makeAutoObservable, reaction, observable, runInAction } from 'mobx';
+import {
+    makeAutoObservable,
+    reaction,
+    observable,
+    runInAction,
+    type IReactionDisposer,
+} from 'mobx';
 
 import type {
     YoutubeChatResponse,
-    ReplayResponse,
-    LiveResponse,
     InitData,
     ReplayContinuationContents,
     LiveContinuationContents,
@@ -25,6 +29,7 @@ import {
 } from './helpers';
 import type { DebugInfoStore } from '../debug-info';
 import type { SettingsStore } from '../settings';
+import type { UiStore } from '../ui';
 
 export { CHAT_ITEM_RENDER_ID } from './get-chat-item-render-container-ele';
 
@@ -49,46 +54,67 @@ export class ChatItemStore {
     public readonly stickyChatItems = observable.array<ChatItemModel>();
 
     private readonly chatItemStatusById = new Map<string, boolean>();
+    private isInitiated = false;
     private mode = Mode.LIVE;
-    private isStarted = false;
     private tickId: number | undefined = undefined;
     private cleanDisplayedIntervalId: number | undefined = undefined;
     private readonly chatItemProcessQueue: ChatItemModel[] = [];
+    private readonly reactionDisposers: IReactionDisposer[] = [];
 
-    // eslint-disable-next-line max-params
     constructor(
         private readonly chatEventName: string,
-        private readonly videoEle: HTMLVideoElement,
-        private readonly videoPlayerEle: HTMLDivElement,
+        private readonly uiStore: UiStore,
         private readonly settingsStore: SettingsStore,
         private readonly debugInfoStore: DebugInfoStore,
     ) {
-        reaction(() => this.debugInfoStore.isDebugging, this.watchDebugStore);
         makeAutoObservable(this);
     }
 
     public async importInitData(initData: InitData): Promise<void> {
         this.mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
         await this.processChatItems(initData);
+        this.isInitiated = true;
     }
 
-    public start(): void {
-        if (this.isStarted) {
-            return;
-        }
-
-        this.isStarted = true;
+    public init(): void {
         window.addEventListener(this.chatEventName, this.onChatMessage);
+
+        this.reactionDisposers.push(
+            reaction(
+                () => this.debugInfoStore.isDebugging,
+                this.watchDebugStore,
+            ),
+        );
+        this.reactionDisposers.push(
+            reaction(
+                () => [
+                    this.uiStore.playerState.width,
+                    this.uiStore.playerState.height,
+                ],
+                this.resetNonStickyChatItems,
+            ),
+        );
+        this.reactionDisposers.push(
+            reaction(
+                () => this.uiStore.playerState.isPaused,
+                this.onPlayerPauseOrResume,
+            ),
+        );
+        this.reactionDisposers.push(
+            reaction(
+                () => this.uiStore.playerState.isSeeking,
+                this.onPlayerSeek,
+            ),
+        );
+
         this.createAllIntervals();
     }
 
-    public stop(): void {
-        if (!this.isStarted) {
-            return;
-        }
-
-        this.isStarted = false;
+    public cleanup(): void {
         window.removeEventListener(this.chatEventName, this.onChatMessage);
+        this.reactionDisposers.forEach((disposer) => {
+            disposer();
+        });
         this.clearAllIntervals();
     }
 
@@ -110,16 +136,6 @@ export class ChatItemStore {
         });
     }
 
-    public resetNonStickyChatItems(): void {
-        this.chatItemsByLineNumber.clear();
-        this.chatItemStatusById.clear();
-
-        // Add back sticky status
-        this.stickyChatItems.forEach((chatItem) => {
-            this.chatItemStatusById.set(chatItem.value.id, true);
-        });
-    }
-
     public startDebug(): void {
         this.updateDebugInfo({
             processChatEventQueueLength: this.chatItemProcessQueue.length,
@@ -133,6 +149,32 @@ export class ChatItemStore {
             (chatItem) => chatItem.value.id !== id,
         );
     }
+
+    private readonly onPlayerPauseOrResume = (): void => {
+        if (this.uiStore.playerState.isPaused) {
+            this.pause();
+        } else {
+            this.resume();
+        }
+    };
+
+    private readonly onPlayerSeek = (): void => {
+        if (this.uiStore.playerState.isSeeking) {
+            this.reset();
+        }
+    };
+
+    private readonly resetNonStickyChatItems = (): void => {
+        runInAction(() => {
+            this.chatItemsByLineNumber.clear();
+            this.chatItemStatusById.clear();
+
+            // Add back sticky status
+            this.stickyChatItems.forEach((chatItem) => {
+                this.chatItemStatusById.set(chatItem.value.id, true);
+            });
+        });
+    };
 
     private createAllIntervals() {
         this.clearAllIntervals();
@@ -163,7 +205,8 @@ export class ChatItemStore {
         currentTimestampMs: number;
     } {
         return {
-            playerTimestampMs: this.videoEle.currentTime * 1000,
+            playerTimestampMs:
+                this.uiStore.playerState.videoCurrentTimeInSecs * 1000,
             currentTimestampMs: Date.now(),
         };
     }
@@ -287,6 +330,10 @@ export class ChatItemStore {
     }
 
     private readonly dequeueAvailableChatItems = () => {
+        if (!this.isInitiated) {
+            return;
+        }
+
         runInAction(() => {
             while (this.dequeueChatItem()) {
                 continue;
@@ -300,7 +347,8 @@ export class ChatItemStore {
      * @returns {boolean} - Whether we can continue to dequeue
      */
     private dequeueChatItem(): boolean {
-        const currentPlayerTimeInMsc = (this.videoEle.currentTime ?? 0) * 1000;
+        const currentPlayerTimeInMsc =
+            this.uiStore.playerState.videoCurrentTimeInSecs * 1000;
 
         const currentTimeInUsec = Date.now() * 1000;
         this.cleanOutdatedChatItems({
@@ -345,7 +393,7 @@ export class ChatItemStore {
 
         const addTimestamp = Date.now();
         const { settings } = this.settingsStore;
-        const messageSettings = settings.getMessageSettings(chatItem.value);
+        const { messageSettings } = chatItem;
 
         if (messageSettings.isSticky) {
             chatItem.assignDisplayMeta(-1, addTimestamp);
@@ -365,7 +413,7 @@ export class ChatItemStore {
             elementWidth: chatItem.width,
             maxLineNumber: settings.totalNumberOfLines,
             flowTimeInSec: settings.flowTimeInSec,
-            containerWidth: this.getPlayerWidth(),
+            containerWidth: this.uiStore.playerState.width,
             displayNumberOfLines: chatItem.numberOfLines,
         });
 
@@ -420,11 +468,6 @@ export class ChatItemStore {
                 outdatedChatEventCount: beforeCount - afterCount,
             });
         });
-    }
-
-    private getPlayerWidth(): number {
-        const rect = this.videoPlayerEle.getBoundingClientRect();
-        return rect.width;
     }
 
     private readonly cleanDisplayedChatItems = (): void => {

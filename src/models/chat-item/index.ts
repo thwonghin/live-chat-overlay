@@ -6,7 +6,7 @@ import {
     isSuperChatItem,
 } from './mapper';
 import type { ChatItem } from './types';
-import type { SettingsModel } from '../settings';
+import type { MessageSettings, SettingsModel } from '../settings';
 
 export class ChatItemModel {
     static fromAction(
@@ -26,7 +26,7 @@ export class ChatItemModel {
                 ? 1
                 : messageSettings.numberOfLines;
 
-        return new ChatItemModel(chatItem, numberOfLines);
+        return new ChatItemModel(chatItem, messageSettings, numberOfLines);
     }
 
     width: number | undefined = undefined;
@@ -37,6 +37,7 @@ export class ChatItemModel {
 
     constructor(
         public readonly value: ChatItem,
+        public readonly messageSettings: MessageSettings,
         public readonly numberOfLines: number,
     ) {
         makeAutoObservable(this);
