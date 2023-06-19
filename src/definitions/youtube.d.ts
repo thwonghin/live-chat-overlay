@@ -204,7 +204,8 @@ export type AddBannerToLiveChatCommand = {
     bannerRenderer: {
         liveChatBannerRenderer: {
             contents: {
-                liveChatTextMessageRenderer: LiveChatTextMessageRenderer;
+                liveChatTextMessageRenderer?: LiveChatTextMessageRenderer;
+                liveChatBannerPollRenderer?: unknown;
             };
         };
     };
