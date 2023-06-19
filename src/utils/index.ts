@@ -1,6 +1,5 @@
 import { isNil } from 'lodash-es';
 
-export * from './event-emitter';
 export * as youtube from './youtube';
 
 export function assertNever(type: never): never {
@@ -102,4 +101,42 @@ export function filterInPlace<T>(
     while (j < array.length) {
         array.pop();
     }
+}
+
+type UseKeyboardToggleParameters = {
+    withAlt: boolean;
+    withCtrl: boolean;
+    key: string;
+    domToAttach: HTMLElement;
+    callback: () => void;
+};
+
+export function attachKeydownEventListener({
+    withAlt,
+    withCtrl,
+    key,
+    domToAttach,
+    callback,
+}: UseKeyboardToggleParameters): () => void {
+    const handleKeyDown = (ev: KeyboardEvent) => {
+        if (withAlt && !ev.altKey) {
+            return;
+        }
+
+        if (withCtrl && !ev.ctrlKey) {
+            return;
+        }
+
+        if (key.toLowerCase() !== ev.key.toLowerCase()) {
+            return;
+        }
+
+        callback();
+    };
+
+    domToAttach.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+        domToAttach.removeEventListener('keydown', handleKeyDown);
+    };
 }
