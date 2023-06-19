@@ -460,16 +460,6 @@ export class ChatItemStore {
             const beforeCount = this.chatItemProcessQueue.length;
 
             filterInPlace(this.chatItemProcessQueue, (chatItem) => {
-                const factor =
-                    getOutdatedFactor(chatItem.value) *
-                    (this.mode === Mode.LIVE ? 3 : 1);
-                const isOutdated = isOutdatedChatItem({
-                    factor,
-                    currentPlayerTimeInMsc: parameters.currentPlayerTimeInMsc,
-                    chatItemAtVideoTimestampInMs:
-                        chatItem.value.videoTimestampInMs,
-                });
-
                 if (!chatItem.isInitData) {
                     this.updateDebugInfo({
                         liveChatDelayInMs:
@@ -477,6 +467,18 @@ export class ChatItemStore {
                             chatItem.value.videoTimestampInMs,
                     });
                 }
+
+                if (this.mode === Mode.LIVE && !chatItem.isInitData) {
+                    return true;
+                }
+
+                const factor = getOutdatedFactor(chatItem.value);
+                const isOutdated = isOutdatedChatItem({
+                    factor,
+                    currentPlayerTimeInMsc: parameters.currentPlayerTimeInMsc,
+                    chatItemAtVideoTimestampInMs:
+                        chatItem.value.videoTimestampInMs,
+                });
 
                 return chatItem.value.chatType === 'pinned' || !isOutdated;
             });
