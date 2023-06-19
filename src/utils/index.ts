@@ -1,6 +1,5 @@
 import { isNil } from 'lodash-es';
 
-export * from './event-emitter';
 export * as youtube from './youtube';
 
 export function assertNever(type: never): never {
