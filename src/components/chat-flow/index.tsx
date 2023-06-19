@@ -1,18 +1,21 @@
-import React, { useCallback, useMemo, type CSSProperties } from 'react';
+import React, {
+    useCallback,
+    useMemo,
+    type CSSProperties,
+    useEffect,
+} from 'react';
 
 import { observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 
 import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
-import { useInitStores } from '@/hooks';
 import type { ChatItemModel } from '@/models/chat-item';
 import { CHAT_ITEM_RENDER_ID } from '@/stores/chat-item';
 
 import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';
 import MessageFlower from './message-flower';
-import { useToggleDebugMode } from './use-toggle-debug-mode';
 
 const Container = styled.div`
     position: relative;
@@ -32,9 +35,20 @@ type Props = {
     initData: InitData;
 };
 
+function useInitStores(initData: InitData): void {
+    const { chatItemStore } = useStore();
+
+    useEffect(() => {
+        // Need to init here because it needs to determine the width
+        // that depends on React
+
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        chatItemStore.importInitData(initData);
+    }, [initData, chatItemStore]);
+}
+
 const ChatFlow: React.FC<Props> = observer(({ initData }) => {
     useInitStores(initData);
-    useToggleDebugMode();
     const store = useStore();
     const {
         debugInfoStore,

@@ -29,11 +29,13 @@ export class RootStore {
         await this.settingsStore.init();
         this.uiStore.init();
         this.chatItemStore.init();
+        this.debugInfoStore.init();
     }
 
     cleanup() {
         this.settingsStore.cleanup();
         this.uiStore.cleanup();
         this.chatItemStore.cleanup();
+        this.debugInfoStore.cleanup();
     }
 }
