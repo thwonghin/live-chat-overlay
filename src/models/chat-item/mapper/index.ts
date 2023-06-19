@@ -82,7 +82,8 @@ export function mapAddChatItemActions({
 
     if (
         'bannerRenderer' in action &&
-        action.bannerRenderer.liveChatBannerRenderer
+        action.bannerRenderer.liveChatBannerRenderer.contents
+            .liveChatTextMessageRenderer
     ) {
         return mapPinnedLiveChatTextMessageRenderer({
             renderer:
