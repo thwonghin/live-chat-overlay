@@ -12,6 +12,7 @@ export class ChatItemModel {
     static fromAction(
         params: MapActionsParameters,
         settings: SettingsModel,
+        isInitData: boolean,
     ): ChatItemModel | undefined {
         const chatItem = mapAddChatItemActions(params);
 
@@ -26,7 +27,12 @@ export class ChatItemModel {
                 ? 1
                 : messageSettings.numberOfLines;
 
-        return new ChatItemModel(chatItem, messageSettings, numberOfLines);
+        return new ChatItemModel(
+            chatItem,
+            messageSettings,
+            numberOfLines,
+            isInitData,
+        );
     }
 
     width: number | undefined = undefined;
@@ -39,6 +45,7 @@ export class ChatItemModel {
         public readonly value: ChatItem,
         public readonly messageSettings: MessageSettings,
         public readonly numberOfLines: number,
+        public readonly isInitData: boolean,
     ) {
         makeAutoObservable(this);
     }

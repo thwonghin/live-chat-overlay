@@ -28,6 +28,7 @@ export function mapChatItemsFromReplayResponse(
     timeInfo: TimeInfo,
     continuationContents: ReplayContinuationContents,
     settingsModel: SettingsModel,
+    isInitData: boolean,
 ): ChatItemModel[] {
     return (continuationContents.liveChatContinuation.actions ?? [])
         .map((a) => a.replayChatItemAction)
@@ -52,6 +53,7 @@ export function mapChatItemsFromReplayResponse(
                             videoTimestampInMs,
                         },
                         settingsModel,
+                        isInitData,
                     ),
                 )
                 .filter(isNotNil);
@@ -64,6 +66,7 @@ export function mapChatItemsFromLiveResponse(
     timeInfo: TimeInfo,
     continuationContents: LiveContinuationContents,
     settingsModel: SettingsModel,
+    isInitData: boolean,
 ): ChatItemModel[] {
     return (continuationContents.liveChatContinuation.actions ?? [])
         .map((v) => v.addChatItemAction ?? v.addBannerToLiveChatCommand)
@@ -76,6 +79,7 @@ export function mapChatItemsFromLiveResponse(
                     playerTimestampMs: timeInfo.playerTimestampMs,
                 },
                 settingsModel,
+                isInitData,
             ),
         )
         .filter(isNotNil);

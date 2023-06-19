@@ -10,5 +10,6 @@ export function calculateBenchmark(
         max: Math.max(oldBenchmark.max, newValue),
         avg: (oldBenchmark.avg * oldBenchmark.count + newValue) / newCount,
         count: newCount,
+        latest: newValue,
     };
 }
