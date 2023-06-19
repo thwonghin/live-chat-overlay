@@ -3,6 +3,7 @@ export type Benchmark = {
     max: number;
     avg: number;
     count: number;
+    latest: number;
 };
 
 export type DebugInfo = {
@@ -12,4 +13,5 @@ export type DebugInfo = {
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
     cleanedChatItemCount: number;
+    liveChatDelay: Benchmark;
 };

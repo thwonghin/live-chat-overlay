@@ -40,6 +40,7 @@ type DebugInfo = Partial<{
     outdatedChatEventCount: number;
     cleanedChatItemCount: number;
     getEleWidthBenchmark: number;
+    liveChatDelayInMs: number;
 }>;
 
 const DEQUEUE_INTERVAL = 1000 / 60; // 5 FPS
@@ -252,6 +253,12 @@ export class ChatItemStore {
                     info.cleanedChatItemCount,
                 );
             }
+
+            if (info.liveChatDelayInMs) {
+                this.debugInfoStore.debugInfoModel.addLiveChatDelay(
+                    info.liveChatDelayInMs,
+                );
+            }
         });
     }
 
@@ -287,7 +294,9 @@ export class ChatItemStore {
                 return;
             }
 
-            if (youtube.isInitData(response)) {
+            const isInitData = youtube.isInitData(response);
+
+            if (isInitData) {
                 this.reset();
             }
 
@@ -299,11 +308,13 @@ export class ChatItemStore {
                               timeInfo,
                               continuationContents as ReplayContinuationContents,
                               this.settingsStore.settings,
+                              isInitData,
                           )
                         : mapChatItemsFromLiveResponse(
                               timeInfo,
                               continuationContents as LiveContinuationContents,
                               this.settingsStore.settings,
+                              isInitData,
                           );
 
                 const { runtime: getEleRuntime } = await benchmarkAsync(
@@ -449,9 +460,19 @@ export class ChatItemStore {
             const beforeCount = this.chatItemProcessQueue.length;
 
             filterInPlace(this.chatItemProcessQueue, (chatItem) => {
-                const factor =
-                    getOutdatedFactor(chatItem.value) *
-                    (this.mode === Mode.LIVE ? 3 : 1);
+                if (!chatItem.isInitData) {
+                    this.updateDebugInfo({
+                        liveChatDelayInMs:
+                            parameters.currentPlayerTimeInMsc -
+                            chatItem.value.videoTimestampInMs,
+                    });
+                }
+
+                if (this.mode === Mode.LIVE && !chatItem.isInitData) {
+                    return true;
+                }
+
+                const factor = getOutdatedFactor(chatItem.value);
                 const isOutdated = isOutdatedChatItem({
                     factor,
                     currentPlayerTimeInMsc: parameters.currentPlayerTimeInMsc,

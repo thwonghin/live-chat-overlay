@@ -12,6 +12,7 @@ type RoundedBenchmark = {
     max: string;
     avg: string;
     count: number;
+    latest: string;
 };
 
 function roundBenchmark(benchmark: Benchmark): RoundedBenchmark {
@@ -20,6 +21,7 @@ function roundBenchmark(benchmark: Benchmark): RoundedBenchmark {
         max: benchmark.max.toFixed(2),
         avg: benchmark.avg.toFixed(2),
         count: benchmark.count,
+        latest: benchmark.latest.toFixed(2),
     };
 }
 
@@ -34,6 +36,10 @@ function renderBenchmark(
         {
             key: 'avg',
             text: `avg: ${benchmark.avg}, count: ${benchmark.count}`,
+        },
+        {
+            key: 'latest',
+            text: `latest: ${benchmark.latest}`,
         },
     ];
 }
@@ -71,6 +77,7 @@ type DebugOverlayLayoutProps = {
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
     cleanedChatItemCount: number;
+    liveChatDelay: RoundedBenchmark;
 };
 
 export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
@@ -81,6 +88,7 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
     processChatEventQueueLength,
     outdatedRemovedChatEventCount,
     cleanedChatItemCount,
+    liveChatDelay,
 }) => {
     return (
         <>
@@ -136,6 +144,14 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 <DebugText>
                     {`Removed Outdated Chat Event: ${outdatedRemovedChatEventCount}`}
                 </DebugText>
+                {liveChatDelay.count !== 0 && (
+                    <>
+                        <DebugText>Live Chat Delay (s):</DebugText>
+                        {renderBenchmark(liveChatDelay).map(({ key, text }) => (
+                            <DebugText key={key}>{text}</DebugText>
+                        ))}
+                    </>
+                )}
                 <DebugText>
                     {`Cleaned Chat Item: ${cleanedChatItemCount}`}
                 </DebugText>
@@ -154,6 +170,7 @@ const DebugOverlay = observer(() => {
                 processChatEventQueueLength,
                 outdatedRemovedChatEventCount,
                 cleanedChatItemCount,
+                liveChatDelay,
             },
         },
         chatItemStore: { chatItemsByLineNumber },
@@ -171,6 +188,10 @@ const DebugOverlay = observer(() => {
         () => roundBenchmark(processChatEventBenchmark),
         [processChatEventBenchmark],
     );
+    const roundedLiveChatDelay = React.useMemo(
+        () => roundBenchmark(liveChatDelay),
+        [liveChatDelay],
+    );
 
     return (
         <DebugOverlayLayout
@@ -181,6 +202,7 @@ const DebugOverlay = observer(() => {
             processChatEventQueueLength={processChatEventQueueLength}
             outdatedRemovedChatEventCount={outdatedRemovedChatEventCount}
             cleanedChatItemCount={cleanedChatItemCount}
+            liveChatDelay={roundedLiveChatDelay}
         />
     );
 });
