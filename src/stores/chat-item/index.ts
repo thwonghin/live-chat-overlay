@@ -254,7 +254,8 @@ export class ChatItemStore {
                 );
             }
 
-            if (info.liveChatDelayInMs) {
+            // Meaningless to measure this in replay mode
+            if (this.mode === Mode.LIVE && info.liveChatDelayInMs) {
                 this.debugInfoStore.debugInfoModel.addLiveChatDelay(
                     info.liveChatDelayInMs,
                 );
@@ -361,16 +362,27 @@ export class ChatItemStore {
         const currentPlayerTimeInMsc =
             this.uiStore.playerState.videoCurrentTimeInSecs * 1000;
 
-        const currentTimeInUsec = Date.now() * 1000;
-        this.cleanOutdatedChatItems({
-            currentPlayerTimeInMsc,
-            currentTimeInUsec,
-        });
-
         const chatItem = this.chatItemProcessQueue[0];
 
         if (!chatItem) {
             return false;
+        }
+
+        // Somehow duplicated
+        if (this.chatItemStatusById.get(chatItem.value.id)) {
+            this.chatItemProcessQueue.shift();
+            return true;
+        }
+
+        // Outdated, continue next dequeue
+        if (this.isOutdatedChatItem(chatItem, currentPlayerTimeInMsc)) {
+            this.updateDebugInfo({
+                outdatedChatEventCount: 1,
+                liveChatDelayInMs:
+                    currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
+            });
+            this.chatItemProcessQueue.shift();
+            return true;
         }
 
         const { result: isTime, runtime } = benchmark(() => {
@@ -383,23 +395,18 @@ export class ChatItemStore {
             );
         }, this.debugInfoStore.isDebugging);
 
-        if (!isTime) {
-            this.updateDebugInfo({
-                processChatEventMs: runtime,
-                processChatEventQueueLength: this.chatItemProcessQueue.length,
-            });
-            return false;
-        }
-
-        // Somehow duplicated
-        if (this.chatItemStatusById.get(chatItem.value.id)) {
-            this.chatItemProcessQueue.shift();
-            return true;
-        }
-
         this.updateDebugInfo({
             processChatEventMs: runtime,
             processChatEventQueueLength: this.chatItemProcessQueue.length,
+        });
+
+        if (!isTime) {
+            return false;
+        }
+
+        this.updateDebugInfo({
+            liveChatDelayInMs:
+                currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
         });
 
         const addTimestamp = Date.now();
@@ -452,42 +459,23 @@ export class ChatItemStore {
         return true;
     }
 
-    private cleanOutdatedChatItems(parameters: {
-        currentTimeInUsec: number;
-        currentPlayerTimeInMsc: number;
-    }): void {
-        runInAction(() => {
-            const beforeCount = this.chatItemProcessQueue.length;
+    private isOutdatedChatItem(
+        chatItem: ChatItemModel,
+        currentPlayerTimeInMsc: number,
+    ): boolean {
+        if (chatItem.value.chatType === 'pinned') {
+            return false;
+        }
 
-            filterInPlace(this.chatItemProcessQueue, (chatItem) => {
-                if (!chatItem.isInitData) {
-                    this.updateDebugInfo({
-                        liveChatDelayInMs:
-                            parameters.currentPlayerTimeInMsc -
-                            chatItem.value.videoTimestampInMs,
-                    });
-                }
+        if (this.mode === Mode.LIVE && !chatItem.isInitData) {
+            return false;
+        }
 
-                if (this.mode === Mode.LIVE && !chatItem.isInitData) {
-                    return true;
-                }
-
-                const factor = getOutdatedFactor(chatItem.value);
-                const isOutdated = isOutdatedChatItem({
-                    factor,
-                    currentPlayerTimeInMsc: parameters.currentPlayerTimeInMsc,
-                    chatItemAtVideoTimestampInMs:
-                        chatItem.value.videoTimestampInMs,
-                });
-
-                return chatItem.value.chatType === 'pinned' || !isOutdated;
-            });
-
-            const afterCount = this.chatItemProcessQueue.length;
-
-            this.updateDebugInfo({
-                outdatedChatEventCount: beforeCount - afterCount,
-            });
+        const factor = getOutdatedFactor(chatItem.value);
+        return isOutdatedChatItem({
+            factor,
+            currentPlayerTimeInMsc,
+            chatItemAtVideoTimestampInMs: chatItem.value.videoTimestampInMs,
         });
     }
 
