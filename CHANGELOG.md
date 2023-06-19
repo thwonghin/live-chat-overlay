@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.13.7](https://github.com/thwonghin/live-chat-overlay/compare/v2.13.6...v2.13.7) (2023-06-19)
+
+
+### Bug Fixes
+
+* cannot show chat due to having poll ([#767](https://github.com/thwonghin/live-chat-overlay/issues/767)) ([75fecc4](https://github.com/thwonghin/live-chat-overlay/commit/75fecc4c10df42a93b838383a7b46ed17fffccac))
+* not throttling chat in live mode ([#768](https://github.com/thwonghin/live-chat-overlay/issues/768)) ([6bc9d4b](https://github.com/thwonghin/live-chat-overlay/commit/6bc9d4b58c8a942eff7886725f35d4797052db00))
+
 ### [2.13.6](https://github.com/thwonghin/live-chat-overlay/compare/v2.13.5...v2.13.6) (2023-06-17)
 
 
