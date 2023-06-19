@@ -30,6 +30,7 @@ describe('calculateBenchmark', () => {
                 max: parameters.max,
                 avg: parameters.avg,
                 count: parameters.count,
+                latest: parameters.value,
             };
 
             const expectedResult: Benchmark = {
@@ -37,6 +38,7 @@ describe('calculateBenchmark', () => {
                 max: parameters.nextMax,
                 avg: parameters.nextAvg,
                 count: parameters.nextCount,
+                latest: parameters.value,
             };
 
             const result = calculateBenchmark(nowBenchmark, parameters.value);
