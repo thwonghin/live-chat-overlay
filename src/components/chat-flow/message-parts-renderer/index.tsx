@@ -11,8 +11,8 @@ import EmojiPartRenderer from './emoji-part-renderer';
 import TextPartRenderer from './text-part-renderer';
 
 type Props = {
-    className?: string;
-    messageParts: MessagePart[];
+    readonly className?: string;
+    readonly messageParts: MessagePart[];
 };
 
 const MessagePartsRenderer: React.FC<Props> = ({ messageParts, className }) => {

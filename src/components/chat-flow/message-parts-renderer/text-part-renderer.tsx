@@ -3,7 +3,7 @@ import * as React from 'react';
 import type { TextPart } from '@/models/chat-item/types';
 
 type Props = {
-    textPart: TextPart;
+    readonly textPart: TextPart;
 };
 
 const TextPartRenderer: React.FC<Props> = ({ textPart }) => {

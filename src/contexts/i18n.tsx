@@ -9,8 +9,8 @@ export function useI18n(): I18n.Static {
 }
 
 type Props = {
-    browser: Browser;
-    children: React.ReactNode;
+    readonly browser: Browser;
+    readonly children: React.ReactNode;
 };
 
 export const I18nProvider: React.FC<Props> = ({ browser, children }) => {

@@ -34,9 +34,12 @@ function getChatItemRenderContainerRoot(): {
 }
 
 const ChatItemRendererForWidth: React.FC<{
-    chatItem: ChatItemModel;
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    onRender: (chatItem: ChatItemModel, ele: HTMLElement | null) => void;
+    readonly chatItem: ChatItemModel;
+
+    readonly onRender: (
+        chatItem: ChatItemModel,
+        ele: HTMLElement | undefined,
+    ) => void;
 }> = ({ chatItem, onRender }) => {
     const handleRender = useCallback(
         // eslint-disable-next-line @typescript-eslint/ban-types

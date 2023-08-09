@@ -54,11 +54,11 @@ const CloseIcon = styled(Icon)`
 `;
 
 type Props = {
-    chatItem: PinnedChatItem;
-    messageSettings: MessageSettings;
-    onClickClose?: React.MouseEventHandler;
+    readonly chatItem: PinnedChatItem;
+    readonly messageSettings: MessageSettings;
+    readonly onClickClose?: React.MouseEventHandler;
     // eslint-disable-next-line @typescript-eslint/ban-types
-    onRender?: (ele: HTMLElement | null) => void;
+    readonly onRender?: (ele: HTMLElement | null) => void;
 };
 
 const PinnedMessage: React.FC<Props> = ({

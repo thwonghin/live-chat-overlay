@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';

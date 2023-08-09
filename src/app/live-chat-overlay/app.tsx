@@ -6,8 +6,8 @@ import PopupContainer from '@/components/popup';
 import type { InitData } from '@/definitions/youtube';
 
 type Props = {
-    initData: InitData;
-    playerControlContainer: HTMLSpanElement;
+    readonly initData: InitData;
+    readonly playerControlContainer: HTMLSpanElement;
 };
 
 const App: React.FC<Props> = ({ initData, playerControlContainer }) => {

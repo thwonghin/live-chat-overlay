@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import {
     isMembershipItem,
@@ -36,10 +36,10 @@ const Message = styled(MessagePartsRenderer)`
 `;
 
 type Props = {
-    chatItem: NormalChatItem | MembershipItem | SuperChatItem;
-    messageSettings: MessageSettings;
+    readonly chatItem: NormalChatItem | MembershipItem | SuperChatItem;
+    readonly messageSettings: MessageSettings;
     // eslint-disable-next-line @typescript-eslint/ban-types
-    onRender?: (ele: HTMLElement | null) => void;
+    readonly onRender?: (ele: HTMLElement | null) => void;
 };
 
 const TwoLinesMessage: React.FC<Props> = ({

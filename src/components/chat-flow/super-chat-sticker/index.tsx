@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import type { SuperStickerItem } from '@/models/chat-item/types';
 import type { MessageSettings } from '@/models/settings';
@@ -24,9 +24,9 @@ const Message = styled.span`
 
 type Props = {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    onRender?: (ele: HTMLElement | null) => void;
-    messageSettings: MessageSettings;
-    chatItem: SuperStickerItem;
+    readonly onRender?: (ele: HTMLElement | null) => void;
+    readonly messageSettings: MessageSettings;
+    readonly chatItem: SuperStickerItem;
 };
 
 const SuperChatSticker: React.FC<Props> = ({
