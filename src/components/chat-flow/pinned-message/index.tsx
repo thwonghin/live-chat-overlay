@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled, { css } from 'styled-components';
+import { styled, css } from 'styled-components';
 
 import type { PinnedChatItem } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
