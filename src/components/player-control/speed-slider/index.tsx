@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { Slider, sliderClasses } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { observer } from 'mobx-react-lite';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { useStore } from '@/contexts/root-store';
@@ -28,7 +28,9 @@ const StyledSlider = styled(Slider)<{ $isHidden: boolean }>`
     color: #fff;
     border-radius: 0;
     will-change: width;
-    transition: cubic-bezier(0.4, 0, 1, 1), width 0.2s;
+    transition:
+        cubic-bezier(0.4, 0, 1, 1),
+        width 0.2s;
 
     & .${sliderClasses.thumb} {
         .${youtube.CLASS_BIG_MODE} & {

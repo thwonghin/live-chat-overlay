@@ -1,5 +1,5 @@
 import { Tooltip, tooltipClasses, type TooltipProps } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { youtube } from '@/utils';
 

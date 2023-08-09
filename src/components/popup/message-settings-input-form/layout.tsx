@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { TextField, Button, FormHelperText } from '@mui/material';
 import { useFormik } from 'formik';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { useI18n } from '@/contexts/i18n';
 import { type MessageSettings } from '@/models/settings';
@@ -18,13 +18,13 @@ const Row = styled.div`
 `;
 
 type Props = {
-    globalOpacity: number;
-    messageSettings: MessageSettings;
-    onSubmit: (value: {
+    readonly globalOpacity: number;
+    readonly messageSettings: MessageSettings;
+    readonly onSubmit: (value: {
         globalOpacity: number;
         messageSettings: MessageSettings;
     }) => void;
-    isBackgroundColorEditable: boolean;
+    readonly isBackgroundColorEditable: boolean;
 };
 
 const MessageSettingsInputFormLayout: React.FC<Props> = ({

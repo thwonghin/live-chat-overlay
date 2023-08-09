@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { observer } from 'mobx-react-lite';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { useStore } from '@/contexts/root-store';
 import type { ChatItemModel } from '@/models/chat-item';
@@ -70,14 +70,14 @@ const BenchmarkContainer = styled.div`
 `;
 
 type DebugOverlayLayoutProps = {
-    chatItemsByLineNumber: Map<number, ChatItemModel[]>;
-    getEleWidthBenchmark: RoundedBenchmark;
-    processXhrBenchmark: RoundedBenchmark;
-    processChatEventBenchmark: RoundedBenchmark;
-    processChatEventQueueLength: number;
-    outdatedRemovedChatEventCount: number;
-    cleanedChatItemCount: number;
-    liveChatDelay: RoundedBenchmark;
+    readonly chatItemsByLineNumber: Map<number, ChatItemModel[]>;
+    readonly getEleWidthBenchmark: RoundedBenchmark;
+    readonly processXhrBenchmark: RoundedBenchmark;
+    readonly processChatEventBenchmark: RoundedBenchmark;
+    readonly processChatEventQueueLength: number;
+    readonly outdatedRemovedChatEventCount: number;
+    readonly cleanedChatItemCount: number;
+    readonly liveChatDelay: RoundedBenchmark;
 };
 
 export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({

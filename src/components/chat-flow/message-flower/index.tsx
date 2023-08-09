@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState, useLayoutEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { useStore } from '@/contexts/root-store';
 import { useRect } from '@/hooks';

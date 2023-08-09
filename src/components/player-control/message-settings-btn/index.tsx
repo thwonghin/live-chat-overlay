@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import { useI18n } from '@/contexts/i18n';
 import { useStore } from '@/contexts/root-store';

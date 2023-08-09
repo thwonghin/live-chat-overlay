@@ -6,7 +6,7 @@ import {
     MenuItem,
     type SelectChangeEvent,
 } from '@mui/material';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 import type { I18n } from 'webextension-polyfill';
 
 import { useI18n } from '@/contexts/i18n';

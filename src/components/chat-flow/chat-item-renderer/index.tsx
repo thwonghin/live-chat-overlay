@@ -15,9 +15,9 @@ import TwoLinesMessage from '../two-lines-message';
 
 type Props = {
     // eslint-disable-next-line @typescript-eslint/ban-types
-    onRender?: (ele: HTMLElement | null) => void;
-    chatItem: ChatItemModel;
-    onClickClose?: React.MouseEventHandler;
+    readonly onRender?: (ele: HTMLElement | null) => void;
+    readonly chatItem: ChatItemModel;
+    readonly onClickClose?: React.MouseEventHandler;
 };
 
 const ChatItemRenderer: React.FC<Props> = ({

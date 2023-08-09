@@ -1,15 +1,15 @@
 import * as React from 'react';
 
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 import type { Thumbnail } from '@/models/chat-item/types';
-import type { MessageSettings } from '@/models/settings';
+import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
 
 type Props = {
-    avatars: Thumbnail[];
-    name: string;
-    authorDisplaySetting: MessageSettings['authorDisplay'];
-    donationAmount?: string;
+    readonly avatars: Thumbnail[];
+    readonly name: string;
+    readonly authorDisplaySetting: MessageSettings['authorDisplay'];
+    readonly donationAmount?: string;
 };
 
 const Container = styled.div`
@@ -42,10 +42,11 @@ const AuthorChip: React.FC<Props> = ({
     donationAmount,
 }) => {
     const isAvatarShown =
-        authorDisplaySetting === 'all' ||
-        authorDisplaySetting === 'avatar-only';
+        authorDisplaySetting === AuthorDisplayMethod.ALL ||
+        authorDisplaySetting === AuthorDisplayMethod.AVATAR_ONLY;
     const isNameShown =
-        authorDisplaySetting === 'all' || authorDisplaySetting === 'name-only';
+        authorDisplaySetting === AuthorDisplayMethod.ALL ||
+        authorDisplaySetting === AuthorDisplayMethod.NAME_ONLY;
 
     if (!isAvatarShown && !isNameShown && !donationAmount) {
         return null;

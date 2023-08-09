@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styled, { css } from 'styled-components';
+import { styled, css } from 'styled-components';
 
 import type { PinnedChatItem } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
@@ -54,11 +54,11 @@ const CloseIcon = styled(Icon)`
 `;
 
 type Props = {
-    chatItem: PinnedChatItem;
-    messageSettings: MessageSettings;
-    onClickClose?: React.MouseEventHandler;
+    readonly chatItem: PinnedChatItem;
+    readonly messageSettings: MessageSettings;
+    readonly onClickClose?: React.MouseEventHandler;
     // eslint-disable-next-line @typescript-eslint/ban-types
-    onRender?: (ele: HTMLElement | null) => void;
+    readonly onRender?: (ele: HTMLElement | null) => void;
 };
 
 const PinnedMessage: React.FC<Props> = ({

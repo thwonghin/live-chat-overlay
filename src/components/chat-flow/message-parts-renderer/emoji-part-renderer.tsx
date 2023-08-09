@@ -5,7 +5,7 @@ import { last } from 'lodash-es';
 import type { EmojiPart } from '@/models/chat-item/types';
 
 type Props = {
-    emojiPart: EmojiPart;
+    readonly emojiPart: EmojiPart;
 };
 
 const EmojiPartRenderer: React.FC<Props> = ({ emojiPart }) => {
