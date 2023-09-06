@@ -31,6 +31,13 @@ export function injectLiveChatOverlay(
         throw new Error('Right Player Control not found.');
     }
 
+    const styleSheet = browser.runtime.getURL('style.css');
+    const cssTag = window.parent.document.createElement('link');
+    cssTag.type = 'text/css';
+    cssTag.rel = 'stylesheet';
+    cssTag.href = styleSheet;
+    window.parent.document.head.append(cssTag);
+
     rightControlEle.style.display = 'flex';
 
     const liveChatContainer = window.parent.document.createElement('div');

@@ -79,6 +79,7 @@
         "swc-loader": "^0.2.3",
         "type-fest": "^4.2.0",
         "typescript": "^5.1.6",
+        "typescript-plugin-css-modules": "^5.0.1",
         "vite": "^4.4.9",
         "vite-plugin-web-extension": "^3.2.0",
         "vite-tsconfig-paths": "^4.2.0"

@@ -24,12 +24,15 @@ function generateManifest() {
             manifest.web_accessible_resources.map(({ resources, ...rest }) => {
                 return {
                     ...rest,
-                    resources: resources.map((filePath) => {
-                        if (filePath.endsWith('.ts')) {
-                            return `${filePath.slice(0, -2)}js`;
-                        }
-                        return filePath;
-                    }),
+                    resources: [
+                        'style.css',
+                        ...resources.map((filePath) => {
+                            if (filePath.endsWith('.ts')) {
+                                return `${filePath.slice(0, -2)}js`;
+                            }
+                            return filePath;
+                        }),
+                    ],
                 };
             });
     }
