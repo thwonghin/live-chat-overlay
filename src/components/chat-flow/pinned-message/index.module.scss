@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    align-items: center;
+    margin-top: 0.2em;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.icon {
+    width: 1em;
+    height: 0.5em;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.message {
+    display: inline;
+    padding: 1px 10px;
+    font-size: 0.8em;
+
+    img {
+        width: 1em;
+        height: 1em;
+        vertical-align: middle;
+    }
+}
+
+.message--truncated {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.close-icon {
+    @extend .icon;
+    margin-left: auto;
+
+    /* Youtube disabled all svg pointer events */
+    pointer-events: all !important;
+}

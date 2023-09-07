@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import { styled } from 'styled-components';
+import cx from 'classnames';
 
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
@@ -8,31 +8,7 @@ import { useNativeStopKeydownPropagation } from '@/hooks';
 import { type MessageSettingsKey } from '@/models/settings';
 import { youtube } from '@/utils';
 
-const Container = styled.div<{ $isHidden: boolean }>`
-    right: 12px;
-    bottom: 49px;
-    z-index: 71;
-    width: 340px;
-    height: 364px;
-
-    .${youtube.CLASS_BIG_MODE} & {
-        right: 24px;
-        bottom: 70px;
-    }
-
-    ${({ $isHidden }) => ($isHidden ? 'display: none;' : '')}
-`;
-
-const NestContainer = styled.div`
-    width: 100%;
-    height: 100%;
-`;
-
-const Content = styled.div`
-    width: 100%;
-    height: 100%;
-    padding: 0 16px;
-`;
+import styles from './index.module.scss';
 
 type Props = {
     isHidden: boolean;
@@ -49,13 +25,14 @@ const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
     useNativeStopKeydownPropagation(containerRef);
 
     return (
-        <Container
+        <div
             ref={containerRef}
-            $isHidden={isHidden}
-            className={youtube.CLASS_POPUP}
+            className={cx(youtube.CLASS_POPUP, styles.container, {
+                [styles['container--hidden']]: isHidden,
+            })}
         >
-            <NestContainer className={youtube.CLASS_PANEL}>
-                <Content className={youtube.CLASS_PANEL_MENU}>
+            <div className={cx(youtube.CLASS_PANEL, styles['nest-container'])}>
+                <div className={cx(youtube.CLASS_PANEL_MENU, styles.content)}>
                     <MessageSettingsTypeSelect
                         value={selectedMessageType}
                         onChange={setSelectedMessageType}
@@ -63,9 +40,9 @@ const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
                     <MessageSettingsInputForm
                         messageSettingsKey={selectedMessageType}
                     />
-                </Content>
-            </NestContainer>
-        </Container>
+                </div>
+            </div>
+        </div>
     );
 };
 

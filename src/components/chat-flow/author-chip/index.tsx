@@ -1,9 +1,11 @@
 import * as React from 'react';
 
-import { styled } from 'styled-components';
+import cx from 'classnames';
 
 import type { Thumbnail } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
+
+import styles from './index.module.scss';
 
 type Props = {
     readonly avatars: Thumbnail[];
@@ -11,29 +13,6 @@ type Props = {
     readonly authorDisplaySetting: MessageSettings['authorDisplay'];
     readonly donationAmount?: string;
 };
-
-const Container = styled.div`
-    display: flex;
-    align-items: center;
-    padding: 1px 10px;
-`;
-
-const AuthorAvatar = styled.img<{ $hasMarginRight: boolean }>`
-    width: 0.6em;
-    height: 0.6em;
-    margin-right: ${({ $hasMarginRight }) => ($hasMarginRight ? '10px' : 0)};
-    border-radius: 0.3em;
-`;
-
-const AuthorName = styled.span<{ $hasMarginRight: boolean }>`
-    margin-right: ${({ $hasMarginRight }) => ($hasMarginRight ? '10px' : 0)};
-    font-size: 0.6em;
-    white-space: nowrap;
-`;
-
-const Donation = styled.span`
-    font-size: 0.6em;
-`;
 
 const AuthorChip: React.FC<Props> = ({
     avatars,
@@ -53,10 +32,13 @@ const AuthorChip: React.FC<Props> = ({
     }
 
     return (
-        <Container>
+        <div className={styles.container}>
             {isAvatarShown && (
-                <AuthorAvatar
-                    $hasMarginRight={isNameShown || Boolean(donationAmount)}
+                <img
+                    className={cx(styles['author-avatar'], {
+                        [styles['author-avatar--margin-right']]:
+                            isNameShown || Boolean(donationAmount),
+                    })}
                     src={avatars[0]?.url}
                     width={avatars[0]?.width}
                     height={avatars[0]?.height}
@@ -64,12 +46,19 @@ const AuthorChip: React.FC<Props> = ({
                 />
             )}
             {isNameShown && (
-                <AuthorName $hasMarginRight={Boolean(donationAmount)}>
+                <span
+                    className={cx(styles['author-name'], {
+                        [styles['author-name--margin-right']]:
+                            Boolean(donationAmount),
+                    })}
+                >
                     {name}
-                </AuthorName>
+                </span>
             )}
-            {Boolean(donationAmount) && <Donation>{donationAmount}</Donation>}
-        </Container>
+            {Boolean(donationAmount) && (
+                <span className={styles['donation']}>{donationAmount}</span>
+            )}
+        </div>
     );
 };
 

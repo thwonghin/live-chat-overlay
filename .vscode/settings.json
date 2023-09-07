@@ -2,9 +2,11 @@
     "typescript.tsdk": "node_modules/typescript/lib",
     "typescript.enablePromptUseWorkspaceTsdk": true,
     "editor.formatOnSave": true,
-    "cSpell.words": [
-        "stylelint"
-    ],
+    "cSpell.words": ["stylelint"],
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "prettier.prettierPath": "./node_modules/prettier"
+    "prettier.prettierPath": "./node_modules/prettier",
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "eslint.validate": ["javascript"]
 }

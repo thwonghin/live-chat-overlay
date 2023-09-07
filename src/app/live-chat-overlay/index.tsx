@@ -16,11 +16,11 @@ import { theme } from './theme';
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
-export function injectLiveChatOverlay(
+export async function injectLiveChatOverlay(
     initData: InitData,
     browser: Browser,
     store: RootStore,
-): () => void {
+): Promise<() => void> {
     const videoPlayerContainer = youtube.getVideoPlayerContainer();
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');
@@ -31,12 +31,24 @@ export function injectLiveChatOverlay(
         throw new Error('Right Player Control not found.');
     }
 
-    const styleSheet = browser.runtime.getURL('style.css');
-    const cssTag = window.parent.document.createElement('link');
-    cssTag.type = 'text/css';
-    cssTag.rel = 'stylesheet';
-    cssTag.href = styleSheet;
-    window.parent.document.head.append(cssTag);
+    const styledInsertionPointContainer =
+        window.parent.document.createElement('div');
+    const styledInsertionPoint = window.parent.document.createElement('div');
+    styledInsertionPoint.id = 'live-chat-overlay-styled';
+    styledInsertionPointContainer.append(styledInsertionPoint);
+    window.parent.document.head.append(styledInsertionPointContainer);
+
+    await new Promise((resolve, reject) => {
+        const styleSheet = browser.runtime.getURL('style.css');
+        const cssTag = window.parent.document.createElement('link');
+        cssTag.type = 'text/css';
+        cssTag.rel = 'stylesheet';
+        cssTag.href = styleSheet;
+
+        cssTag.onload = resolve;
+        cssTag.onerror = reject;
+        window.parent.document.head.append(cssTag);
+    });
 
     rightControlEle.style.display = 'flex';
 
@@ -54,13 +66,6 @@ export function injectLiveChatOverlay(
     playerControlContainer.style.display = 'flex';
     playerControlContainer.style.alignItems = 'center';
     rightControlEle.prepend(playerControlContainer);
-
-    const styledInsertionPointContainer =
-        window.parent.document.createElement('div');
-    const styledInsertionPoint = window.parent.document.createElement('div');
-    styledInsertionPoint.id = 'live-chat-overlay-styled';
-    styledInsertionPointContainer.append(styledInsertionPoint);
-    window.parent.document.head.append(styledInsertionPointContainer);
 
     const root = createRoot(liveChatContainer);
 

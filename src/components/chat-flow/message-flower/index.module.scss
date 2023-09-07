@@ -1,0 +1,9 @@
+.container {
+    position: absolute;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    white-space: nowrap;
+    transition-timing-function: linear;
+    transition-property: transform;
+}

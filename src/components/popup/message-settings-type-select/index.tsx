@@ -6,16 +6,13 @@ import {
     MenuItem,
     type SelectChangeEvent,
 } from '@mui/material';
-import { styled } from 'styled-components';
 import type { I18n } from 'webextension-polyfill';
 
 import { useI18n } from '@/contexts/i18n';
 import { type MessageSettingsKey } from '@/models/settings';
 import { assertNever } from '@/utils';
 
-const StyledFormLabel = styled(FormLabel)`
-    margin-right: 8px;
-`;
+import styles from './index.module.scss';
 
 function getStringByMessageKey(
     i18n: I18n.Static,
@@ -81,9 +78,9 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
 
     return (
         <div>
-            <StyledFormLabel>
+            <FormLabel className={styles['form-label']}>
                 {i18n.getMessage('messageTypeSelectLabel')}
-            </StyledFormLabel>
+            </FormLabel>
             <Select
                 variant="standard"
                 color="secondary"

@@ -1,0 +1,15 @@
+@import '../../../_variable.scss';
+
+.tooltip {
+    padding: 5px 9px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 15px;
+    background-color: rgb(28 28 28 / 90%);
+    border-radius: 2px;
+
+    :global(.#{$youtube-big-mode-class}) & {
+        font-size: 2rem;
+        line-height: 22px;
+    }
+}

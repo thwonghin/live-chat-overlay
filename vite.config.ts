@@ -53,6 +53,15 @@ export default defineConfig({
                 ) ?? [],
         }),
     ],
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `
+                    @import "./src/_variable.scss"
+                `,
+            },
+        },
+    },
     resolve: {
         alias: {
             // In dev mode, make sure fast refresh works
