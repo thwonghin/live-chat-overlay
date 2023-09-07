@@ -1,25 +1,6 @@
-import { Tooltip, tooltipClasses, type TooltipProps } from '@mui/material';
-import { styled } from 'styled-components';
+import { Tooltip } from '@mui/material';
 
-import { youtube } from '@/utils';
-
-const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
-    <Tooltip {...props} classes={{ popper: className }} />
-))`
-    & .${tooltipClasses.tooltip} {
-        padding: 5px 9px;
-        font-size: 1.2rem;
-        font-weight: 500;
-        line-height: 15px;
-        background-color: rgb(28 28 28 / 90%);
-        border-radius: 2px;
-
-        .${youtube.CLASS_BIG_MODE} & {
-            font-size: 2rem;
-            line-height: 22px;
-        }
-    }
-`;
+import styles from './index.module.scss';
 
 type Props = {
     title: string;
@@ -28,8 +9,11 @@ type Props = {
 
 const BtnTooltip: React.FC<Props> = ({ title, children }) => {
     return (
-        <CustomTooltip
+        <Tooltip
             title={title}
+            classes={{
+                tooltip: styles.tooltip,
+            }}
             placement="top"
             PopperProps={{
                 disablePortal: true,
@@ -39,7 +23,7 @@ const BtnTooltip: React.FC<Props> = ({ title, children }) => {
             }}
         >
             {children}
-        </CustomTooltip>
+        </Tooltip>
     );
 };
 

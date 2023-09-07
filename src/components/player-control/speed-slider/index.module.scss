@@ -1,0 +1,61 @@
+@import '../../../_variable.scss';
+
+.slider {
+    width: 52px;
+    height: 3px;
+    margin-right: 8px;
+    color: #fff;
+    border-radius: 0;
+    will-change: width;
+    transition:
+        cubic-bezier(0.4, 0, 1, 1),
+        width 0.2s;
+
+    :global(.#{$youtube-big-mode-class}) & {
+        width: 78px;
+        height: 4px;
+    }
+}
+
+.slider--hidden {
+    width: 0;
+}
+
+.thumb {
+    display: initial;
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    &:hover {
+        box-shadow: none;
+    }
+
+    :global(.#{$youtube-big-mode-class}) & {
+        width: 18px;
+        height: 18px;
+        border-radius: 9px;
+    }
+}
+
+.thumb--hidden {
+    display: none;
+}
+
+.thumb--active {
+    box-shadow: none;
+}
+
+.rail {
+    height: inherit;
+    opacity: 0.2;
+}
+
+.track {
+    display: 'initial';
+    height: inherit;
+    border: none;
+}
+
+.track--hidden {
+    display: 'none';
+}

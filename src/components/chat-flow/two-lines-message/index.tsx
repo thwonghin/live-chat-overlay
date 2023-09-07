@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-import { styled } from 'styled-components';
-
 import {
     isMembershipItem,
     isNormalChatItem,
@@ -14,26 +12,9 @@ import type {
 } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
 
+import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
-
-const Container = styled.div`
-    display: flex;
-    margin-top: 0.2em;
-    border-radius: 5px;
-`;
-
-const Message = styled(MessagePartsRenderer)`
-    display: flex;
-    align-items: center;
-    padding: 1px 10px;
-    font-size: 0.8em;
-
-    img {
-        width: 1em;
-        height: 1em;
-    }
-`;
 
 type Props = {
     readonly chatItem: NormalChatItem | MembershipItem | SuperChatItem;
@@ -62,8 +43,9 @@ const TwoLinesMessage: React.FC<Props> = ({
         : undefined;
 
     return (
-        <Container
+        <div
             ref={onRender}
+            className={styles.container}
             style={{
                 height: `${actualNumberOfLines}em`,
                 color: messageSettings.color,
@@ -84,8 +66,11 @@ const TwoLinesMessage: React.FC<Props> = ({
                 donationAmount={donationAmount}
                 authorDisplaySetting={messageSettings.authorDisplay}
             />
-            <Message messageParts={chatItem.messageParts} />
-        </Container>
+            <MessagePartsRenderer
+                className={styles.message}
+                messageParts={chatItem.messageParts}
+            />
+        </div>
     );
 };
 

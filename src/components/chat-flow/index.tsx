@@ -6,7 +6,6 @@ import React, {
 } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { styled } from 'styled-components';
 
 import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
@@ -15,21 +14,8 @@ import { CHAT_ITEM_RENDER_ID } from '@/stores/chat-item';
 
 import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';
+import styles from './index.module.scss';
 import MessageFlower from './message-flower';
-
-const Container = styled.div`
-    position: relative;
-    width: 100%;
-    height: 100%;
-`;
-
-const TestRenderContainer = styled.div`
-    position: absolute;
-    display: flex;
-    flex-direction: row;
-    white-space: nowrap;
-    visibility: hidden;
-`;
 
 type Props = {
     initData: InitData;
@@ -87,8 +73,11 @@ const ChatFlow: React.FC<Props> = observer(({ initData }) => {
     );
 
     return (
-        <Container style={containerStyle}>
-            <TestRenderContainer id={CHAT_ITEM_RENDER_ID} />
+        <div className={styles.container} style={containerStyle}>
+            <div
+                className={styles['test-render-container']}
+                id={CHAT_ITEM_RENDER_ID}
+            />
             <div style={style}>
                 {Array.from(chatItemsByLineNumber.entries()).flatMap(
                     ([lineNumber, chatItems]) =>
@@ -126,7 +115,7 @@ const ChatFlow: React.FC<Props> = observer(({ initData }) => {
                 })}
             </div>
             {debugInfoStore.isDebugging && <DebugOverlay />}
-        </Container>
+        </div>
     );
 });
 

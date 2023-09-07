@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    align-items: center;
+    padding: 1px 10px;
+}
+
+.author-avatar {
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: 0.3em;
+}
+
+.author-avatar--margin-right {
+    margin-right: 10px;
+}
+
+.author-name {
+    font-size: 0.6em;
+    white-space: nowrap;
+}
+
+.author-name--margin-right {
+    margin-right: 10px;
+}
+
+.donation {
+    font-size: 0.6em;
+}

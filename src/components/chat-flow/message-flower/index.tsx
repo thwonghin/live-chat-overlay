@@ -1,20 +1,11 @@
 import { useMemo, useRef, useState, useLayoutEffect } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { styled } from 'styled-components';
 
 import { useStore } from '@/contexts/root-store';
 import { useRect } from '@/hooks';
 
-const Container = styled.div`
-    position: absolute;
-    top: 0;
-    display: flex;
-    flex-direction: row;
-    white-space: nowrap;
-    transition-timing-function: linear;
-    transition-property: transform;
-`;
+import styles from './index.module.scss';
 
 type Props = {
     children: React.ReactNode;
@@ -53,9 +44,9 @@ const MessageFlower: React.FC<Props> = observer(
         }, []);
 
         return (
-            <Container ref={ref} style={style}>
+            <div ref={ref} className={styles.container} style={style}>
                 {children}
-            </Container>
+            </div>
         );
     },
 );

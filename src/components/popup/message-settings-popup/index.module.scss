@@ -1,0 +1,29 @@
+@import '../../../_variable.scss';
+
+.container {
+    right: 12px;
+    bottom: 49px;
+    z-index: 71;
+    width: 340px;
+    height: 364px;
+
+    :global(.#{$youtube-big-mode-class}) & {
+        right: 24px;
+        bottom: 70px;
+    }
+}
+
+.container--hidden {
+    display: none;
+}
+
+.nest-container {
+    width: 100%;
+    height: 100%;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
+    padding: 0 16px;
+}

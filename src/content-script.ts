@@ -28,7 +28,11 @@ async function init(): Promise<void> {
     const store = new RootStore(videoEle, videoPlayerEle);
     await store.init();
 
-    const cleanupLiveChat = injectLiveChatOverlay(initData, browser, store);
+    const cleanupLiveChat = await injectLiveChatOverlay(
+        initData,
+        browser,
+        store,
+    );
 
     function cleanup(): void {
         cleanupLiveChat();

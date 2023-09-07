@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 import { observer } from 'mobx-react-lite';
-import { styled } from 'styled-components';
 
 import { useStore } from '@/contexts/root-store';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { Benchmark } from '@/models/debug-info/types';
+
+import styles from './index.module.scss';
 
 type RoundedBenchmark = {
     min: string;
@@ -44,31 +45,6 @@ function renderBenchmark(
     ];
 }
 
-const DebugContainer = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-`;
-
-const DebugText = styled.p`
-    font-size: 20px;
-    color: #ff0;
-    white-space: nowrap;
-    -webkit-text-stroke-color: #000;
-    -webkit-text-stroke-width: 1px;
-`;
-
-const BenchmarkContainer = styled.div`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    text-align: right;
-`;
-
 type DebugOverlayLayoutProps = {
     readonly chatItemsByLineNumber: Map<number, ChatItemModel[]>;
     readonly getEleWidthBenchmark: RoundedBenchmark;
@@ -92,23 +68,30 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
 }) => {
     return (
         <>
-            <DebugContainer>
-                <DebugText>Message Count By Position:</DebugText>
+            <div className={styles['debug-container']}>
+                <p className={styles['debug-text']}>
+                    Message Count By Position:
+                </p>
                 {Array.from(chatItemsByLineNumber.entries()).map(
                     ([lineNumber, chatItems]) => (
-                        <DebugText key={lineNumber}>{`${lineNumber + 1}: ${
-                            (chatItems ?? []).length
-                        }`}</DebugText>
+                        <p
+                            key={lineNumber}
+                            className={styles['debug-text']}
+                        >{`${lineNumber + 1}: ${(chatItems ?? []).length}`}</p>
                     ),
                 )}
-            </DebugContainer>
-            <BenchmarkContainer>
+            </div>
+            <div className={styles['benchmark-container']}>
                 {getEleWidthBenchmark.count !== 0 && (
                     <>
-                        <DebugText>Get element width benchmark (μs):</DebugText>
+                        <p className={styles['debug-text']}>
+                            Get element width benchmark (μs):
+                        </p>
                         {renderBenchmark(getEleWidthBenchmark).map(
                             ({ key, text }) => (
-                                <DebugText key={key}>{text}</DebugText>
+                                <p key={key} className={styles['debug-text']}>
+                                    {text}
+                                </p>
                             ),
                         )}
                     </>
@@ -116,46 +99,56 @@ export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
                 <br />
                 {processXhrBenchmark.count !== 0 && (
                     <>
-                        <DebugText>Process response benchmark (μs):</DebugText>
+                        <p className={styles['debug-text']}>
+                            Process response benchmark (μs):
+                        </p>
                         {renderBenchmark(processXhrBenchmark).map(
                             ({ key, text }) => (
-                                <DebugText key={key}>{text}</DebugText>
+                                <p key={key} className={styles['debug-text']}>
+                                    {text}
+                                </p>
                             ),
                         )}
                     </>
                 )}
                 <br />
-                <DebugText>
+                <p className={styles['debug-text']}>
                     {`Response Chat Event Queue Length: ${processChatEventQueueLength}`}
-                </DebugText>
+                </p>
                 {processChatEventBenchmark.count !== 0 && (
                     <>
-                        <DebugText>
+                        <p className={styles['debug-text']}>
                             Process chat event benchmark (μs):
-                        </DebugText>
+                        </p>
                         {renderBenchmark(processChatEventBenchmark).map(
                             ({ key, text }) => (
-                                <DebugText key={key}>{text}</DebugText>
+                                <p key={key} className={styles['debug-text']}>
+                                    {text}
+                                </p>
                             ),
                         )}
                     </>
                 )}
                 <br />
-                <DebugText>
+                <p className={styles['debug-text']}>
                     {`Removed Outdated Chat Event: ${outdatedRemovedChatEventCount}`}
-                </DebugText>
+                </p>
                 {liveChatDelay.count !== 0 && (
                     <>
-                        <DebugText>Live Chat Delay (s):</DebugText>
+                        <p className={styles['debug-text']}>
+                            Live Chat Delay (s):
+                        </p>
                         {renderBenchmark(liveChatDelay).map(({ key, text }) => (
-                            <DebugText key={key}>{text}</DebugText>
+                            <p key={key} className={styles['debug-text']}>
+                                {text}
+                            </p>
                         ))}
                     </>
                 )}
-                <DebugText>
+                <p className={styles['debug-text']}>
                     {`Cleaned Chat Item: ${cleanedChatItemCount}`}
-                </DebugText>
-            </BenchmarkContainer>
+                </p>
+            </div>
         </>
     );
 };
