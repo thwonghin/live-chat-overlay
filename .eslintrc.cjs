@@ -3,23 +3,20 @@ module.exports = {
         'xo',
         'xo/browser',
         'xo-typescript',
-        'xo-react/space',
+        'plugin:solid/typescript',
         'plugin:import/recommended',
         'plugin:import/typescript',
         'plugin:prettier/recommended',
         'plugin:storybook/recommended',
     ],
+    plugins: ['solid'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: './tsconfig.json',
         tsconfigRootDir: __dirname,
     },
     rules: {
-        'react/jsx-uses-react': 'off',
-        'react/react-in-jsx-scope': 'off',
-        'react/prop-types': 'off',
         'unicorn/no-array-callback-reference': 'off',
-        'react-hooks/exhaustive-deps': 'error',
         'node/file-extension-in-import': 'off',
         '@typescript-eslint/no-implicit-any-catch': 'off',
         // using 'useUnknownInCatchVariables' in tsconfig by default
@@ -52,12 +49,6 @@ module.exports = {
                 },
             },
         ],
-        'react/function-component-definition': [
-            'error',
-            {
-                namedComponents: 'arrow-function',
-            },
-        ],
         '@typescript-eslint/naming-convention': [
             'error',
             {
@@ -80,9 +71,6 @@ module.exports = {
         ],
     },
     settings: {
-        react: {
-            version: 'detect',
-        },
         'import/resolver': {
             node: {
                 extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],

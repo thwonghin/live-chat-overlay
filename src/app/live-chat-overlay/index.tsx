@@ -1,17 +1,16 @@
-import { StrictMode } from 'react';
-
-import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+// Import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { createRoot } from 'react-dom/client';
-import { ThemeProvider, StyleSheetManager } from 'styled-components';
+import { render } from 'solid-js/web';
+// Import { ThemeProvider, StyleSheetManager } from 'styled-components';
 import type { Browser } from 'webextension-polyfill';
 
-import * as contexts from '@/contexts';
+// Import * as contexts from '@/contexts';
 import type { InitData } from '@/definitions/youtube';
 import type { RootStore } from '@/stores';
 import { youtube } from '@/utils';
 
 import App from './app';
-import { theme } from './theme';
+// Import { theme } from './theme';
 
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
@@ -30,13 +29,6 @@ export async function injectLiveChatOverlay(
     if (!rightControlEle) {
         throw new Error('Right Player Control not found.');
     }
-
-    const styledInsertionPointContainer =
-        window.parent.document.createElement('div');
-    const styledInsertionPoint = window.parent.document.createElement('div');
-    styledInsertionPoint.id = 'live-chat-overlay-styled';
-    styledInsertionPointContainer.append(styledInsertionPoint);
-    window.parent.document.head.append(styledInsertionPointContainer);
 
     await new Promise((resolve, reject) => {
         const styleSheet = browser.runtime.getURL('style.css');
@@ -69,31 +61,19 @@ export async function injectLiveChatOverlay(
 
     const root = createRoot(liveChatContainer);
 
-    root.render(
-        <StrictMode>
-            <contexts.rootStore.StoreProvider store={store}>
-                <contexts.i18n.I18nProvider browser={browser}>
-                    <MuiThemeProvider theme={theme}>
-                        <StyleSheetManager target={styledInsertionPoint}>
-                            <ThemeProvider theme={theme}>
-                                <App
-                                    initData={initData}
-                                    playerControlContainer={
-                                        playerControlContainer
-                                    }
-                                />
-                            </ThemeProvider>
-                        </StyleSheetManager>
-                    </MuiThemeProvider>
-                </contexts.i18n.I18nProvider>
-            </contexts.rootStore.StoreProvider>
-        </StrictMode>,
+    render(
+        () => (
+            <App
+                initData={initData}
+                playerControlContainer={playerControlContainer}
+            />
+        ),
+        liveChatContainer,
     );
 
     return () => {
         root.unmount();
         playerControlContainer.remove();
         liveChatContainer.remove();
-        styledInsertionPointContainer.remove();
     };
 }

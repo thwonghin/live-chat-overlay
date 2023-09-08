@@ -1,22 +1,23 @@
-import * as React from 'react';
+import { createSignal, onCleanup } from 'solid-js';
 
-import ChatFlow from '@/components/chat-flow';
-import PlayerControl from '@/components/player-control';
-import PopupContainer from '@/components/popup';
-import type { InitData } from '@/definitions/youtube';
+import { type InitData } from '@/definitions/youtube';
 
-type Props = {
-    readonly initData: InitData;
-    readonly playerControlContainer: HTMLSpanElement;
-};
+type Props = Readonly<{
+    initData: InitData;
+    playerControlContainer: HTMLSpanElement;
+}>;
 
-const App: React.FC<Props> = ({ initData, playerControlContainer }) => {
+const App = (props: Props) => {
+    const [count, setCount] = createSignal(0);
+    const timer = setInterval(() => setCount(count() + 1), 1000);
+    onCleanup(() => {
+        clearInterval(timer);
+    });
+
     return (
-        <>
-            <ChatFlow initData={initData} />
-            <PopupContainer playerControlContainer={playerControlContainer} />
-            <PlayerControl playerControlContainer={playerControlContainer} />
-        </>
+        <div>
+            Count: {count()} {JSON.stringify(props.initData)}
+        </div>
     );
 };
 

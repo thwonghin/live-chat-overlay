@@ -19,7 +19,8 @@
         "noPropertyAccessFromIndexSignature": true,
         "noImplicitOverride": true,
         "strictPropertyInitialization": true,
-        "jsx": "react-jsx",
+        "jsx": "preserve",
+        "jsxImportSource": "solid-js",
         "paths": {
             "@/*": ["src/*"]
         },

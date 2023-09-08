@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite';
 import webExtension, { readJsonFile } from 'vite-plugin-web-extension';
-import react from '@vitejs/plugin-react-swc';
+import solidPlugin from 'vite-plugin-solid';
 import path from 'node:path';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
@@ -43,7 +43,7 @@ function generateManifest() {
 export default defineConfig({
     plugins: [
         tsconfigPaths(),
-        react(),
+        solidPlugin(),
         webExtension({
             disableAutoLaunch: true,
             manifest: generateManifest,
@@ -53,12 +53,4 @@ export default defineConfig({
                 ) ?? [],
         }),
     ],
-    resolve: {
-        alias: {
-            // In dev mode, make sure fast refresh works
-            '/@react-refresh': path.resolve(
-                'node_modules/@vitejs/plugin-react-swc/refresh-runtime.js',
-            ),
-        },
-    },
 });

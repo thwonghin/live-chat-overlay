@@ -1,4 +1,4 @@
-import { children, type JSXElement } from 'solid-js';
+import * as React from 'react';
 
 import { AuthorDisplayMethod } from '@/models/settings';
 
@@ -17,15 +17,11 @@ const avatars = [
 ];
 const name = 'Author Name';
 
-type ContainerProps = Readonly<{
-    children: JSXElement;
-}>;
-const Container = (props: ContainerProps) => {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    return <div style={{ 'font-size': '40px' }}>{props.children}</div>;
-};
+const Container: React.FC<React.PropsWithChildren> = (props) => (
+    <div style={{ 'font-size': 40 }}>{props.children}</div>
+);
 
-export const WithAllDisplay = () => (
+export const WithAllDisplay: React.FC = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -35,7 +31,7 @@ export const WithAllDisplay = () => (
     </Container>
 );
 
-export const WithNameOnly = () => (
+export const WithNameOnly: React.FC = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -45,7 +41,7 @@ export const WithNameOnly = () => (
     </Container>
 );
 
-export const WithAvatarOnly = () => (
+export const WithAvatarOnly: React.FC = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -55,7 +51,7 @@ export const WithAvatarOnly = () => (
     </Container>
 );
 
-export const WithNone = () => (
+export const WithNone: React.FC = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -65,7 +61,7 @@ export const WithNone = () => (
     </Container>
 );
 
-export const WithAllDisplayAndDonation = () => (
+export const WithAllDisplayAndDonation: React.FC = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -76,7 +72,7 @@ export const WithAllDisplayAndDonation = () => (
     </Container>
 );
 
-export const WithNameOnlyAndDonation = () => (
+export const WithNameOnlyAndDonation: React.FC = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -87,7 +83,7 @@ export const WithNameOnlyAndDonation = () => (
     </Container>
 );
 
-export const WithAvatarOnlyAndDonation = () => (
+export const WithAvatarOnlyAndDonation: React.FC = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -98,7 +94,7 @@ export const WithAvatarOnlyAndDonation = () => (
     </Container>
 );
 
-export const WithNoneAndDonation = () => (
+export const WithNoneAndDonation: React.FC = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
