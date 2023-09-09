@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import webExtension, { readJsonFile } from 'vite-plugin-web-extension';
 import solidPlugin from 'vite-plugin-solid';
-import path from 'node:path';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 type Manifest = {
@@ -47,6 +46,14 @@ export default defineConfig({
         webExtension({
             disableAutoLaunch: true,
             manifest: generateManifest,
+            scriptViteConfig: {
+                build: {
+                    sourcemap:
+                        process.env.NODE_ENV === 'production'
+                            ? false
+                            : 'inline',
+                },
+            },
             additionalInputs:
                 readManifest().web_accessible_resources?.flatMap(
                     ({ resources }) => resources ?? [],
