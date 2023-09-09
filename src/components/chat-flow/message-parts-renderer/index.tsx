@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import {
     isEmojiMessagePart,
     isTextMessagePart,
@@ -9,28 +7,29 @@ import { assertNever } from '@/utils';
 
 import EmojiPartRenderer from './emoji-part-renderer';
 import TextPartRenderer from './text-part-renderer';
+import { For } from 'solid-js';
 
-type Props = {
-    readonly className?: string;
-    readonly messageParts: MessagePart[];
-};
+type Props = Readonly<{
+    class?: string;
+    messageParts: MessagePart[];
+}>;
 
-const MessagePartsRenderer: React.FC<Props> = ({ messageParts, className }) => {
+const MessagePartsRenderer = (props: Props) => {
     return (
-        <span className={className}>
-            {messageParts.map((part, index) => {
-                if (isTextMessagePart(part)) {
-                    // eslint-disable-next-line react/no-array-index-key
-                    return <TextPartRenderer key={index} textPart={part} />;
-                }
+        <span class={props.class}>
+            <For each={props.messageParts}>
+                {(part) => {
+                    if (isTextMessagePart(part)) {
+                        return <TextPartRenderer textPart={part} />;
+                    }
 
-                if (isEmojiMessagePart(part)) {
-                    // eslint-disable-next-line react/no-array-index-key
-                    return <EmojiPartRenderer key={index} emojiPart={part} />;
-                }
+                    if (isEmojiMessagePart(part)) {
+                        return <EmojiPartRenderer emojiPart={part} />;
+                    }
 
-                return assertNever(part);
-            })}
+                    return assertNever(part);
+                }}
+            </For>
         </span>
     );
 };

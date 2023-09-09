@@ -1,5 +1,3 @@
-import { makeAutoObservable } from 'mobx';
-
 import { calculateBenchmark } from './helpers';
 import type { DebugInfo } from './types';
 
@@ -37,66 +35,64 @@ const DEFAULT_DEBUG_INFO: Readonly<DebugInfo> = Object.freeze({
     },
 });
 
-export class DebugInfoModel implements DebugInfo {
-    getChatItemEleWidthBenchmark =
-        DEFAULT_DEBUG_INFO.getChatItemEleWidthBenchmark;
+export type DebugInfoModel = {
+    addChatItemEleWidthMetric(value: number): void;
+    addProcessXhrMetric(value: number): void;
+    addProcessChatEventMetric(value: number): void;
+    addLiveChatDelay(ms: number): void;
+    updateProcessChatEventQueueLength(queueLength: number): void;
+    addOutdatedRemovedChatEventCount(count: number): void;
+    addCleanedChatItemCount(count: number): void;
+    reset(): void;
+} & DebugInfo;
 
-    processXhrBenchmark = DEFAULT_DEBUG_INFO.processXhrBenchmark;
+export const createDebugInfoModel = (): DebugInfoModel => {
+    const debugInfoModel = {
+        ...DEFAULT_DEBUG_INFO,
+        addChatItemEleWidthMetric(value: number) {
+            debugInfoModel.getChatItemEleWidthBenchmark = calculateBenchmark(
+                debugInfoModel.getChatItemEleWidthBenchmark,
+                value * 1000,
+            );
+        },
 
-    processChatEventBenchmark = DEFAULT_DEBUG_INFO.processChatEventBenchmark;
+        addProcessXhrMetric(value: number) {
+            debugInfoModel.processXhrBenchmark = calculateBenchmark(
+                debugInfoModel.processXhrBenchmark,
+                value * 1000,
+            );
+        },
 
-    processChatEventQueueLength =
-        DEFAULT_DEBUG_INFO.processChatEventQueueLength;
+        addProcessChatEventMetric(value: number) {
+            debugInfoModel.processChatEventBenchmark = calculateBenchmark(
+                debugInfoModel.processChatEventBenchmark,
+                value * 1000,
+            );
+        },
 
-    outdatedRemovedChatEventCount =
-        DEFAULT_DEBUG_INFO.outdatedRemovedChatEventCount;
+        addLiveChatDelay(ms: number) {
+            debugInfoModel.liveChatDelay = calculateBenchmark(
+                debugInfoModel.liveChatDelay,
+                ms / 1000,
+            );
+        },
 
-    cleanedChatItemCount = DEFAULT_DEBUG_INFO.cleanedChatItemCount;
+        updateProcessChatEventQueueLength(queueLength: number) {
+            debugInfoModel.processChatEventQueueLength = queueLength;
+        },
 
-    liveChatDelay = DEFAULT_DEBUG_INFO.liveChatDelay;
+        addOutdatedRemovedChatEventCount(count: number) {
+            debugInfoModel.outdatedRemovedChatEventCount += count;
+        },
 
-    constructor() {
-        makeAutoObservable(this);
-    }
+        addCleanedChatItemCount(count: number) {
+            debugInfoModel.cleanedChatItemCount += count;
+        },
 
-    addChatItemEleWidthMetric(value: number) {
-        this.getChatItemEleWidthBenchmark = calculateBenchmark(
-            this.getChatItemEleWidthBenchmark,
-            value * 1000,
-        );
-    }
+        reset() {
+            Object.assign(debugInfoModel, { ...DEFAULT_DEBUG_INFO });
+        },
+    };
 
-    addProcessXhrMetric(value: number) {
-        this.processXhrBenchmark = calculateBenchmark(
-            this.processXhrBenchmark,
-            value * 1000,
-        );
-    }
-
-    addProcessChatEventMetric(value: number) {
-        this.processChatEventBenchmark = calculateBenchmark(
-            this.processChatEventBenchmark,
-            value * 1000,
-        );
-    }
-
-    addLiveChatDelay(ms: number) {
-        this.liveChatDelay = calculateBenchmark(this.liveChatDelay, ms / 1000);
-    }
-
-    updateProcessChatEventQueueLength(queueLength: number) {
-        this.processChatEventQueueLength = queueLength;
-    }
-
-    addOutdatedRemovedChatEventCount(count: number) {
-        this.outdatedRemovedChatEventCount += count;
-    }
-
-    addCleanedChatItemCount(count: number) {
-        this.cleanedChatItemCount += count;
-    }
-
-    reset() {
-        Object.assign(this, { ...DEFAULT_DEBUG_INFO });
-    }
-}
+    return debugInfoModel;
+};

@@ -1,10 +1,5 @@
-import {
-    makeAutoObservable,
-    reaction,
-    observable,
-    runInAction,
-    type IReactionDisposer,
-} from 'mobx';
+import { createEffect, onCleanup } from 'solid-js';
+import { createStore, produce } from 'solid-js/store';
 
 import type {
     YoutubeChatResponse,
@@ -46,230 +41,191 @@ type DebugInfo = Partial<{
 const DEQUEUE_INTERVAL = 1000 / 60; // 5 FPS
 const CLEAN_INTERVAL = 1000;
 
-export class ChatItemStore {
-    public readonly chatItemsByLineNumber = observable.map<
-        number,
-        ChatItemModel[]
-    >();
+export type ChatItemStoreValue = {
+    chatItemsByLineNumber: Record<number, ChatItemModel[]>;
+    stickyChatItems: ChatItemModel[];
+};
 
-    public readonly stickyChatItems = observable.array<ChatItemModel>();
+export type ChatItemStore = {
+    importInitData(initData: InitData): Promise<void>;
+    removeStickyChatItemById(id: string): void;
+} & ChatItemStoreValue;
 
-    private readonly chatItemStatusById = new Map<string, boolean>();
-    private isInitiated = false;
-    private mode = Mode.LIVE;
-    private tickId: number | undefined = undefined;
-    private cleanDisplayedIntervalId: number | undefined = undefined;
-    private readonly chatItemProcessQueue: ChatItemModel[] = [];
-    private readonly reactionDisposers: IReactionDisposer[] = [];
+export const createChatItemStore = (
+    chatEventName: string,
+    uiStore: UiStore,
+    settingsStore: SettingsStore,
+    debugInfoStore: DebugInfoStore,
+): ChatItemStore => {
+    const chatItemStatusById = new Map<string, boolean>();
+    let isInitiated = false;
+    let mode = Mode.LIVE;
+    let tickId: number | undefined;
+    let cleanDisplayedIntervalId: number | undefined;
+    const chatItemProcessQueue: ChatItemModel[] = [];
 
-    constructor(
-        private readonly chatEventName: string,
-        private readonly uiStore: UiStore,
-        private readonly settingsStore: SettingsStore,
-        private readonly debugInfoStore: DebugInfoStore,
-    ) {
-        makeAutoObservable(this);
+    window.addEventListener(chatEventName, onChatMessage);
+
+    const [state, setState] = createStore<ChatItemStoreValue>({
+        chatItemsByLineNumber: {},
+        stickyChatItems: [],
+    });
+
+    function pause(): void {
+        clearAllIntervals();
     }
 
-    public async importInitData(initData: InitData): Promise<void> {
-        this.mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
-        await this.processChatItems(initData);
-        this.isInitiated = true;
+    function resume(): void {
+        createAllIntervals();
     }
 
-    public init(): void {
-        window.addEventListener(this.chatEventName, this.onChatMessage);
+    function reset(): void {
+        chatItemProcessQueue.splice(0);
+        setState('chatItemsByLineNumber', {});
+        setState('stickyChatItems', []);
+        chatItemStatusById.clear();
 
-        this.reactionDisposers.push(
-            reaction(
-                () => this.debugInfoStore.isDebugging,
-                this.watchDebugStore,
-            ),
-        );
-        this.reactionDisposers.push(
-            reaction(
-                () => [
-                    this.uiStore.playerState.width,
-                    this.uiStore.playerState.height,
-                ],
-                this.resetNonStickyChatItems,
-            ),
-        );
-        this.reactionDisposers.push(
-            reaction(
-                () => this.uiStore.playerState.isPaused,
-                this.onPlayerPauseOrResume,
-            ),
-        );
-        this.reactionDisposers.push(
-            reaction(
-                () => this.uiStore.playerState.isSeeking,
-                this.onPlayerSeek,
-            ),
-        );
-
-        this.createAllIntervals();
-    }
-
-    public cleanup(): void {
-        window.removeEventListener(this.chatEventName, this.onChatMessage);
-        this.reactionDisposers.forEach((disposer) => {
-            disposer();
-        });
-        this.clearAllIntervals();
-    }
-
-    public pause(): void {
-        this.clearAllIntervals();
-    }
-
-    public resume(): void {
-        this.createAllIntervals();
-    }
-
-    public reset(): void {
-        this.chatItemProcessQueue.splice(0);
-        this.chatItemsByLineNumber.clear();
-        this.chatItemStatusById.clear();
-
-        this.updateDebugInfo({
+        updateDebugInfo({
             processChatEventQueueLength: 0,
         });
     }
 
-    public startDebug(): void {
-        this.updateDebugInfo({
-            processChatEventQueueLength: this.chatItemProcessQueue.length,
+    function startDebug(): void {
+        updateDebugInfo({
+            processChatEventQueueLength: chatItemProcessQueue.length,
         });
     }
 
-    public removeStickyChatItemById(id: string): void {
-        this.chatItemStatusById.delete(id);
-        filterInPlace(
-            this.stickyChatItems,
-            (chatItem) => chatItem.value.id !== id,
-        );
-    }
-
-    private readonly onPlayerPauseOrResume = (): void => {
-        if (this.uiStore.playerState.isPaused) {
-            this.pause();
+    function onPlayerPauseOrResume(isPaused: boolean): void {
+        if (isPaused) {
+            pause();
         } else {
-            this.resume();
+            resume();
         }
-    };
+    }
 
-    private readonly onPlayerSeek = (): void => {
-        if (this.uiStore.playerState.isSeeking) {
-            this.reset();
+    createEffect(() => {
+        onPlayerPauseOrResume(uiStore.playerState.isPaused);
+    });
+
+    function onPlayerSeek(isSeeking: boolean): void {
+        if (isSeeking) {
+            reset();
         }
-    };
+    }
 
-    private readonly resetNonStickyChatItems = (): void => {
-        runInAction(() => {
-            this.chatItemsByLineNumber.clear();
-            this.chatItemStatusById.clear();
+    createEffect(() => {
+        onPlayerSeek(uiStore.playerState.isSeeking);
+    });
 
-            // Add back sticky status
-            this.stickyChatItems.forEach((chatItem) => {
-                this.chatItemStatusById.set(chatItem.value.id, true);
-            });
+    function resetNonStickyChatItems(width?: number, height?: number): void {
+        setState('chatItemsByLineNumber', {});
+        chatItemStatusById.clear();
+
+        // Add back sticky status
+        state.stickyChatItems.forEach((chatItem) => {
+            chatItemStatusById.set(chatItem.value.id, true);
         });
-    };
+    }
 
-    private createAllIntervals() {
-        this.clearAllIntervals();
+    createEffect(() => {
+        resetNonStickyChatItems(
+            uiStore.playerState.width,
+            uiStore.playerState.height,
+        );
+    });
 
-        this.tickId = window.setInterval(
-            this.dequeueAvailableChatItems,
+    function createAllIntervals() {
+        clearAllIntervals();
+
+        tickId = window.setInterval(
+            dequeueAvailableChatItems,
             DEQUEUE_INTERVAL,
         );
 
-        this.cleanDisplayedIntervalId = window.setInterval(
-            this.cleanDisplayedChatItems,
+        cleanDisplayedIntervalId = window.setInterval(
+            cleanDisplayedChatItems,
             CLEAN_INTERVAL,
         );
     }
 
-    private clearAllIntervals() {
-        if (this.tickId !== undefined) {
-            window.clearInterval(this.tickId);
+    function clearAllIntervals() {
+        if (tickId !== undefined) {
+            window.clearInterval(tickId);
         }
 
-        if (this.cleanDisplayedIntervalId !== undefined) {
-            window.clearInterval(this.cleanDisplayedIntervalId);
+        if (cleanDisplayedIntervalId !== undefined) {
+            window.clearInterval(cleanDisplayedIntervalId);
         }
     }
 
-    private getCurrentTimeInfo(): {
+    function getCurrentTimeInfo(): {
         playerTimestampMs: number;
         currentTimestampMs: number;
     } {
         return {
             playerTimestampMs:
-                this.uiStore.playerState.videoCurrentTimeInSecs * 1000,
+                uiStore.playerState.videoCurrentTimeInSecs * 1000,
             currentTimestampMs: Date.now(),
         };
     }
 
-    private updateDebugInfo(info: DebugInfo) {
-        runInAction(() => {
-            if (!this.debugInfoStore.isDebugging) {
-                return;
-            }
+    function updateDebugInfo(info: DebugInfo) {
+        if (!debugInfoStore.isDebugging) {
+            return;
+        }
 
-            if (info.processChatEventMs) {
-                this.debugInfoStore.debugInfoModel.addProcessChatEventMetric(
-                    info.processChatEventMs,
-                );
-            }
+        if (info.processChatEventMs) {
+            debugInfoStore.debugInfoModel.addProcessChatEventMetric(
+                info.processChatEventMs,
+            );
+        }
 
-            if (info.processXhrResponseMs) {
-                this.debugInfoStore.debugInfoModel.addProcessXhrMetric(
-                    info.processXhrResponseMs,
-                );
-            }
+        if (info.processXhrResponseMs) {
+            debugInfoStore.debugInfoModel.addProcessXhrMetric(
+                info.processXhrResponseMs,
+            );
+        }
 
-            if (info.processChatEventQueueLength) {
-                this.debugInfoStore.debugInfoModel.updateProcessChatEventQueueLength(
-                    info.processChatEventQueueLength,
-                );
-            }
+        if (info.processChatEventQueueLength) {
+            debugInfoStore.debugInfoModel.updateProcessChatEventQueueLength(
+                info.processChatEventQueueLength,
+            );
+        }
 
-            if (info.outdatedChatEventCount) {
-                this.debugInfoStore.debugInfoModel.addOutdatedRemovedChatEventCount(
-                    info.outdatedChatEventCount,
-                );
-            }
+        if (info.outdatedChatEventCount) {
+            debugInfoStore.debugInfoModel.addOutdatedRemovedChatEventCount(
+                info.outdatedChatEventCount,
+            );
+        }
 
-            if (info.getEleWidthBenchmark) {
-                this.debugInfoStore.debugInfoModel.addChatItemEleWidthMetric(
-                    info.getEleWidthBenchmark,
-                );
-            }
+        if (info.getEleWidthBenchmark) {
+            debugInfoStore.debugInfoModel.addChatItemEleWidthMetric(
+                info.getEleWidthBenchmark,
+            );
+        }
 
-            if (info.cleanedChatItemCount) {
-                this.debugInfoStore.debugInfoModel.addCleanedChatItemCount(
-                    info.cleanedChatItemCount,
-                );
-            }
+        if (info.cleanedChatItemCount) {
+            debugInfoStore.debugInfoModel.addCleanedChatItemCount(
+                info.cleanedChatItemCount,
+            );
+        }
 
-            // Meaningless to measure this in replay mode
-            if (this.mode === Mode.LIVE && info.liveChatDelayInMs) {
-                this.debugInfoStore.debugInfoModel.addLiveChatDelay(
-                    info.liveChatDelayInMs,
-                );
-            }
-        });
+        // Meaningless to measure this in replay mode
+        if (mode === Mode.LIVE && info.liveChatDelayInMs) {
+            debugInfoStore.debugInfoModel.addLiveChatDelay(
+                info.liveChatDelayInMs,
+            );
+        }
     }
 
-    private readonly watchDebugStore = () => {
-        if (this.debugInfoStore.isDebugging) {
-            this.startDebug();
+    createEffect(() => {
+        if (debugInfoStore.isDebugging) {
+            startDebug();
         }
-    };
+    });
 
-    private readonly onChatMessage = async (event: Event): Promise<void> => {
+    async function onChatMessage(event: Event): Promise<void> {
         const customEvent =
             event as CustomEvent<fetchInterceptor.CustomEventDetail>;
 
@@ -282,106 +238,48 @@ export class ChatItemStore {
             return;
         }
 
-        await this.processChatItems(response);
-    };
-
-    private async processChatItems(
-        response: YoutubeChatResponse | InitData,
-    ): Promise<void> {
-        await runInAction(async () => {
-            const { continuationContents } = response;
-
-            if (!continuationContents) {
-                return;
-            }
-
-            const isInitData = youtube.isInitData(response);
-
-            if (isInitData) {
-                this.reset();
-            }
-
-            const { runtime } = await benchmarkAsync(async () => {
-                const timeInfo = this.getCurrentTimeInfo();
-                const chatItems =
-                    this.mode === Mode.REPLAY
-                        ? mapChatItemsFromReplayResponse(
-                              timeInfo,
-                              continuationContents as ReplayContinuationContents,
-                              this.settingsStore.settings,
-                              isInitData,
-                          )
-                        : mapChatItemsFromLiveResponse(
-                              timeInfo,
-                              continuationContents as LiveContinuationContents,
-                              this.settingsStore.settings,
-                              isInitData,
-                          );
-
-                const { runtime: getEleRuntime } = await benchmarkAsync(
-                    async () => assignChatItemRenderedWidth(chatItems),
-                    this.debugInfoStore.isDebugging,
-                );
-
-                chatItems.forEach((item) => {
-                    this.chatItemProcessQueue.push(item);
-                });
-
-                this.updateDebugInfo({
-                    getEleWidthBenchmark: getEleRuntime,
-                    processChatEventQueueLength:
-                        this.chatItemProcessQueue.length,
-                });
-            }, this.debugInfoStore.isDebugging);
-
-            this.updateDebugInfo({
-                processXhrResponseMs: runtime,
-                processChatEventQueueLength: this.chatItemProcessQueue.length,
-            });
-        });
+        await processChatItems(response);
     }
 
-    private readonly dequeueAvailableChatItems = () => {
-        if (!this.isInitiated) {
+    function dequeueAvailableChatItems() {
+        if (!isInitiated) {
             return;
         }
 
-        runInAction(() => {
-            while (this.dequeueChatItem()) {
-                continue;
-            }
-        });
-    };
+        while (dequeueChatItem()) {
+            continue;
+        }
+    }
 
     /**
      * Dequeue a chat item from processed item queue
      *
      * @returns {boolean} - Whether we can continue to dequeue
      */
-    private dequeueChatItem(): boolean {
+    function dequeueChatItem(): boolean {
         const currentPlayerTimeInMsc =
-            this.uiStore.playerState.videoCurrentTimeInSecs * 1000;
+            uiStore.playerState.videoCurrentTimeInSecs * 1000;
 
-        const chatItem = this.chatItemProcessQueue[0];
+        const chatItem = chatItemProcessQueue[0];
 
         if (!chatItem) {
             return false;
         }
 
         // Somehow duplicated
-        if (this.chatItemStatusById.get(chatItem.value.id)) {
-            this.chatItemProcessQueue.shift();
+        if (chatItemStatusById.get(chatItem.value.id)) {
+            chatItemProcessQueue.shift();
             return true;
         }
 
         // Outdated, continue next dequeue
-        if (this.isOutdatedChatItem(chatItem, currentPlayerTimeInMsc)) {
-            this.updateDebugInfo({
+        if (isOutdatedChatItemForPlayerTime(chatItem, currentPlayerTimeInMsc)) {
+            updateDebugInfo({
                 outdatedChatEventCount: 1,
                 liveChatDelayInMs:
                     currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
             });
-            this.chatItemProcessQueue.shift();
+            chatItemProcessQueue.shift();
             return true;
         }
 
@@ -393,31 +291,31 @@ export class ChatItemStore {
                     currentPlayerTimeInMsc,
                 })
             );
-        }, this.debugInfoStore.isDebugging);
+        }, debugInfoStore.isDebugging);
 
-        this.updateDebugInfo({
+        updateDebugInfo({
             processChatEventMs: runtime,
-            processChatEventQueueLength: this.chatItemProcessQueue.length,
+            processChatEventQueueLength: chatItemProcessQueue.length,
         });
 
         if (!isTime) {
             return false;
         }
 
-        this.updateDebugInfo({
+        updateDebugInfo({
             liveChatDelayInMs:
                 currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
         });
 
         const addTimestamp = Date.now();
-        const { settings } = this.settingsStore;
+        const { settings } = settingsStore;
         const { messageSettings } = chatItem;
 
         if (messageSettings.isSticky) {
             chatItem.assignDisplayMeta(-1, addTimestamp);
-            this.chatItemStatusById.set(chatItem.value.id, true);
-            this.stickyChatItems.push(chatItem);
-            this.chatItemProcessQueue.shift();
+            chatItemStatusById.set(chatItem.value.id, true);
+            setState('stickyChatItems', [...state.stickyChatItems, chatItem]);
+            chatItemProcessQueue.shift();
             return true;
         }
 
@@ -426,12 +324,12 @@ export class ChatItemStore {
         }
 
         const lineNumber = getLineNumber({
-            chatItemsByLineNumber: this.chatItemsByLineNumber,
+            chatItemsByLineNumber: state.chatItemsByLineNumber,
             addTimestamp,
             elementWidth: chatItem.width,
             maxLineNumber: settings.totalNumberOfLines,
             flowTimeInSec: settings.flowTimeInSec,
-            containerWidth: this.uiStore.playerState.width,
+            containerWidth: uiStore.playerState.width,
             displayNumberOfLines: chatItem.numberOfLines,
         });
 
@@ -443,23 +341,23 @@ export class ChatItemStore {
         chatItem.assignDisplayMeta(lineNumber, addTimestamp);
 
         for (let i = lineNumber; i < lineNumber + chatItem.numberOfLines; i++) {
-            let chatItems = this.chatItemsByLineNumber.get(i);
-
-            if (!chatItems) {
-                chatItems = observable.array();
-                this.chatItemsByLineNumber.set(i, chatItems);
+            if (state.chatItemsByLineNumber[i]) {
+                setState('chatItemsByLineNumber', i, [
+                    ...state.chatItemsByLineNumber[i]!,
+                    chatItem,
+                ]);
+            } else {
+                setState('chatItemsByLineNumber', i, [chatItem]);
             }
-
-            chatItems.push(chatItem);
         }
 
-        this.chatItemStatusById.set(chatItem.value.id, true);
-        this.chatItemProcessQueue.shift();
+        chatItemStatusById.set(chatItem.value.id, true);
+        chatItemProcessQueue.shift();
 
         return true;
     }
 
-    private isOutdatedChatItem(
+    function isOutdatedChatItemForPlayerTime(
         chatItem: ChatItemModel,
         currentPlayerTimeInMsc: number,
     ): boolean {
@@ -467,7 +365,7 @@ export class ChatItemStore {
             return false;
         }
 
-        if (this.mode === Mode.LIVE && !chatItem.isInitData) {
+        if (mode === Mode.LIVE && !chatItem.isInitData) {
             return false;
         }
 
@@ -479,36 +377,118 @@ export class ChatItemStore {
         });
     }
 
-    private readonly cleanDisplayedChatItems = (): void => {
-        runInAction(() => {
-            const currentTimestamp = Date.now();
-            const flowTimeInMs =
-                this.settingsStore.settings.flowTimeInSec * 1000;
+    function cleanDisplayedChatItems(): void {
+        const currentTimestamp = Date.now();
+        const flowTimeInMs = settingsStore.settings.flowTimeInSec * 1000;
 
-            const cutoffTimestamp = currentTimestamp - flowTimeInMs;
+        const cutoffTimestamp = currentTimestamp - flowTimeInMs;
 
-            let cleanedChatItemCount = 0;
-            const finishedChatItem = (chatItem: ChatItemModel) => {
-                if (chatItem.addTimestamp === undefined) {
-                    throw new Error(
-                        `Missing AddTimestamp for ${chatItem.value.id}`,
-                    );
-                }
-
-                const shouldRemove = chatItem.addTimestamp < cutoffTimestamp;
-                if (shouldRemove) {
-                    this.chatItemStatusById.delete(chatItem.value.id);
-                    cleanedChatItemCount++;
-                }
-
-                return !shouldRemove;
-            };
-
-            for (const chatItems of this.chatItemsByLineNumber.values()) {
-                filterInPlace(chatItems, finishedChatItem);
+        let cleanedChatItemCount = 0;
+        const finishedChatItem = (chatItem: ChatItemModel) => {
+            if (chatItem.addTimestamp === undefined) {
+                throw new Error(
+                    `Missing AddTimestamp for ${chatItem.value.id}`,
+                );
             }
 
-            this.updateDebugInfo({ cleanedChatItemCount });
+            const shouldRemove = chatItem.addTimestamp < cutoffTimestamp;
+            if (shouldRemove) {
+                chatItemStatusById.delete(chatItem.value.id);
+                cleanedChatItemCount++;
+            }
+
+            return !shouldRemove;
+        };
+
+        setState(
+            produce((s) => {
+                for (const chatItems of Object.values(
+                    s.chatItemsByLineNumber,
+                )) {
+                    filterInPlace(chatItems, finishedChatItem);
+                }
+            }),
+        );
+
+        updateDebugInfo({ cleanedChatItemCount });
+    }
+
+    async function processChatItems(
+        response: YoutubeChatResponse | InitData,
+    ): Promise<void> {
+        const { continuationContents } = response;
+
+        if (!continuationContents) {
+            return;
+        }
+
+        const isInitData = youtube.isInitData(response);
+
+        if (isInitData) {
+            reset();
+        }
+
+        const { runtime } = await benchmarkAsync(async () => {
+            const timeInfo = getCurrentTimeInfo();
+            const chatItems =
+                mode === Mode.REPLAY
+                    ? mapChatItemsFromReplayResponse(
+                          timeInfo,
+                          continuationContents as ReplayContinuationContents,
+                          settingsStore.settings,
+                          isInitData,
+                      )
+                    : mapChatItemsFromLiveResponse(
+                          timeInfo,
+                          continuationContents as LiveContinuationContents,
+                          settingsStore.settings,
+                          isInitData,
+                      );
+
+            const { runtime: getEleRuntime } = await benchmarkAsync(
+                async () => assignChatItemRenderedWidth(chatItems),
+                debugInfoStore.isDebugging,
+            );
+
+            chatItems.forEach((item) => {
+                chatItemProcessQueue.push(item);
+            });
+
+            updateDebugInfo({
+                getEleWidthBenchmark: getEleRuntime,
+                processChatEventQueueLength: chatItemProcessQueue.length,
+            });
+        }, debugInfoStore.isDebugging);
+
+        updateDebugInfo({
+            processXhrResponseMs: runtime,
+            processChatEventQueueLength: chatItemProcessQueue.length,
         });
+    }
+
+    onCleanup(() => {
+        window.removeEventListener(chatEventName, onChatMessage);
+        clearAllIntervals();
+    });
+
+    return {
+        ...state,
+        async importInitData(initData: InitData): Promise<void> {
+            mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
+            await processChatItems(initData);
+            isInitiated = true;
+            createAllIntervals();
+        },
+        removeStickyChatItemById(id: string): void {
+            chatItemStatusById.delete(id);
+            setState(
+                produce((s) => {
+                    filterInPlace(
+                        s.stickyChatItems,
+                        (chatItem) => chatItem.value.id !== id,
+                    );
+                }),
+            );
+        },
     };
-}
+};

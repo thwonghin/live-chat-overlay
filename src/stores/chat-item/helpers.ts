@@ -6,7 +6,10 @@ import type {
     ReplayInitData,
     InitData,
 } from '@/definitions/youtube';
-import { ChatItemModel } from '@/models/chat-item';
+import {
+    type ChatItemModel,
+    createChatItemModelFromAction,
+} from '@/models/chat-item';
 import { isNormalChatItem } from '@/models/chat-item/mapper';
 import type { ChatItem } from '@/models/chat-item/types';
 import type { SettingsModel } from '@/models/settings';
@@ -45,7 +48,7 @@ export function mapChatItemsFromReplayResponse(
             const videoTimestampInMs = Number(a.videoOffsetTimeMsec);
             const items = actions
                 .map((action) =>
-                    ChatItemModel.fromAction(
+                    createChatItemModelFromAction(
                         {
                             action,
                             currentTimestampMs: timeInfo.currentTimestampMs,
@@ -72,7 +75,7 @@ export function mapChatItemsFromLiveResponse(
         .map((v) => v.addChatItemAction ?? v.addBannerToLiveChatCommand)
         .filter(isNotNil)
         .map((action) =>
-            ChatItemModel.fromAction(
+            createChatItemModelFromAction(
                 {
                     action,
                     currentTimestampMs: timeInfo.currentTimestampMs,
@@ -174,7 +177,7 @@ function hasSpaceInLine({
 }
 
 type GetLineNumberParameters = {
-    chatItemsByLineNumber: Map<number, ChatItemModel[]>;
+    chatItemsByLineNumber: Record<number, ChatItemModel[]>;
     elementWidth: number;
     maxLineNumber: number;
     addTimestamp: number;
@@ -209,7 +212,7 @@ export function getLineNumber({
                 .map((v, index) => index + lineNumber)
                 .every((loopLineNumber) => {
                     const lastMessageInLine = last(
-                        chatItemsByLineNumber.get(loopLineNumber),
+                        chatItemsByLineNumber[loopLineNumber],
                     );
 
                     return (

@@ -1,10 +1,9 @@
 // Import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
-import { createRoot } from 'react-dom/client';
 import { render } from 'solid-js/web';
 // Import { ThemeProvider, StyleSheetManager } from 'styled-components';
 import type { Browser } from 'webextension-polyfill';
 
-// Import * as contexts from '@/contexts';
+import * as contexts from '@/contexts';
 import type { InitData } from '@/definitions/youtube';
 import type { RootStore } from '@/stores';
 import { youtube } from '@/utils';
@@ -20,6 +19,7 @@ export async function injectLiveChatOverlay(
     browser: Browser,
     store: RootStore,
 ): Promise<() => void> {
+    console.log('init live chat overlay');
     const videoPlayerContainer = youtube.getVideoPlayerContainer();
     if (!videoPlayerContainer) {
         throw new Error('Video Player Container not found.');
@@ -30,6 +30,7 @@ export async function injectLiveChatOverlay(
         throw new Error('Right Player Control not found.');
     }
 
+    console.log('player ele existss');
     await new Promise((resolve, reject) => {
         const styleSheet = browser.runtime.getURL('style.css');
         const cssTag = window.parent.document.createElement('link');
@@ -42,6 +43,7 @@ export async function injectLiveChatOverlay(
         window.parent.document.head.append(cssTag);
     });
 
+    console.log('injectstylesheet');
     rightControlEle.style.display = 'flex';
 
     const liveChatContainer = window.parent.document.createElement('div');
@@ -51,28 +53,31 @@ export async function injectLiveChatOverlay(
     liveChatContainer.style.left = '0';
     liveChatContainer.style.width = '100%';
     liveChatContainer.style.height = '100%';
+    console.log('aa');
     videoPlayerContainer.append(liveChatContainer);
-
+    console.log('bb');
     const playerControlContainer = window.parent.document.createElement('span');
     playerControlContainer.id = PLAYER_CONTROL_CONTAINER;
     playerControlContainer.style.display = 'flex';
     playerControlContainer.style.alignItems = 'center';
     rightControlEle.prepend(playerControlContainer);
 
-    const root = createRoot(liveChatContainer);
-
-    render(
+    const cleanupRender = render(
         () => (
-            <App
-                initData={initData}
-                playerControlContainer={playerControlContainer}
-            />
+            <contexts.i18n.I18nProvider browser={browser}>
+                <contexts.rootStore.StoreProvider store={store}>
+                    <App
+                        initData={initData}
+                        playerControlContainer={playerControlContainer}
+                    />
+                </contexts.rootStore.StoreProvider>
+            </contexts.i18n.I18nProvider>
         ),
         liveChatContainer,
     );
 
     return () => {
-        root.unmount();
+        cleanupRender();
         playerControlContainer.remove();
         liveChatContainer.remove();
     };

@@ -1,49 +1,64 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-
-import { DebugInfoModel } from '@/models/debug-info';
+import { DebugInfoModel, createDebugInfoModel } from '@/models/debug-info';
 import { attachKeydownEventListener } from '@/utils';
+import { createStore, produce } from 'solid-js/store';
+import { onCleanup } from 'solid-js';
 
-export class DebugInfoStore {
-    isDebugging = false;
+export type DebugInfoStoreValues = {
+    isDebugging: boolean;
+    debugInfoModel: DebugInfoModel;
+};
 
-    debugInfoModel = new DebugInfoModel();
+export type DebugInfoStore = {
+    resetMetrics: () => void;
+    reset: () => void;
+} & DebugInfoStoreValues;
 
-    private disposeKeyboardListener: (() => void) | undefined = undefined;
+export const createDebugInfoStore = (): DebugInfoStore => {
+    const [state, setState] = createStore<DebugInfoStoreValues>({
+        isDebugging: false,
+        debugInfoModel: createDebugInfoModel(),
+    });
 
-    constructor() {
-        makeAutoObservable(this);
+    function toggleIsDebugging() {
+        setState(
+            produce((s) => {
+                s.isDebugging = !s.isDebugging;
+            }),
+        );
     }
 
-    init() {
-        this.disposeKeyboardListener = this.attachKeyboardEvent();
+    function resetMetrics() {
+        setState(
+            produce((s) => {
+                s.debugInfoModel.reset();
+            }),
+        );
     }
 
-    cleanup() {
-        this.disposeKeyboardListener?.();
+    function reset() {
+        setState(
+            produce((s) => {
+                s.isDebugging = false;
+                resetMetrics();
+            }),
+        );
     }
 
-    resetMetrics() {
-        this.debugInfoModel.reset();
-    }
+    const disposeKeyboardListener = attachKeydownEventListener({
+        withAlt: true,
+        withCtrl: true,
+        key: 'd',
+        domToAttach: window.parent.document.body,
+        callback: toggleIsDebugging,
+    });
 
-    reset() {
-        this.resetMetrics();
-        this.isDebugging = false;
-    }
+    onCleanup(() => {
+        disposeKeyboardListener();
+    });
 
-    private attachKeyboardEvent(): () => void {
-        return attachKeydownEventListener({
-            withAlt: true,
-            withCtrl: true,
-            key: 'd',
-            domToAttach: window.parent.document.body,
-            callback: this.toggleIsDebugging,
-        });
-    }
-
-    private readonly toggleIsDebugging = (): void => {
-        runInAction(() => {
-            this.isDebugging = !this.isDebugging;
-        });
+    return {
+        ...state,
+        resetMetrics,
+        reset,
     };
-}
+};

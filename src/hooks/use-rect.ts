@@ -1,5 +1,6 @@
 // Source: https://gist.github.com/morajabi/523d7a642d8c0a2f71fcfa0d8b3d2846
-import { useLayoutEffect, useCallback, useState } from 'react';
+
+import { createEffect, createSignal, onCleanup } from 'solid-js';
 
 export type RectResult = {
     bottom: number;
@@ -23,51 +24,33 @@ function getRect<T extends HTMLElement>(element?: T): RectResult {
     return rect;
 }
 
-export function useRect<T extends HTMLElement>(
-    ref: React.RefObject<T>,
-): RectResult {
-    const [rect, setRect] = useState<RectResult>(
-        ref.current ? getRect(ref.current) : getRect(),
-    );
+export function useRect<T extends HTMLElement>(ele?: T): RectResult {
+    const [rect, setRect] = createSignal<RectResult>(getRect(ele));
+    let resizeObserver: ResizeObserver | undefined = undefined;
 
-    const handleResize = useCallback(() => {
-        if (!ref.current) return;
-        setRect(getRect(ref.current)); // Update client rect
-    }, [ref]);
+    function handleResize() {
+        setTimeout(() => {
+            setRect(getRect(ele));
+        });
+    }
 
-    useLayoutEffect(() => {
-        const element = ref.current;
-        if (!element) {
-            return () => {
-                // No clean up
-            };
+    createEffect(() => {
+        if (!ele) {
+            return;
         }
-
-        handleResize();
 
         if (typeof ResizeObserver === 'function') {
-            let resizeObserver: ResizeObserver | undefined = new ResizeObserver(
-                () => {
-                    handleResize();
-                },
-            );
-            resizeObserver.observe(element);
-
-            return (): void => {
-                if (!resizeObserver) {
-                    return;
-                }
-
-                resizeObserver.disconnect();
-                resizeObserver = undefined;
-            };
+            resizeObserver = new ResizeObserver(() => {
+                handleResize();
+            });
+            resizeObserver.observe(ele);
         }
+        handleResize();
+    });
 
-        window.addEventListener('resize', handleResize); // Browser support, remove freely
-        return (): void => {
-            window.removeEventListener('resize', handleResize);
-        };
-    }, [handleResize, ref]);
+    onCleanup(() => {
+        resizeObserver?.disconnect();
+    });
 
-    return rect;
+    return rect();
 }

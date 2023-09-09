@@ -1,5 +1,3 @@
-export * from './use-click-outside';
-export * from './use-ele-class-names';
 export * from './use-is-element-hovering';
 export * from './use-native-stop-keydown-propagation';
 export * from './use-rect';

@@ -1,75 +1,87 @@
-import { makeAutoObservable } from 'mobx';
-
-import { PlayerStateModel } from '@/models/ui';
-
 import type { PopupType } from './types';
+import { createStore } from 'solid-js/store';
+import { onCleanup } from 'solid-js';
 
-export class UiStore {
-    currentPopup: PopupType | undefined;
+export type PlayerStateModel = {
+    width: number;
+    height: number;
+    isSeeking: boolean;
+    isPaused: boolean;
+    readonly videoPlayerEle: HTMLDivElement;
+    readonly videoEle: HTMLVideoElement;
+    get videoCurrentTimeInSecs(): number;
+};
+
+export type UiStoreValue = {
+    currentPopup?: PopupType;
     playerState: PlayerStateModel;
+};
 
-    private resizeObserver: ResizeObserver | undefined;
+export type UiStore = Readonly<{
+    videoPlayerEle: HTMLDivElement;
+    togglePopup: (type: PopupType) => void;
+}> &
+    UiStoreValue;
 
-    constructor(
-        public readonly videoPlayerEle: HTMLDivElement,
-        private readonly videoEle: HTMLVideoElement,
-    ) {
-        this.playerState = new PlayerStateModel(videoPlayerEle, videoEle);
-        makeAutoObservable(this);
+const VIDEO_EVENTS_TO_SUBSCRIBE: Array<keyof HTMLVideoElementEventMap> = [
+    'seeking',
+    'pause',
+    'play',
+    'playing',
+    'seeked',
+];
+
+export const createUiStore = (
+    videoPlayerEle: HTMLDivElement,
+    videoEle: HTMLVideoElement,
+): UiStore => {
+    const [state, setState] = createStore<UiStoreValue>({
+        currentPopup: undefined,
+        playerState: {
+            width: 0,
+            height: 0,
+            isSeeking: false,
+            isPaused: false,
+            videoPlayerEle,
+            videoEle,
+            get videoCurrentTimeInSecs() {
+                return videoEle.currentTime;
+            },
+        },
+    });
+
+    const resizeObserver = new ResizeObserver(() => {
+        const { width, height } = videoPlayerEle.getBoundingClientRect();
+
+        setState('playerState', 'width', width);
+        setState('playerState', 'height', height);
+    });
+    resizeObserver.observe(videoPlayerEle);
+
+    function onVideoStateChange() {
+        setState('playerState', 'isSeeking', videoEle.seeking);
+        setState('playerState', 'isPaused', videoEle.paused);
     }
 
-    togglePopup(type: PopupType) {
-        if (this.currentPopup === type) {
-            this.currentPopup = undefined;
-        } else {
-            this.currentPopup = type;
-        }
-    }
+    VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
+        videoEle.addEventListener(event, onVideoStateChange);
+    });
 
-    init() {
-        this.initResizeObserver();
-        this.addVideoStateChangeListener();
-    }
-
-    cleanup() {
-        this.currentPopup = undefined;
-        this.disconnectResizeObserver();
-        this.removeVideoStateChangeListener();
-    }
-
-    private initResizeObserver() {
-        this.resizeObserver = new ResizeObserver(() => {
-            this.playerState.assignRect();
+    onCleanup(() => {
+        resizeObserver?.disconnect();
+        VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
+            videoEle.removeEventListener(event, onVideoStateChange);
         });
-        this.resizeObserver.observe(this.videoPlayerEle);
+    });
+
+    function togglePopup(type: PopupType) {
+        const newType = type === state.currentPopup ? undefined : type;
+        setState('currentPopup', newType);
     }
 
-    private disconnectResizeObserver() {
-        if (!this.resizeObserver) {
-            return;
-        }
-
-        this.resizeObserver.disconnect();
-        this.resizeObserver = undefined;
-    }
-
-    private addVideoStateChangeListener() {
-        this.videoEle.addEventListener('seeking', this.onVideoStateChange);
-        this.videoEle.addEventListener('pause', this.onVideoStateChange);
-        this.videoEle.addEventListener('play', this.onVideoStateChange);
-        this.videoEle.addEventListener('playing', this.onVideoStateChange);
-        this.videoEle.addEventListener('seeked', this.onVideoStateChange);
-    }
-
-    private removeVideoStateChangeListener() {
-        this.videoEle.removeEventListener('seeking', this.onVideoStateChange);
-        this.videoEle.removeEventListener('pause', this.onVideoStateChange);
-        this.videoEle.removeEventListener('play', this.onVideoStateChange);
-        this.videoEle.removeEventListener('playing', this.onVideoStateChange);
-        this.videoEle.removeEventListener('seeked', this.onVideoStateChange);
-    }
-
-    private readonly onVideoStateChange = () => {
-        this.playerState.assignVideoStates();
+    return {
+        ...state,
+        togglePopup,
+        videoPlayerEle,
     };
-}
+};

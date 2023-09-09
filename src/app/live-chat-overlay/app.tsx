@@ -1,6 +1,7 @@
 import { createSignal, onCleanup } from 'solid-js';
 
 import { type InitData } from '@/definitions/youtube';
+import ChatFlow from '@/components/chat-flow';
 
 type Props = Readonly<{
     initData: InitData;
@@ -8,16 +9,10 @@ type Props = Readonly<{
 }>;
 
 const App = (props: Props) => {
-    const [count, setCount] = createSignal(0);
-    const timer = setInterval(() => setCount(count() + 1), 1000);
-    onCleanup(() => {
-        clearInterval(timer);
-    });
-
     return (
-        <div>
-            Count: {count()} {JSON.stringify(props.initData)}
-        </div>
+        <>
+            <ChatFlow initData={props.initData} />
+        </>
     );
 };
 

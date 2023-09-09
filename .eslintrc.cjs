@@ -80,4 +80,10 @@ module.exports = {
             },
         },
     },
+    '@typescript-eslint/ban-types': [
+        'error',
+        {
+            extendDefaults: true,
+        },
+    ],
 };

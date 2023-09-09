@@ -1,59 +1,30 @@
-import {
-    type IReactionDisposer,
-    makeAutoObservable,
-    reaction,
-    runInAction,
-} from 'mobx';
 import { type Browser } from 'webextension-polyfill';
 
-import { type Settings, SettingsModel } from '@/models/settings';
+import {
+    type Settings,
+    SettingsModel,
+    createSettingsModel,
+} from '@/models/settings';
 import { catchWithFallback, promiseSeries } from '@/utils';
 
 import { MIGRATIONS_STORAGE_KEY, SETTINGS_STORAGE_KEY } from './const';
 import { migrations } from './migrations';
+import { SetStoreFunction, createStore, produce } from 'solid-js/store';
+import { createEffect } from 'solid-js';
 
-class SettingsStore {
+export type SettingsStoreValue = {
     settings: SettingsModel;
-    private readonly reactionDisposers: IReactionDisposer[] = [];
+};
 
-    constructor(private readonly browser: Browser) {
-        this.settings = new SettingsModel();
+export type SettingsStore = {
+    setSettings: SetStoreFunction<SettingsStoreValue>;
+} & SettingsStoreValue;
 
-        makeAutoObservable(this);
-    }
-
-    async init() {
-        try {
-            await this.runMigrations();
-        } catch (error) {
-            console.error(
-                'Fail to run migration, fallback to default settings...',
-                error,
-            );
-        }
-
-        await this.loadFromStorage();
-
-        this.reactionDisposers.push(
-            reaction(
-                () => this.settings,
-                async () => {
-                    await this.updateSettingsInStorage();
-                },
-            ),
-        );
-    }
-
-    public cleanup() {
-        this.reactionDisposers.forEach((disposer) => {
-            disposer();
-        });
-    }
-
-    private async runMigrations() {
-        const result = await this.browser.storage.sync.get(
-            MIGRATIONS_STORAGE_KEY,
-        );
+export const createSettingsStore = async (
+    browser: Browser,
+): Promise<SettingsStore> => {
+    async function runMigrations() {
+        const result = await browser.storage.sync.get(MIGRATIONS_STORAGE_KEY);
         const currentMigrations = (result[MIGRATIONS_STORAGE_KEY] ??
             []) as string[];
 
@@ -63,41 +34,52 @@ class SettingsStore {
 
         await promiseSeries(
             missingMigrations.map((migration) => async () => {
-                await migration.run(this.browser);
+                await migration.run(browser);
 
-                const getResult = await this.browser.storage.sync.get(
+                const getResult = await browser.storage.sync.get(
                     MIGRATIONS_STORAGE_KEY,
                 );
                 const migrated = (getResult[MIGRATIONS_STORAGE_KEY] ??
                     []) as string[];
 
-                await this.browser.storage.sync.set({
+                await browser.storage.sync.set({
                     [MIGRATIONS_STORAGE_KEY]: [...migrated, migration.name],
                 });
             }),
         );
     }
+    await runMigrations();
 
-    private async loadFromStorage() {
+    async function loadFromStorage() {
         const storedSettings = await catchWithFallback(async () => {
-            const result = await this.browser.storage.sync.get(
-                SETTINGS_STORAGE_KEY,
-            );
+            const result = await browser.storage.sync.get(SETTINGS_STORAGE_KEY);
             return result[SETTINGS_STORAGE_KEY] as Settings;
         }, undefined);
 
+        const settings = createSettingsModel();
+
         if (storedSettings) {
-            runInAction(() => {
-                this.settings.setRawSettings(storedSettings);
-            });
+            return settings.setRawSettings(storedSettings);
         }
+        return settings;
     }
 
-    private async updateSettingsInStorage() {
-        return this.browser.storage.sync.set({
-            [SETTINGS_STORAGE_KEY]: this.settings,
+    const [state, setState] = createStore<SettingsStoreValue>({
+        settings: await loadFromStorage(),
+    });
+
+    async function updateSettingsInStorage(settings: SettingsModel) {
+        return browser.storage.sync.set({
+            [SETTINGS_STORAGE_KEY]: settings,
         });
     }
-}
 
-export { SettingsStore };
+    createEffect(() => {
+        updateSettingsInStorage(state.settings);
+    });
+
+    return {
+        ...state,
+        setSettings: setState,
+    };
+};

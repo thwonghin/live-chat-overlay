@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import {
     isMembershipItem,
     isNormalChatItem,
@@ -15,60 +13,65 @@ import { type MessageSettings } from '@/models/settings';
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
+import { createEffect, createSignal } from 'solid-js';
 
-type Props = {
-    readonly chatItem: NormalChatItem | MembershipItem | SuperChatItem;
-    readonly messageSettings: MessageSettings;
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    readonly onRender?: (ele: HTMLElement | null) => void;
-};
+type Props = Readonly<{
+    chatItem: NormalChatItem | MembershipItem | SuperChatItem;
+    messageSettings: MessageSettings;
+    onRender?: (ele?: HTMLElement) => void;
+}>;
 
-const TwoLinesMessage: React.FC<Props> = ({
-    onRender,
-    messageSettings,
-    chatItem,
-}) => {
+const TwoLinesMessage = (props: Props) => {
+    const [ref, setRef] = createSignal<HTMLDivElement>();
+    createEffect(() => {
+        setTimeout(() => {
+            props.onRender?.(ref());
+        });
+    });
+
     const actualNumberOfLines =
-        chatItem.messageParts.length > 0 ? messageSettings.numberOfLines : 1;
+        props.chatItem.messageParts.length > 0
+            ? props.messageSettings.numberOfLines
+            : 1;
 
     const flexDirection = actualNumberOfLines === 2 ? 'column' : 'row';
 
     const bgColor =
-        isNormalChatItem(chatItem) || isMembershipItem(chatItem)
-            ? messageSettings.bgColor
-            : chatItem.color;
+        isNormalChatItem(props.chatItem) || isMembershipItem(props.chatItem)
+            ? props.messageSettings.bgColor
+            : props.chatItem.color;
 
-    const donationAmount = isSuperChatItem(chatItem)
-        ? chatItem.donationAmount
+    const donationAmount = isSuperChatItem(props.chatItem)
+        ? props.chatItem.donationAmount
         : undefined;
 
     return (
         <div
-            ref={onRender}
-            className={styles.container}
+            ref={setRef}
+            class={styles.container}
             style={{
                 height: `${actualNumberOfLines}em`,
-                color: messageSettings.color,
-                fontWeight: messageSettings.weight,
-                opacity: messageSettings.opacity,
-                backgroundColor: bgColor,
-                WebkitTextStrokeColor: messageSettings.strokeColor,
-                WebkitTextStrokeWidth: `${messageSettings.strokeWidth}em`,
-                flexDirection,
-                justifyContent:
+                color: props.messageSettings.color,
+                'font-weight': props.messageSettings.weight,
+                opacity: props.messageSettings.opacity,
+                'background-color': bgColor,
+                '-webkit-text-stroke-color': props.messageSettings.strokeColor,
+                '-webkit-text-stroke-width': `${props.messageSettings.strokeWidth}em`,
+                'flex-direction': flexDirection,
+                'justify-content':
                     flexDirection === 'column' ? 'center' : undefined,
-                alignItems: flexDirection === 'row' ? 'center' : undefined,
+                'align-items': flexDirection === 'row' ? 'center' : undefined,
             }}
         >
             <AuthorChip
-                avatars={chatItem.avatars}
-                name={chatItem.authorName}
+                avatars={props.chatItem.avatars}
+                name={props.chatItem.authorName}
                 donationAmount={donationAmount}
-                authorDisplaySetting={messageSettings.authorDisplay}
+                authorDisplaySetting={props.messageSettings.authorDisplay}
             />
             <MessagePartsRenderer
-                className={styles.message}
-                messageParts={chatItem.messageParts}
+                class={styles.message}
+                messageParts={props.chatItem.messageParts}
             />
         </div>
     );

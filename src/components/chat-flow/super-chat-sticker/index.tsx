@@ -1,48 +1,49 @@
-import * as React from 'react';
-
 import type { SuperStickerItem } from '@/models/chat-item/types';
 import type { MessageSettings } from '@/models/settings';
 
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
+import { createEffect, createSignal } from 'solid-js';
 
-type Props = {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    readonly onRender?: (ele: HTMLElement | null) => void;
-    readonly messageSettings: MessageSettings;
-    readonly chatItem: SuperStickerItem;
-};
+type Props = Readonly<{
+    onRender?: (ele?: HTMLElement) => void;
+    messageSettings: MessageSettings;
+    chatItem: SuperStickerItem;
+}>;
 
-const SuperChatSticker: React.FC<Props> = ({
-    onRender,
-    messageSettings,
-    chatItem,
-}) => {
-    const imageSize = `${0.8 * messageSettings.numberOfLines}em`;
+const SuperChatSticker = (props: Props) => {
+    const [ref, setRef] = createSignal<HTMLDivElement>();
+    createEffect(() => {
+        setTimeout(() => {
+            props.onRender?.(ref());
+        });
+    });
+
+    const imageSize = `${0.8 * props.messageSettings.numberOfLines}em`;
 
     return (
         <div
-            ref={onRender}
-            className={styles.container}
+            ref={setRef}
+            class={styles.container}
             style={{
-                height: `${messageSettings.numberOfLines}em`,
-                color: messageSettings.color,
-                fontWeight: messageSettings.weight,
-                opacity: messageSettings.opacity,
-                backgroundColor: chatItem.color,
-                WebkitTextStrokeColor: messageSettings.strokeColor,
-                WebkitTextStrokeWidth: `${messageSettings.strokeWidth}em`,
+                height: `${props.messageSettings.numberOfLines}em`,
+                color: props.messageSettings.color,
+                'font-weight': props.messageSettings.weight,
+                opacity: props.messageSettings.opacity,
+                'background-color': props.chatItem.color,
+                '-webkit-text-stroke-color': props.messageSettings.strokeColor,
+                '-webkit-text-stroke-width': `${props.messageSettings.strokeWidth}em`,
             }}
         >
             <AuthorChip
-                avatars={chatItem.avatars}
-                name={chatItem.authorName}
-                donationAmount={chatItem.donationAmount}
-                authorDisplaySetting={messageSettings.authorDisplay}
+                avatars={props.chatItem.avatars}
+                name={props.chatItem.authorName}
+                donationAmount={props.chatItem.donationAmount}
+                authorDisplaySetting={props.messageSettings.authorDisplay}
             />
-            <span className={styles.message}>
+            <span class={styles.message}>
                 <img
-                    src={chatItem.stickers[0]?.url}
+                    src={props.chatItem.stickers[0]?.url}
                     style={{
                         width: imageSize,
                         height: imageSize,

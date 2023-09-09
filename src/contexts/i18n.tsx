@@ -1,22 +1,25 @@
-import * as React from 'react';
-
+import { JSXElement, createContext, useContext } from 'solid-js';
 import type { Browser, I18n } from 'webextension-polyfill';
 
-export const I18nContext = React.createContext<I18n.Static>({} as I18n.Static);
+export const I18nContext = createContext<I18n.Static>();
 
 export function useI18n(): I18n.Static {
-    return React.useContext(I18nContext);
+    const i18n = useContext(I18nContext);
+    if (!i18n) {
+        throw new Error('useI18n must be used within a I18nProvider');
+    }
+    return i18n;
 }
 
-type Props = {
-    readonly browser: Browser;
-    readonly children: React.ReactNode;
-};
+type Props = Readonly<{
+    browser: Browser;
+    children: JSXElement;
+}>;
 
-export const I18nProvider: React.FC<Props> = ({ browser, children }) => {
+export const I18nProvider = (props: Props) => {
     return (
-        <I18nContext.Provider value={browser.i18n}>
-            {children}
+        <I18nContext.Provider value={props.browser.i18n}>
+            {props.children}
         </I18nContext.Provider>
     );
 };

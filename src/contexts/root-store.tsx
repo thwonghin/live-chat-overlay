@@ -1,21 +1,26 @@
-import { type PropsWithChildren, createContext, useContext } from 'react';
-
 import type { RootStore } from '@/stores';
+import { JSXElement, createContext, useContext } from 'solid-js';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-const StoreContext = createContext<RootStore>({} as any);
+const StoreContext = createContext<RootStore>();
 
-export const useStore = () => useContext(StoreContext);
+export const useStore = (): RootStore => {
+    const store = useContext(StoreContext);
+    if (!store) {
+        throw new Error('useStore must be used within a StoreProvider');
+    }
+
+    return store;
+};
 
 type Props = {
     store: RootStore;
+    children: JSXElement;
 };
 
-export const StoreProvider: React.FC<PropsWithChildren<Props>> = ({
-    store,
-    children,
-}) => {
+export const StoreProvider = (props: Props) => {
     return (
-        <StoreContext.Provider value={store}>{children}</StoreContext.Provider>
+        <StoreContext.Provider value={props.store}>
+            {props.children}
+        </StoreContext.Provider>
     );
 };

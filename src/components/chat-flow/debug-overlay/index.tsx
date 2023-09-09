@@ -1,12 +1,9 @@
-import * as React from 'react';
-
-import { observer } from 'mobx-react-lite';
-
 import { useStore } from '@/contexts/root-store';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { Benchmark } from '@/models/debug-info/types';
 
 import styles from './index.module.scss';
+import { For, Show, createMemo } from 'solid-js';
 
 type RoundedBenchmark = {
     min: string;
@@ -45,159 +42,145 @@ function renderBenchmark(
     ];
 }
 
-type DebugOverlayLayoutProps = {
-    readonly chatItemsByLineNumber: Map<number, ChatItemModel[]>;
-    readonly getEleWidthBenchmark: RoundedBenchmark;
-    readonly processXhrBenchmark: RoundedBenchmark;
-    readonly processChatEventBenchmark: RoundedBenchmark;
-    readonly processChatEventQueueLength: number;
-    readonly outdatedRemovedChatEventCount: number;
-    readonly cleanedChatItemCount: number;
-    readonly liveChatDelay: RoundedBenchmark;
-};
+type DebugOverlayLayoutProps = Readonly<{
+    chatItemsByLineNumber: Record<number, ChatItemModel[]>;
+    getEleWidthBenchmark: RoundedBenchmark;
+    processXhrBenchmark: RoundedBenchmark;
+    processChatEventBenchmark: RoundedBenchmark;
+    processChatEventQueueLength: number;
+    outdatedRemovedChatEventCount: number;
+    cleanedChatItemCount: number;
+    liveChatDelay: RoundedBenchmark;
+}>;
 
-export const DebugOverlayLayout: React.FC<DebugOverlayLayoutProps> = ({
-    chatItemsByLineNumber,
-    getEleWidthBenchmark,
-    processChatEventBenchmark,
-    processXhrBenchmark,
-    processChatEventQueueLength,
-    outdatedRemovedChatEventCount,
-    cleanedChatItemCount,
-    liveChatDelay,
-}) => {
+export const DebugOverlayLayout = (props: DebugOverlayLayoutProps) => {
+    const chatItems = createMemo(() => {
+        return Object.entries(props.chatItemsByLineNumber);
+    });
+    const getElementWidthBenchMark = createMemo(() => {
+        return renderBenchmark(props.getEleWidthBenchmark);
+    });
+    const processXhrBenchmark = createMemo(() => {
+        return renderBenchmark(props.processXhrBenchmark);
+    });
+    const processChatEventBenchmark = createMemo(() => {
+        return renderBenchmark(props.processChatEventBenchmark);
+    });
+    const liveChatDelayBenchmark = createMemo(() => {
+        return renderBenchmark(props.liveChatDelay);
+    });
+
     return (
         <>
-            <div className={styles['debug-container']}>
-                <p className={styles['debug-text']}>
-                    Message Count By Position:
-                </p>
-                {Array.from(chatItemsByLineNumber.entries()).map(
-                    ([lineNumber, chatItems]) => (
-                        <p
-                            key={lineNumber}
-                            className={styles['debug-text']}
-                        >{`${lineNumber + 1}: ${(chatItems ?? []).length}`}</p>
-                    ),
-                )}
+            <div class={styles['debug-container']}>
+                <p class={styles['debug-text']}>Message Count By Position:</p>
+                <For each={chatItems()}>
+                    {([lineNumber, chatItems]) => (
+                        <p class={styles['debug-text']}>{`${lineNumber + 1}: ${
+                            (chatItems ?? []).length
+                        }`}</p>
+                    )}
+                </For>
             </div>
-            <div className={styles['benchmark-container']}>
-                {getEleWidthBenchmark.count !== 0 && (
-                    <>
-                        <p className={styles['debug-text']}>
-                            Get element width benchmark (μs):
-                        </p>
-                        {renderBenchmark(getEleWidthBenchmark).map(
-                            ({ key, text }) => (
-                                <p key={key} className={styles['debug-text']}>
-                                    {text}
-                                </p>
-                            ),
+            <div class={styles['benchmark-container']}>
+                <Show when={props.getEleWidthBenchmark.count !== 0}>
+                    <p class={styles['debug-text']}>
+                        Get element width benchmark (μs):
+                    </p>
+                    <For each={getElementWidthBenchMark()}>
+                        {(item) => (
+                            <p class={styles['debug-text']}>{item.text}</p>
                         )}
-                    </>
-                )}
+                    </For>
+                </Show>
                 <br />
-                {processXhrBenchmark.count !== 0 && (
-                    <>
-                        <p className={styles['debug-text']}>
-                            Process response benchmark (μs):
-                        </p>
-                        {renderBenchmark(processXhrBenchmark).map(
-                            ({ key, text }) => (
-                                <p key={key} className={styles['debug-text']}>
-                                    {text}
-                                </p>
-                            ),
+                <Show when={props.processXhrBenchmark.count !== 0}>
+                    <p class={styles['debug-text']}>
+                        Process response benchmark (μs):
+                    </p>
+                    <For each={processXhrBenchmark()}>
+                        {(item) => (
+                            <p class={styles['debug-text']}>{item.text}</p>
                         )}
-                    </>
-                )}
+                    </For>
+                </Show>
                 <br />
-                <p className={styles['debug-text']}>
-                    {`Response Chat Event Queue Length: ${processChatEventQueueLength}`}
+                <p class={styles['debug-text']}>
+                    {`Response Chat Event Queue Length: ${props.processChatEventQueueLength}`}
                 </p>
-                {processChatEventBenchmark.count !== 0 && (
-                    <>
-                        <p className={styles['debug-text']}>
-                            Process chat event benchmark (μs):
-                        </p>
-                        {renderBenchmark(processChatEventBenchmark).map(
-                            ({ key, text }) => (
-                                <p key={key} className={styles['debug-text']}>
-                                    {text}
-                                </p>
-                            ),
+                <Show when={props.processChatEventBenchmark.count !== 0}>
+                    <p class={styles['debug-text']}>
+                        Process chat event benchmark (μs):
+                    </p>
+                    <For each={processChatEventBenchmark()}>
+                        {(item) => (
+                            <p class={styles['debug-text']}>{item.text}</p>
                         )}
-                    </>
-                )}
+                    </For>
+                </Show>
                 <br />
-                <p className={styles['debug-text']}>
-                    {`Removed Outdated Chat Event: ${outdatedRemovedChatEventCount}`}
+                <p class={styles['debug-text']}>
+                    {`Removed Outdated Chat Event: ${props.outdatedRemovedChatEventCount}`}
                 </p>
-                {liveChatDelay.count !== 0 && (
-                    <>
-                        <p className={styles['debug-text']}>
-                            Live Chat Delay (s):
-                        </p>
-                        {renderBenchmark(liveChatDelay).map(({ key, text }) => (
-                            <p key={key} className={styles['debug-text']}>
-                                {text}
-                            </p>
-                        ))}
-                    </>
-                )}
-                <p className={styles['debug-text']}>
-                    {`Cleaned Chat Item: ${cleanedChatItemCount}`}
+                <Show when={props.liveChatDelay.count !== 0}>
+                    <p class={styles['debug-text']}>Live Chat Delay (s):</p>
+                    <For each={liveChatDelayBenchmark()}>
+                        {(item) => (
+                            <p class={styles['debug-text']}>{item.text}</p>
+                        )}
+                    </For>
+                </Show>
+                <p class={styles['debug-text']}>
+                    {`Cleaned Chat Item: ${props.cleanedChatItemCount}`}
                 </p>
             </div>
         </>
     );
 };
 
-const DebugOverlay = observer(() => {
-    const {
-        debugInfoStore: {
-            debugInfoModel: {
-                getChatItemEleWidthBenchmark,
-                processXhrBenchmark,
-                processChatEventBenchmark,
-                processChatEventQueueLength,
-                outdatedRemovedChatEventCount,
-                cleanedChatItemCount,
-                liveChatDelay,
-            },
-        },
-        chatItemStore: { chatItemsByLineNumber },
-    } = useStore();
+const DebugOverlay = () => {
+    const store = useStore();
 
-    const roundedGetEleWidthBenchmark = React.useMemo(
-        () => roundBenchmark(getChatItemEleWidthBenchmark),
-        [getChatItemEleWidthBenchmark],
-    );
-    const roundedProcessXhrBenchmark = React.useMemo(
-        () => roundBenchmark(processXhrBenchmark),
-        [processXhrBenchmark],
-    );
-    const roundedProcessChatEventBenchmark = React.useMemo(
-        () => roundBenchmark(processChatEventBenchmark),
-        [processChatEventBenchmark],
-    );
-    const roundedLiveChatDelay = React.useMemo(
-        () => roundBenchmark(liveChatDelay),
-        [liveChatDelay],
-    );
+    const roundedGetEleWidthBenchmark = createMemo(() => {
+        return roundBenchmark(
+            store.debugInfoStore.debugInfoModel.getChatItemEleWidthBenchmark,
+        );
+    });
+    const roundedProcessXhrBenchmark = createMemo(() => {
+        return roundBenchmark(
+            store.debugInfoStore.debugInfoModel.processXhrBenchmark,
+        );
+    });
+    const roundedProcessChatEventBenchmark = createMemo(() => {
+        return roundBenchmark(
+            store.debugInfoStore.debugInfoModel.processChatEventBenchmark,
+        );
+    });
+    const roundedLiveChatDelay = createMemo(() => {
+        return roundBenchmark(
+            store.debugInfoStore.debugInfoModel.liveChatDelay,
+        );
+    });
 
     return (
         <DebugOverlayLayout
-            chatItemsByLineNumber={chatItemsByLineNumber}
-            getEleWidthBenchmark={roundedGetEleWidthBenchmark}
-            processChatEventBenchmark={roundedProcessXhrBenchmark}
-            processXhrBenchmark={roundedProcessChatEventBenchmark}
-            processChatEventQueueLength={processChatEventQueueLength}
-            outdatedRemovedChatEventCount={outdatedRemovedChatEventCount}
-            cleanedChatItemCount={cleanedChatItemCount}
-            liveChatDelay={roundedLiveChatDelay}
+            chatItemsByLineNumber={store.chatItemStore.chatItemsByLineNumber}
+            getEleWidthBenchmark={roundedGetEleWidthBenchmark()}
+            processChatEventBenchmark={roundedProcessXhrBenchmark()}
+            processXhrBenchmark={roundedProcessChatEventBenchmark()}
+            processChatEventQueueLength={
+                store.debugInfoStore.debugInfoModel.processChatEventQueueLength
+            }
+            outdatedRemovedChatEventCount={
+                store.debugInfoStore.debugInfoModel
+                    .outdatedRemovedChatEventCount
+            }
+            cleanedChatItemCount={
+                store.debugInfoStore.debugInfoModel.cleanedChatItemCount
+            }
+            liveChatDelay={roundedLiveChatDelay()}
         />
     );
-});
+};
 
 export default DebugOverlay;

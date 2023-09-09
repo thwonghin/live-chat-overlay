@@ -1,54 +1,44 @@
-import { useMemo, useRef, useState, useLayoutEffect } from 'react';
-
-import { observer } from 'mobx-react-lite';
-
 import { useStore } from '@/contexts/root-store';
-import { useRect } from '@/hooks';
 
 import styles from './index.module.scss';
+import { createMemo, createSignal, JSX, JSXElement, onMount } from 'solid-js';
 
-type Props = {
-    children: React.ReactNode;
+type Props = Readonly<{
+    children: JSXElement;
     top: number;
     containerWidth: number;
-};
+    width: number;
+}>;
 
-const MessageFlower: React.FC<Props> = observer(
-    ({ children, top, containerWidth }) => {
-        const [isFlowing, setIsFlowing] = useState(false);
+const MessageFlower = (props: Props) => {
+    const [isFlowing, setIsFlowing] = createSignal(false);
 
-        const ref = useRef<HTMLDivElement>(null);
-        const rect = useRect(ref);
-        const {
-            settingsStore: { settings },
-        } = useStore();
-        const timeout = useMemo(
-            () => settings.flowTimeInSec * 1000,
-            [settings.flowTimeInSec],
-        );
+    const store = useStore();
 
-        const style = useMemo<React.CSSProperties>(
-            () => ({
-                transitionDuration: `${timeout}ms`,
-                left: containerWidth || 99999,
-                top,
-                transform: isFlowing
-                    ? `translate3d(-${containerWidth + rect.width}px, 0, 0)`
-                    : 'translate3d(0, 0, 0)',
-            }),
-            [timeout, containerWidth, top, isFlowing, rect.width],
-        );
+    const style = createMemo<JSX.CSSProperties>(() => {
+        return {
+            'transition-duration': `${
+                store.settingsStore.settings.flowTimeInSec * 1000
+            }ms`,
+            left: `${props.containerWidth || 99999}px`,
+            top: `${props.top}px`,
+            transform: isFlowing()
+                ? `translate3d(-${props.containerWidth + props.width}px, 0, 0)`
+                : 'translate3d(0, 0, 0)',
+        };
+    });
 
-        useLayoutEffect(() => {
+    onMount(() => {
+        setTimeout(() => {
             setIsFlowing(true);
-        }, []);
+        });
+    });
 
-        return (
-            <div ref={ref} className={styles.container} style={style}>
-                {children}
-            </div>
-        );
-    },
-);
+    return (
+        <div class={styles.container} style={style()}>
+            {props.children}
+        </div>
+    );
+};
 
 export default MessageFlower;

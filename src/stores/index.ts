@@ -1,41 +1,37 @@
-import { makeAutoObservable } from 'mobx';
 import browser from 'webextension-polyfill';
 
 import { LIVE_CHAT_API_INTERCEPT_EVENT } from '@/constants';
 
-import { ChatItemStore } from './chat-item';
-import { DebugInfoStore } from './debug-info';
-import { SettingsStore } from './settings';
-import { UiStore } from './ui';
+import { ChatItemStore, createChatItemStore } from './chat-item';
+import { DebugInfoStore, createDebugInfoStore } from './debug-info';
+import { SettingsStore, createSettingsStore } from './settings';
+import { UiStore, createUiStore } from './ui';
 
-export class RootStore {
-    settingsStore = new SettingsStore(browser);
-    debugInfoStore = new DebugInfoStore();
+export type RootStore = {
+    settingsStore: SettingsStore;
+    debugInfoStore: DebugInfoStore;
     uiStore: UiStore;
     chatItemStore: ChatItemStore;
+};
 
-    constructor(videoEle: HTMLVideoElement, videoPlayerEle: HTMLDivElement) {
-        this.uiStore = new UiStore(videoPlayerEle, videoEle);
-        this.chatItemStore = new ChatItemStore(
-            LIVE_CHAT_API_INTERCEPT_EVENT,
-            this.uiStore,
-            this.settingsStore,
-            this.debugInfoStore,
-        );
-        makeAutoObservable(this);
-    }
+export const createRootStore = async (
+    videoEle: HTMLVideoElement,
+    videoPlayerEle: HTMLDivElement,
+): Promise<RootStore> => {
+    const settingsStore = await createSettingsStore(browser);
+    const debugInfoStore = createDebugInfoStore();
+    const uiStore = createUiStore(videoPlayerEle, videoEle);
+    const chatItemStore = createChatItemStore(
+        LIVE_CHAT_API_INTERCEPT_EVENT,
+        uiStore,
+        settingsStore,
+        debugInfoStore,
+    );
 
-    async init() {
-        await this.settingsStore.init();
-        this.uiStore.init();
-        this.chatItemStore.init();
-        this.debugInfoStore.init();
-    }
-
-    cleanup() {
-        this.settingsStore.cleanup();
-        this.uiStore.cleanup();
-        this.chatItemStore.cleanup();
-        this.debugInfoStore.cleanup();
-    }
-}
+    return {
+        settingsStore,
+        debugInfoStore,
+        uiStore,
+        chatItemStore,
+    };
+};
