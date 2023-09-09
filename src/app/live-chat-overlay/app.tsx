@@ -1,5 +1,3 @@
-import { createSignal, onCleanup } from 'solid-js';
-
 import { type InitData } from '@/definitions/youtube';
 import ChatFlow from '@/components/chat-flow';
 

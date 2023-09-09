@@ -53,12 +53,6 @@ dependencies:
   react-dom:
     specifier: ^18.2.0
     version: 18.2.0(react@18.2.0)
-  solid-fa:
-    specifier: ^0.2.0
-    version: 0.2.0(solid-js@1.7.11)
-  solid-fontawesome:
-    specifier: ^0.1.0
-    version: 0.1.0(@fortawesome/fontawesome-svg-core@6.4.2)(solid-js@1.7.11)
   solid-js:
     specifier: ^1.7.11
     version: 1.7.11
@@ -12672,24 +12666,6 @@ packages:
       astral-regex: 2.0.0
       is-fullwidth-code-point: 3.0.0
     dev: true
-
-  /solid-fa@0.2.0(solid-js@1.7.11):
-    resolution: {integrity: sha512-Mi8aOKZ+GJ2VgchwlV3SVrQPwpcDh1kuXdMCbQ0AlxBI9W36FaxTMOUrZenU6Ua/p04EcRfHLT4AfOx7xJSF3Q==}
-    peerDependencies:
-      solid-js: ^1.0.0
-    dependencies:
-      solid-js: 1.7.11
-    dev: false
-
-  /solid-fontawesome@0.1.0(@fortawesome/fontawesome-svg-core@6.4.2)(solid-js@1.7.11):
-    resolution: {integrity: sha512-tAkuUBc/ZoJBjcxLQxAZX4JDmJAbYibVJscUfcA5lZVUFAxUBGzRal4JkUh+w6YHA5qQIJgzij9psIAw8AISag==}
-    peerDependencies:
-      '@fortawesome/fontawesome-svg-core': ^6.2.1
-      solid-js: ^1.6.2
-    dependencies:
-      '@fortawesome/fontawesome-svg-core': 6.4.2
-      solid-js: 1.7.11
-    dev: false
 
   /solid-js@1.7.11:
     resolution: {integrity: sha512-JkuvsHt8jqy7USsy9xJtT18aF9r2pFO+GB8JQ2XGTvtF49rGTObB46iebD25sE3qVNvIbwglXOXdALnJq9IHtQ==}
