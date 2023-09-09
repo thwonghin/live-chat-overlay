@@ -9,7 +9,7 @@ import type {
 } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { fetchInterceptor } from '@/services';
-import { benchmark, benchmarkAsync, filterInPlace, youtube } from '@/utils';
+import { benchmark, benchmarkAsync, youtube } from '@/utils';
 
 import { assignChatItemRenderedWidth } from './get-chat-item-render-container-ele';
 import {
