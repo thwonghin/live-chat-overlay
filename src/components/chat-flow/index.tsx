@@ -47,7 +47,7 @@ const ChatFlow = (props: Props) => {
             store.settingsStore.settings.totalNumberOfLines,
     );
     const containerStyle = createMemo<JSX.CSSProperties>(() => ({
-        'font-size': `${lineHeight}px`,
+        'font-size': `${lineHeight()}px`,
     }));
 
     return (
