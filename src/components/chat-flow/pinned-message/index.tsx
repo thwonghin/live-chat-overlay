@@ -1,6 +1,5 @@
 import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 import Fa from 'solid-fa';
-import cx from 'classnames';
 
 import type { PinnedChatItem } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
@@ -64,9 +63,10 @@ const PinnedMessage = (props: Props) => {
                 authorDisplaySetting={props.messageSettings.authorDisplay}
             />
             <MessagePartsRenderer
-                class={cx(styles.message, {
+                class={styles.message}
+                classList={{
                     [styles['message--truncated']]: !isExpended,
-                })}
+                }}
                 messageParts={props.chatItem.messageParts}
             />
             {/*

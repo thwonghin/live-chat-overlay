@@ -25,10 +25,8 @@ async function init(): Promise<void> {
         throw new Error('Video Ele not found');
     }
 
-    console.log('hihi');
     const store = await createRootStore(videoEle, videoPlayerEle);
 
-    console.log('hihi2');
     const cleanupLiveChat = await injectLiveChatOverlay(
         initData,
         browser,

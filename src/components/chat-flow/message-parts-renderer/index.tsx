@@ -11,12 +11,13 @@ import { For } from 'solid-js';
 
 type Props = Readonly<{
     class?: string;
+    classList?: Record<string, boolean>;
     messageParts: MessagePart[];
 }>;
 
 const MessagePartsRenderer = (props: Props) => {
     return (
-        <span class={props.class}>
+        <span class={props.class} classList={props.classList}>
             <For each={props.messageParts}>
                 {(part) => {
                     if (isTextMessagePart(part)) {

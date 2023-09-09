@@ -54,7 +54,7 @@ export async function assignChatItemRenderedWidth(
                 }
 
                 if (currentCount === totalChatItemCount) {
-                    cleanup?.();
+                    // cleanup?.();
                     resolve();
                 }
             }
