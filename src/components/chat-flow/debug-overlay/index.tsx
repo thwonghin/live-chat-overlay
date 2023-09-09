@@ -1,6 +1,6 @@
 import { useStore } from '@/contexts/root-store';
 import type { ChatItemModel } from '@/models/chat-item';
-import type { Benchmark } from '@/models/debug-info/types';
+import type { Benchmark } from '@/stores/debug-info/types';
 
 import styles from './index.module.scss';
 import { For, Show, createMemo } from 'solid-js';
@@ -143,23 +143,21 @@ const DebugOverlay = () => {
 
     const roundedGetEleWidthBenchmark = createMemo(() => {
         return roundBenchmark(
-            store.debugInfoStore.debugInfoModel.getChatItemEleWidthBenchmark,
+            store.debugInfoStore.debugInfo.getChatItemEleWidthBenchmark,
         );
     });
     const roundedProcessXhrBenchmark = createMemo(() => {
         return roundBenchmark(
-            store.debugInfoStore.debugInfoModel.processXhrBenchmark,
+            store.debugInfoStore.debugInfo.processXhrBenchmark,
         );
     });
     const roundedProcessChatEventBenchmark = createMemo(() => {
         return roundBenchmark(
-            store.debugInfoStore.debugInfoModel.processChatEventBenchmark,
+            store.debugInfoStore.debugInfo.processChatEventBenchmark,
         );
     });
     const roundedLiveChatDelay = createMemo(() => {
-        return roundBenchmark(
-            store.debugInfoStore.debugInfoModel.liveChatDelay,
-        );
+        return roundBenchmark(store.debugInfoStore.debugInfo.liveChatDelay);
     });
 
     return (
@@ -169,14 +167,13 @@ const DebugOverlay = () => {
             processChatEventBenchmark={roundedProcessXhrBenchmark()}
             processXhrBenchmark={roundedProcessChatEventBenchmark()}
             processChatEventQueueLength={
-                store.debugInfoStore.debugInfoModel.processChatEventQueueLength
+                store.debugInfoStore.debugInfo.processChatEventQueueLength
             }
             outdatedRemovedChatEventCount={
-                store.debugInfoStore.debugInfoModel
-                    .outdatedRemovedChatEventCount
+                store.debugInfoStore.debugInfo.outdatedRemovedChatEventCount
             }
             cleanedChatItemCount={
-                store.debugInfoStore.debugInfoModel.cleanedChatItemCount
+                store.debugInfoStore.debugInfo.cleanedChatItemCount
             }
             liveChatDelay={roundedLiveChatDelay()}
         />

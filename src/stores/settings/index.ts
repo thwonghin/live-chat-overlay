@@ -18,6 +18,7 @@ export type SettingsStoreValue = {
 
 export type SettingsStore = {
     setSettings: SetStoreFunction<SettingsStoreValue>;
+    init: () => void;
 } & SettingsStoreValue;
 
 export const createSettingsStore = async (
@@ -74,12 +75,15 @@ export const createSettingsStore = async (
         });
     }
 
-    createEffect(() => {
-        updateSettingsInStorage(state.settings);
-    });
+    function init() {
+        createEffect(() => {
+            updateSettingsInStorage(state.settings);
+        });
+    }
 
     return {
         ...state,
         setSettings: setState,
+        init,
     };
 };

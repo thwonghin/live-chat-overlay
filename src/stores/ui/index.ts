@@ -20,6 +20,7 @@ export type UiStoreValue = {
 export type UiStore = Readonly<{
     videoPlayerEle: HTMLDivElement;
     togglePopup: (type: PopupType) => void;
+    init: () => void;
 }> &
     UiStoreValue;
 
@@ -50,37 +51,40 @@ export const createUiStore = (
         },
     });
 
-    const resizeObserver = new ResizeObserver(() => {
-        const { width, height } = videoPlayerEle.getBoundingClientRect();
-
-        setState('playerState', 'width', width);
-        setState('playerState', 'height', height);
-    });
-    resizeObserver.observe(videoPlayerEle);
-
-    function onVideoStateChange() {
-        setState('playerState', 'isSeeking', videoEle.seeking);
-        setState('playerState', 'isPaused', videoEle.paused);
-    }
-
-    VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
-        videoEle.addEventListener(event, onVideoStateChange);
-    });
-
-    onCleanup(() => {
-        resizeObserver?.disconnect();
-        VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
-            videoEle.removeEventListener(event, onVideoStateChange);
-        });
-    });
-
     function togglePopup(type: PopupType) {
         const newType = type === state.currentPopup ? undefined : type;
         setState('currentPopup', newType);
     }
 
+    function init() {
+        const resizeObserver = new ResizeObserver(() => {
+            const { width, height } = videoPlayerEle.getBoundingClientRect();
+
+            setState('playerState', 'width', width);
+            setState('playerState', 'height', height);
+        });
+        resizeObserver.observe(videoPlayerEle);
+
+        function onVideoStateChange() {
+            setState('playerState', 'isSeeking', videoEle.seeking);
+            setState('playerState', 'isPaused', videoEle.paused);
+        }
+
+        VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
+            videoEle.addEventListener(event, onVideoStateChange);
+        });
+
+        onCleanup(() => {
+            resizeObserver?.disconnect();
+            VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
+                videoEle.removeEventListener(event, onVideoStateChange);
+            });
+        });
+    }
+
     return {
         ...state,
+        init,
         togglePopup,
         videoPlayerEle,
     };

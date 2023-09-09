@@ -6,12 +6,14 @@ import { ChatItemStore, createChatItemStore } from './chat-item';
 import { DebugInfoStore, createDebugInfoStore } from './debug-info';
 import { SettingsStore, createSettingsStore } from './settings';
 import { UiStore, createUiStore } from './ui';
+import { InitData } from '@/definitions/youtube';
 
 export type RootStore = {
     settingsStore: SettingsStore;
     debugInfoStore: DebugInfoStore;
     uiStore: UiStore;
     chatItemStore: ChatItemStore;
+    init: (initData: InitData) => Promise<void>;
 };
 
 export const createRootStore = async (
@@ -28,7 +30,15 @@ export const createRootStore = async (
         debugInfoStore,
     );
 
+    async function init(initData: InitData) {
+        await chatItemStore.init(initData);
+        settingsStore.init();
+        debugInfoStore.init();
+        uiStore.init();
+    }
+
     return {
+        init,
         settingsStore,
         debugInfoStore,
         uiStore,

@@ -1,5 +1,5 @@
 import { createEffect, onCleanup } from 'solid-js';
-import { createStore, produce } from 'solid-js/store';
+import { createStore } from 'solid-js/store';
 
 import type {
     YoutubeChatResponse,
@@ -47,8 +47,8 @@ export type ChatItemStoreValue = {
 };
 
 export type ChatItemStore = {
-    importInitData(initData: InitData): Promise<void>;
     removeStickyChatItemById(id: string): void;
+    init(initData: InitData): Promise<void>;
 } & ChatItemStoreValue;
 
 export const createChatItemStore = (
@@ -63,8 +63,6 @@ export const createChatItemStore = (
     let tickId: number | undefined;
     let cleanDisplayedIntervalId: number | undefined;
     const chatItemProcessQueue: ChatItemModel[] = [];
-
-    window.addEventListener(chatEventName, onChatMessage);
 
     const [state, setState] = createStore<ChatItemStoreValue>({
         chatItemsByLineNumber: {},
@@ -104,19 +102,11 @@ export const createChatItemStore = (
         }
     }
 
-    createEffect(() => {
-        onPlayerPauseOrResume(uiStore.playerState.isPaused);
-    });
-
     function onPlayerSeek(isSeeking: boolean): void {
         if (isSeeking) {
             reset();
         }
     }
-
-    createEffect(() => {
-        onPlayerSeek(uiStore.playerState.isSeeking);
-    });
 
     function resetNonStickyChatItems(width?: number, height?: number): void {
         setState('chatItemsByLineNumber', {});
@@ -127,13 +117,6 @@ export const createChatItemStore = (
             chatItemStatusById.set(chatItem.value.id, true);
         });
     }
-
-    createEffect(() => {
-        resetNonStickyChatItems(
-            uiStore.playerState.width,
-            uiStore.playerState.height,
-        );
-    });
 
     function createAllIntervals() {
         clearAllIntervals();
@@ -176,54 +159,38 @@ export const createChatItemStore = (
         }
 
         if (info.processChatEventMs) {
-            debugInfoStore.debugInfoModel.addProcessChatEventMetric(
-                info.processChatEventMs,
-            );
+            debugInfoStore.addProcessChatEventMetric(info.processChatEventMs);
         }
 
         if (info.processXhrResponseMs) {
-            debugInfoStore.debugInfoModel.addProcessXhrMetric(
-                info.processXhrResponseMs,
-            );
+            debugInfoStore.addProcessXhrMetric(info.processXhrResponseMs);
         }
 
         if (info.processChatEventQueueLength) {
-            debugInfoStore.debugInfoModel.updateProcessChatEventQueueLength(
+            debugInfoStore.updateProcessChatEventQueueLength(
                 info.processChatEventQueueLength,
             );
         }
 
         if (info.outdatedChatEventCount) {
-            debugInfoStore.debugInfoModel.addOutdatedRemovedChatEventCount(
+            debugInfoStore.addOutdatedRemovedChatEventCount(
                 info.outdatedChatEventCount,
             );
         }
 
         if (info.getEleWidthBenchmark) {
-            debugInfoStore.debugInfoModel.addChatItemEleWidthMetric(
-                info.getEleWidthBenchmark,
-            );
+            debugInfoStore.addChatItemEleWidthMetric(info.getEleWidthBenchmark);
         }
 
         if (info.cleanedChatItemCount) {
-            debugInfoStore.debugInfoModel.addCleanedChatItemCount(
-                info.cleanedChatItemCount,
-            );
+            debugInfoStore.addCleanedChatItemCount(info.cleanedChatItemCount);
         }
 
         // Meaningless to measure this in replay mode
         if (mode === Mode.LIVE && info.liveChatDelayInMs) {
-            debugInfoStore.debugInfoModel.addLiveChatDelay(
-                info.liveChatDelayInMs,
-            );
+            debugInfoStore.addLiveChatDelay(info.liveChatDelayInMs);
         }
     }
-
-    createEffect(() => {
-        if (debugInfoStore.isDebugging) {
-            startDebug();
-        }
-    });
 
     async function onChatMessage(event: Event): Promise<void> {
         const customEvent =
@@ -400,15 +367,11 @@ export const createChatItemStore = (
             return !shouldRemove;
         };
 
-        setState(
-            produce((s) => {
-                for (const chatItems of Object.values(
-                    s.chatItemsByLineNumber,
-                )) {
-                    filterInPlace(chatItems, finishedChatItem);
-                }
-            }),
-        );
+        for (const lineNumber in Object.keys(state.chatItemsByLineNumber)) {
+            setState('chatItemsByLineNumber', Number(lineNumber), (s) =>
+                s.filter(finishedChatItem),
+            );
+        }
 
         updateDebugInfo({ cleanedChatItemCount });
     }
@@ -466,28 +429,52 @@ export const createChatItemStore = (
         });
     }
 
-    onCleanup(() => {
-        window.removeEventListener(chatEventName, onChatMessage);
-        clearAllIntervals();
-    });
+    async function importInitData(initData: InitData): Promise<void> {
+        mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
+        await processChatItems(initData);
+        isInitiated = true;
+        createAllIntervals();
+    }
+
+    async function init(initData: InitData) {
+        window.addEventListener(chatEventName, onChatMessage);
+
+        createEffect(() => {
+            onPlayerPauseOrResume(uiStore.playerState.isPaused);
+        });
+
+        createEffect(() => {
+            onPlayerSeek(uiStore.playerState.isSeeking);
+        });
+
+        createEffect(() => {
+            resetNonStickyChatItems(
+                uiStore.playerState.width,
+                uiStore.playerState.height,
+            );
+        });
+
+        createEffect(() => {
+            if (debugInfoStore.isDebugging) {
+                startDebug();
+            }
+        });
+
+        onCleanup(() => {
+            window.removeEventListener(chatEventName, onChatMessage);
+            clearAllIntervals();
+        });
+
+        await importInitData(initData);
+    }
 
     return {
         ...state,
-        async importInitData(initData: InitData): Promise<void> {
-            mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
-            await processChatItems(initData);
-            isInitiated = true;
-            createAllIntervals();
-        },
+        init,
         removeStickyChatItemById(id: string): void {
             chatItemStatusById.delete(id);
-            setState(
-                produce((s) => {
-                    filterInPlace(
-                        s.stickyChatItems,
-                        (chatItem) => chatItem.value.id !== id,
-                    );
-                }),
+            setState('stickyChatItems', (s) =>
+                s.filter((chatItem) => chatItem.value.id !== id),
             );
         },
     };

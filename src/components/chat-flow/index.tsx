@@ -7,7 +7,7 @@ import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';
 import styles from './index.module.scss';
 import MessageFlower from './message-flower';
-import { createEffect, createMemo, For, Index, JSX } from 'solid-js';
+import { createEffect, createMemo, For, Index, JSX, Show } from 'solid-js';
 
 type Props = Readonly<{
     initData: InitData;
@@ -19,7 +19,7 @@ function useInitStores(initData: InitData): void {
     createEffect(() => {
         // Need to init here because it needs to determine the width
         // that depends on SolidJS
-        store.chatItemStore.importInitData(initData);
+        store.init(initData);
     });
 }
 
@@ -108,7 +108,9 @@ const ChatFlow = (props: Props) => {
                     )}
                 </For>
             </div>
-            {store.debugInfoStore.isDebugging && <DebugOverlay />}
+            <Show when={store.debugInfoStore.isDebugging}>
+                <DebugOverlay />
+            </Show>
         </div>
     );
 };
