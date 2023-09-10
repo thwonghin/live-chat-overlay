@@ -4,8 +4,7 @@ import { useI18n } from '@/contexts/i18n';
 import { useStore } from '@/contexts/root-store';
 
 import BtnTooltip from '../btn-tooltip';
-import FontAwesomeIcon from '@/components/font-awesome';
-import { Component, createSignal } from 'solid-js';
+import { Component, createMemo } from 'solid-js';
 
 const iconToBtnRatio = 2 / 3;
 const faCommentSlashHeight = 640;
@@ -18,9 +17,13 @@ const ToggleBtn: Component = () => {
 
     const i18n = useI18n();
 
-    const ratio = store.settingsStore.settings.isEnabled
-        ? withSlashIconRatio
-        : iconToBtnRatio;
+    const width = createMemo(() => {
+        const ratio = store.settingsStore.settings.isEnabled
+            ? withSlashIconRatio
+            : iconToBtnRatio;
+
+        return `${ratio * 100}%`;
+    });
 
     function handleClick(event: MouseEvent) {
         event.preventDefault();
@@ -35,7 +38,7 @@ const ToggleBtn: Component = () => {
                     : i18n.getMessage('toggleButtonShowTitle')
             }
             onClickTrigger={handleClick}
-            iconWidth={`${ratio * 100}%`}
+            iconWidth={width()}
             icon={
                 store.settingsStore.settings.isEnabled
                     ? faComment
