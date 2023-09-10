@@ -64,7 +64,6 @@ export const createDebugInfoStore = (): DebugInfoStore => {
 
     function toggleIsDebugging() {
         setState('debugInfo', 'isDebugging', (s) => !s);
-        console.log('toggle');
     }
 
     function resetMetrics() {

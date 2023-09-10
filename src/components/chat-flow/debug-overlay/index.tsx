@@ -3,7 +3,7 @@ import type { ChatItemModel } from '@/models/chat-item';
 import type { Benchmark } from '@/stores/debug-info/types';
 
 import styles from './index.module.scss';
-import { For, Show, createMemo } from 'solid-js';
+import { For, Index, Show, createMemo } from 'solid-js';
 
 type RoundedBenchmark = {
     min: string;
@@ -23,22 +23,11 @@ function roundBenchmark(benchmark: Benchmark): RoundedBenchmark {
     };
 }
 
-function renderBenchmark(
-    benchmark: RoundedBenchmark,
-): Array<{ key: string; text: string }> {
+function renderBenchmark(benchmark: RoundedBenchmark): string[] {
     return [
-        {
-            key: 'min-max',
-            text: `min: ${benchmark.min}, max: ${benchmark.max}`,
-        },
-        {
-            key: 'avg',
-            text: `avg: ${benchmark.avg}, count: ${benchmark.count}`,
-        },
-        {
-            key: 'latest',
-            text: `latest: ${benchmark.latest}`,
-        },
+        `min: ${benchmark.min}, max: ${benchmark.max}`,
+        `avg: ${benchmark.avg}, count: ${benchmark.count}`,
+        `latest: ${benchmark.latest}`,
     ];
 }
 
@@ -76,9 +65,9 @@ export const DebugOverlayLayout = (props: DebugOverlayLayoutProps) => {
                 <p class={styles['debug-text']}>Message Count By Position:</p>
                 <For each={chatItems()}>
                     {([lineNumber, chatItems]) => (
-                        <p class={styles['debug-text']}>{`${lineNumber + 1}: ${
-                            (chatItems ?? []).length
-                        }`}</p>
+                        <p class={styles['debug-text']}>{`${
+                            Number(lineNumber) + 1
+                        }: ${(chatItems ?? []).length}`}</p>
                     )}
                 </For>
             </div>
@@ -87,22 +76,18 @@ export const DebugOverlayLayout = (props: DebugOverlayLayoutProps) => {
                     <p class={styles['debug-text']}>
                         Get element width benchmark (μs):
                     </p>
-                    <For each={getElementWidthBenchMark()}>
-                        {(item) => (
-                            <p class={styles['debug-text']}>{item.text}</p>
-                        )}
-                    </For>
+                    <Index each={getElementWidthBenchMark()}>
+                        {(item) => <p class={styles['debug-text']}>{item()}</p>}
+                    </Index>
                 </Show>
                 <br />
                 <Show when={props.processXhrBenchmark.count !== 0}>
                     <p class={styles['debug-text']}>
                         Process response benchmark (μs):
                     </p>
-                    <For each={processXhrBenchmark()}>
-                        {(item) => (
-                            <p class={styles['debug-text']}>{item.text}</p>
-                        )}
-                    </For>
+                    <Index each={processXhrBenchmark()}>
+                        {(item) => <p class={styles['debug-text']}>{item()}</p>}
+                    </Index>
                 </Show>
                 <br />
                 <p class={styles['debug-text']}>
@@ -112,11 +97,9 @@ export const DebugOverlayLayout = (props: DebugOverlayLayoutProps) => {
                     <p class={styles['debug-text']}>
                         Process chat event benchmark (μs):
                     </p>
-                    <For each={processChatEventBenchmark()}>
-                        {(item) => (
-                            <p class={styles['debug-text']}>{item.text}</p>
-                        )}
-                    </For>
+                    <Index each={processChatEventBenchmark()}>
+                        {(item) => <p class={styles['debug-text']}>{item()}</p>}
+                    </Index>
                 </Show>
                 <br />
                 <p class={styles['debug-text']}>
@@ -124,11 +107,9 @@ export const DebugOverlayLayout = (props: DebugOverlayLayoutProps) => {
                 </p>
                 <Show when={props.liveChatDelay.count !== 0}>
                     <p class={styles['debug-text']}>Live Chat Delay (s):</p>
-                    <For each={liveChatDelayBenchmark()}>
-                        {(item) => (
-                            <p class={styles['debug-text']}>{item.text}</p>
-                        )}
-                    </For>
+                    <Index each={liveChatDelayBenchmark()}>
+                        {(item) => <p class={styles['debug-text']}>{item()}</p>}
+                    </Index>
                 </Show>
                 <p class={styles['debug-text']}>
                     {`Cleaned Chat Item: ${props.cleanedChatItemCount}`}
@@ -164,8 +145,8 @@ const DebugOverlay = () => {
         <DebugOverlayLayout
             chatItemsByLineNumber={store.chatItemStore.chatItemsByLineNumber}
             getEleWidthBenchmark={roundedGetEleWidthBenchmark()}
-            processChatEventBenchmark={roundedProcessXhrBenchmark()}
-            processXhrBenchmark={roundedProcessChatEventBenchmark()}
+            processChatEventBenchmark={roundedProcessChatEventBenchmark()}
+            processXhrBenchmark={roundedProcessXhrBenchmark()}
             processChatEventQueueLength={
                 store.debugInfoStore.debugInfo.processChatEventQueueLength
             }

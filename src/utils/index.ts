@@ -34,7 +34,7 @@ export function injectScript(scriptSrc: string) {
 
 type BenchmarkResult<T> = {
     result: T;
-    runtime: number;
+    runtime?: number;
 };
 
 export function benchmark<T>(
@@ -47,7 +47,7 @@ export function benchmark<T>(
 
     return {
         result,
-        runtime: isDebugging ? performance.now() - beforeTime : 0,
+        runtime: isDebugging ? performance.now() - beforeTime : undefined,
     };
 }
 

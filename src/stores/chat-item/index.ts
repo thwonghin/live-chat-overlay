@@ -159,36 +159,36 @@ export const createChatItemStore = (
             return;
         }
 
-        if (info.processChatEventMs) {
+        if (info.processChatEventMs !== undefined) {
             debugInfoStore.addProcessChatEventMetric(info.processChatEventMs);
         }
 
-        if (info.processXhrResponseMs) {
+        if (info.processXhrResponseMs !== undefined) {
             debugInfoStore.addProcessXhrMetric(info.processXhrResponseMs);
         }
 
-        if (info.processChatEventQueueLength) {
+        if (info.processChatEventQueueLength !== undefined) {
             debugInfoStore.updateProcessChatEventQueueLength(
                 info.processChatEventQueueLength,
             );
         }
 
-        if (info.outdatedChatEventCount) {
+        if (info.outdatedChatEventCount !== undefined) {
             debugInfoStore.addOutdatedRemovedChatEventCount(
                 info.outdatedChatEventCount,
             );
         }
 
-        if (info.getEleWidthBenchmark) {
+        if (info.getEleWidthBenchmark !== undefined) {
             debugInfoStore.addChatItemEleWidthMetric(info.getEleWidthBenchmark);
         }
 
-        if (info.cleanedChatItemCount) {
+        if (info.cleanedChatItemCount !== undefined) {
             debugInfoStore.addCleanedChatItemCount(info.cleanedChatItemCount);
         }
 
         // Meaningless to measure this in replay mode
-        if (mode === Mode.LIVE && info.liveChatDelayInMs) {
+        if (mode === Mode.LIVE && info.liveChatDelayInMs !== undefined) {
             debugInfoStore.addLiveChatDelay(info.liveChatDelayInMs);
         }
     }
