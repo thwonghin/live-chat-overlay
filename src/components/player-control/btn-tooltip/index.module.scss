@@ -2,6 +2,7 @@
 
 .tooltip {
     padding: 5px 9px;
+    margin-bottom: 14px;
     font-size: 1.2rem;
     font-weight: 500;
     line-height: 15px;
@@ -12,4 +13,11 @@
         font-size: 2rem;
         line-height: 22px;
     }
+}
+
+.trigger {
+    font-size: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

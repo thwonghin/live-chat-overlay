@@ -1,15 +1,13 @@
-// Import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { render } from 'solid-js/web';
-// Import { ThemeProvider, StyleSheetManager } from 'styled-components';
 import type { Browser } from 'webextension-polyfill';
 
 import * as contexts from '@/contexts';
 import type { InitData } from '@/definitions/youtube';
 import type { RootStore } from '@/stores';
 import { youtube } from '@/utils';
+import styles from './index.module.scss';
 
 import App from './app';
-// Import { theme } from './theme';
 
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
@@ -45,17 +43,12 @@ export async function injectLiveChatOverlay(
 
     const liveChatContainer = window.parent.document.createElement('div');
     liveChatContainer.id = OVERLAY_CONTAINER;
-    liveChatContainer.style.position = 'absolute';
-    liveChatContainer.style.top = '0';
-    liveChatContainer.style.left = '0';
-    liveChatContainer.style.width = '100%';
-    liveChatContainer.style.height = '100%';
+    liveChatContainer.className = styles['live-chat-container'];
     videoPlayerContainer.append(liveChatContainer);
 
     const playerControlContainer = window.parent.document.createElement('span');
     playerControlContainer.id = PLAYER_CONTROL_CONTAINER;
-    playerControlContainer.style.display = 'flex';
-    playerControlContainer.style.alignItems = 'center';
+    playerControlContainer.className = styles['player-control-container'];
     rightControlEle.prepend(playerControlContainer);
 
     const cleanupRender = render(

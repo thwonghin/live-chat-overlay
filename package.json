@@ -95,6 +95,7 @@
         "@fortawesome/fontawesome-svg-core": "^6.4.2",
         "@fortawesome/free-solid-svg-icons": "^6.4.2",
         "@fortawesome/react-fontawesome": "^0.2.0",
+        "@kobalte/core": "^0.11.0",
         "@mui/material": "^5.14.4",
         "@mui/styled-engine-sc": "^5.12.0",
         "@solid-primitives/map": "^0.4.8",

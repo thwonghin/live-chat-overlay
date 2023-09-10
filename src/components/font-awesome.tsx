@@ -9,7 +9,11 @@ type Props = Readonly<
 >;
 
 const FontAwesomeIcon = (props: Props) => {
-    const [localProps, otherProps] = splitProps(props, ['icon', 'classList']);
+    const [localProps, otherProps] = splitProps(props, [
+        'icon',
+        'classList',
+        'width',
+    ]);
     const faicon = createMemo(() => icon(localProps.icon));
 
     return (
@@ -20,6 +24,7 @@ const FontAwesomeIcon = (props: Props) => {
             role="img"
             xmlns="http://www.s3.org/2000/svg"
             viewBox={`0 0 ${faicon().icon[0]} ${faicon().icon[1]}`}
+            width={localProps.width}
             classList={{
                 'svg-inline--fa': true,
                 [faicon().iconName]: true,
