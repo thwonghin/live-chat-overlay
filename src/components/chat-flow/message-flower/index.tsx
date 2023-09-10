@@ -1,7 +1,14 @@
 import { useStore } from '@/contexts/root-store';
 
 import styles from './index.module.scss';
-import { createMemo, createSignal, JSX, JSXElement, onMount } from 'solid-js';
+import {
+    Component,
+    createMemo,
+    createSignal,
+    JSX,
+    JSXElement,
+    onMount,
+} from 'solid-js';
 
 type Props = Readonly<{
     children: JSXElement;
@@ -10,7 +17,7 @@ type Props = Readonly<{
     width: number;
 }>;
 
-const MessageFlower = (props: Props) => {
+const MessageFlower: Component<Props> = (props) => {
     const [isFlowing, setIsFlowing] = createSignal(false);
 
     const store = useStore();

@@ -2,7 +2,7 @@ import type { SuperStickerItem } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
 
 import SuperChatSticker from '.';
-import { JSXElement } from 'solid-js';
+import { Component, JSXElement } from 'solid-js';
 
 const settings = { title: 'SuperChatSticker' };
 export default settings;
@@ -50,13 +50,13 @@ type ContainerProps = {
     children: JSXElement;
 };
 
-const Container = (props: ContainerProps) => (
+const Container: Component<ContainerProps> = (props) => (
     <div style={{ 'font-size': '40px', position: 'absolute' }}>
         {props.children}
     </div>
 );
 
-export const TwoLinesSuperChatSticker = () => (
+export const TwoLinesSuperChatSticker: Component = () => (
     <Container>
         <SuperChatSticker
             chatItem={superStickerItem}
@@ -65,7 +65,7 @@ export const TwoLinesSuperChatSticker = () => (
     </Container>
 );
 
-export const OneLineSuperChatSticker = () => (
+export const OneLineSuperChatSticker: Component = () => (
     <Container>
         <SuperChatSticker
             chatItem={superStickerItem}
@@ -77,7 +77,7 @@ export const OneLineSuperChatSticker = () => (
     </Container>
 );
 
-export const TwoLinesSuperChatStickerWithoutAuthorDisplay = () => (
+export const TwoLinesSuperChatStickerWithoutAuthorDisplay: Component = () => (
     <Container>
         <SuperChatSticker
             chatItem={superStickerItem}
@@ -89,7 +89,7 @@ export const TwoLinesSuperChatStickerWithoutAuthorDisplay = () => (
     </Container>
 );
 
-export const OneLineSuperChatStickerWithoutAuthorDisplay = () => (
+export const OneLineSuperChatStickerWithoutAuthorDisplay: Component = () => (
     <Container>
         <SuperChatSticker
             chatItem={superStickerItem}

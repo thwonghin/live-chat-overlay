@@ -6,7 +6,7 @@ import type {
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
 
 import TwoLinesMessage from '.';
-import { JSXElement } from 'solid-js';
+import { Component, JSXElement } from 'solid-js';
 
 const settings = { title: 'TwoLinesMessage' };
 export default settings;
@@ -64,17 +64,17 @@ const messageSettings: MessageSettings = {
     isSticky: false,
 };
 
-type ContainerProps = {
+type ContainerProps = Readonly<{
     children: JSXElement;
-};
+}>;
 
-const Container = (props: ContainerProps) => (
+const Container: Component<ContainerProps> = (props) => (
     <div style={{ 'font-size': '40px', position: 'absolute' }}>
         {props.children}
     </div>
 );
 
-export const TwoLinesSuperChatMessage = () => (
+export const TwoLinesSuperChatMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={superChatItem}
@@ -83,7 +83,7 @@ export const TwoLinesSuperChatMessage = () => (
     </Container>
 );
 
-export const OneLineSuperChatMessage = () => (
+export const OneLineSuperChatMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={superChatItem}
@@ -95,7 +95,7 @@ export const OneLineSuperChatMessage = () => (
     </Container>
 );
 
-export const TwoLinesMembershipMessage = () => (
+export const TwoLinesMembershipMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={membershipItem}
@@ -104,7 +104,7 @@ export const TwoLinesMembershipMessage = () => (
     </Container>
 );
 
-export const OneLineMembershipMessage = () => (
+export const OneLineMembershipMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={membershipItem}
@@ -116,7 +116,7 @@ export const OneLineMembershipMessage = () => (
     </Container>
 );
 
-export const TwoLinesNormalMessage = () => (
+export const TwoLinesNormalMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={normalMessageItem}
@@ -125,7 +125,7 @@ export const TwoLinesNormalMessage = () => (
     </Container>
 );
 
-export const OneLineNormalMessage = () => (
+export const OneLineNormalMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={normalMessageItem}
@@ -137,7 +137,7 @@ export const OneLineNormalMessage = () => (
     </Container>
 );
 
-export const TwoLinesSuperChatMessageWithoutAuthorDisplay = () => (
+export const TwoLinesSuperChatMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={superChatItem}
@@ -149,7 +149,7 @@ export const TwoLinesSuperChatMessageWithoutAuthorDisplay = () => (
     </Container>
 );
 
-export const OneLineSuperChatMessageWithoutAuthorDisplay = () => (
+export const OneLineSuperChatMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={superChatItem}
@@ -162,7 +162,7 @@ export const OneLineSuperChatMessageWithoutAuthorDisplay = () => (
     </Container>
 );
 
-export const TwoLinesMembershipMessageWithoutAuthorDisplay = () => (
+export const TwoLinesMembershipMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={membershipItem}
@@ -174,7 +174,7 @@ export const TwoLinesMembershipMessageWithoutAuthorDisplay = () => (
     </Container>
 );
 
-export const OneLineMembershipMessageWithoutAuthorDisplay = () => (
+export const OneLineMembershipMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={membershipItem}
@@ -187,7 +187,7 @@ export const OneLineMembershipMessageWithoutAuthorDisplay = () => (
     </Container>
 );
 
-export const TwoLinesNormalMessageWithoutAuthorDisplay = () => (
+export const TwoLinesNormalMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={normalMessageItem}
@@ -199,7 +199,7 @@ export const TwoLinesNormalMessageWithoutAuthorDisplay = () => (
     </Container>
 );
 
-export const OneLineNormalMessageWithoutAuthorDisplay = () => (
+export const OneLineNormalMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={normalMessageItem}

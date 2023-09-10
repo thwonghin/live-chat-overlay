@@ -1,12 +1,13 @@
 import { createChatItemModel } from '@/models/chat-item';
 
 import { DebugOverlayLayout } from '.';
+import { Component } from 'solid-js';
 
 const settings = { title: 'DebugOverlay' };
 
 export default settings;
 
-export const DebugOverlay = () => {
+export const DebugOverlay: Component = () => {
     return (
         <div style={{ width: '800px', height: '800px', position: 'relative' }}>
             <DebugOverlayLayout

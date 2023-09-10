@@ -3,15 +3,15 @@ import type { ChatItemModel } from '@/models/chat-item';
 import type { Benchmark } from '@/stores/debug-info/types';
 
 import styles from './index.module.scss';
-import { For, Index, Show, createMemo } from 'solid-js';
+import { Component, For, Index, Show, createMemo } from 'solid-js';
 
-type RoundedBenchmark = {
+type RoundedBenchmark = Readonly<{
     min: string;
     max: string;
     avg: string;
     count: number;
     latest: string;
-};
+}>;
 
 function roundBenchmark(benchmark: Benchmark): RoundedBenchmark {
     return {
@@ -42,7 +42,9 @@ type DebugOverlayLayoutProps = Readonly<{
     liveChatDelay: RoundedBenchmark;
 }>;
 
-export const DebugOverlayLayout = (props: DebugOverlayLayoutProps) => {
+export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
+    props,
+) => {
     const chatItems = createMemo(() => {
         return Object.entries(props.chatItemsByLineNumber);
     });
@@ -119,7 +121,7 @@ export const DebugOverlayLayout = (props: DebugOverlayLayoutProps) => {
     );
 };
 
-const DebugOverlay = () => {
+const DebugOverlay: Component = () => {
     const store = useStore();
 
     const roundedGetEleWidthBenchmark = createMemo(() => {

@@ -8,6 +8,7 @@ import DebugOverlay from './debug-overlay';
 import styles from './index.module.scss';
 import MessageFlower from './message-flower';
 import {
+    Component,
     createMemo,
     For,
     Index,
@@ -21,7 +22,7 @@ type Props = Readonly<{
     initData: InitData;
 }>;
 
-const ChatFlow = (props: Props) => {
+const ChatFlow: Component<Props> = (props) => {
     const store = useStore();
 
     onMount(() => {

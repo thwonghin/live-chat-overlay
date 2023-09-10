@@ -1,4 +1,4 @@
-import { children, type JSXElement } from 'solid-js';
+import { children, Component, type JSXElement } from 'solid-js';
 
 import { AuthorDisplayMethod } from '@/models/settings';
 
@@ -20,12 +20,12 @@ const name = 'Author Name';
 type ContainerProps = Readonly<{
     children: JSXElement;
 }>;
-const Container = (props: ContainerProps) => {
+const Container: Component<ContainerProps> = (props) => {
     // eslint-disable-next-line @typescript-eslint/naming-convention
     return <div style={{ 'font-size': '40px' }}>{props.children}</div>;
 };
 
-export const WithAllDisplay = () => (
+export const WithAllDisplay: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -35,7 +35,7 @@ export const WithAllDisplay = () => (
     </Container>
 );
 
-export const WithNameOnly = () => (
+export const WithNameOnly: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -45,7 +45,7 @@ export const WithNameOnly = () => (
     </Container>
 );
 
-export const WithAvatarOnly = () => (
+export const WithAvatarOnly: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -55,7 +55,7 @@ export const WithAvatarOnly = () => (
     </Container>
 );
 
-export const WithNone = () => (
+export const WithNone: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -65,7 +65,7 @@ export const WithNone = () => (
     </Container>
 );
 
-export const WithAllDisplayAndDonation = () => (
+export const WithAllDisplayAndDonation: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -76,7 +76,7 @@ export const WithAllDisplayAndDonation = () => (
     </Container>
 );
 
-export const WithNameOnlyAndDonation = () => (
+export const WithNameOnlyAndDonation: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -87,7 +87,7 @@ export const WithNameOnlyAndDonation = () => (
     </Container>
 );
 
-export const WithAvatarOnlyAndDonation = () => (
+export const WithAvatarOnlyAndDonation: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -98,7 +98,7 @@ export const WithAvatarOnlyAndDonation = () => (
     </Container>
 );
 
-export const WithNoneAndDonation = () => (
+export const WithNoneAndDonation: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}

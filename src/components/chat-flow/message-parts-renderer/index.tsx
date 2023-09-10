@@ -7,7 +7,7 @@ import { assertNever } from '@/utils';
 
 import EmojiPartRenderer from './emoji-part-renderer';
 import TextPartRenderer from './text-part-renderer';
-import { For } from 'solid-js';
+import { Component, For } from 'solid-js';
 
 type Props = Readonly<{
     class?: string;
@@ -15,7 +15,7 @@ type Props = Readonly<{
     messageParts: MessagePart[];
 }>;
 
-const MessagePartsRenderer = (props: Props) => {
+const MessagePartsRenderer: Component<Props> = (props) => {
     return (
         <span class={props.class} classList={props.classList}>
             <For each={props.messageParts}>

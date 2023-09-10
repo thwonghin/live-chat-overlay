@@ -4,7 +4,7 @@ import { type MessageSettings } from '@/models/settings';
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
-import { createEffect, createSignal, JSX } from 'solid-js';
+import { Component, createEffect, createSignal, JSX } from 'solid-js';
 import FontAwesomeIcon from '@/components/font-awesome';
 import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,7 +15,7 @@ type Props = Readonly<{
     onRender?: (ele?: HTMLElement) => void;
 }>;
 
-const PinnedMessage = (props: Props) => {
+const PinnedMessage: Component<Props> = (props) => {
     const [ref, setRef] = createSignal<HTMLDivElement>();
     createEffect(() => {
         setTimeout(() => {

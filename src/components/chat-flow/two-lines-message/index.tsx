@@ -13,7 +13,7 @@ import { type MessageSettings } from '@/models/settings';
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
-import { createEffect, createSignal } from 'solid-js';
+import { Component, createEffect, createSignal } from 'solid-js';
 
 type Props = Readonly<{
     chatItem: NormalChatItem | MembershipItem | SuperChatItem;
@@ -21,7 +21,7 @@ type Props = Readonly<{
     onRender?: (ele?: HTMLElement) => void;
 }>;
 
-const TwoLinesMessage = (props: Props) => {
+const TwoLinesMessage: Component<Props> = (props) => {
     const [ref, setRef] = createSignal<HTMLDivElement>();
     createEffect(() => {
         setTimeout(() => {

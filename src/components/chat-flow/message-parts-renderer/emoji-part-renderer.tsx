@@ -1,12 +1,13 @@
 import { last } from 'lodash-es';
 
 import type { EmojiPart } from '@/models/chat-item/types';
+import { Component } from 'solid-js';
 
 type Props = Readonly<{
     emojiPart: EmojiPart;
 }>;
 
-const EmojiPartRenderer = (props: Props) => {
+const EmojiPartRenderer: Component<Props> = (props) => {
     const thumbnail = last(props.emojiPart.thumbnails);
     return (
         <img

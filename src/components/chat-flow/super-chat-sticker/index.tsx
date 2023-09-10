@@ -3,7 +3,7 @@ import type { MessageSettings } from '@/models/settings';
 
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
-import { createEffect, createSignal } from 'solid-js';
+import { Component, createEffect, createSignal } from 'solid-js';
 
 type Props = Readonly<{
     onRender?: (ele?: HTMLElement) => void;
@@ -11,7 +11,7 @@ type Props = Readonly<{
     chatItem: SuperStickerItem;
 }>;
 
-const SuperChatSticker = (props: Props) => {
+const SuperChatSticker: Component<Props> = (props) => {
     const [ref, setRef] = createSignal<HTMLDivElement>();
     createEffect(() => {
         setTimeout(() => {

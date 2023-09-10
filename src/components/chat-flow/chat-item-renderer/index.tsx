@@ -1,4 +1,4 @@
-import { Show } from 'solid-js';
+import { Component, Show } from 'solid-js';
 
 import type { ChatItemModel } from '@/models/chat-item';
 import {
@@ -26,7 +26,7 @@ type Props = Readonly<{
     onClickClose?: (event: MouseEvent) => void;
 }>;
 
-const ChatItemRenderer = (props: Props) => {
+const ChatItemRenderer: Component<Props> = (props) => {
     return (
         <>
             <Show when={isSuperStickerItem(props.chatItem.value)}>
