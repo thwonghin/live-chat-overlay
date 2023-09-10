@@ -1,16 +1,17 @@
 import { attachKeydownEventListener } from '@/utils';
 import { createStore } from 'solid-js/store';
-import { onCleanup } from 'solid-js';
+import { createEffect, createRoot, onCleanup } from 'solid-js';
 import { DebugInfo } from './types';
 import { calculateBenchmark } from './helpers';
 
 export type DebugInfoStoreValues = {
-    isDebugging: boolean;
-    debugInfo: DebugInfo;
+    debugInfo: DebugInfo & {
+        isDebugging: boolean;
+    };
 };
 
 export type DebugInfoStore = {
-    init: () => void;
+    cleanup?: () => void;
     resetMetrics: () => void;
     reset: () => void;
     addChatItemEleWidthMetric(value: number): void;
@@ -58,21 +59,21 @@ const DEFAULT_DEBUG_INFO: Readonly<DebugInfo> = Object.freeze({
 
 export const createDebugInfoStore = (): DebugInfoStore => {
     const [state, setState] = createStore<DebugInfoStoreValues>({
-        isDebugging: false,
-        debugInfo: { ...DEFAULT_DEBUG_INFO },
+        debugInfo: { ...DEFAULT_DEBUG_INFO, isDebugging: false },
     });
 
     function toggleIsDebugging() {
-        setState('isDebugging', (s) => !s);
+        setState('debugInfo', 'isDebugging', (s) => !s);
+        console.log('toggle');
     }
 
     function resetMetrics() {
-        setState('debugInfo', { ...DEFAULT_DEBUG_INFO });
+        setState('debugInfo', { ...DEFAULT_DEBUG_INFO, isDebugging: false });
     }
 
     function reset() {
         resetMetrics();
-        setState('isDebugging', false);
+        setState('debugInfo', 'isDebugging', false);
     }
 
     function addChatItemEleWidthMetric(value: number) {
@@ -115,22 +116,28 @@ export const createDebugInfoStore = (): DebugInfoStore => {
         setState('debugInfo', 'cleanedChatItemCount', (s) => s + count);
     }
 
-    function init() {
-        const disposeKeyboardListener = attachKeydownEventListener({
-            withAlt: true,
-            withCtrl: true,
-            key: 'd',
-            domToAttach: window.parent.document.body,
-            callback: toggleIsDebugging,
+    let cleanup: (() => void) | undefined = undefined;
+
+    createRoot((dispose) => {
+        createEffect(() => {
+            const disposeKeyboardListener = attachKeydownEventListener({
+                withAlt: true,
+                withCtrl: true,
+                key: 'd',
+                domToAttach: window.parent.document.body,
+                callback: toggleIsDebugging,
+            });
+            onCleanup(() => {
+                disposeKeyboardListener();
+            });
         });
-        onCleanup(() => {
-            disposeKeyboardListener();
-        });
-    }
+
+        cleanup = dispose;
+    });
 
     return {
         ...state,
-        init,
+        cleanup,
         resetMetrics,
         reset,
         addChatItemEleWidthMetric,

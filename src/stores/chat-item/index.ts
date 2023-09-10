@@ -1,4 +1,4 @@
-import { createEffect, onCleanup } from 'solid-js';
+import { createEffect, createRoot, onCleanup } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import type {
@@ -48,7 +48,8 @@ export type ChatItemStoreValue = {
 
 export type ChatItemStore = {
     removeStickyChatItemById(id: string): void;
-    init(initData: InitData): Promise<void>;
+    importInitData(initData: InitData): void;
+    cleanup?: () => void;
 } & ChatItemStoreValue;
 
 export const createChatItemStore = (
@@ -154,7 +155,7 @@ export const createChatItemStore = (
     }
 
     function updateDebugInfo(info: DebugInfo) {
-        if (!debugInfoStore.isDebugging) {
+        if (!debugInfoStore.debugInfo.isDebugging) {
             return;
         }
 
@@ -258,7 +259,7 @@ export const createChatItemStore = (
                     currentPlayerTimeInMsc,
                 })
             );
-        }, debugInfoStore.isDebugging);
+        }, debugInfoStore.debugInfo.isDebugging);
 
         updateDebugInfo({
             processChatEventMs: runtime,
@@ -345,6 +346,10 @@ export const createChatItemStore = (
     }
 
     function cleanDisplayedChatItems(): void {
+        if (!isInitiated) {
+            return;
+        }
+
         const currentTimestamp = Date.now();
         const flowTimeInMs = settingsStore.settings.flowTimeInSec * 1000;
 
@@ -410,7 +415,7 @@ export const createChatItemStore = (
 
             const { runtime: getEleRuntime } = await benchmarkAsync(
                 async () => assignChatItemRenderedWidth(chatItems),
-                debugInfoStore.isDebugging,
+                debugInfoStore.debugInfo.isDebugging,
             );
 
             chatItems.forEach((item) => {
@@ -421,7 +426,7 @@ export const createChatItemStore = (
                 getEleWidthBenchmark: getEleRuntime,
                 processChatEventQueueLength: chatItemProcessQueue.length,
             });
-        }, debugInfoStore.isDebugging);
+        }, debugInfoStore.debugInfo.isDebugging);
 
         updateDebugInfo({
             processXhrResponseMs: runtime,
@@ -433,11 +438,17 @@ export const createChatItemStore = (
         mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
         await processChatItems(initData);
         isInitiated = true;
-        createAllIntervals();
     }
 
-    async function init(initData: InitData) {
-        window.addEventListener(chatEventName, onChatMessage);
+    let cleanup: (() => void) | undefined = undefined;
+
+    createRoot((dispose) => {
+        createEffect(() => {
+            window.addEventListener(chatEventName, onChatMessage);
+            onCleanup(() => {
+                window.removeEventListener(chatEventName, onChatMessage);
+            });
+        });
 
         createEffect(() => {
             onPlayerPauseOrResume(uiStore.playerState.isPaused);
@@ -455,22 +466,24 @@ export const createChatItemStore = (
         });
 
         createEffect(() => {
-            if (debugInfoStore.isDebugging) {
+            if (debugInfoStore.debugInfo.isDebugging) {
                 startDebug();
             }
         });
 
-        onCleanup(() => {
-            window.removeEventListener(chatEventName, onChatMessage);
-            clearAllIntervals();
+        createEffect(() => {
+            onCleanup(() => {
+                clearAllIntervals();
+            });
         });
 
-        await importInitData(initData);
-    }
+        cleanup = dispose;
+    });
 
     return {
         ...state,
-        init,
+        cleanup,
+        importInitData,
         removeStickyChatItemById(id: string): void {
             chatItemStatusById.delete(id);
             setState('stickyChatItems', (s) =>

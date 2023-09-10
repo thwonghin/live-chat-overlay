@@ -7,28 +7,32 @@ import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';
 import styles from './index.module.scss';
 import MessageFlower from './message-flower';
-import { createEffect, createMemo, For, Index, JSX, Show } from 'solid-js';
+import {
+    createMemo,
+    For,
+    Index,
+    JSX,
+    onCleanup,
+    onMount,
+    Show,
+} from 'solid-js';
 
 type Props = Readonly<{
     initData: InitData;
 }>;
 
-function useInitStores(initData: InitData): void {
+const ChatFlow = (props: Props) => {
     const store = useStore();
 
-    createEffect(() => {
+    onMount(() => {
         // Need to init here because it needs to determine the width
         // that depends on SolidJS
-        store.init(initData);
+        store.init(props.initData);
+
+        onCleanup(() => {
+            store.cleanup();
+        });
     });
-}
-
-const ChatFlow = (props: Props) => {
-    useInitStores(props.initData);
-
-    const store = useStore();
-
-    // const { chatItemsByLineNumber, stickyChatItems } = chatItemStore;
 
     function handleRemoveMessage(chatItem: ChatItemModel) {
         store.chatItemStore.removeStickyChatItemById(chatItem.value.id);
@@ -108,7 +112,7 @@ const ChatFlow = (props: Props) => {
                     )}
                 </For>
             </div>
-            <Show when={store.debugInfoStore.isDebugging}>
+            <Show when={store.debugInfoStore.debugInfo.isDebugging}>
                 <DebugOverlay />
             </Show>
         </div>

@@ -10,7 +10,7 @@ import { catchWithFallback, promiseSeries } from '@/utils';
 import { MIGRATIONS_STORAGE_KEY, SETTINGS_STORAGE_KEY } from './const';
 import { migrations } from './migrations';
 import { SetStoreFunction, createStore, produce } from 'solid-js/store';
-import { createEffect } from 'solid-js';
+import { createEffect, createRoot } from 'solid-js';
 
 export type SettingsStoreValue = {
     settings: SettingsModel;
@@ -18,7 +18,7 @@ export type SettingsStoreValue = {
 
 export type SettingsStore = {
     setSettings: SetStoreFunction<SettingsStoreValue>;
-    init: () => void;
+    cleanup?: () => void;
 } & SettingsStoreValue;
 
 export const createSettingsStore = async (
@@ -75,15 +75,18 @@ export const createSettingsStore = async (
         });
     }
 
-    function init() {
+    let cleanup: (() => void) | undefined = undefined;
+
+    createRoot((dispose) => {
         createEffect(() => {
             updateSettingsInStorage(state.settings);
         });
-    }
+        cleanup = dispose;
+    });
 
     return {
         ...state,
         setSettings: setState,
-        init,
+        cleanup,
     };
 };

@@ -1,6 +1,6 @@
 import type { PopupType } from './types';
 import { createStore } from 'solid-js/store';
-import { onCleanup } from 'solid-js';
+import { createEffect, createRoot, onCleanup } from 'solid-js';
 
 export type PlayerStateModel = {
     width: number;
@@ -20,7 +20,7 @@ export type UiStoreValue = {
 export type UiStore = Readonly<{
     videoPlayerEle: HTMLDivElement;
     togglePopup: (type: PopupType) => void;
-    init: () => void;
+    cleanup?: () => void;
 }> &
     UiStoreValue;
 
@@ -56,35 +56,47 @@ export const createUiStore = (
         setState('currentPopup', newType);
     }
 
-    function init() {
-        const resizeObserver = new ResizeObserver(() => {
-            const { width, height } = videoPlayerEle.getBoundingClientRect();
+    let cleanup: (() => void) | undefined = undefined;
 
-            setState('playerState', 'width', width);
-            setState('playerState', 'height', height);
-        });
-        resizeObserver.observe(videoPlayerEle);
+    createRoot((dispose) => {
+        createEffect(() => {
+            const resizeObserver = new ResizeObserver(() => {
+                const { width, height } =
+                    videoPlayerEle.getBoundingClientRect();
 
-        function onVideoStateChange() {
-            setState('playerState', 'isSeeking', videoEle.seeking);
-            setState('playerState', 'isPaused', videoEle.paused);
-        }
+                setState('playerState', 'width', width);
+                setState('playerState', 'height', height);
+            });
+            resizeObserver.observe(videoPlayerEle);
 
-        VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
-            videoEle.addEventListener(event, onVideoStateChange);
-        });
-
-        onCleanup(() => {
-            resizeObserver?.disconnect();
-            VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
-                videoEle.removeEventListener(event, onVideoStateChange);
+            onCleanup(() => {
+                resizeObserver.disconnect();
             });
         });
-    }
+
+        createEffect(() => {
+            function onVideoStateChange() {
+                setState('playerState', 'isSeeking', videoEle.seeking);
+                setState('playerState', 'isPaused', videoEle.paused);
+            }
+
+            VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
+                videoEle.addEventListener(event, onVideoStateChange);
+            });
+
+            onCleanup(() => {
+                VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
+                    videoEle.removeEventListener(event, onVideoStateChange);
+                });
+            });
+        });
+
+        cleanup = dispose;
+    });
 
     return {
         ...state,
-        init,
+        cleanup,
         togglePopup,
         videoPlayerEle,
     };

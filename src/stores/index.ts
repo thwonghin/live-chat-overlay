@@ -14,6 +14,7 @@ export type RootStore = {
     uiStore: UiStore;
     chatItemStore: ChatItemStore;
     init: (initData: InitData) => Promise<void>;
+    cleanup: () => void;
 };
 
 export const createRootStore = async (
@@ -31,14 +32,19 @@ export const createRootStore = async (
     );
 
     async function init(initData: InitData) {
-        await chatItemStore.init(initData);
-        settingsStore.init();
-        debugInfoStore.init();
-        uiStore.init();
+        await chatItemStore.importInitData(initData);
+    }
+
+    function cleanup() {
+        settingsStore.cleanup?.();
+        debugInfoStore.cleanup?.();
+        uiStore.cleanup?.();
+        chatItemStore.cleanup?.();
     }
 
     return {
         init,
+        cleanup,
         settingsStore,
         debugInfoStore,
         uiStore,
