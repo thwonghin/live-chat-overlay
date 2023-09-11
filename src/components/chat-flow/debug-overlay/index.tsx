@@ -1,9 +1,10 @@
+import { type Component, For, Index, Show, createMemo } from 'solid-js';
+
 import { useStore } from '@/contexts/root-store';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { Benchmark } from '@/stores/debug-info/types';
 
 import styles from './index.module.scss';
-import { Component, For, Index, Show, createMemo } from 'solid-js';
 
 type RoundedBenchmark = Readonly<{
     min: string;

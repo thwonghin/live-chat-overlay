@@ -1,6 +1,6 @@
 // Source: https://gist.github.com/morajabi/523d7a642d8c0a2f71fcfa0d8b3d2846
 
-import { Accessor, createEffect, createSignal, onCleanup } from 'solid-js';
+import { type Accessor, createEffect, createSignal, onCleanup } from 'solid-js';
 
 export type RectResult = {
     bottom: number;
@@ -28,7 +28,7 @@ export function useRect<T extends HTMLElement>(
     ele: Accessor<T | undefined>,
 ): Accessor<RectResult> {
     const [rect, setRect] = createSignal<RectResult>(getRect(ele()));
-    let resizeObserver: ResizeObserver | undefined = undefined;
+    let resizeObserver: ResizeObserver | undefined;
 
     function handleResize() {
         setTimeout(() => {
@@ -48,6 +48,7 @@ export function useRect<T extends HTMLElement>(
             });
             resizeObserver.observe(element);
         }
+
         handleResize();
     });
 

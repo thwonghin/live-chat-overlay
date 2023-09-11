@@ -1,7 +1,8 @@
+import { type Component } from 'solid-js';
+
 import { createChatItemModel } from '@/models/chat-item';
 
 import { DebugOverlayLayout } from '.';
-import { Component } from 'solid-js';
 
 const settings = { title: 'DebugOverlay' };
 

@@ -1,8 +1,9 @@
+import { type Component } from 'solid-js';
+import { Portal } from 'solid-js/web';
+
 import MessageSettingsBtn from '@/components/player-control/message-settings-btn';
 import SpeedSlider from '@/components/player-control/speed-slider';
 import ToggleBtn from '@/components/player-control/toggle-btn';
-import { Component } from 'solid-js';
-import { Portal } from 'solid-js/web';
 
 type Props = Readonly<{
     playerControlContainer: HTMLSpanElement;

@@ -1,10 +1,10 @@
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
+import { type Component, createMemo } from 'solid-js';
 
 import { useI18n } from '@/contexts/i18n';
 import { useStore } from '@/contexts/root-store';
 
 import BtnTooltip from '../btn-tooltip';
-import { Component, createMemo } from 'solid-js';
 
 const iconToBtnRatio = 2 / 3;
 const faCommentSlashHeight = 640;

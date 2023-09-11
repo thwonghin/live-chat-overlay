@@ -1,8 +1,9 @@
+import { type Component, type JSXElement } from 'solid-js';
+
 import type { SuperStickerItem } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
 
 import SuperChatSticker from '.';
-import { Component, JSXElement } from 'solid-js';
 
 const settings = { title: 'SuperChatSticker' };
 export default settings;

@@ -47,9 +47,9 @@ export type ChatItemStoreValue = {
 };
 
 export type ChatItemStore = {
+    cleanup?: () => void;
     removeStickyChatItemById(id: string): void;
     importInitData(initData: InitData): void;
-    cleanup?: () => void;
 } & ChatItemStoreValue;
 
 export const createChatItemStore = (
@@ -372,7 +372,7 @@ export const createChatItemStore = (
             return !shouldRemove;
         };
 
-        for (const lineNumber in Object.keys(state.chatItemsByLineNumber)) {
+        for (const lineNumber of Object.keys(state.chatItemsByLineNumber)) {
             setState('chatItemsByLineNumber', Number(lineNumber), (s) =>
                 s.filter(finishedChatItem),
             );
@@ -440,7 +440,7 @@ export const createChatItemStore = (
         isInitiated = true;
     }
 
-    let cleanup: (() => void) | undefined = undefined;
+    let cleanup: (() => void) | undefined;
 
     createRoot((dispose) => {
         createEffect(() => {

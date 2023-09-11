@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { createTheme, adaptV4Theme } from '@mui/material';
 
 export const theme = createTheme(

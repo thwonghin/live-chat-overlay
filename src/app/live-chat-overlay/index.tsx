@@ -5,9 +5,9 @@ import * as contexts from '@/contexts';
 import type { InitData } from '@/definitions/youtube';
 import type { RootStore } from '@/stores';
 import { youtube } from '@/utils';
-import styles from './index.module.scss';
 
 import App from './app';
+import styles from './index.module.scss';
 
 const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';

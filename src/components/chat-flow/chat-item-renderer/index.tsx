@@ -1,4 +1,4 @@
-import { Component, Show } from 'solid-js';
+import { type Component, Show } from 'solid-js';
 
 import type { ChatItemModel } from '@/models/chat-item';
 import {
@@ -8,17 +8,17 @@ import {
     isSuperChatItem,
     isSuperStickerItem,
 } from '@/models/chat-item/mapper';
+import {
+    type MembershipItem,
+    type NormalChatItem,
+    type PinnedChatItem,
+    type SuperChatItem,
+    type SuperStickerItem,
+} from '@/models/chat-item/types';
 
 import PinnedMessage from '../pinned-message';
 import SuperChatSticker from '../super-chat-sticker';
 import TwoLinesMessage from '../two-lines-message';
-import {
-    MembershipItem,
-    NormalChatItem,
-    PinnedChatItem,
-    SuperChatItem,
-    SuperStickerItem,
-} from '@/models/chat-item/types';
 
 type Props = Readonly<{
     onRender?: (ele?: HTMLElement) => void;

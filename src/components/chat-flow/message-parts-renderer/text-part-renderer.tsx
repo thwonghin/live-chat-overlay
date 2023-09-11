@@ -1,5 +1,6 @@
+import { type Component } from 'solid-js';
+
 import type { TextPart } from '@/models/chat-item/types';
-import { Component } from 'solid-js';
 
 type Props = Readonly<{
     textPart: TextPart;

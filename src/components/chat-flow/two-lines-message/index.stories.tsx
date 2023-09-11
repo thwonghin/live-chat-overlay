@@ -1,3 +1,5 @@
+import { type Component, type JSXElement } from 'solid-js';
+
 import type {
     MembershipItem,
     NormalChatItem,
@@ -6,7 +8,6 @@ import type {
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
 
 import TwoLinesMessage from '.';
-import { Component, JSXElement } from 'solid-js';
 
 const settings = { title: 'TwoLinesMessage' };
 export default settings;

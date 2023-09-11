@@ -6,6 +6,7 @@ import {
     MenuItem,
     type SelectChangeEvent,
 } from '@mui/material';
+import { For } from 'solid-js';
 import type { I18n } from 'webextension-polyfill';
 
 import { useI18n } from '@/contexts/i18n';
@@ -58,12 +59,12 @@ type Props = {
     onChange: (value: MessageSettingsKey) => void;
 };
 
-const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
+const MessageSettingsTypeSelect: React.FC<Props> = (props) => {
     const handleChange = useCallback(
         (event: SelectChangeEvent<MessageSettingsKey>) => {
-            onChange(event.target.value as MessageSettingsKey);
+            props.onChange(event.target.value as MessageSettingsKey);
         },
-        [onChange],
+        [props.onChange],
     );
     const i18n = useI18n();
 
@@ -78,24 +79,26 @@ const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
 
     return (
         <div>
-            <FormLabel className={styles['form-label']}>
+            <FormLabel class={styles['form-label']}>
                 {i18n.getMessage('messageTypeSelectLabel')}
             </FormLabel>
             <Select
                 variant="standard"
                 color="secondary"
-                value={value}
+                value={props.value}
                 MenuProps={{
                     // Avoid window scrollbar disappeared casuing shift horizontally
                     disableScrollLock: true,
                 }}
                 onChange={handleChange}
             >
-                {messageSettingsOptions.map((option) => (
-                    <MenuItem key={option.key} value={option.key}>
-                        {option.label}
-                    </MenuItem>
-                ))}
+                <For each={messageSettingsOptions}>
+                    {(option) => (
+                        <MenuItem key={option.key} value={option.key}>
+                            {option.label}
+                        </MenuItem>
+                    )}
+                </For>
             </Select>
         </div>
     );

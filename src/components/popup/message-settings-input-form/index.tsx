@@ -15,36 +15,36 @@ type Props = {
     messageSettingsKey: MessageSettingsKey;
 };
 
-const MessageSettingsInputForm: React.FC<Props> = observer(
-    ({ messageSettingsKey }) => {
-        const {
-            settingsStore: { settings },
-        } = useStore();
+const MessageSettingsInputForm: React.FC<Props> = observer((props) => {
+    const {
+        settingsStore: { settings },
+    } = useStore();
 
-        const handleSubmit = useCallback(
-            (value: {
-                globalOpacity: number;
-                messageSettings: MessageSettings;
-            }) => {
-                runInAction(() => {
-                    settings.globalOpacity = value.globalOpacity;
-                    settings.messageSettings[messageSettingsKey] =
-                        value.messageSettings;
-                });
-            },
-            [settings, messageSettingsKey],
-        );
+    const handleSubmit = useCallback(
+        (value: {
+            globalOpacity: number;
+            messageSettings: MessageSettings;
+        }) => {
+            runInAction(() => {
+                settings.globalOpacity = value.globalOpacity;
+                settings.messageSettings[props.messageSettingsKey] =
+                    value.messageSettings;
+            });
+        },
+        [settings, props.messageSettingsKey],
+    );
 
-        return (
-            <Layout
-                key={messageSettingsKey}
-                globalOpacity={settings.globalOpacity}
-                messageSettings={settings.messageSettings[messageSettingsKey]}
-                isBackgroundColorEditable={messageSettingsKey !== 'super-chat'}
-                onSubmit={handleSubmit}
-            />
-        );
-    },
-);
+    return (
+        <Layout
+            key={props.messageSettingsKey}
+            globalOpacity={settings.globalOpacity}
+            messageSettings={settings.messageSettings[props.messageSettingsKey]}
+            isBackgroundColorEditable={
+                props.messageSettingsKey !== 'super-chat'
+            }
+            onSubmit={handleSubmit}
+        />
+    );
+});
 
 export default MessageSettingsInputForm;

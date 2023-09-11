@@ -1,6 +1,8 @@
+import { For } from 'solid-js';
+import { render } from 'solid-js/web';
+
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
 import type { ChatItemModel } from '@/models/chat-item';
-import { For, render } from 'solid-js/web';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 

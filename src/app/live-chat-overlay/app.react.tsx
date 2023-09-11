@@ -10,12 +10,16 @@ type Props = {
     readonly playerControlContainer: HTMLSpanElement;
 };
 
-const App: React.FC<Props> = ({ initData, playerControlContainer }) => {
+const App: React.FC<Props> = (props) => {
     return (
         <>
-            <ChatFlow initData={initData} />
-            <PopupContainer playerControlContainer={playerControlContainer} />
-            <PlayerControl playerControlContainer={playerControlContainer} />
+            <ChatFlow initData={props.initData} />
+            <PopupContainer
+                playerControlContainer={props.playerControlContainer}
+            />
+            <PlayerControl
+                playerControlContainer={props.playerControlContainer}
+            />
         </>
     );
 };

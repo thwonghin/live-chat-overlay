@@ -1,9 +1,10 @@
-import { useStore } from '@/contexts/root-store';
 import { leadingAndTrailing, debounce } from '@solid-primitives/scheduled';
+import { type Component, createMemo, onCleanup } from 'solid-js';
 
-import { Component, createMemo, onCleanup } from 'solid-js';
-import Slider from './slider';
+import { useStore } from '@/contexts/root-store';
+
 import styles from './index.module.scss';
+import Slider from './slider';
 
 const minValue = 3;
 const maxValue = 15;

@@ -1,12 +1,13 @@
+import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { type Component, createEffect, createSignal, type JSX } from 'solid-js';
+
+import FontAwesomeIcon from '@/components/font-awesome';
 import type { PinnedChatItem } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
 
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
-import { Component, createEffect, createSignal, JSX } from 'solid-js';
-import FontAwesomeIcon from '@/components/font-awesome';
-import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 type Props = Readonly<{
     chatItem: PinnedChatItem;

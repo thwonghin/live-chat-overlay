@@ -16,9 +16,7 @@ import type { SettingsModel } from '@/models/settings';
 import { isNotNil } from '@/utils';
 
 export enum Mode {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     LIVE = 'live',
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     REPLAY = 'replay',
 }
 

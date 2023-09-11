@@ -49,24 +49,11 @@ module.exports = {
                 },
             },
         ],
-        '@typescript-eslint/naming-convention': [
+        '@typescript-eslint/naming-convention': 'off',
+        '@typescript-eslint/ban-types': [
             'error',
             {
-                selector: 'default',
-                format: ['strictCamelCase'],
-                filter: {
-                    match: false,
-                    regex: '^Webkit.*',
-                },
-            },
-            {
-                selector: 'typeLike',
-                format: ['StrictPascalCase'],
-            },
-            {
-                selector: 'variable',
-                modifiers: ['const'],
-                format: ['strictCamelCase', 'StrictPascalCase', 'UPPER_CASE'],
+                extendDefaults: true,
             },
         ],
     },
@@ -80,10 +67,4 @@ module.exports = {
             },
         },
     },
-    '@typescript-eslint/ban-types': [
-        'error',
-        {
-            extendDefaults: true,
-        },
-    ],
 };

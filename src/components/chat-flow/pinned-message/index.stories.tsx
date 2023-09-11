@@ -1,8 +1,9 @@
+import { type Component, type JSXElement } from 'solid-js';
+
 import type { PinnedChatItem } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
 
 import PinnedMessage from '.';
-import { Component, JSXElement } from 'solid-js';
 
 const settings = { title: 'PinnedMessage' };
 export default settings;

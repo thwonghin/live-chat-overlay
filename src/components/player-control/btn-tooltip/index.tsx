@@ -1,10 +1,16 @@
+import { type IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Tooltip } from '@kobalte/core';
-import { Component, createEffect, createSignal, onCleanup } from 'solid-js';
+import {
+    type Component,
+    createEffect,
+    createSignal,
+    onCleanup,
+} from 'solid-js';
+
+import FontAwesomeIcon from '@/components/font-awesome';
+import { youtube } from '@/utils';
 
 import styles from './index.module.scss';
-import { youtube } from '@/utils';
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import FontAwesomeIcon from '@/components/font-awesome';
 
 export const ICON_WIDTH = (2 / 3) * (512 / 640) * 100;
 

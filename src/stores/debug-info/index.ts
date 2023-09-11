@@ -1,8 +1,10 @@
-import { attachKeydownEventListener } from '@/utils';
-import { createStore } from 'solid-js/store';
 import { createEffect, createRoot, onCleanup } from 'solid-js';
-import { DebugInfo } from './types';
+import { createStore } from 'solid-js/store';
+
+import { attachKeydownEventListener } from '@/utils';
+
 import { calculateBenchmark } from './helpers';
+import { type DebugInfo } from './types';
 
 export type DebugInfoStoreValues = {
     debugInfo: DebugInfo & {
@@ -115,7 +117,7 @@ export const createDebugInfoStore = (): DebugInfoStore => {
         setState('debugInfo', 'cleanedChatItemCount', (s) => s + count);
     }
 
-    let cleanup: (() => void) | undefined = undefined;
+    let cleanup: (() => void) | undefined;
 
     createRoot((dispose) => {
         createEffect(() => {

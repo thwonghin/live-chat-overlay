@@ -1,6 +1,7 @@
-import type { PopupType } from './types';
-import { createStore } from 'solid-js/store';
 import { createEffect, createRoot, onCleanup } from 'solid-js';
+import { createStore } from 'solid-js/store';
+
+import type { PopupType } from './types';
 
 export type PlayerStateModel = {
     width: number;
@@ -56,7 +57,7 @@ export const createUiStore = (
         setState('currentPopup', newType);
     }
 
-    let cleanup: (() => void) | undefined = undefined;
+    let cleanup: (() => void) | undefined;
 
     createRoot((dispose) => {
         createEffect(() => {

@@ -1,3 +1,14 @@
+import {
+    type Component,
+    createMemo,
+    For,
+    Index,
+    type JSX,
+    onCleanup,
+    onMount,
+    Show,
+} from 'solid-js';
+
 import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
@@ -7,16 +18,6 @@ import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';
 import styles from './index.module.scss';
 import MessageFlower from './message-flower';
-import {
-    Component,
-    createMemo,
-    For,
-    Index,
-    JSX,
-    onCleanup,
-    onMount,
-    Show,
-} from 'solid-js';
 
 type Props = Readonly<{
     initData: InitData;

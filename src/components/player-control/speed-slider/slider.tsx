@@ -1,13 +1,15 @@
-import { useRect } from '@/hooks';
+import { clamp } from 'lodash-es';
 import {
-    Component,
+    type Component,
     createEffect,
     createMemo,
     createSignal,
     onCleanup,
 } from 'solid-js';
+
+import { useRect } from '@/hooks';
+
 import styles from './slider.module.scss';
-import { clamp } from 'lodash-es';
 
 type Props = Readonly<{
     window: Window;
@@ -26,9 +28,7 @@ const Slider: Component<Props> = (props) => {
         return trackRect().width - handleRect().width;
     });
 
-    const [position, setPosition] = createSignal(
-        (maxWidth() * props.percentage) / 100,
-    );
+    const [position, setPosition] = createSignal(0);
 
     const [isDragging, setIsDragging] = createSignal(false);
 
@@ -88,12 +88,12 @@ const Slider: Component<Props> = (props) => {
             ref={setTrackEle}
             class={styles.slider}
             draggable="true"
-            style="touch-action: none;"
+            style={{ 'touch-action': 'none' }}
         >
             <div
                 ref={setHandleEle}
                 class={styles.handle}
-                style={`left: ${position()}px;`}
+                style={{ left: `${position()}px` }}
             />
         </div>
     );

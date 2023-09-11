@@ -71,7 +71,6 @@ export const createSettingsModel = (): SettingsModel => {
                 numberOfLines: 1,
                 authorDisplay: AuthorDisplayMethod.ALL,
             },
-            // eslint-disable-next-line @typescript-eslint/naming-convention
             'super-chat': {
                 ...commonMessageSettings,
                 numberOfLines: 2,

@@ -1,5 +1,11 @@
+import {
+    type JSXElement,
+    createContext,
+    useContext,
+    type Component,
+} from 'solid-js';
+
 import type { RootStore } from '@/stores';
-import { JSXElement, createContext, useContext } from 'solid-js';
 
 const StoreContext = createContext<RootStore>();
 
@@ -17,8 +23,9 @@ type Props = {
     children: JSXElement;
 };
 
-export const StoreProvider = (props: Props) => {
+export const StoreProvider: Component<Props> = (props) => {
     return (
+        // eslint-disable-next-line solid/reactivity
         <StoreContext.Provider value={props.store}>
             {props.children}
         </StoreContext.Provider>

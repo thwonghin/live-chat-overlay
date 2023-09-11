@@ -1,16 +1,16 @@
+import { createEffect, createRoot } from 'solid-js';
+import { type SetStoreFunction, createStore, produce } from 'solid-js/store';
 import { type Browser } from 'webextension-polyfill';
 
 import {
     type Settings,
-    SettingsModel,
+    type SettingsModel,
     createSettingsModel,
 } from '@/models/settings';
 import { catchWithFallback, promiseSeries } from '@/utils';
 
 import { MIGRATIONS_STORAGE_KEY, SETTINGS_STORAGE_KEY } from './const';
 import { migrations } from './migrations';
-import { SetStoreFunction, createStore, produce } from 'solid-js/store';
-import { createEffect, createRoot } from 'solid-js';
 
 export type SettingsStoreValue = {
     settings: SettingsModel;
@@ -49,6 +49,7 @@ export const createSettingsStore = async (
             }),
         );
     }
+
     await runMigrations();
 
     async function loadFromStorage() {
@@ -62,6 +63,7 @@ export const createSettingsStore = async (
         if (storedSettings) {
             return settings.setRawSettings(storedSettings);
         }
+
         return settings;
     }
 
@@ -77,18 +79,12 @@ export const createSettingsStore = async (
 
     const wrappedSetState: typeof setState = (...args: any[]) => {
         // Super hacky workaround to tame the typescript compiler
+        // eslint-disable-next-line prefer-spread
         setState.apply(null, args as never);
-        updateSettingsInStorage(state.settings);
+        void updateSettingsInStorage(state.settings);
     };
 
-    let cleanup: (() => void) | undefined = undefined;
-
-    createRoot((dispose) => {
-        createEffect(() => {
-            updateSettingsInStorage(state.settings);
-        });
-        cleanup = dispose;
-    });
+    let cleanup: (() => void) | undefined;
 
     return {
         ...state,

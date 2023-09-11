@@ -1,4 +1,4 @@
-import { children, Component, type JSXElement } from 'solid-js';
+import { type Component, type JSXElement } from 'solid-js';
 
 import { AuthorDisplayMethod } from '@/models/settings';
 
@@ -21,7 +21,6 @@ type ContainerProps = Readonly<{
     children: JSXElement;
 }>;
 const Container: Component<ContainerProps> = (props) => {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     return <div style={{ 'font-size': '40px' }}>{props.children}</div>;
 };
 

@@ -1,6 +1,6 @@
-import { IconDefinition, icon } from '@fortawesome/fontawesome-svg-core';
+import { type IconDefinition, icon } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import { createMemo, JSX, splitProps } from 'solid-js';
+import { createMemo, type JSX, splitProps } from 'solid-js';
 
 type Props = Readonly<
     {
@@ -32,7 +32,7 @@ const FontAwesomeIcon = (props: Props) => {
             }}
             {...otherProps}
         >
-            <path fill="currentColor" d={faicon().icon[4] as string}></path>
+            <path fill="currentColor" d={faicon().icon[4] as string} />
         </svg>
     );
 };

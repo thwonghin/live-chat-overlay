@@ -9,18 +9,16 @@ type Props = {
     playerControlContainer: HTMLSpanElement;
 };
 
-const PopupContainer: React.FC<Props> = observer(
-    ({ playerControlContainer }) => {
-        const { uiStore } = useStore();
+const PopupContainer: React.FC<Props> = observer((props) => {
+    const { uiStore } = useStore();
 
-        return ReactDOM.createPortal(
-            <MessageSettingsPopup
-                isHidden={uiStore.currentPopup !== 'message-settings'}
-                playerControlContainer={playerControlContainer}
-            />,
-            uiStore.videoPlayerEle,
-        );
-    },
-);
+    return ReactDOM.createPortal(
+        <MessageSettingsPopup
+            isHidden={uiStore.currentPopup !== 'message-settings'}
+            playerControlContainer={props.playerControlContainer}
+        />,
+        uiStore.videoPlayerEle,
+    );
+});
 
 export default PopupContainer;

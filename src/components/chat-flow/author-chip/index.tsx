@@ -1,4 +1,4 @@
-import { Component, Show, createMemo } from 'solid-js';
+import { type Component, Show, createMemo } from 'solid-js';
 
 import type { Thumbnail } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';

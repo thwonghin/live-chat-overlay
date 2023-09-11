@@ -1,14 +1,15 @@
+import {
+    type Component,
+    createMemo,
+    createSignal,
+    type JSX,
+    type JSXElement,
+    onMount,
+} from 'solid-js';
+
 import { useStore } from '@/contexts/root-store';
 
 import styles from './index.module.scss';
-import {
-    Component,
-    createMemo,
-    createSignal,
-    JSX,
-    JSXElement,
-    onMount,
-} from 'solid-js';
 
 type Props = Readonly<{
     children: JSXElement;

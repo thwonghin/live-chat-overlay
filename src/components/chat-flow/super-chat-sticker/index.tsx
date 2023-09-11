@@ -1,9 +1,15 @@
+import {
+    type Component,
+    createEffect,
+    createSignal,
+    createMemo,
+} from 'solid-js';
+
 import type { SuperStickerItem } from '@/models/chat-item/types';
 import type { MessageSettings } from '@/models/settings';
 
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
-import { Component, createEffect, createSignal } from 'solid-js';
 
 type Props = Readonly<{
     onRender?: (ele?: HTMLElement) => void;
@@ -19,7 +25,9 @@ const SuperChatSticker: Component<Props> = (props) => {
         });
     });
 
-    const imageSize = `${0.8 * props.messageSettings.numberOfLines}em`;
+    const imageSize = createMemo(
+        () => `${0.8 * props.messageSettings.numberOfLines}em`,
+    );
 
     return (
         <div
@@ -45,8 +53,8 @@ const SuperChatSticker: Component<Props> = (props) => {
                 <img
                     src={props.chatItem.stickers[0]?.url}
                     style={{
-                        width: imageSize,
-                        height: imageSize,
+                        width: imageSize(),
+                        height: imageSize(),
                     }}
                 />
             </span>

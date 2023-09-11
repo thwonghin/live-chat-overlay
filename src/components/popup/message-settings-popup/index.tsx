@@ -15,7 +15,7 @@ type Props = {
     playerControlContainer: HTMLSpanElement;
 };
 
-const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
+const MessageSettingsPopup: React.FC<Props> = (props) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const [selectedMessageType, setSelectedMessageType] =
         useState<MessageSettingsKey>('guest');
@@ -27,12 +27,12 @@ const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
     return (
         <div
             ref={containerRef}
-            className={cx(youtube.CLASS_POPUP, styles.container, {
-                [styles['container--hidden']]: isHidden,
+            class={cx(youtube.CLASS_POPUP, styles.container, {
+                [styles['container--hidden']]: props.isHidden,
             })}
         >
-            <div className={cx(youtube.CLASS_PANEL, styles['nest-container'])}>
-                <div className={cx(youtube.CLASS_PANEL_MENU, styles.content)}>
+            <div class={cx(youtube.CLASS_PANEL, styles['nest-container'])}>
+                <div class={cx(youtube.CLASS_PANEL_MENU, styles.content)}>
                     <MessageSettingsTypeSelect
                         value={selectedMessageType}
                         onChange={setSelectedMessageType}

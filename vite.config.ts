@@ -46,6 +46,7 @@ export default defineConfig({
         solidPlugin(),
         webExtension({
             disableAutoLaunch: true,
+            skipManifestValidation: true,
             manifest: generateManifest,
             scriptViteConfig: {
                 css: {

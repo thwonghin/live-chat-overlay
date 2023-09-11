@@ -1,10 +1,10 @@
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
+import { type Component } from 'solid-js';
 
 import { useI18n } from '@/contexts/i18n';
 import { useStore } from '@/contexts/root-store';
 
 import BtnTooltip from '../btn-tooltip';
-import { Component } from 'solid-js';
 
 const MessageSettingsBtn: Component = () => {
     const store = useStore();

@@ -1,3 +1,5 @@
+import { type Component, For } from 'solid-js';
+
 import {
     isEmojiMessagePart,
     isTextMessagePart,
@@ -7,7 +9,6 @@ import { assertNever } from '@/utils';
 
 import EmojiPartRenderer from './emoji-part-renderer';
 import TextPartRenderer from './text-part-renderer';
-import { Component, For } from 'solid-js';
 
 type Props = Readonly<{
     class?: string;

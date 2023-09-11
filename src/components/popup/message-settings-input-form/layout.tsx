@@ -18,18 +18,13 @@ type Props = {
     readonly isBackgroundColorEditable: boolean;
 };
 
-const MessageSettingsInputFormLayout: React.FC<Props> = ({
-    globalOpacity,
-    messageSettings,
-    onSubmit,
-    isBackgroundColorEditable,
-}) => {
+const MessageSettingsInputFormLayout: React.FC<Props> = (props) => {
     const formik = useFormik({
         initialValues: {
-            globalOpacity,
-            messageSettings,
+            props.globalOpacity,
+            props.messageSettings,
         },
-        onSubmit,
+        props.onSubmit,
     });
     const i18n = useI18n();
 
@@ -131,7 +126,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     variant="standard"
                     color="secondary"
                     label={i18n.getMessage('messageSettingsBgColorInputLabel')}
-                    disabled={!isBackgroundColorEditable}
+                    disabled={!props.isBackgroundColorEditable}
                     value={formik.values.messageSettings.bgColor}
                     name="messageSettings.bgColor"
                     type="text"
@@ -158,7 +153,7 @@ const MessageSettingsInputFormLayout: React.FC<Props> = ({
                     onChange={formik.handleChange}
                 />
             </div>
-            <div className={styles.row}>
+            <div class={styles.row}>
                 <Button type="submit" color="primary" variant="contained">
                     {i18n.getMessage('applyButtonText')}
                 </Button>
