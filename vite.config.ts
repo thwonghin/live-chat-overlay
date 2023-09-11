@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import webExtension, { readJsonFile } from 'vite-plugin-web-extension';
 import solidPlugin from 'vite-plugin-solid';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import autoprefixer from 'autoprefixer';
 
 type Manifest = {
     version: string;
@@ -47,6 +48,11 @@ export default defineConfig({
             disableAutoLaunch: true,
             manifest: generateManifest,
             scriptViteConfig: {
+                css: {
+                    postcss: {
+                        plugins: [autoprefixer],
+                    },
+                },
                 build: {
                     sourcemap:
                         process.env.NODE_ENV === 'production'

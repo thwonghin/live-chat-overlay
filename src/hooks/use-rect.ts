@@ -1,6 +1,6 @@
 // Source: https://gist.github.com/morajabi/523d7a642d8c0a2f71fcfa0d8b3d2846
 
-import { createEffect, createSignal, onCleanup } from 'solid-js';
+import { Accessor, createEffect, createSignal, onCleanup } from 'solid-js';
 
 export type RectResult = {
     bottom: number;
@@ -24,18 +24,21 @@ function getRect<T extends HTMLElement>(element?: T): RectResult {
     return rect;
 }
 
-export function useRect<T extends HTMLElement>(ele?: T): RectResult {
-    const [rect, setRect] = createSignal<RectResult>(getRect(ele));
+export function useRect<T extends HTMLElement>(
+    ele: Accessor<T | undefined>,
+): Accessor<RectResult> {
+    const [rect, setRect] = createSignal<RectResult>(getRect(ele()));
     let resizeObserver: ResizeObserver | undefined = undefined;
 
     function handleResize() {
         setTimeout(() => {
-            setRect(getRect(ele));
+            setRect(getRect(ele()));
         });
     }
 
     createEffect(() => {
-        if (!ele) {
+        const element = ele();
+        if (!element) {
             return;
         }
 
@@ -43,7 +46,7 @@ export function useRect<T extends HTMLElement>(ele?: T): RectResult {
             resizeObserver = new ResizeObserver(() => {
                 handleResize();
             });
-            resizeObserver.observe(ele);
+            resizeObserver.observe(element);
         }
         handleResize();
     });
@@ -52,5 +55,5 @@ export function useRect<T extends HTMLElement>(ele?: T): RectResult {
         resizeObserver?.disconnect();
     });
 
-    return rect();
+    return rect;
 }

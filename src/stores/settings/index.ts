@@ -75,6 +75,12 @@ export const createSettingsStore = async (
         });
     }
 
+    const wrappedSetState: typeof setState = (...args: any[]) => {
+        // Super hacky workaround to tame the typescript compiler
+        setState.apply(null, args as never);
+        updateSettingsInStorage(state.settings);
+    };
+
     let cleanup: (() => void) | undefined = undefined;
 
     createRoot((dispose) => {
@@ -86,7 +92,7 @@ export const createSettingsStore = async (
 
     return {
         ...state,
-        setSettings: setState,
+        setSettings: wrappedSetState,
         cleanup,
     };
 };

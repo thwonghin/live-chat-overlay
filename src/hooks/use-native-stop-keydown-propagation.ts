@@ -7,8 +7,8 @@ export function useNativeStopKeydownPropagation(element?: HTMLElement): void {
 
     createEffect(() => {
         element?.addEventListener('keydown', stopPropagation);
-    });
-    onCleanup(() => {
-        element?.removeEventListener('keydown', stopPropagation);
+        onCleanup(() => {
+            element?.removeEventListener('keydown', stopPropagation);
+        });
     });
 }
