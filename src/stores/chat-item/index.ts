@@ -43,7 +43,9 @@ const CLEAN_INTERVAL = 1000;
 
 export type ChatItemStoreValue = {
     chatItemsByLineNumber: Record<number, ChatItemModel[]>;
-    stickyChatItems: ChatItemModel[];
+    stickyChatItems: {
+        values: ChatItemModel[];
+    };
 };
 
 export type ChatItemStore = {
@@ -67,7 +69,9 @@ export const createChatItemStore = (
 
     const [state, setState] = createStore<ChatItemStoreValue>({
         chatItemsByLineNumber: {},
-        stickyChatItems: [],
+        stickyChatItems: {
+            values: [],
+        },
     });
 
     function pause(): void {
@@ -81,7 +85,7 @@ export const createChatItemStore = (
     function reset(): void {
         chatItemProcessQueue.splice(0);
         setState('chatItemsByLineNumber', {});
-        setState('stickyChatItems', []);
+        setState('stickyChatItems', 'values', []);
         chatItemStatusById.clear();
 
         updateDebugInfo({
@@ -105,7 +109,7 @@ export const createChatItemStore = (
 
     function onPlayerSeek(isSeeking: boolean): void {
         if (isSeeking) {
-            reset();
+            resetNonStickyChatItems();
         }
     }
 
@@ -114,7 +118,7 @@ export const createChatItemStore = (
         chatItemStatusById.clear();
 
         // Add back sticky status
-        state.stickyChatItems.forEach((chatItem) => {
+        state.stickyChatItems.values.forEach((chatItem) => {
             chatItemStatusById.set(chatItem.value.id, true);
         });
     }
@@ -282,7 +286,7 @@ export const createChatItemStore = (
         if (messageSettings.isSticky) {
             chatItem.assignDisplayMeta(-1, addTimestamp);
             chatItemStatusById.set(chatItem.value.id, true);
-            setState('stickyChatItems', [...state.stickyChatItems, chatItem]);
+            setState('stickyChatItems', 'values', (s) => s.concat(chatItem));
             chatItemProcessQueue.shift();
             return true;
         }
@@ -310,10 +314,7 @@ export const createChatItemStore = (
 
         for (let i = lineNumber; i < lineNumber + chatItem.numberOfLines; i++) {
             if (state.chatItemsByLineNumber[i]) {
-                setState('chatItemsByLineNumber', i, [
-                    ...state.chatItemsByLineNumber[i]!,
-                    chatItem,
-                ]);
+                setState('chatItemsByLineNumber', i, (s) => s.concat(chatItem));
             } else {
                 setState('chatItemsByLineNumber', i, [chatItem]);
             }
@@ -440,6 +441,13 @@ export const createChatItemStore = (
         isInitiated = true;
     }
 
+    function removeStickyChatItemById(id: string): void {
+        chatItemStatusById.delete(id);
+        setState('stickyChatItems', 'values', (s) =>
+            s.filter((chatItem) => chatItem.value.id !== id),
+        );
+    }
+
     let cleanup: (() => void) | undefined;
 
     createRoot((dispose) => {
@@ -484,11 +492,6 @@ export const createChatItemStore = (
         ...state,
         cleanup,
         importInitData,
-        removeStickyChatItemById(id: string): void {
-            chatItemStatusById.delete(id);
-            setState('stickyChatItems', (s) =>
-                s.filter((chatItem) => chatItem.value.id !== id),
-            );
-        },
+        removeStickyChatItemById,
     };
 };

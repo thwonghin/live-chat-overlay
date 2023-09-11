@@ -1,11 +1,19 @@
 import { type IconDefinition, icon } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import { createMemo, type JSX, splitProps } from 'solid-js';
+import {
+    createMemo,
+    type JSX,
+    splitProps,
+    createEffect,
+    createSignal,
+    onCleanup,
+} from 'solid-js';
 
 type Props = Readonly<
-    {
+    JSX.SvgSVGAttributes<SVGSVGElement> & {
         icon: IconDefinition;
-    } & JSX.SvgSVGAttributes<SVGSVGElement>
+        onClick?: (mouseEvent: MouseEvent) => void;
+    }
 >;
 
 const FontAwesomeIcon = (props: Props) => {
@@ -13,11 +21,26 @@ const FontAwesomeIcon = (props: Props) => {
         'icon',
         'classList',
         'width',
+        'onClick',
     ]);
     const faicon = createMemo(() => icon(localProps.icon));
+    const [ref, setRef] = createSignal<SVGElement>();
+
+    createEffect(() => {
+        if (localProps.onClick) {
+            ref()?.addEventListener('click', localProps.onClick);
+        }
+
+        onCleanup(() => {
+            if (localProps.onClick) {
+                ref()?.removeEventListener('click', localProps.onClick);
+            }
+        });
+    });
 
     return (
         <svg
+            ref={setRef}
             aria-hidden="true"
             data-prefix={faicon().prefix}
             dat-icon={faicon().iconName}

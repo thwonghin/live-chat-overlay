@@ -1,5 +1,11 @@
 import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { type Component, createEffect, createSignal, type JSX } from 'solid-js';
+import {
+    type Component,
+    createEffect,
+    createSignal,
+    type JSX,
+    onCleanup,
+} from 'solid-js';
 
 import FontAwesomeIcon from '@/components/font-awesome';
 import type { PinnedChatItem } from '@/models/chat-item/types';
@@ -25,21 +31,26 @@ const PinnedMessage: Component<Props> = (props) => {
     });
 
     const [isExpended, setIsExpended] = createSignal(false);
-    const handleClick: JSX.EventHandlerUnion<HTMLDivElement, MouseEvent> = (
-        event,
-    ) => {
+    const handleClick = (event: MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
         setIsExpended((state) => !state);
     };
 
-    const handleClickClose: JSX.EventHandlerUnion<SVGSVGElement, MouseEvent> = (
-        event,
-    ) => {
+    const handleClickClose = (event: MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
         props.onClickClose?.(event);
     };
+
+    // Solid js onClick props are not working
+    createEffect(() => {
+        ref()?.addEventListener('click', handleClick);
+
+        onCleanup(() => {
+            ref()?.removeEventListener('click', handleClick);
+        });
+    });
 
     return (
         <div
@@ -53,7 +64,6 @@ const PinnedMessage: Component<Props> = (props) => {
                 '-webkit-text-stroke-color': props.messageSettings.strokeColor,
                 '-webkit-text-stroke-width': `${props.messageSettings.strokeWidth}em`,
             }}
-            onClick={handleClick}
         >
             <FontAwesomeIcon class={styles.icon} icon={faThumbtack} />
             <AuthorChip
@@ -64,7 +74,7 @@ const PinnedMessage: Component<Props> = (props) => {
             <MessagePartsRenderer
                 class={styles.message}
                 classList={{
-                    [styles['message--truncated']]: !isExpended,
+                    [styles['message--truncated']]: !isExpended(),
                 }}
                 messageParts={props.chatItem.messageParts}
             />

@@ -7,6 +7,7 @@ import {
     onCleanup,
     onMount,
     Show,
+    createEffect,
 } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
@@ -103,7 +104,7 @@ const ChatFlow: Component<Props> = (props) => {
                         </For>
                     )}
                 </Index>
-                <For each={store.chatItemStore.stickyChatItems}>
+                <For each={store.chatItemStore.stickyChatItems.values}>
                     {(chatItem) => (
                         <ChatItemRenderer
                             chatItem={chatItem}
