@@ -7,7 +7,6 @@ import {
     onCleanup,
     onMount,
     Show,
-    createEffect,
 } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';

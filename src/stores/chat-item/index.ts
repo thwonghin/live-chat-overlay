@@ -114,7 +114,10 @@ export const createChatItemStore = (
     }
 
     function resetNonStickyChatItems(width?: number, height?: number): void {
-        setState('chatItemsByLineNumber', {});
+        Object.keys(state.chatItemsByLineNumber).forEach((lineNumber) => {
+            setState('chatItemsByLineNumber', Number(lineNumber), []);
+        });
+
         chatItemStatusById.clear();
 
         // Add back sticky status
@@ -458,25 +461,52 @@ export const createChatItemStore = (
             });
         });
 
-        createEffect(() => {
+        createEffect((prev) => {
+            if (prev === uiStore.playerState.isPaused) {
+                return;
+            }
+
             onPlayerPauseOrResume(uiStore.playerState.isPaused);
+
+            return uiStore.playerState.isPaused;
         });
 
-        createEffect(() => {
+        createEffect((prev) => {
+            if (prev === uiStore.playerState.isSeeking) {
+                return;
+            }
+
             onPlayerSeek(uiStore.playerState.isSeeking);
+
+            return uiStore.playerState.isSeeking;
         });
 
-        createEffect(() => {
+        createEffect((prev) => {
+            const newDimension = `${Math.round(
+                uiStore.playerState.width,
+            )},${Math.round(uiStore.playerState.height)}`;
+            if (prev === newDimension) {
+                return;
+            }
+
             resetNonStickyChatItems(
                 uiStore.playerState.width,
                 uiStore.playerState.height,
             );
+
+            return newDimension;
         });
 
-        createEffect(() => {
+        createEffect((prev) => {
+            if (prev === debugInfoStore.debugInfo.isDebugging) {
+                return;
+            }
+
             if (debugInfoStore.debugInfo.isDebugging) {
                 startDebug();
             }
+
+            return debugInfoStore.debugInfo.isDebugging;
         });
 
         createEffect(() => {

@@ -1,5 +1,4 @@
-import { createEffect, createRoot } from 'solid-js';
-import { type SetStoreFunction, createStore, produce } from 'solid-js/store';
+import { type SetStoreFunction, createStore } from 'solid-js/store';
 import { type Browser } from 'webextension-polyfill';
 
 import {
