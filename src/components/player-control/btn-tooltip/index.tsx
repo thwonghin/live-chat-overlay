@@ -8,6 +8,7 @@ import {
 } from 'solid-js';
 
 import FontAwesomeIcon from '@/components/font-awesome';
+import { useNativeOnClick } from '@/hooks/use-native-on-click';
 import { youtube } from '@/utils';
 
 import styles from './index.module.scss';
@@ -22,22 +23,8 @@ type Props = Readonly<{
 }>;
 
 const BtnTooltip: Component<Props> = (props) => {
-    // Workaround for click event not propagate inside Portal
     const [triggerEle, setTriggerEle] = createSignal<HTMLButtonElement>();
-    createEffect(() => {
-        if (props.onClickTrigger) {
-            triggerEle()?.addEventListener('click', props.onClickTrigger);
-        }
-
-        onCleanup(() => {
-            if (props.onClickTrigger) {
-                triggerEle()?.removeEventListener(
-                    'click',
-                    props.onClickTrigger,
-                );
-            }
-        });
-    });
+    useNativeOnClick(triggerEle, (e) => props.onClickTrigger?.(e));
 
     return (
         <Tooltip.Root placement="top" openDelay={0} closeDelay={0}>

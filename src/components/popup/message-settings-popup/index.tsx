@@ -1,6 +1,5 @@
-import { useRef, useState } from 'react';
-
 import cx from 'classnames';
+import { createSignal, type Component } from 'solid-js';
 
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
@@ -10,15 +9,15 @@ import { youtube } from '@/utils';
 
 import styles from './index.module.scss';
 
-type Props = {
+type Props = Readonly<{
     isHidden: boolean;
     playerControlContainer: HTMLSpanElement;
-};
+}>;
 
-const MessageSettingsPopup: React.FC<Props> = (props) => {
-    const containerRef = useRef<HTMLDivElement>(null);
+const MessageSettingsPopup: Component<Props> = (props) => {
+    const [containerRef, setContainerRef] = createSignal<HTMLDivElement>();
     const [selectedMessageType, setSelectedMessageType] =
-        useState<MessageSettingsKey>('guest');
+        createSignal<MessageSettingsKey>('guest');
 
     // Workaround for cannot stop event propagation: use native event handler
     // https://github.com/facebook/react/issues/11387#issuecomment-524113945
@@ -26,10 +25,12 @@ const MessageSettingsPopup: React.FC<Props> = (props) => {
 
     return (
         <div
-            ref={containerRef}
-            class={cx(youtube.CLASS_POPUP, styles.container, {
+            ref={setContainerRef}
+            classList={{
+                [youtube.CLASS_POPUP]: true,
+                [styles.container]: true,
                 [styles['container--hidden']]: props.isHidden,
-            })}
+            }}
         >
             <div class={cx(youtube.CLASS_PANEL, styles['nest-container'])}>
                 <div class={cx(youtube.CLASS_PANEL_MENU, styles.content)}>

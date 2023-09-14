@@ -8,6 +8,7 @@ import {
 } from 'solid-js';
 
 import FontAwesomeIcon from '@/components/font-awesome';
+import { useNativeOnClick } from '@/hooks/use-native-on-click';
 import type { PinnedChatItem } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
 
@@ -43,14 +44,7 @@ const PinnedMessage: Component<Props> = (props) => {
         props.onClickClose?.(event);
     };
 
-    // Solid js onClick props are not working
-    createEffect(() => {
-        ref()?.addEventListener('click', handleClick);
-
-        onCleanup(() => {
-            ref()?.removeEventListener('click', handleClick);
-        });
-    });
+    useNativeOnClick(ref, handleClick);
 
     return (
         <div

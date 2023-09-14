@@ -1,13 +1,9 @@
 import { type IconDefinition, icon } from '@fortawesome/fontawesome-svg-core';
+import { createMemo, type JSX, splitProps, createSignal } from 'solid-js';
+
+import { useNativeOnClick } from '@/hooks/use-native-on-click';
+
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import {
-    createMemo,
-    type JSX,
-    splitProps,
-    createEffect,
-    createSignal,
-    onCleanup,
-} from 'solid-js';
 
 type Props = Readonly<
     JSX.SvgSVGAttributes<SVGSVGElement> & {
@@ -26,16 +22,8 @@ const FontAwesomeIcon = (props: Props) => {
     const faicon = createMemo(() => icon(localProps.icon));
     const [ref, setRef] = createSignal<SVGElement>();
 
-    createEffect(() => {
-        if (localProps.onClick) {
-            ref()?.addEventListener('click', localProps.onClick);
-        }
-
-        onCleanup(() => {
-            if (localProps.onClick) {
-                ref()?.removeEventListener('click', localProps.onClick);
-            }
-        });
+    useNativeOnClick(ref, (e) => {
+        localProps.onClick?.(e);
     });
 
     return (

@@ -1,14 +1,16 @@
-import { createEffect, onCleanup } from 'solid-js';
+import { type Accessor, createEffect, onCleanup } from 'solid-js';
 
-export function useNativeStopKeydownPropagation(element?: HTMLElement): void {
+export function useNativeStopKeydownPropagation(
+    element: Accessor<HTMLElement | undefined>,
+): void {
     function stopPropagation(event: KeyboardEvent): void {
         event.stopPropagation();
     }
 
     createEffect(() => {
-        element?.addEventListener('keydown', stopPropagation);
+        element()?.addEventListener('keydown', stopPropagation);
         onCleanup(() => {
-            element?.removeEventListener('keydown', stopPropagation);
+            element()?.removeEventListener('keydown', stopPropagation);
         });
     });
 }

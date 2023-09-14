@@ -93,6 +93,7 @@
         "Chrome >= 88"
     ],
     "dependencies": {
+        "@felte/solid": "^1.2.11",
         "@fortawesome/fontawesome-svg-core": "^6.4.2",
         "@fortawesome/free-solid-svg-icons": "^6.4.2",
         "@fortawesome/react-fontawesome": "^0.2.0",

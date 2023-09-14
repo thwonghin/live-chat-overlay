@@ -1,14 +1,9 @@
-import { useCallback, useMemo } from 'react';
-
-import {
-    Select,
-    FormLabel,
-    MenuItem,
-    type SelectChangeEvent,
-} from '@mui/material';
-import { For } from 'solid-js';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { Select } from '@kobalte/core';
+import { type Component, createMemo, type Accessor } from 'solid-js';
 import type { I18n } from 'webextension-polyfill';
 
+import FontAwesomeIcon from '@/components/font-awesome';
 import { useI18n } from '@/contexts/i18n';
 import { type MessageSettingsKey } from '@/models/settings';
 import { assertNever } from '@/utils';
@@ -54,52 +49,55 @@ const supportedTypes: MessageSettingsKey[] = [
     'pinned',
 ];
 
-type Props = {
-    value: MessageSettingsKey;
+type Props = Readonly<{
+    value: Accessor<MessageSettingsKey>;
     onChange: (value: MessageSettingsKey) => void;
-};
+}>;
 
-const MessageSettingsTypeSelect: React.FC<Props> = (props) => {
-    const handleChange = useCallback(
-        (event: SelectChangeEvent<MessageSettingsKey>) => {
-            props.onChange(event.target.value as MessageSettingsKey);
-        },
-        [props.onChange],
-    );
+const MessageSettingsTypeSelect: Component<Props> = (props) => {
     const i18n = useI18n();
-
-    const messageSettingsOptions = useMemo(
-        () =>
-            supportedTypes.map((type) => ({
-                key: type,
-                label: getStringByMessageKey(i18n, type),
-            })),
-        [i18n],
+    const messageSettingsOptions = createMemo(() =>
+        supportedTypes.map((type) => ({
+            value: type,
+            label: getStringByMessageKey(i18n, type),
+        })),
+    );
+    const value = createMemo(() =>
+        messageSettingsOptions().find(
+            (option) => option.value === props.value(),
+        ),
     );
 
     return (
         <div>
-            <FormLabel class={styles['form-label']}>
+            <p class={styles['form-label']}>
                 {i18n.getMessage('messageTypeSelectLabel')}
-            </FormLabel>
-            <Select
-                variant="standard"
-                color="secondary"
-                value={props.value}
-                MenuProps={{
-                    // Avoid window scrollbar disappeared casuing shift horizontally
-                    disableScrollLock: true,
-                }}
-                onChange={handleChange}
+            </p>
+            <Select.Root
+                options={messageSettingsOptions()}
+                optionValue="value"
+                optionTextValue="label"
+                value={value()}
+                itemComponent={(props) => (
+                    <Select.Item item={props.item}>
+                        <Select.ItemLabel>
+                            {props.item.rawValue.label}
+                        </Select.ItemLabel>
+                    </Select.Item>
+                )}
             >
-                <For each={messageSettingsOptions}>
-                    {(option) => (
-                        <MenuItem key={option.key} value={option.key}>
-                            {option.label}
-                        </MenuItem>
-                    )}
-                </For>
-            </Select>
+                <Select.Trigger>
+                    <Select.Value<MessageSettingsKey>>
+                        {(state) => state.selectedOption()}
+                    </Select.Value>
+                    <Select.Icon>
+                        <FontAwesomeIcon icon={faAngleDown} />
+                    </Select.Icon>
+                </Select.Trigger>
+                <Select.Content>
+                    <Select.Listbox />
+                </Select.Content>
+            </Select.Root>
         </div>
     );
 };

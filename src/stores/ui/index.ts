@@ -14,7 +14,9 @@ export type PlayerStateModel = {
 };
 
 export type UiStoreValue = {
-    currentPopup?: PopupType;
+    currentPopup: {
+        value?: PopupType;
+    };
     playerState: PlayerStateModel;
 };
 
@@ -38,7 +40,9 @@ export const createUiStore = (
     videoEle: HTMLVideoElement,
 ): UiStore => {
     const [state, setState] = createStore<UiStoreValue>({
-        currentPopup: undefined,
+        currentPopup: {
+            value: undefined,
+        },
         playerState: {
             width: 0,
             height: 0,
@@ -53,8 +57,9 @@ export const createUiStore = (
     });
 
     function togglePopup(type: PopupType) {
-        const newType = type === state.currentPopup ? undefined : type;
-        setState('currentPopup', newType);
+        setState('currentPopup', 'value', (s) =>
+            type === s ? undefined : type,
+        );
     }
 
     let cleanup: (() => void) | undefined;

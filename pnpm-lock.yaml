@@ -11,6 +11,9 @@ overrides:
   uuid: '>=7'
 
 dependencies:
+  '@felte/solid':
+    specifier: ^1.2.11
+    version: 1.2.11(solid-js@1.7.11)
   '@fortawesome/fontawesome-svg-core':
     specifier: ^6.4.2
     version: 6.4.2
@@ -1562,6 +1565,13 @@ packages:
     dependencies:
       regenerator-runtime: 0.14.0
 
+  /@babel/runtime@7.22.15:
+    resolution: {integrity: sha512-T0O+aa+4w0u06iNmapipJXMV4HoUir03hpx3/YqXXhu9xim3w+dVphjFWl1OH8NbZHw5Lbm9k45drDkgq2VNNA==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.14.0
+    dev: false
+
   /@babel/template@7.22.5:
     resolution: {integrity: sha512-X7yV7eiwAxdj9k94NEylvbVHLiVG1nvzCV2EAowhxLTwODV1jl9UzZ48leOC0sH7OnuHrIkllaBgneUykIcZaw==}
     engines: {node: '>=6.9.0'}
@@ -2125,6 +2135,28 @@ packages:
   /@fal-works/esbuild-plugin-global-externals@2.1.2:
     resolution: {integrity: sha512-cEee/Z+I12mZcFJshKcCqC8tuX5hG3s+d+9nZ3LabqKF1vKdF41B92pJVCBggjAGORAeOzyyDDKrZwIkLffeOQ==}
     dev: true
+
+  /@felte/common@1.1.8:
+    resolution: {integrity: sha512-VbEOfNLWfDx0SpCfeE+fNWDpvcntND4MFs7Lxd18RIjrZYH82D0wWe9th2oVF9QT5XzgBEdMF5NGIttcwU4sjg==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dev: false
+
+  /@felte/core@1.4.1:
+    resolution: {integrity: sha512-dUzfzug5cK93kBjG0u9F3zDM781qCJP4QwYPOpJsXbydwVseDM5BXpDqvZUFhqJsd0x1GKftkX69+iWafyASjw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      '@felte/common': 1.1.8
+    dev: false
+
+  /@felte/solid@1.2.11(solid-js@1.7.11):
+    resolution: {integrity: sha512-0NlcDjr+AY6m2B48J4hvHMxbLvx1l7O9/j3izkb35qb+26wki4tk4HpIzmnRIweTT7PXsObq6mnuc20+MGlrMQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    peerDependencies:
+      solid-js: ^1.2.0
+    dependencies:
+      '@felte/core': 1.4.1
+      solid-js: 1.7.11
+    dev: false
 
   /@floating-ui/core@1.4.1:
     resolution: {integrity: sha512-jk3WqquEJRlcyu7997NtR5PibI+y5bi+LS3hPmguVClypenMsCY3CBa3LAQnozRCtCrYWSEtAdiskpamuJRFOQ==}
@@ -2722,8 +2754,8 @@ packages:
       styled-components: 6.0.7(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
-  /@mui/styled-engine-sc@5.14.8(@types/styled-components@5.1.26)(styled-components@6.0.7):
-    resolution: {integrity: sha512-s4bu3oqE2s3eeB6v/03NRB0N0yswA74Azn6N53PPq87dsvGOyvKLj707bJe+9HfbcbkdksQXP+2NUDmtmUDcig==}
+  /@mui/styled-engine-sc@5.14.9(@types/styled-components@5.1.26)(styled-components@6.0.7):
+    resolution: {integrity: sha512-2g/UT/vGaVCazscjhqWqPXgV8miifWiojj5AVZpgknUcmmjCalJ6pIRaqGndAjvC+/WmkfmKD20edc32Z5MfTg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@types/styled-components': ^5.1.14
@@ -2732,9 +2764,11 @@ packages:
       '@types/styled-components':
         optional: true
     dependencies:
-      '@babel/runtime': 7.22.10
+      '@babel/runtime': 7.22.15
       '@types/styled-components': 5.1.26
+      csstype: 3.1.2
       prop-types: 15.8.1
+      react: 18.2.0
       styled-components: 6.0.7(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
@@ -2756,7 +2790,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.10
       '@mui/private-theming': 5.14.4(@types/react@18.2.19)(react@18.2.0)
-      '@mui/styled-engine': /@mui/styled-engine-sc@5.14.8(@types/styled-components@5.1.26)(styled-components@6.0.7)
+      '@mui/styled-engine': /@mui/styled-engine-sc@5.14.9(@types/styled-components@5.1.26)(styled-components@6.0.7)
       '@mui/types': 7.2.4(@types/react@18.2.19)
       '@mui/utils': 5.14.4(react@18.2.0)
       '@types/react': 18.2.19
