@@ -17,16 +17,19 @@ export type MessageSettings = {
     isSticky: boolean;
 };
 
-export type MessageSettingsKey =
-    | 'moderator'
-    | 'member'
-    | 'guest'
-    | 'owner'
-    | 'you'
-    | 'verified'
-    | 'membership'
-    | 'super-chat'
-    | 'pinned';
+export const messageSettingsKeys = [
+    'moderator',
+    'member',
+    'guest',
+    'owner',
+    'you',
+    'verified',
+    'membership',
+    'super-chat',
+    'pinned',
+] as const;
+
+export type MessageSettingsKey = (typeof messageSettingsKeys)[number];
 
 export type Settings = {
     isEnabled: boolean;

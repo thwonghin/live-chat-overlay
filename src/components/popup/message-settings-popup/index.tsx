@@ -1,10 +1,13 @@
 import cx from 'classnames';
-import { createSignal, type Component } from 'solid-js';
+import { createSignal, type Component, Index, Show } from 'solid-js';
 
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
 import { useNativeStopKeydownPropagation } from '@/hooks';
-import { type MessageSettingsKey } from '@/models/settings';
+import {
+    messageSettingsKeys,
+    type MessageSettingsKey,
+} from '@/models/settings';
 import { youtube } from '@/utils';
 
 import styles from './index.module.scss';
@@ -38,9 +41,15 @@ const MessageSettingsPopup: Component<Props> = (props) => {
                         value={selectedMessageType}
                         onChange={setSelectedMessageType}
                     />
-                    <MessageSettingsInputForm
-                        messageSettingsKey={selectedMessageType}
-                    />
+                    <Index each={messageSettingsKeys}>
+                        {(item) => (
+                            <Show when={item() === selectedMessageType()}>
+                                <MessageSettingsInputForm
+                                    messageSettingsKey={item}
+                                />
+                            </Show>
+                        )}
+                    </Index>
                 </div>
             </div>
         </div>

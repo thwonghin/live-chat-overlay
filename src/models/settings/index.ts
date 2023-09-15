@@ -30,6 +30,57 @@ const commonMessageSettings: MessageSettings = {
     isSticky: false,
 } as const;
 
+export const defaultSettings = {
+    isEnabled: true,
+    totalNumberOfLines: 15,
+    flowTimeInSec: 10,
+    globalOpacity: 0.7,
+    messageSettings: {
+        guest: commonMessageSettings,
+        member: {
+            ...commonMessageSettings,
+            color: '#2ba640',
+        },
+        you: commonMessageSettings,
+        moderator: {
+            ...commonMessageSettings,
+            color: '#5e84f1',
+            authorDisplay: AuthorDisplayMethod.ALL,
+        },
+        owner: {
+            ...commonMessageSettings,
+            color: 'white',
+            bgColor: '#ffd600',
+            authorDisplay: AuthorDisplayMethod.ALL,
+        },
+        verified: {
+            ...commonMessageSettings,
+            color: '#E9E9E9',
+            bgColor: '#606060',
+            authorDisplay: AuthorDisplayMethod.ALL,
+        },
+        membership: {
+            ...commonMessageSettings,
+            bgColor: '#2ba640',
+            numberOfLines: 1,
+            authorDisplay: AuthorDisplayMethod.ALL,
+        },
+        'super-chat': {
+            ...commonMessageSettings,
+            numberOfLines: 2,
+            authorDisplay: AuthorDisplayMethod.ALL,
+            bgColor: '',
+        },
+        pinned: {
+            ...commonMessageSettings,
+            numberOfLines: 1,
+            authorDisplay: AuthorDisplayMethod.ALL,
+            bgColor: '#224072',
+            isSticky: true,
+        },
+    },
+};
+
 export type SettingsModel = {
     setRawSettings(settings: Settings): SettingsModel;
     getMessageSettings(chatItem: ChatItem): MessageSettings;
@@ -37,54 +88,7 @@ export type SettingsModel = {
 
 export const createSettingsModel = (): SettingsModel => {
     const settingsModel: SettingsModel = {
-        isEnabled: true,
-        totalNumberOfLines: 15,
-        flowTimeInSec: 10,
-        globalOpacity: 0.7,
-        messageSettings: {
-            guest: commonMessageSettings,
-            member: {
-                ...commonMessageSettings,
-                color: '#2ba640',
-            },
-            you: commonMessageSettings,
-            moderator: {
-                ...commonMessageSettings,
-                color: '#5e84f1',
-                authorDisplay: AuthorDisplayMethod.ALL,
-            },
-            owner: {
-                ...commonMessageSettings,
-                color: 'white',
-                bgColor: '#ffd600',
-                authorDisplay: AuthorDisplayMethod.ALL,
-            },
-            verified: {
-                ...commonMessageSettings,
-                color: '#E9E9E9',
-                bgColor: '#606060',
-                authorDisplay: AuthorDisplayMethod.ALL,
-            },
-            membership: {
-                ...commonMessageSettings,
-                bgColor: '#2ba640',
-                numberOfLines: 1,
-                authorDisplay: AuthorDisplayMethod.ALL,
-            },
-            'super-chat': {
-                ...commonMessageSettings,
-                numberOfLines: 2,
-                authorDisplay: AuthorDisplayMethod.ALL,
-                bgColor: '',
-            },
-            pinned: {
-                ...commonMessageSettings,
-                numberOfLines: 1,
-                authorDisplay: AuthorDisplayMethod.ALL,
-                bgColor: '#224072',
-                isSticky: true,
-            },
-        },
+        ...defaultSettings,
         setRawSettings(settings: Settings) {
             Object.assign(settingsModel, defaultsDeep(settings, this));
             return settingsModel;

@@ -23,7 +23,7 @@ const FontAwesomeIcon = (props: Props) => {
     const [ref, setRef] = createSignal<SVGElement>();
 
     useNativeOnClick(ref, (e) => {
-        localProps.onClick?.(e);
+        localProps.onClick?.(e as MouseEvent);
     });
 
     return (

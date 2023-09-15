@@ -11,6 +11,10 @@ import styles from './index.module.scss';
 type Props = Readonly<{
     globalOpacity: number;
     messageSettings: MessageSettings;
+    defaultValues: {
+        globalOpacity: number;
+        messageSettings: MessageSettings;
+    };
     onSubmit: (value: {
         globalOpacity: number;
         messageSettings: MessageSettings;

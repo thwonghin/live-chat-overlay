@@ -4,6 +4,7 @@ import { useStore } from '@/contexts/root-store';
 import {
     type MessageSettingsKey,
     type MessageSettings,
+    defaultSettings,
 } from '@/models/settings';
 
 import Layout from './layout';
@@ -35,6 +36,11 @@ const MessageSettingsInputForm: Component<Props> = (props) => {
     return (
         <Layout
             globalOpacity={store.settingsStore.settings.globalOpacity}
+            defaultValues={{
+                globalOpacity: defaultSettings.globalOpacity,
+                messageSettings:
+                    defaultSettings.messageSettings[props.messageSettingsKey()],
+            }}
             messageSettings={
                 store.settingsStore.settings.messageSettings[
                     props.messageSettingsKey()

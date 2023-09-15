@@ -1,11 +1,5 @@
 import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
-import {
-    type Component,
-    createEffect,
-    createSignal,
-    type JSX,
-    onCleanup,
-} from 'solid-js';
+import { type Component, createEffect, createSignal } from 'solid-js';
 
 import FontAwesomeIcon from '@/components/font-awesome';
 import { useNativeOnClick } from '@/hooks/use-native-on-click';
@@ -44,7 +38,9 @@ const PinnedMessage: Component<Props> = (props) => {
         props.onClickClose?.(event);
     };
 
-    useNativeOnClick(ref, handleClick);
+    useNativeOnClick(ref, (e) => {
+        handleClick(e as MouseEvent);
+    });
 
     return (
         <div
