@@ -1,6 +1,8 @@
 import type { InitData, YoutubeChatResponse } from '@/definitions/youtube';
 import { createError } from '@/logger';
 
+import { waitForValue } from '.';
+
 export const CLASS_BIG_MODE = 'ytp-big-mode';
 export const CLASS_PLAYER_CTL_BTN = 'ytp-button';
 export const CLASS_POPUP = 'ytp-popup';
@@ -45,26 +47,8 @@ export function getVideoEle(): HTMLVideoElement | undefined {
     );
 }
 
-export async function waitForPlayerReady(): Promise<void> {
-    return new Promise((resolve, reject) => {
-        if (getVideoPlayerEle()) {
-            resolve();
-            return;
-        }
-
-        let retryTimeInMs = 0;
-        const interval = setInterval(() => {
-            if (getVideoPlayerEle()) {
-                resolve();
-                clearInterval(interval);
-            } else {
-                retryTimeInMs += 100;
-                if (retryTimeInMs >= 600000) {
-                    reject(createError('Player not found.'));
-                }
-            }
-        }, 100);
-    });
+export async function waitForPlayerReady(): Promise<HTMLElement> {
+    return waitForValue(getVideoPlayerEle);
 }
 
 export function isInitData(

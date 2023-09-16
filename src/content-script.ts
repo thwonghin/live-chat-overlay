@@ -1,7 +1,7 @@
 import './common';
 import browser from 'webextension-polyfill';
 
-import { youtube } from '@/utils';
+import { waitForValue, youtube } from '@/utils';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
 import {
@@ -43,29 +43,7 @@ async function getInitData(doc: Document): Promise<InitData> {
         return JSON.parse(innerHtml.slice(startIndex, -1)) as InitData;
     }
 
-    return new Promise((resolve, reject) => {
-        const data = getData();
-        if (data) {
-            resolve(data);
-            return;
-        }
-
-        let retryTimeInMs = 0;
-
-        const interval = setInterval(() => {
-            const data = getData();
-            if (data) {
-                resolve(data);
-                clearInterval(interval);
-                return;
-            }
-
-            retryTimeInMs += 100;
-            if (retryTimeInMs >= 600000) {
-                reject(createError('Chat Frame not found.'));
-            }
-        }, 100);
-    });
+    return waitForValue(getData);
 }
 
 async function init() {

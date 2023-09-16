@@ -124,3 +124,31 @@ export function attachKeydownEventListener({
         domToAttach.removeEventListener('keydown', handleKeyDown);
     };
 }
+
+export async function waitForValue<T>(
+    getValue: () => T | null | undefined,
+    retryIntervalMs = 100,
+    maxRetryMs = 600000,
+): Promise<T> {
+    return new Promise((resolve, reject) => {
+        const value = getValue();
+        if (value) {
+            resolve(value);
+            return;
+        }
+
+        let retryTimeInMs = 0;
+        const interval = setInterval(() => {
+            const value = getValue();
+            if (value) {
+                resolve(value);
+                clearInterval(interval);
+            } else {
+                retryTimeInMs += retryIntervalMs;
+                if (retryTimeInMs >= maxRetryMs) {
+                    reject(createError('Player not found.'));
+                }
+            }
+        }, retryIntervalMs);
+    });
+}
