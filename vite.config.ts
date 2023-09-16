@@ -25,7 +25,6 @@ function generateManifest() {
                 return {
                     ...rest,
                     resources: [
-                        'style.css',
                         ...resources.map((filePath) => {
                             if (filePath.endsWith('.ts')) {
                                 return `${filePath.slice(0, -2)}js`;
