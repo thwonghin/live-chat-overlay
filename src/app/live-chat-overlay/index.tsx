@@ -3,6 +3,7 @@ import type { Browser } from 'webextension-polyfill';
 
 import * as contexts from '@/contexts';
 import type { InitData } from '@/definitions/youtube';
+import { createError } from '@/logger';
 import type { RootStore } from '@/stores';
 import { youtube } from '@/utils';
 
@@ -19,12 +20,12 @@ export async function injectLiveChatOverlay(
 ): Promise<() => void> {
     const videoPlayerContainer = youtube.getVideoPlayerContainer();
     if (!videoPlayerContainer) {
-        throw new Error('Video Player Container not found.');
+        throw createError('Video Player Container not found.');
     }
 
     const rightControlEle = youtube.getRightControlEle();
     if (!rightControlEle) {
-        throw new Error('Right Player Control not found.');
+        throw createError('Right Player Control not found.');
     }
 
     rightControlEle.style.display = 'flex';

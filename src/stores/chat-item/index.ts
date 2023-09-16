@@ -7,6 +7,7 @@ import type {
     ReplayContinuationContents,
     LiveContinuationContents,
 } from '@/definitions/youtube';
+import { createError } from '@/logger';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { fetchInterceptor } from '@/services';
 import { benchmark, benchmarkAsync, youtube } from '@/utils';
@@ -86,7 +87,7 @@ export const createChatItemStore = (
             document.getElementById(CHAT_ITEM_RENDER_ID);
 
         if (!chatItemRenderForWidthEle) {
-            throw new Error('Cannot find chat item render container');
+            throw createError('Cannot find chat item render container');
         }
 
         return chatItemRenderForWidthEle;
@@ -312,7 +313,7 @@ export const createChatItemStore = (
         }
 
         if (!chatItem.width) {
-            throw new Error(`Unknown width for ${chatItem.value.id}`);
+            throw createError(`Unknown width for ${chatItem.value.id}`);
         }
 
         const lineNumber = getLineNumber({
@@ -379,7 +380,7 @@ export const createChatItemStore = (
         let cleanedChatItemCount = 0;
         const finishedChatItem = (chatItem: ChatItemModel) => {
             if (chatItem.addTimestamp === undefined) {
-                throw new Error(
+                throw createError(
                     `Missing AddTimestamp for ${chatItem.value.id}`,
                 );
             }

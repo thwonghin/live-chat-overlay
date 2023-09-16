@@ -1,4 +1,5 @@
 import type { InitData, YoutubeChatResponse } from '@/definitions/youtube';
+import { createError } from '@/logger';
 
 export const CLASS_BIG_MODE = 'ytp-big-mode';
 export const CLASS_PLAYER_CTL_BTN = 'ytp-button';
@@ -59,7 +60,7 @@ export async function waitForPlayerReady(): Promise<void> {
             } else {
                 retryTimeInMs += 100;
                 if (retryTimeInMs >= 600000) {
-                    reject(new Error('Player not found.'));
+                    reject(createError('Player not found.'));
                 }
             }
         }, 100);

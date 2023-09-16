@@ -6,12 +6,14 @@ import {
 } from 'solid-js';
 import type { Browser, I18n } from 'webextension-polyfill';
 
+import { createError } from '@/logger';
+
 export const I18nContext = createContext<I18n.Static>();
 
 export function useI18n(): I18n.Static {
     const i18n = useContext(I18nContext);
     if (!i18n) {
-        throw new Error('useI18n must be used within a I18nProvider');
+        throw createError('useI18n must be used within a I18nProvider');
     }
 
     return i18n;

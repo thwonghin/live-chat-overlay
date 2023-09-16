@@ -6,6 +6,7 @@ import type {
     ReplayInitData,
     InitData,
 } from '@/definitions/youtube';
+import { createError } from '@/logger';
 import {
     type ChatItemModel,
     createChatItemModelFromAction,
@@ -152,14 +153,14 @@ function hasSpaceInLine({
     containerWidth,
 }: HasSpaceInLineParameters): boolean {
     if (isNil(lastMessageInLine.addTimestamp)) {
-        throw new Error('Missing timestamp');
+        throw createError('Missing timestamp');
     }
 
     const lastMessageFlowedTime =
         (addTimestamp - lastMessageInLine.addTimestamp) / 1000;
     const lastMessageWidth = lastMessageInLine.width;
     if (isNil(lastMessageWidth)) {
-        throw new Error('Unknown width');
+        throw createError('Unknown width');
     }
 
     const lastMessageSpeed =

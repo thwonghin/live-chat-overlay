@@ -12,6 +12,7 @@ import FontAwesomeIcon from '@/components/font-awesome';
 import { useI18n } from '@/contexts/i18n';
 import { useNativeEventListener } from '@/hooks/use-native-event';
 import { useNativeOnClick } from '@/hooks/use-native-on-click';
+import { createError } from '@/logger';
 import { type MessageSettingsKey } from '@/models/settings';
 import { assertNever } from '@/utils';
 
@@ -33,7 +34,7 @@ function getStringByMessageKey(
         case 'owner':
             return i18n.getMessage('ownerMessageType');
         case 'you':
-            throw new Error('"you" type message Not supported');
+            throw createError('"you" type message Not supported');
         case 'membership':
             return i18n.getMessage('membershipMessageType');
         case 'super-chat':

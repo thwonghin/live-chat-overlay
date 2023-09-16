@@ -1,9 +1,11 @@
 import { isNil } from 'lodash-es';
 
+import { createError } from '@/logger';
+
 export * as youtube from './youtube';
 
 export function assertNever(type: never): never {
-    throw new Error(`Unknown object: ${type as string}`);
+    throw createError(`Unknown object: ${type as string}`);
 }
 
 // Reference from Youtube livechat.js

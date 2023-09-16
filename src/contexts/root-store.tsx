@@ -5,6 +5,7 @@ import {
     type Component,
 } from 'solid-js';
 
+import { createError } from '@/logger';
 import type { RootStore } from '@/stores';
 
 const StoreContext = createContext<RootStore>();
@@ -12,7 +13,7 @@ const StoreContext = createContext<RootStore>();
 export const useStore = (): RootStore => {
     const store = useContext(StoreContext);
     if (!store) {
-        throw new Error('useStore must be used within a StoreProvider');
+        throw createError('useStore must be used within a StoreProvider');
     }
 
     return store;

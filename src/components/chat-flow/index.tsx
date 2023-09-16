@@ -11,6 +11,7 @@ import {
 
 import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
+import { createError } from '@/logger';
 import type { ChatItemModel } from '@/models/chat-item';
 import { CHAT_ITEM_RENDER_ID } from '@/stores/chat-item';
 
@@ -78,7 +79,7 @@ const ChatFlow: Component<Props> = (props) => {
                         >
                             {(chatItem) => {
                                 if (chatItem.lineNumber === undefined) {
-                                    throw new Error('Unknown line number');
+                                    throw createError('Unknown line number');
                                 }
 
                                 // Two line items
