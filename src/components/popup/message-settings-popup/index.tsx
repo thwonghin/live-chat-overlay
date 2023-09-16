@@ -23,7 +23,6 @@ const MessageSettingsPopup: Component<Props> = (props) => {
         createSignal<MessageSettingsKey>('guest');
 
     // Workaround for cannot stop event propagation: use native event handler
-    // https://github.com/facebook/react/issues/11387#issuecomment-524113945
     useNativeStopKeydownPropagation(containerRef);
 
     return (
@@ -38,7 +37,7 @@ const MessageSettingsPopup: Component<Props> = (props) => {
             <div class={cx(youtube.CLASS_PANEL, styles['nest-container'])}>
                 <div class={cx(youtube.CLASS_PANEL_MENU, styles.content)}>
                     <MessageSettingsTypeSelect
-                        value={selectedMessageType}
+                        defaultValue="guest"
                         onChange={setSelectedMessageType}
                     />
                     <Index each={messageSettingsKeys}>

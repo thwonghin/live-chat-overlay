@@ -1,14 +1,8 @@
 import { type IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Tooltip } from '@kobalte/core';
-import {
-    type Component,
-    createEffect,
-    createSignal,
-    onCleanup,
-} from 'solid-js';
+import { type Component } from 'solid-js';
 
 import FontAwesomeIcon from '@/components/font-awesome';
-import { useNativeOnClick } from '@/hooks/use-native-on-click';
 import { youtube } from '@/utils';
 
 import styles from './index.module.scss';
@@ -23,13 +17,10 @@ type Props = Readonly<{
 }>;
 
 const BtnTooltip: Component<Props> = (props) => {
-    const [triggerEle, setTriggerEle] = createSignal<HTMLButtonElement>();
-    useNativeOnClick(triggerEle, (e) => props.onClickTrigger?.(e));
-
     return (
         <Tooltip.Root placement="top" openDelay={0} closeDelay={0}>
             <Tooltip.Trigger
-                ref={setTriggerEle}
+                onClick={props.onClickTrigger}
                 classList={{
                     [youtube.CLASS_PLAYER_CTL_BTN]: true,
                     [styles.trigger]: true,

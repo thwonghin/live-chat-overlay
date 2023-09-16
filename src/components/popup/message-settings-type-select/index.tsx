@@ -1,17 +1,10 @@
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { Select } from '@kobalte/core';
-import {
-    type Component,
-    createMemo,
-    type Accessor,
-    createSignal,
-} from 'solid-js';
+import { type Component, createMemo } from 'solid-js';
 import type { I18n } from 'webextension-polyfill';
 
 import FontAwesomeIcon from '@/components/font-awesome';
 import { useI18n } from '@/contexts/i18n';
-import { useNativeEventListener } from '@/hooks/use-native-event';
-import { useNativeOnClick } from '@/hooks/use-native-on-click';
 import { createError } from '@/logger';
 import { type MessageSettingsKey } from '@/models/settings';
 import { assertNever } from '@/utils';
@@ -61,78 +54,53 @@ type Option = Readonly<{
     label: string;
 }>;
 
-const SelectItem: Component<
-    Select.SelectRootItemComponentProps<Option> & {
-        onClickItem?: (itemValue: MessageSettingsKey) => void;
-    }
-> = (props) => {
-    const [ref, setRef] = createSignal<HTMLLIElement>();
-    useNativeOnClick(ref, () => {
-        props.onClickItem?.(props.item.rawValue.value);
-    });
-    return (
-        <Select.Item item={props.item} ref={setRef}>
-            <Select.ItemLabel>{props.item.rawValue.label}</Select.ItemLabel>
-        </Select.Item>
-    );
-};
-
 type Props = Readonly<{
-    value: Accessor<MessageSettingsKey>;
+    defaultValue: MessageSettingsKey;
     onChange: (value: MessageSettingsKey) => void;
 }>;
 
 const MessageSettingsTypeSelect: Component<Props> = (props) => {
     const i18n = useI18n();
-    const [isDropdownOpened, setIsDropdownOpened] = createSignal(false);
-    const [triggerRef, setTriggerRef] = createSignal<HTMLUListElement>();
-    const [listBoxRef, setListBoxRef] = createSignal<HTMLDivElement>();
-    const messageSettingsOptions = createMemo<Option[]>(() =>
-        supportedTypes.map((type) => ({
-            value: type,
-            label: getStringByMessageKey(i18n, type),
-        })),
-    );
-    const value = createMemo<Option>(
-        () =>
-            messageSettingsOptions().find(
-                (option) => option.value === props.value(),
-            )!,
-    );
-    useNativeOnClick(triggerRef, () => {
-        setIsDropdownOpened((s) => !s);
-        listBoxRef()?.focus();
-    });
-    useNativeEventListener(listBoxRef, 'blur', (e) => {
-        const event = e as MouseEvent;
-        if (
-            !(event.currentTarget as HTMLElement).contains(
-                event.relatedTarget as Node,
-            )
-        ) {
-            setIsDropdownOpened(false);
-        }
-    });
+    const messageSettingsOptions = supportedTypes.map((type) => ({
+        value: type,
+        label: getStringByMessageKey(i18n, type),
+    }));
+
+    const defaultValue = messageSettingsOptions.find(
+        (option) => option.value === props.defaultValue,
+    )!;
 
     return (
         <label class={styles['form-label']}>
             {i18n.getMessage('messageTypeSelectLabel')}
             <Select.Root
-                open={isDropdownOpened()}
-                options={messageSettingsOptions()}
-                value={value()}
-                itemComponent={(itemProps) => (
-                    <SelectItem onClickItem={props.onChange} {...itemProps} />
+                options={messageSettingsOptions}
+                defaultValue={defaultValue}
+                optionValue="value"
+                optionTextValue="label"
+                onChange={(v) => {
+                    if (v) {
+                        props.onChange(v.value);
+                    }
+                }}
+                itemComponent={(props) => (
+                    <Select.Item item={props.item}>
+                        <Select.ItemLabel>
+                            {props.item.rawValue.label}
+                        </Select.ItemLabel>
+                    </Select.Item>
                 )}
             >
-                <Select.Trigger ref={setTriggerRef}>
-                    <Select.Value<Option>>{value().label}</Select.Value>
+                <Select.Trigger>
+                    <Select.Value<Option>>
+                        {(state) => state.selectedOption().label}
+                    </Select.Value>
                     <Select.Icon>
                         <FontAwesomeIcon icon={faAngleDown} />
                     </Select.Icon>
                 </Select.Trigger>
                 <Select.Content>
-                    <Select.Listbox tabindex="1" ref={setListBoxRef} />
+                    <Select.Listbox />
                 </Select.Content>
             </Select.Root>
         </label>

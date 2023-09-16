@@ -1,9 +1,8 @@
 import { createForm } from '@felte/solid';
 import { Button } from '@kobalte/core';
-import { createSignal, type Component } from 'solid-js';
+import { type Component } from 'solid-js';
 
 import { useI18n } from '@/contexts/i18n';
-import { useNativeOnClick } from '@/hooks/use-native-on-click';
 import { type MessageSettings } from '@/models/settings';
 
 import styles from './index.module.scss';
@@ -30,9 +29,6 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
         },
         onSubmit: props.onSubmit,
     });
-
-    const [buttonRef, setButtonRef] = createSignal<HTMLButtonElement>();
-    useNativeOnClick(buttonRef, reset);
 
     const i18n = useI18n();
 
@@ -152,7 +148,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                 <Button.Root type="submit">
                     {i18n.getMessage('applyButtonText')}
                 </Button.Root>
-                <Button.Root type="button" ref={setButtonRef}>
+                <Button.Root type="button" onClick={reset}>
                     {i18n.getMessage('resetButtonText')}
                 </Button.Root>
             </div>

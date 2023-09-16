@@ -2,7 +2,6 @@ import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { type Component, createEffect, createSignal } from 'solid-js';
 
 import FontAwesomeIcon from '@/components/font-awesome';
-import { useNativeOnClick } from '@/hooks/use-native-on-click';
 import type { PinnedChatItem } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
 
@@ -38,13 +37,10 @@ const PinnedMessage: Component<Props> = (props) => {
         props.onClickClose?.(event);
     };
 
-    useNativeOnClick(ref, (e) => {
-        handleClick(e as MouseEvent);
-    });
-
     return (
         <div
             ref={setRef}
+            onClick={handleClick}
             class={styles.container}
             style={{
                 color: props.messageSettings.color,
