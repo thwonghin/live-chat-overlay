@@ -542,10 +542,7 @@ export const createChatItemStore = (
 
     return {
         ...state,
-        cleanup() {
-            cleanup?.();
-            reset();
-        },
+        cleanup,
         importInitData,
         removeStickyChatItemById,
     };
