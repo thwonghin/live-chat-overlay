@@ -13,11 +13,7 @@ function reverse(value: number): number {
     return maxValue - value + minValue;
 }
 
-type Props = Readonly<{
-    window: Window;
-}>;
-
-const SpeedSlider: Component<Props> = (props) => {
+const SpeedSlider: Component = () => {
     const store = useStore();
 
     const handleChange = leadingAndTrailing(
