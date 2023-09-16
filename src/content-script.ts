@@ -88,11 +88,7 @@ async function init() {
         attachChatEvent,
     );
 
-    const cleanupLiveChat = await injectLiveChatOverlay(
-        initData,
-        browser,
-        store,
-    );
+    const cleanupLiveChat = await injectLiveChatOverlay(initData, store);
 
     function cleanup(): void {
         logInfo('cleaning up in main player page');

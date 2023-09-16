@@ -15,7 +15,6 @@ const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
 export async function injectLiveChatOverlay(
     initData: InitData,
-    browser: Browser,
     store: RootStore,
 ): Promise<() => void> {
     const videoPlayerContainer = youtube.getVideoPlayerContainer();

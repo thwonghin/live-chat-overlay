@@ -12,7 +12,6 @@ import { useRect } from '@/hooks';
 import styles from './slider.module.scss';
 
 type Props = Readonly<{
-    window: Window;
     percentage: number;
     onChange: (percentage: number) => void;
 }>;
@@ -64,16 +63,12 @@ const Slider: Component<Props> = (props) => {
     };
 
     createEffect(() => {
-        handleEle()?.addEventListener('click', handleClick);
-        handleEle()?.addEventListener('mousedown', handleMouseDown);
-        props.window.addEventListener('mousemove', handleMouseMove);
-        props.window.addEventListener('mouseup', handleMouseUp);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
 
         onCleanup(() => {
-            handleEle()?.removeEventListener('click', handleClick);
-            handleEle()?.removeEventListener('mousedown', handleMouseDown);
-            props.window.removeEventListener('mousemove', handleMouseMove);
-            props.window.removeEventListener('mouseup', handleMouseUp);
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
         });
     });
 
@@ -92,6 +87,8 @@ const Slider: Component<Props> = (props) => {
         >
             <div
                 ref={setHandleEle}
+                onClick={handleClick}
+                onMouseDown={handleMouseDown}
                 class={styles.handle}
                 style={{ left: `${position()}px` }}
             />

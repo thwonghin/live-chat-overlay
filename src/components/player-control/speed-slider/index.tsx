@@ -45,11 +45,7 @@ const SpeedSlider: Component<Props> = (props) => {
 
     return (
         <div class={styles.container} role="slider">
-            <Slider
-                window={props.window}
-                onChange={handleChange}
-                percentage={percentage()}
-            />
+            <Slider onChange={handleChange} percentage={percentage()} />
         </div>
     );
 };
