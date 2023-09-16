@@ -27,26 +27,14 @@ export async function injectLiveChatOverlay(
         throw new Error('Right Player Control not found.');
     }
 
-    await new Promise((resolve, reject) => {
-        const styleSheet = browser.runtime.getURL('style.css');
-        const cssTag = window.parent.document.createElement('link');
-        cssTag.type = 'text/css';
-        cssTag.rel = 'stylesheet';
-        cssTag.href = styleSheet;
-
-        cssTag.onload = resolve;
-        cssTag.onerror = reject;
-        window.parent.document.head.append(cssTag);
-    });
-
     rightControlEle.style.display = 'flex';
 
-    const liveChatContainer = window.parent.document.createElement('div');
+    const liveChatContainer = document.createElement('div');
     liveChatContainer.id = OVERLAY_CONTAINER;
     liveChatContainer.className = styles['live-chat-container'];
     videoPlayerContainer.append(liveChatContainer);
 
-    const playerControlContainer = window.parent.document.createElement('span');
+    const playerControlContainer = document.createElement('span');
     playerControlContainer.id = PLAYER_CONTROL_CONTAINER;
     playerControlContainer.className = styles['player-control-container'];
     rightControlEle.prepend(playerControlContainer);

@@ -125,7 +125,7 @@ export const createDebugInfoStore = (): DebugInfoStore => {
                 withAlt: true,
                 withCtrl: true,
                 key: 'd',
-                domToAttach: window.parent.document.body,
+                domToAttach: document.body,
                 callback: toggleIsDebugging,
             });
             onCleanup(() => {

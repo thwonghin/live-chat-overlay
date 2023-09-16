@@ -11,7 +11,10 @@ import type { ChatItemModel } from '@/models/chat-item';
 import type { fetchInterceptor } from '@/services';
 import { benchmark, benchmarkAsync, youtube } from '@/utils';
 
-import { assignChatItemRenderedWidth } from './get-chat-item-render-container-ele';
+import {
+    CHAT_ITEM_RENDER_ID,
+    assignChatItemRenderedWidth,
+} from './get-chat-item-render-container-ele';
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
@@ -55,7 +58,9 @@ export type ChatItemStore = {
 } & ChatItemStoreValue;
 
 export const createChatItemStore = (
-    chatEventName: string,
+    attachChatEvent: (
+        callback: (e: fetchInterceptor.ChatEventDetail) => void,
+    ) => () => void,
     uiStore: UiStore,
     settingsStore: SettingsStore,
     debugInfoStore: DebugInfoStore,
@@ -66,6 +71,7 @@ export const createChatItemStore = (
     let tickId: number | undefined;
     let cleanDisplayedIntervalId: number | undefined;
     const chatItemProcessQueue: ChatItemModel[] = [];
+    let chatItemRenderForWidthEle: HTMLElement | null;
 
     const [state, setState] = createStore<ChatItemStoreValue>({
         chatItemsByLineNumber: {},
@@ -73,6 +79,18 @@ export const createChatItemStore = (
             values: [],
         },
     });
+
+    function getChatItemRenderForWidthEle() {
+        chatItemRenderForWidthEle =
+            chatItemRenderForWidthEle ??
+            document.getElementById(CHAT_ITEM_RENDER_ID);
+
+        if (!chatItemRenderForWidthEle) {
+            throw new Error('Cannot find chat item render container');
+        }
+
+        return chatItemRenderForWidthEle;
+    }
 
     function pause(): void {
         clearAllIntervals();
@@ -200,11 +218,10 @@ export const createChatItemStore = (
         }
     }
 
-    async function onChatMessage(event: Event): Promise<void> {
-        const customEvent =
-            event as CustomEvent<fetchInterceptor.CustomEventDetail>;
-
-        const response = customEvent.detail.response as
+    async function onChatMessageEvent(
+        event: fetchInterceptor.ChatEventDetail,
+    ): Promise<void> {
+        const response = event.response as
             | YoutubeChatResponse
             | InitData
             | undefined;
@@ -418,7 +435,11 @@ export const createChatItemStore = (
                       );
 
             const { runtime: getEleRuntime } = await benchmarkAsync(
-                async () => assignChatItemRenderedWidth(chatItems),
+                async () =>
+                    assignChatItemRenderedWidth(
+                        chatItems,
+                        getChatItemRenderForWidthEle(),
+                    ),
                 debugInfoStore.debugInfo.isDebugging,
             );
 
@@ -455,9 +476,9 @@ export const createChatItemStore = (
 
     createRoot((dispose) => {
         createEffect(() => {
-            window.addEventListener(chatEventName, onChatMessage);
+            const cleanup = attachChatEvent(onChatMessageEvent);
             onCleanup(() => {
-                window.removeEventListener(chatEventName, onChatMessage);
+                cleanup();
             });
         });
 
@@ -520,7 +541,10 @@ export const createChatItemStore = (
 
     return {
         ...state,
-        cleanup,
+        cleanup() {
+            cleanup?.();
+            reset();
+        },
         importInitData,
         removeStickyChatItemById,
     };

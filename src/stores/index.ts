@@ -1,7 +1,7 @@
 import browser from 'webextension-polyfill';
 
-import { LIVE_CHAT_API_INTERCEPT_EVENT } from '@/constants';
 import { type InitData } from '@/definitions/youtube';
+import { type ChatEventDetail } from '@/services/fetch-interceptor';
 
 import { type ChatItemStore, createChatItemStore } from './chat-item';
 import { type DebugInfoStore, createDebugInfoStore } from './debug-info';
@@ -20,12 +20,13 @@ export type RootStore = {
 export const createRootStore = async (
     videoEle: HTMLVideoElement,
     videoPlayerEle: HTMLDivElement,
+    attachChatEvent: (callback: (e: ChatEventDetail) => void) => () => void,
 ): Promise<RootStore> => {
     const settingsStore = await createSettingsStore(browser);
     const debugInfoStore = createDebugInfoStore();
     const uiStore = createUiStore(videoPlayerEle, videoEle);
     const chatItemStore = createChatItemStore(
-        LIVE_CHAT_API_INTERCEPT_EVENT,
+        attachChatEvent,
         uiStore,
         settingsStore,
         debugInfoStore,

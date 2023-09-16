@@ -1,3 +1,4 @@
+import { memoize } from 'lodash-es';
 import { For } from 'solid-js';
 import { render } from 'solid-js/web';
 
@@ -5,22 +6,6 @@ import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
 import type { ChatItemModel } from '@/models/chat-item';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
-
-let renderRootEle: HTMLElement;
-
-function getChatItemRenderContainer(): HTMLElement {
-    if (!renderRootEle) {
-        const containerEle =
-            window.parent.document.getElementById(CHAT_ITEM_RENDER_ID);
-        if (!containerEle) {
-            throw new Error('Cannot find chat item render container');
-        }
-
-        renderRootEle = containerEle;
-    }
-
-    return renderRootEle;
-}
 
 type ChatItemRendererForWidthProps = Readonly<{
     chatItem: ChatItemModel;
@@ -39,9 +24,8 @@ const ChatItemRendererForWidth = (props: ChatItemRendererForWidthProps) => {
 
 export async function assignChatItemRenderedWidth(
     chatItemModels: ChatItemModel[],
+    renderEle: HTMLElement,
 ): Promise<void> {
-    const rootEle = getChatItemRenderContainer();
-
     const totalChatItemCount = chatItemModels.length;
     let cleanup: () => void;
     let currentCount = 0;
@@ -73,7 +57,7 @@ export async function assignChatItemRenderedWidth(
                     )}
                 </For>
             ),
-            rootEle,
+            renderEle,
         );
     });
 }

@@ -16,17 +16,22 @@
     "content_scripts": [
         {
             "run_at": "document_start",
+            "matches": ["https://www.youtube.com/watch*"],
+            "exclude_globs": ["https://www.youtube.com/live_chat*"],
+            "all_frames": true,
+            "js": ["src/content-script.ts"],
+            "css": ["src/style.css"]
+        },
+        {
+            "run_at": "document_start",
             "matches": ["https://www.youtube.com/live_chat*"],
             "all_frames": true,
-            "js": ["src/content-script.ts"]
+            "js": ["src/live-chat-content-script.ts"]
         }
     ],
     "web_accessible_resources": [
         {
-            "resources": [
-                "src/get-live-chat-init-data.ts",
-                "src/live-chat-fetch-interceptor.ts"
-            ],
+            "resources": ["src/live-chat-fetch-interceptor.ts"],
             "matches": ["https://www.youtube.com/*"]
         }
     ]

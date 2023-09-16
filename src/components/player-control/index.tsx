@@ -12,7 +12,7 @@ type Props = Readonly<{
 const PlayerControl: Component<Props> = (props) => {
     return (
         <Portal mount={props.playerControlContainer}>
-            <SpeedSlider window={window.parent.window} />
+            <SpeedSlider window={window} />
             <ToggleBtn />
             <MessageSettingsBtn />
         </Portal>
