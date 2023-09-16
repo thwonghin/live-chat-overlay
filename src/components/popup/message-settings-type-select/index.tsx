@@ -1,39 +1,35 @@
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { Select } from '@kobalte/core';
-import { type Component, createMemo } from 'solid-js';
-import type { I18n } from 'webextension-polyfill';
+import { type Component } from 'solid-js';
+import browser from 'webextension-polyfill';
 
 import FontAwesomeIcon from '@/components/font-awesome';
-import { useI18n } from '@/contexts/i18n';
 import { createError } from '@/logger';
 import { type MessageSettingsKey } from '@/models/settings';
 import { assertNever } from '@/utils';
 
 import styles from './index.module.scss';
 
-function getStringByMessageKey(
-    i18n: I18n.Static,
-    key: MessageSettingsKey,
-): string {
+function getStringByMessageKey(key: MessageSettingsKey): string {
     switch (key) {
         case 'guest':
-            return i18n.getMessage('guestMessageType');
+            return browser.i18n.getMessage('guestMessageType');
         case 'member':
-            return i18n.getMessage('memberMessageType');
+            return browser.i18n.getMessage('memberMessageType');
         case 'verified':
-            return i18n.getMessage('verifiedMessageType');
+            return browser.i18n.getMessage('verifiedMessageType');
         case 'moderator':
-            return i18n.getMessage('moderatorMessageType');
+            return browser.i18n.getMessage('moderatorMessageType');
         case 'owner':
-            return i18n.getMessage('ownerMessageType');
+            return browser.i18n.getMessage('ownerMessageType');
         case 'you':
             throw createError('"you" type message Not supported');
         case 'membership':
-            return i18n.getMessage('membershipMessageType');
+            return browser.i18n.getMessage('membershipMessageType');
         case 'super-chat':
-            return i18n.getMessage('superChatMessageType');
+            return browser.i18n.getMessage('superChatMessageType');
         case 'pinned':
-            return i18n.getMessage('pinnedMessageType');
+            return browser.i18n.getMessage('pinnedMessageType');
         default:
             return assertNever(key);
     }
@@ -60,10 +56,9 @@ type Props = Readonly<{
 }>;
 
 const MessageSettingsTypeSelect: Component<Props> = (props) => {
-    const i18n = useI18n();
     const messageSettingsOptions = supportedTypes.map((type) => ({
         value: type,
-        label: getStringByMessageKey(i18n, type),
+        label: getStringByMessageKey(type),
     }));
 
     const defaultValue = messageSettingsOptions.find(
@@ -72,7 +67,7 @@ const MessageSettingsTypeSelect: Component<Props> = (props) => {
 
     return (
         <label class={styles['form-label']}>
-            {i18n.getMessage('messageTypeSelectLabel')}
+            {browser.i18n.getMessage('messageTypeSelectLabel')}
             <Select.Root
                 options={messageSettingsOptions}
                 defaultValue={defaultValue}

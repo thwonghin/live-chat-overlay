@@ -42,14 +42,12 @@ export async function injectLiveChatOverlay(
 
     const cleanupRender = render(
         () => (
-            <contexts.i18n.I18nProvider browser={browser}>
-                <contexts.rootStore.StoreProvider store={store}>
-                    <App
-                        initData={initData}
-                        playerControlContainer={playerControlContainer}
-                    />
-                </contexts.rootStore.StoreProvider>
-            </contexts.i18n.I18nProvider>
+            <contexts.rootStore.StoreProvider store={store}>
+                <App
+                    initData={initData}
+                    playerControlContainer={playerControlContainer}
+                />
+            </contexts.rootStore.StoreProvider>
         ),
         liveChatContainer,
     );

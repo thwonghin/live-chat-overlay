@@ -1,7 +1,7 @@
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
 import { type Component, createMemo } from 'solid-js';
+import browser from 'webextension-polyfill';
 
-import { useI18n } from '@/contexts/i18n';
 import { useStore } from '@/contexts/root-store';
 
 import BtnTooltip from '../btn-tooltip';
@@ -14,8 +14,6 @@ const withSlashIconRatio =
 
 const ToggleBtn: Component = () => {
     const store = useStore();
-
-    const i18n = useI18n();
 
     const width = createMemo(() => {
         const ratio = store.settingsStore.settings.isEnabled
@@ -34,8 +32,8 @@ const ToggleBtn: Component = () => {
         <BtnTooltip
             title={
                 store.settingsStore.settings.isEnabled
-                    ? i18n.getMessage('toggleButtonHideTitle')
-                    : i18n.getMessage('toggleButtonShowTitle')
+                    ? browser.i18n.getMessage('toggleButtonHideTitle')
+                    : browser.i18n.getMessage('toggleButtonShowTitle')
             }
             onClickTrigger={handleClick}
             iconWidth={width()}

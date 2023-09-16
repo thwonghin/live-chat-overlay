@@ -17,10 +17,12 @@ type Props = Readonly<{
     playerControlContainer: HTMLSpanElement;
 }>;
 
+const DEFAULT_MESSAGE_SETTING_KEY = 'guest' as const;
+
 const MessageSettingsPopup: Component<Props> = (props) => {
     const [containerRef, setContainerRef] = createSignal<HTMLDivElement>();
     const [selectedMessageType, setSelectedMessageType] =
-        createSignal<MessageSettingsKey>('guest');
+        createSignal<MessageSettingsKey>(DEFAULT_MESSAGE_SETTING_KEY);
 
     // Workaround for cannot stop event propagation: use native event handler
     useNativeStopKeydownPropagation(containerRef);
@@ -37,7 +39,7 @@ const MessageSettingsPopup: Component<Props> = (props) => {
             <div class={cx(youtube.CLASS_PANEL, styles['nest-container'])}>
                 <div class={cx(youtube.CLASS_PANEL_MENU, styles.content)}>
                     <MessageSettingsTypeSelect
-                        defaultValue="guest"
+                        defaultValue={DEFAULT_MESSAGE_SETTING_KEY}
                         onChange={setSelectedMessageType}
                     />
                     <Index each={messageSettingsKeys}>

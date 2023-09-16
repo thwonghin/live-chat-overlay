@@ -1,8 +1,8 @@
 import { createForm } from '@felte/solid';
 import { Button } from '@kobalte/core';
 import { type Component } from 'solid-js';
+import browser from 'webextension-polyfill';
 
-import { useI18n } from '@/contexts/i18n';
 import { type MessageSettings } from '@/models/settings';
 
 import styles from './index.module.scss';
@@ -30,15 +30,13 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
         onSubmit: props.onSubmit,
     });
 
-    const i18n = useI18n();
-
     return (
         <form ref={form} class={styles['container-form']}>
-            <p>{i18n.getMessage('colorInputHelperText')}</p>
+            <p>{browser.i18n.getMessage('colorInputHelperText')}</p>
             <div class={styles.row}>
                 <div>
                     <label>
-                        {i18n.getMessage('globalOpacityInputLabel')}
+                        {browser.i18n.getMessage('globalOpacityInputLabel')}
                         <input
                             name="globalOpacity"
                             type="number"
@@ -55,7 +53,9 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
             <div class={styles.row}>
                 <div>
                     <label>
-                        {i18n.getMessage('messageSettingsColorInputLabel')}
+                        {browser.i18n.getMessage(
+                            'messageSettingsColorInputLabel',
+                        )}
                         <input
                             name="messageSettings.color"
                             type="text"
@@ -67,7 +67,9 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                 </div>
                 <div>
                     <label>
-                        {i18n.getMessage('messageSettingsWeightInputLabel')}
+                        {browser.i18n.getMessage(
+                            'messageSettingsWeightInputLabel',
+                        )}
                         <input
                             name="messageSettings.weight"
                             type="number"
@@ -84,7 +86,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
             <div class={styles.row}>
                 <div>
                     <label>
-                        {i18n.getMessage(
+                        {browser.i18n.getMessage(
                             'messageSettingsStrokeColorInputLabel',
                         )}
                         <input
@@ -98,7 +100,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                 </div>
                 <div>
                     <label>
-                        {i18n.getMessage(
+                        {browser.i18n.getMessage(
                             'messageSettingsStrokeWidthInputLabel',
                         )}
                         <input
@@ -117,7 +119,9 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
             <div class={styles.row}>
                 <div>
                     <label>
-                        {i18n.getMessage('messageSettingsBgColorInputLabel')}
+                        {browser.i18n.getMessage(
+                            'messageSettingsBgColorInputLabel',
+                        )}
                         <input
                             disabled={!props.isBackgroundColorEditable}
                             name="messageSettings.bgColor"
@@ -130,7 +134,9 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                 </div>
                 <div>
                     <label>
-                        {i18n.getMessage('messageSettingsOpacityInputLabel')}
+                        {browser.i18n.getMessage(
+                            'messageSettingsOpacityInputLabel',
+                        )}
                         <input
                             name="messageSettings.opacity"
                             type="number"
@@ -146,10 +152,10 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
             </div>
             <div class={styles.row}>
                 <Button.Root type="submit">
-                    {i18n.getMessage('applyButtonText')}
+                    {browser.i18n.getMessage('applyButtonText')}
                 </Button.Root>
                 <Button.Root type="button" onClick={reset}>
-                    {i18n.getMessage('resetButtonText')}
+                    {browser.i18n.getMessage('resetButtonText')}
                 </Button.Root>
             </div>
         </form>
