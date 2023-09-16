@@ -39,7 +39,7 @@ const MessageFlower: Component<Props> = (props) => {
     onMount(() => {
         setTimeout(() => {
             setIsFlowing(true);
-        });
+        }, 10);
     });
 
     return (
