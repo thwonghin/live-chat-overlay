@@ -127,6 +127,7 @@ export function attachKeydownEventListener({
 
 export async function waitForValue<T>(
     getValue: () => T | null | undefined,
+    createError: () => Error,
     retryIntervalMs = 100,
     maxRetryMs = 600000,
 ): Promise<T> {
@@ -146,7 +147,7 @@ export async function waitForValue<T>(
             } else {
                 retryTimeInMs += retryIntervalMs;
                 if (retryTimeInMs >= maxRetryMs) {
-                    reject(createError('Player not found.'));
+                    reject(createError());
                 }
             }
         }, retryIntervalMs);

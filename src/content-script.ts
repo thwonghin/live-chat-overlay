@@ -43,7 +43,7 @@ async function getInitData(doc: Document): Promise<InitData> {
         return JSON.parse(innerHtml.slice(startIndex, -1)) as InitData;
     }
 
-    return waitForValue(getData);
+    return waitForValue(getData, () => createError('init data not found'));
 }
 
 async function init() {

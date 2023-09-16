@@ -48,7 +48,9 @@ export function getVideoEle(): HTMLVideoElement | undefined {
 }
 
 export async function waitForPlayerReady(): Promise<HTMLElement> {
-    return waitForValue(getVideoPlayerEle);
+    return waitForValue(getVideoPlayerEle, () =>
+        createError('Video player not found'),
+    );
 }
 
 export function isInitData(
