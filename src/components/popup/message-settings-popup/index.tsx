@@ -1,4 +1,3 @@
-import cx from 'classnames';
 import { createSignal, type Component, Index, Show } from 'solid-js';
 
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
@@ -36,8 +35,18 @@ const MessageSettingsPopup: Component<Props> = (props) => {
                 [styles['container--hidden']]: props.isHidden,
             }}
         >
-            <div class={cx(youtube.CLASS_PANEL, styles['nest-container'])}>
-                <div class={cx(youtube.CLASS_PANEL_MENU, styles.content)}>
+            <div
+                classList={{
+                    [youtube.CLASS_PANEL]: true,
+                    [styles['nest-container']]: true,
+                }}
+            >
+                <div
+                    classList={{
+                        [youtube.CLASS_PANEL_MENU]: true,
+                        [styles.content]: true,
+                    }}
+                >
                     <MessageSettingsTypeSelect
                         defaultValue={DEFAULT_MESSAGE_SETTING_KEY}
                         onChange={setSelectedMessageType}

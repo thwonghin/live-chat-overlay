@@ -11,16 +11,6 @@
             "tsx": true,
             "decorators": false,
             "dynamicImport": false
-        },
-        "experimental": {
-            "plugins": [
-                [
-                    "@swc/plugin-styled-components",
-                    {
-                        "displayName": true
-                    }
-                ]
-            ]
         }
     },
     "env": {

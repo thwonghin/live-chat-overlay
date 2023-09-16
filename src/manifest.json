@@ -19,8 +19,7 @@
             "matches": ["https://www.youtube.com/watch*"],
             "exclude_globs": ["https://www.youtube.com/live_chat*"],
             "all_frames": true,
-            "js": ["src/content-script.ts"],
-            "css": ["src/style.css"]
+            "js": ["src/content-script.ts"]
         },
         {
             "run_at": "document_start",
