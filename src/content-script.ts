@@ -1,4 +1,3 @@
-import './common';
 import browser from 'webextension-polyfill';
 
 import { waitForValue, youtube } from '@/utils';

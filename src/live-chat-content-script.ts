@@ -1,4 +1,3 @@
-import './common';
 import browser from 'webextension-polyfill';
 
 import { CHAT_END_EVENT, CHAT_START_EVENT } from './constants';

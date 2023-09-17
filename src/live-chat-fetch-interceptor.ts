@@ -1,4 +1,3 @@
-import './common';
 import { initInterceptor } from '@/services/fetch-interceptor';
 
 import { LIVE_CHAT_API_INTERCEPT_EVENT } from './constants';
