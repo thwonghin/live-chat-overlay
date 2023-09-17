@@ -1,4 +1,4 @@
-import { createEffect, createRoot, onCleanup, onMount } from 'solid-js';
+import { createRoot, onCleanup, onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import { attachKeydownEventListener } from '@/utils';
