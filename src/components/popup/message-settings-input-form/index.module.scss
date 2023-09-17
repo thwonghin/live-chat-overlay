@@ -64,5 +64,10 @@
         &:focus {
             border-color: var(--yt-spec-themed-blue);
         }
+
+        &:disabled {
+            background-color: var(--yt-spec-menu-background);
+            cursor: not-allowed;
+        }
     }
 }
