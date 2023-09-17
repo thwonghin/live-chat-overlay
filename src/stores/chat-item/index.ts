@@ -1,4 +1,4 @@
-import { createEffect, createRoot, onCleanup } from 'solid-js';
+import { createEffect, createRoot, onCleanup, onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import type {
@@ -103,7 +103,9 @@ export const createChatItemStore = (
 
     function reset(): void {
         chatItemProcessQueue.splice(0);
-        setState('chatItemsByLineNumber', {});
+        Object.keys(state.chatItemsByLineNumber).forEach((lineNumber) => {
+            setState('chatItemsByLineNumber', Number(lineNumber), []);
+        });
         setState('stickyChatItems', 'values', []);
         chatItemStatusById.clear();
 
@@ -126,17 +128,11 @@ export const createChatItemStore = (
         }
     }
 
-    function onPlayerSeek(isSeeking: boolean): void {
-        if (isSeeking) {
-            resetNonStickyChatItems();
-        }
-    }
-
     function resetNonStickyChatItems(width?: number, height?: number): void {
         Object.keys(state.chatItemsByLineNumber).forEach((lineNumber) => {
             setState('chatItemsByLineNumber', Number(lineNumber), []);
         });
-
+        chatItemProcessQueue.splice(0);
         chatItemStatusById.clear();
 
         // Add back sticky status
@@ -476,7 +472,7 @@ export const createChatItemStore = (
     let cleanup: (() => void) | undefined;
 
     createRoot((dispose) => {
-        createEffect(() => {
+        onMount(() => {
             const cleanup = attachChatEvent(onChatMessageEvent);
             onCleanup(() => {
                 cleanup();
@@ -491,16 +487,6 @@ export const createChatItemStore = (
             onPlayerPauseOrResume(uiStore.playerState.isPaused);
 
             return uiStore.playerState.isPaused;
-        });
-
-        createEffect((prev) => {
-            if (prev === uiStore.playerState.isSeeking) {
-                return;
-            }
-
-            onPlayerSeek(uiStore.playerState.isSeeking);
-
-            return uiStore.playerState.isSeeking;
         });
 
         createEffect((prev) => {
@@ -531,10 +517,8 @@ export const createChatItemStore = (
             return debugInfoStore.debugInfo.isDebugging;
         });
 
-        createEffect(() => {
-            onCleanup(() => {
-                clearAllIntervals();
-            });
+        onCleanup(() => {
+            clearAllIntervals();
         });
 
         cleanup = dispose;

@@ -1,4 +1,4 @@
-import { createEffect, createRoot, onCleanup } from 'solid-js';
+import { createRoot, onCleanup, onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import { attachKeydownEventListener } from '@/utils';
@@ -120,7 +120,7 @@ export const createDebugInfoStore = (): DebugInfoStore => {
     let cleanup: (() => void) | undefined;
 
     createRoot((dispose) => {
-        createEffect(() => {
+        onMount(() => {
             const disposeKeyboardListener = attachKeydownEventListener({
                 withAlt: true,
                 withCtrl: true,

@@ -1,4 +1,4 @@
-import { createEffect, createRoot, onCleanup } from 'solid-js';
+import { createRoot, onCleanup, onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
 import type { PopupType } from './types';
@@ -6,7 +6,6 @@ import type { PopupType } from './types';
 export type PlayerStateModel = {
     width: number;
     height: number;
-    isSeeking: boolean;
     isPaused: boolean;
     readonly videoPlayerEle: HTMLDivElement;
     readonly videoEle: HTMLVideoElement;
@@ -46,7 +45,6 @@ export const createUiStore = (
         playerState: {
             width: 0,
             height: 0,
-            isSeeking: false,
             isPaused: false,
             videoPlayerEle,
             videoEle,
@@ -65,7 +63,7 @@ export const createUiStore = (
     let cleanup: (() => void) | undefined;
 
     createRoot((dispose) => {
-        createEffect(() => {
+        onMount(() => {
             const resizeObserver = new ResizeObserver(() => {
                 const { width, height } =
                     videoPlayerEle.getBoundingClientRect();
@@ -80,9 +78,8 @@ export const createUiStore = (
             });
         });
 
-        createEffect(() => {
+        onMount(() => {
             function onVideoStateChange() {
-                setState('playerState', 'isSeeking', videoEle.seeking);
                 setState('playerState', 'isPaused', videoEle.paused);
             }
 
