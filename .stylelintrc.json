@@ -1,8 +1,13 @@
 {
-    "customSyntax": "postcss-styled-syntax",
     "extends": [
-        "stylelint-config-recommended",
+        "stylelint-config-standard-scss",
         "stylelint-config-recess-order",
         "stylelint-prettier/recommended"
+    ],
+    "overrides": [
+        {
+            "files": ["**/*.scss"],
+            "customSyntax": "postcss-scss"
+        }
     ]
 }

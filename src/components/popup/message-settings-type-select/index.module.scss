@@ -3,6 +3,7 @@
     flex-direction: column;
     margin-bottom: 8px;
     font-size: 14px;
+
     > div {
         margin-top: 4px;
     }
@@ -13,15 +14,15 @@
     align-items: center;
     justify-content: space-between;
     width: 150px;
-    border-radius: 18px;
-    padding: 4px 8px 4px 8px;
+    padding: 4px 8px;
+    font-size: 14px;
     line-height: 1;
     color: var(--yt-spec-text-primary);
+    cursor: pointer;
     background-color: var(--yt-spec-raised-background);
     border: var(--yt-spec-raised-background);
+    border-radius: 18px;
     outline: none;
-    cursor: pointer;
-    font-size: 14px;
     transition:
         border-color 250ms,
         color 250ms;
@@ -33,26 +34,29 @@
 }
 
 .value {
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
 }
 
-@keyframes contentShow {
+@keyframes content-show {
     from {
         opacity: 0;
         transform: translateY(-8px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
-@keyframes contentHide {
+
+@keyframes content-hide {
     from {
         opacity: 1;
         transform: translateY(0);
     }
+
     to {
         opacity: 0;
         transform: translateY(-8px);
@@ -63,14 +67,14 @@
     background-color: var(--yt-spec-raised-background);
     border-radius: 18px;
     box-shadow:
-        0 4px 6px -1px rgb(0 0 0 / 0.1),
-        0 2px 4px -2px rgb(0 0 0 / 0.1);
+        0 4px 6px -1px rgb(0 0 0 / 10%),
+        0 2px 4px -2px rgb(0 0 0 / 10%);
     transform-origin: var(--kb-select-content-transform-origin);
-    animation: contentHide 250ms ease-in forwards;
+    animation: content-hide 250ms ease-in forwards;
 }
 
 .content[data-expanded] {
-    animation: contentShow 250ms ease-out;
+    animation: content-show 250ms ease-out;
 }
 
 .listbox {
@@ -78,18 +82,18 @@
 }
 
 .item {
-    line-height: 1;
-    font-size: 14px;
-    color: var(--yt-spec-text-primary);
-    border-radius: 18px;
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 8px;
-    position: relative;
-    user-select: none;
-    outline: none;
+    font-size: 14px;
+    line-height: 1;
+    color: var(--yt-spec-text-primary);
     cursor: pointer;
+    user-select: none;
+    border-radius: 18px;
+    outline: none;
 
     &:hover {
         background-color: var(--yt-spec-menu-background);
@@ -97,6 +101,6 @@
 }
 
 .item[data-highlighted] {
-    outline: none;
     background-color: var(--yt-spec-menu-background);
+    outline: none;
 }
