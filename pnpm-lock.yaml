@@ -141,6 +141,9 @@ devDependencies:
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
+  postcss-styled-syntax:
+    specifier: ^0.4.0
+    version: 0.4.0(postcss@8.4.29)(typescript@5.2.2)
   prettier:
     specifier: ^3.0.3
     version: 3.0.3
@@ -7345,6 +7348,10 @@ packages:
     engines: {node: '>=4.0'}
     dev: true
 
+  /estree-walker@2.0.2:
+    resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
+    dev: true
+
   /esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
@@ -10806,6 +10813,19 @@ packages:
       postcss: ^8.4.20
     dependencies:
       postcss: 8.4.29
+    dev: true
+
+  /postcss-styled-syntax@0.4.0(postcss@8.4.29)(typescript@5.2.2):
+    resolution: {integrity: sha512-LvG++K8LtIyX1Q1mNuZVQYmBo+SCwn90cEkMigo4/I0QwXrEiYt8nPeJ5rrI5Uuh+5w7hRfPyJKlvQdhVZBhUg==}
+    peerDependencies:
+      postcss: ^8.4.21
+    dependencies:
+      '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.2.2)
+      estree-walker: 2.0.2
+      postcss: 8.4.29
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
     dev: true
 
   /postcss-value-parser@4.2.0:

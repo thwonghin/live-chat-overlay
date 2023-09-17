@@ -10,9 +10,8 @@ export const migrations: Array<{
     {
         name: 'MigrateLocalStorageToSyncStorage',
         async run(browser: Browser): Promise<void> {
-            const localStorageResult = await browser.storage.local.get(
-                SETTINGS_STORAGE_KEY,
-            );
+            const localStorageResult =
+                await browser.storage.local.get(SETTINGS_STORAGE_KEY);
             const localSettings = localStorageResult?.[SETTINGS_STORAGE_KEY] as
                 | Settings
                 | undefined;
@@ -20,9 +19,8 @@ export const migrations: Array<{
                 return;
             }
 
-            const syncStorageResult = await browser.storage.sync.get(
-                SETTINGS_STORAGE_KEY,
-            );
+            const syncStorageResult =
+                await browser.storage.sync.get(SETTINGS_STORAGE_KEY);
             const syncSettings = syncStorageResult?.[SETTINGS_STORAGE_KEY] as
                 | Settings
                 | undefined;
