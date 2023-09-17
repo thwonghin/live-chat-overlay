@@ -69,5 +69,21 @@
             background-color: var(--yt-spec-menu-background);
             cursor: not-allowed;
         }
+
+        &[type='color'] {
+            appearance: none;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            color: none;
+            cursor: pointer;
+
+            &::-webkit-color-swatch-wrapper {
+                padding: 0;
+            }
+            &::-webkit-color-swatch {
+                border: none;
+            }
+        }
     }
 }

@@ -1,7 +1,10 @@
+import Color from 'color';
 import { type Browser } from 'webextension-polyfill';
 
+import { logInfo } from '@/utils/logger';
+
 import { SETTINGS_STORAGE_KEY } from './const';
-import type { Settings } from '../../models/settings/types';
+import type { MessageSettingsKey, Settings } from '../../models/settings/types';
 
 export const migrations: Array<{
     name: string;
@@ -35,6 +38,39 @@ export const migrations: Array<{
             }
 
             await browser.storage.local.clear();
+        },
+    },
+    {
+        name: 'MigrateColorsToHexCode',
+        async run(browser: Browser): Promise<void> {
+            const syncStorageResult = await browser.storage.sync.get(
+                SETTINGS_STORAGE_KEY,
+            );
+            const syncSettings = syncStorageResult?.[SETTINGS_STORAGE_KEY] as
+                | Settings
+                | undefined;
+
+            if (!syncSettings) {
+                return;
+            }
+
+            function convertHex(value: string) {
+                try {
+                    // eslint-disable-next-line new-cap
+                    return Color(value).hex();
+                } catch (e) {
+                    logInfo('Failed to convert color to hex:', value);
+                    return '#FFFFFF';
+                }
+            }
+
+            Object.keys(syncSettings.messageSettings).forEach((key) => {
+                const msgSetting =
+                    syncSettings.messageSettings[key as MessageSettingsKey];
+                msgSetting.bgColor = convertHex(msgSetting.bgColor);
+                msgSetting.color = convertHex(msgSetting.bgColor);
+                msgSetting.strokeColor = convertHex(msgSetting.strokeColor);
+            });
         },
     },
 ];

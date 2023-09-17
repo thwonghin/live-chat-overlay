@@ -1,6 +1,7 @@
 import { createForm } from '@felte/solid';
 import { Button } from '@kobalte/core';
-import { type Component } from 'solid-js';
+import { RgbaStringColorPicker } from '@tiagotrindade/solid-colorful';
+import { type Component, Show } from 'solid-js';
 import browser from 'webextension-polyfill';
 
 import { type MessageSettings } from '@/models/settings';
@@ -61,7 +62,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                     }}
                 >
                     {browser.i18n.getMessage('messageSettingsColorInputLabel')}
-                    <input name="messageSettings.color" type="text" />
+                    <input name="messageSettings.color" type="color" />
                 </label>
                 <label
                     class={styles['form-label']}
@@ -80,18 +81,24 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                 </label>
             </div>
             <div class={styles.row}>
-                <label
-                    class={styles['form-label']}
-                    style={{
-                        width: '60%',
-                        'padding-right': '8px',
-                    }}
-                >
-                    {browser.i18n.getMessage(
-                        'messageSettingsStrokeColorInputLabel',
-                    )}
-                    <input name="messageSettings.strokeColor" type="text" />
-                </label>
+                <Show when={props.isBackgroundColorEditable}>
+                    <label
+                        class={styles['form-label']}
+                        style={{
+                            width: '60%',
+                            'padding-right': '8px',
+                        }}
+                    >
+                        {browser.i18n.getMessage(
+                            'messageSettingsStrokeColorInputLabel',
+                        )}
+                        <input
+                            name="messageSettings.strokeColor"
+                            type="color"
+                        />
+                    </label>
+                </Show>
+
                 <label
                     class={styles['form-label']}
                     style={{
@@ -124,7 +131,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                     <input
                         disabled={!props.isBackgroundColorEditable}
                         name="messageSettings.bgColor"
-                        type="text"
+                        type="color"
                     />
                 </label>
                 <label

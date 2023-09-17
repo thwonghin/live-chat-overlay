@@ -7,6 +7,7 @@ import {
     createSettingsModel,
 } from '@/models/settings';
 import { catchWithFallback, promiseSeries } from '@/utils';
+import { logInfo } from '@/utils/logger';
 
 import { MIGRATIONS_STORAGE_KEY, SETTINGS_STORAGE_KEY } from './const';
 import { migrations } from './migrations';
@@ -34,6 +35,7 @@ export const createSettingsStore = async (
 
         await promiseSeries(
             missingMigrations.map((migration) => async () => {
+                logInfo('Running migration', migration.name);
                 await migration.run(browser);
 
                 const getResult = await browser.storage.sync.get(
