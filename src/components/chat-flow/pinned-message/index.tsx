@@ -1,5 +1,10 @@
 import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { type Component, createEffect, createSignal } from 'solid-js';
+import {
+    type Component,
+    createEffect,
+    createSignal,
+    onCleanup,
+} from 'solid-js';
 
 import FontAwesomeIcon from '@/components/font-awesome';
 import type { PinnedChatItem } from '@/models/chat-item/types';
@@ -18,6 +23,7 @@ type Props = Readonly<{
 
 const PinnedMessage: Component<Props> = (props) => {
     const [ref, setRef] = createSignal<HTMLDivElement>();
+    const [closeIconRef, setCloseIconRef] = createSignal<SVGSVGElement>();
     createEffect(() => {
         setTimeout(() => {
             props.onRender?.(ref());
@@ -37,10 +43,24 @@ const PinnedMessage: Component<Props> = (props) => {
         props.onClickClose?.(event);
     };
 
+    // Workarounds on cannot stop event propagation that stops the video
+    createEffect(() => {
+        ref()?.addEventListener('click', handleClick);
+        onCleanup(() => {
+            ref()?.removeEventListener('click', handleClick);
+        });
+    });
+
+    createEffect(() => {
+        closeIconRef()?.addEventListener('click', handleClickClose);
+        onCleanup(() => {
+            closeIconRef()?.removeEventListener('click', handleClick);
+        });
+    });
+
     return (
         <div
             ref={setRef}
-            onClick={handleClick}
             class={styles.container}
             style={{
                 color: props.messageSettings.color,
@@ -65,9 +85,9 @@ const PinnedMessage: Component<Props> = (props) => {
                 messageParts={props.chatItem.messageParts}
             />
             <FontAwesomeIcon
+                ref={setCloseIconRef}
                 class={styles['close-icon']}
                 icon={faTimes}
-                onClick={handleClickClose}
             />
         </div>
     );
