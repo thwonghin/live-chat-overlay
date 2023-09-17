@@ -14,7 +14,6 @@ const FontAwesomeIcon = (props: Props) => {
         'icon',
         'classList',
         'width',
-        'onClick',
     ]);
     const faicon = createMemo(() => icon(localProps.icon));
 
