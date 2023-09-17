@@ -5,8 +5,8 @@ import {
     type Component,
 } from 'solid-js';
 
-import { createError } from '@/logger';
 import type { RootStore } from '@/stores';
+import { createError } from '@/utils/logger';
 
 const StoreContext = createContext<RootStore>();
 

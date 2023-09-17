@@ -1,6 +1,6 @@
 import { isNil } from 'lodash-es';
 
-import { createError } from '@/logger';
+import { createError } from '@/utils/logger';
 
 export * as youtube from './youtube';
 

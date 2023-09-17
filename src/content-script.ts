@@ -10,9 +10,9 @@ import {
     LIVE_CHAT_API_INTERCEPT_EVENT,
 } from './constants';
 import { type InitData } from './definitions/youtube';
-import { createError, logInfo } from './logger';
 import { type ChatEventDetail } from './services/fetch-interceptor';
 import { createRootStore } from './stores';
+import { createError, logInfo } from './utils/logger';
 
 function getChatFrame() {
     const chatFrame = document.getElementById(

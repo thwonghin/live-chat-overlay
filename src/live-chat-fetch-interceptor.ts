@@ -2,8 +2,8 @@ import './common';
 import { initInterceptor } from '@/services/fetch-interceptor';
 
 import { LIVE_CHAT_API_INTERCEPT_EVENT } from './constants';
-import { logInfo } from './logger';
 import { youtube } from './utils';
+import { logInfo } from './utils/logger';
 
 function init(): void {
     logInfo('injecting chat interceptor');

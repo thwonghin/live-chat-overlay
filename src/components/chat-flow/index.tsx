@@ -11,9 +11,9 @@ import {
 
 import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
-import { createError } from '@/logger';
 import type { ChatItemModel } from '@/models/chat-item';
 import { CHAT_ITEM_RENDER_ID } from '@/stores/chat-item';
+import { createError } from '@/utils/logger';
 
 import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';

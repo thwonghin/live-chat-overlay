@@ -1,5 +1,5 @@
 import type { InitData, YoutubeChatResponse } from '@/definitions/youtube';
-import { createError } from '@/logger';
+import { createError } from '@/utils/logger';
 
 import { waitForValue } from '.';
 

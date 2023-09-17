@@ -3,9 +3,9 @@ import type { Browser } from 'webextension-polyfill';
 
 import * as contexts from '@/contexts';
 import type { InitData } from '@/definitions/youtube';
-import { createError } from '@/logger';
 import type { RootStore } from '@/stores';
 import { youtube } from '@/utils';
+import { createError } from '@/utils/logger';
 
 import App from './app';
 import styles from './index.module.scss';

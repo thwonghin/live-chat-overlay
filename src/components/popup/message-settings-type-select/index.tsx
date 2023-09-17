@@ -4,9 +4,9 @@ import { type Component } from 'solid-js';
 import browser from 'webextension-polyfill';
 
 import FontAwesomeIcon from '@/components/font-awesome';
-import { createError } from '@/logger';
 import { type MessageSettingsKey } from '@/models/settings';
 import { assertNever } from '@/utils';
+import { createError } from '@/utils/logger';
 
 import styles from './index.module.scss';
 

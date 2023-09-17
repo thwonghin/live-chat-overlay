@@ -7,10 +7,10 @@ import type {
     ReplayContinuationContents,
     LiveContinuationContents,
 } from '@/definitions/youtube';
-import { createError } from '@/logger';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { fetchInterceptor } from '@/services';
 import { benchmark, benchmarkAsync, youtube } from '@/utils';
+import { createError } from '@/utils/logger';
 
 import {
     CHAT_ITEM_RENDER_ID,

@@ -6,7 +6,6 @@ import type {
     ReplayInitData,
     InitData,
 } from '@/definitions/youtube';
-import { createError } from '@/logger';
 import {
     type ChatItemModel,
     createChatItemModelFromAction,
@@ -15,6 +14,7 @@ import { isNormalChatItem } from '@/models/chat-item/mapper';
 import type { ChatItem } from '@/models/chat-item/types';
 import type { SettingsModel } from '@/models/settings';
 import { isNotNil } from '@/utils';
+import { createError } from '@/utils/logger';
 
 export enum Mode {
     LIVE = 'live',

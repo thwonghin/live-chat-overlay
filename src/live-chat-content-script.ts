@@ -2,8 +2,8 @@ import './common';
 import browser from 'webextension-polyfill';
 
 import { CHAT_END_EVENT, CHAT_START_EVENT } from './constants';
-import { logInfo } from './logger';
 import { injectScript } from './utils';
+import { logInfo } from './utils/logger';
 
 function start() {
     logInfo('starting from live chat iframe');
