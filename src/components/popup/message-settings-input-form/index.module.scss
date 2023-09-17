@@ -5,5 +5,64 @@
 .row {
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
+}
+
+.btn-row {
+    @extend .row;
+    margin-top: 8px;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    line-height: 1;
+    color: var(--yt-spec-text-primary);
+    border: none;
+    outline: none;
+    background-color: transparent;
+    border-radius: 18px;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--yt-spec-menu-background);
+    }
+}
+
+.btn-primary {
+    @extend .btn;
+    background-color: var(--yt-spec-call-to-action);
+
+    &:hover {
+        background-color: var(--yt-spec-call-to-action-inverse);
+    }
+}
+
+.color-hint {
+    padding-bottom: 4px;
+}
+
+.form-label {
+    display: inline-flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding-bottom: 8px;
+    font-size: 14px;
+    > input {
+        margin-top: 4px;
+        color: var(--yt-spec-text-primary);
+        background-color: var(--yt-spec-raised-background);
+        border: none;
+        border-bottom: solid 1px var(--yt-spec-text-primary);
+        outline: none;
+        border-radius: 0;
+        font-size: 14px;
+        padding: 4px 8px 4px 8px;
+
+        &:focus {
+            border-color: var(--yt-spec-themed-blue);
+        }
+    }
 }

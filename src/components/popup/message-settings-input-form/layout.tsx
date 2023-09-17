@@ -32,129 +32,124 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
 
     return (
         <form ref={form} class={styles['container-form']}>
-            <p>{browser.i18n.getMessage('colorInputHelperText')}</p>
+            <p class={styles['color-hint']}>
+                {browser.i18n.getMessage('colorInputHelperText')}
+            </p>
             <div class={styles.row}>
-                <div>
-                    <label>
-                        {browser.i18n.getMessage('globalOpacityInputLabel')}
-                        <input
-                            name="globalOpacity"
-                            type="number"
-                            min="0"
-                            max="1"
-                            step="0.01"
-                            style={{
-                                width: '100%',
-                            }}
-                        />
-                    </label>
-                </div>
+                <label
+                    class={styles['form-label']}
+                    style={{
+                        width: '100%',
+                    }}
+                >
+                    {browser.i18n.getMessage('globalOpacityInputLabel')}
+                    <input
+                        name="globalOpacity"
+                        type="number"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                    />
+                </label>
             </div>
             <div class={styles.row}>
-                <div>
-                    <label>
-                        {browser.i18n.getMessage(
-                            'messageSettingsColorInputLabel',
-                        )}
-                        <input
-                            name="messageSettings.color"
-                            type="text"
-                            style={{
-                                width: '60%',
-                            }}
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        {browser.i18n.getMessage(
-                            'messageSettingsWeightInputLabel',
-                        )}
-                        <input
-                            name="messageSettings.weight"
-                            type="number"
-                            min="100"
-                            max="900"
-                            step="100"
-                            style={{
-                                width: '30%',
-                            }}
-                        />
-                    </label>
-                </div>
+                <label
+                    class={styles['form-label']}
+                    style={{
+                        width: '60%',
+                        'padding-right': '8px',
+                    }}
+                >
+                    {browser.i18n.getMessage('messageSettingsColorInputLabel')}
+                    <input name="messageSettings.color" type="text" />
+                </label>
+                <label
+                    class={styles['form-label']}
+                    style={{
+                        width: '30%',
+                    }}
+                >
+                    {browser.i18n.getMessage('messageSettingsWeightInputLabel')}
+                    <input
+                        name="messageSettings.weight"
+                        type="number"
+                        min="100"
+                        max="900"
+                        step="100"
+                    />
+                </label>
             </div>
             <div class={styles.row}>
-                <div>
-                    <label>
-                        {browser.i18n.getMessage(
-                            'messageSettingsStrokeColorInputLabel',
-                        )}
-                        <input
-                            name="messageSettings.strokeColor"
-                            type="text"
-                            style={{
-                                width: '60%',
-                            }}
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        {browser.i18n.getMessage(
-                            'messageSettingsStrokeWidthInputLabel',
-                        )}
-                        <input
-                            name="messageSettings.strokeWidth"
-                            type="number"
-                            min="0"
-                            max="0.5"
-                            step="0.001"
-                            style={{
-                                width: '30%',
-                            }}
-                        />
-                    </label>
-                </div>
+                <label
+                    class={styles['form-label']}
+                    style={{
+                        width: '60%',
+                        'padding-right': '8px',
+                    }}
+                >
+                    {browser.i18n.getMessage(
+                        'messageSettingsStrokeColorInputLabel',
+                    )}
+                    <input name="messageSettings.strokeColor" type="text" />
+                </label>
+                <label
+                    class={styles['form-label']}
+                    style={{
+                        width: '30%',
+                    }}
+                >
+                    {browser.i18n.getMessage(
+                        'messageSettingsStrokeWidthInputLabel',
+                    )}
+                    <input
+                        name="messageSettings.strokeWidth"
+                        type="number"
+                        min="0"
+                        max="0.5"
+                        step="0.001"
+                    />
+                </label>
             </div>
             <div class={styles.row}>
-                <div>
-                    <label>
-                        {browser.i18n.getMessage(
-                            'messageSettingsBgColorInputLabel',
-                        )}
-                        <input
-                            disabled={!props.isBackgroundColorEditable}
-                            name="messageSettings.bgColor"
-                            type="text"
-                            style={{
-                                width: '60%',
-                            }}
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        {browser.i18n.getMessage(
-                            'messageSettingsOpacityInputLabel',
-                        )}
-                        <input
-                            name="messageSettings.opacity"
-                            type="number"
-                            min="0"
-                            max="1"
-                            step="0.01"
-                            style={{
-                                width: '30%',
-                            }}
-                        />
-                    </label>
-                </div>
+                <label
+                    class={styles['form-label']}
+                    style={{
+                        width: '60%',
+                        'padding-right': '8px',
+                    }}
+                >
+                    {browser.i18n.getMessage(
+                        'messageSettingsBgColorInputLabel',
+                    )}
+                    <input
+                        disabled={!props.isBackgroundColorEditable}
+                        name="messageSettings.bgColor"
+                        type="text"
+                    />
+                </label>
+                <label
+                    class={styles['form-label']}
+                    style={{
+                        width: '30%',
+                    }}
+                >
+                    {browser.i18n.getMessage(
+                        'messageSettingsOpacityInputLabel',
+                    )}
+                    <input
+                        name="messageSettings.opacity"
+                        type="number"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                    />
+                </label>
             </div>
-            <div class={styles.row}>
-                <Button.Root type="submit">
+            <div class={styles['btn-row']}>
+                <Button.Root type="submit" class={styles['btn-primary']}>
                     {browser.i18n.getMessage('applyButtonText')}
                 </Button.Root>
-                <Button.Root type="button" onClick={reset}>
+                <Button.Root type="button" class={styles.btn} onClick={reset}>
                     {browser.i18n.getMessage('resetButtonText')}
                 </Button.Root>
             </div>

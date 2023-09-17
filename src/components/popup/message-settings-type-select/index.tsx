@@ -79,23 +79,23 @@ const MessageSettingsTypeSelect: Component<Props> = (props) => {
                     }
                 }}
                 itemComponent={(props) => (
-                    <Select.Item item={props.item}>
+                    <Select.Item item={props.item} class={styles.item}>
                         <Select.ItemLabel>
                             {props.item.rawValue.label}
                         </Select.ItemLabel>
                     </Select.Item>
                 )}
             >
-                <Select.Trigger>
-                    <Select.Value<Option>>
+                <Select.Trigger class={styles.trigger}>
+                    <Select.Value<Option> class={styles.value}>
                         {(state) => state.selectedOption().label}
                     </Select.Value>
                     <Select.Icon>
                         <FontAwesomeIcon icon={faAngleDown} />
                     </Select.Icon>
                 </Select.Trigger>
-                <Select.Content>
-                    <Select.Listbox />
+                <Select.Content class={styles.content}>
+                    <Select.Listbox class={styles.listbox} />
                 </Select.Content>
             </Select.Root>
         </label>
