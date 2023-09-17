@@ -104,3 +104,5 @@ async function init() {
 }
 
 window.addEventListener(`${browser.runtime.id}-${CHAT_START_EVENT}`, init);
+
+logInfo('injected script from', window.location.href);
