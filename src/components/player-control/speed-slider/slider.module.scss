@@ -1,9 +1,9 @@
-@import '../../../_variable.scss';
+@import '../../../variable';
 
 .slider {
+    position: relative;
     height: 100%;
     min-height: 36px;
-    position: relative;
     overflow: hidden;
 
     :global(.#{$youtube-big-mode-class}) & {
@@ -16,36 +16,36 @@
     top: 50%;
     width: 12px;
     height: 12px;
-    border-radius: 6px;
     margin-top: -6px;
     background: #fff;
+    border-radius: 6px;
 
     :global(.#{$youtube-big-mode-class}) & {
         width: 18px;
         height: 18px;
-        border-radius: 9px;
         margin-top: -9px;
+        border-radius: 9px;
     }
 
-    &:before,
-    &:after {
-        content: '';
+    &::before,
+    &::after {
         position: absolute;
-        display: block;
         top: 50%;
         left: 0;
+        display: block;
+        width: 64px;
         height: 3px;
         margin-top: -2px;
-        width: 64px;
+        content: '';
 
         :global(.#{$youtube-big-mode-class}) & {
+            width: 96px;
             height: 4px;
             margin-top: -2px;
-            width: 96px;
         }
     }
 
-    &:before {
+    &::before {
         left: -58px;
         background: #fff;
 
@@ -54,13 +54,13 @@
         }
     }
 
-    &:after {
+    &::after {
         left: 6px;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgb(255 255 255 / 20%);
 
         :global(.#{$youtube-big-mode-class}) & {
             left: 9px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgb(255 255 255 / 20%);
         }
     }
 }

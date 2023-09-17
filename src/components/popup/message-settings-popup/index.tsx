@@ -32,7 +32,7 @@ const MessageSettingsPopup: Component<Props> = (props) => {
             classList={{
                 [youtube.CLASS_POPUP]: true,
                 [styles.container]: true,
-                [styles['container--hidden']]: props.isHidden,
+                [styles['container-hidden']]: props.isHidden,
             }}
         >
             <div

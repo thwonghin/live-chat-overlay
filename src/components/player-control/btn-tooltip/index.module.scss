@@ -1,4 +1,4 @@
-@import '../../../_variable.scss';
+@import '../../../variable';
 
 .tooltip {
     padding: 5px 9px;
@@ -16,9 +16,8 @@
 }
 
 .trigger {
-    font-size: 30px !important;
     display: flex !important;
-    // text-align: center;
     align-items: center;
     justify-content: center;
+    font-size: 30px !important;
 }

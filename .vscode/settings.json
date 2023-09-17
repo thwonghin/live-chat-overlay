@@ -6,7 +6,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "prettier.prettierPath": "./node_modules/prettier",
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": true,
+        "source.fixAll.stylelint": true
     },
+    "stylelint.validate": ["css", "scss"],
     "eslint.validate": ["javascript"]
 }
