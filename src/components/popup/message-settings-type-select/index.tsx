@@ -1,42 +1,35 @@
-import { useCallback, useMemo } from 'react';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { Select } from '@kobalte/core';
+import { type Component } from 'solid-js';
+import browser from 'webextension-polyfill';
 
-import {
-    Select,
-    FormLabel,
-    MenuItem,
-    type SelectChangeEvent,
-} from '@mui/material';
-import type { I18n } from 'webextension-polyfill';
-
-import { useI18n } from '@/contexts/i18n';
+import FontAwesomeIcon from '@/components/font-awesome';
 import { type MessageSettingsKey } from '@/models/settings';
 import { assertNever } from '@/utils';
+import { createError } from '@/utils/logger';
 
 import styles from './index.module.scss';
 
-function getStringByMessageKey(
-    i18n: I18n.Static,
-    key: MessageSettingsKey,
-): string {
+function getStringByMessageKey(key: MessageSettingsKey): string {
     switch (key) {
         case 'guest':
-            return i18n.getMessage('guestMessageType');
+            return browser.i18n.getMessage('guestMessageType');
         case 'member':
-            return i18n.getMessage('memberMessageType');
+            return browser.i18n.getMessage('memberMessageType');
         case 'verified':
-            return i18n.getMessage('verifiedMessageType');
+            return browser.i18n.getMessage('verifiedMessageType');
         case 'moderator':
-            return i18n.getMessage('moderatorMessageType');
+            return browser.i18n.getMessage('moderatorMessageType');
         case 'owner':
-            return i18n.getMessage('ownerMessageType');
+            return browser.i18n.getMessage('ownerMessageType');
         case 'you':
-            throw new Error('"you" type message Not supported');
+            throw createError('"you" type message Not supported');
         case 'membership':
-            return i18n.getMessage('membershipMessageType');
+            return browser.i18n.getMessage('membershipMessageType');
         case 'super-chat':
-            return i18n.getMessage('superChatMessageType');
+            return browser.i18n.getMessage('superChatMessageType');
         case 'pinned':
-            return i18n.getMessage('pinnedMessageType');
+            return browser.i18n.getMessage('pinnedMessageType');
         default:
             return assertNever(key);
     }
@@ -52,52 +45,60 @@ const supportedTypes: MessageSettingsKey[] = [
     'super-chat',
     'pinned',
 ];
-
-type Props = {
+type Option = Readonly<{
     value: MessageSettingsKey;
+    label: string;
+}>;
+
+type Props = Readonly<{
+    defaultValue: MessageSettingsKey;
     onChange: (value: MessageSettingsKey) => void;
-};
+}>;
 
-const MessageSettingsTypeSelect: React.FC<Props> = ({ value, onChange }) => {
-    const handleChange = useCallback(
-        (event: SelectChangeEvent<MessageSettingsKey>) => {
-            onChange(event.target.value as MessageSettingsKey);
-        },
-        [onChange],
-    );
-    const i18n = useI18n();
+const MessageSettingsTypeSelect: Component<Props> = (props) => {
+    const messageSettingsOptions = supportedTypes.map((type) => ({
+        value: type,
+        label: getStringByMessageKey(type),
+    }));
 
-    const messageSettingsOptions = useMemo(
-        () =>
-            supportedTypes.map((type) => ({
-                key: type,
-                label: getStringByMessageKey(i18n, type),
-            })),
-        [i18n],
-    );
+    const defaultValue = messageSettingsOptions.find(
+        (option) => option.value === props.defaultValue,
+    )!;
 
     return (
-        <div>
-            <FormLabel className={styles['form-label']}>
-                {i18n.getMessage('messageTypeSelectLabel')}
-            </FormLabel>
-            <Select
-                variant="standard"
-                color="secondary"
-                value={value}
-                MenuProps={{
-                    // Avoid window scrollbar disappeared casuing shift horizontally
-                    disableScrollLock: true,
+        <label class={styles['form-label']}>
+            {browser.i18n.getMessage('messageTypeSelectLabel')}
+            <Select.Root
+                options={messageSettingsOptions}
+                defaultValue={defaultValue}
+                optionValue="value"
+                optionTextValue="label"
+                onChange={(v) => {
+                    if (v) {
+                        props.onChange(v.value);
+                    }
                 }}
-                onChange={handleChange}
+                itemComponent={(props) => (
+                    <Select.Item item={props.item} class={styles.item}>
+                        <Select.ItemLabel>
+                            {props.item.rawValue.label}
+                        </Select.ItemLabel>
+                    </Select.Item>
+                )}
             >
-                {messageSettingsOptions.map((option) => (
-                    <MenuItem key={option.key} value={option.key}>
-                        {option.label}
-                    </MenuItem>
-                ))}
-            </Select>
-        </div>
+                <Select.Trigger class={styles.trigger}>
+                    <Select.Value<Option> class={styles.value}>
+                        {(state) => state.selectedOption().label}
+                    </Select.Value>
+                    <Select.Icon>
+                        <FontAwesomeIcon icon={faAngleDown} />
+                    </Select.Icon>
+                </Select.Trigger>
+                <Select.Content class={styles.content}>
+                    <Select.Listbox class={styles.listbox} />
+                </Select.Content>
+            </Select.Root>
+        </label>
     );
 };
 

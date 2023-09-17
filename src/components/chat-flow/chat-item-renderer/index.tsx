@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { type Component, Show } from 'solid-js';
 
 import type { ChatItemModel } from '@/models/chat-item';
 import {
@@ -8,61 +8,63 @@ import {
     isSuperChatItem,
     isSuperStickerItem,
 } from '@/models/chat-item/mapper';
+import {
+    type MembershipItem,
+    type NormalChatItem,
+    type PinnedChatItem,
+    type SuperChatItem,
+    type SuperStickerItem,
+} from '@/models/chat-item/types';
 
 import PinnedMessage from '../pinned-message';
 import SuperChatSticker from '../super-chat-sticker';
 import TwoLinesMessage from '../two-lines-message';
 
-type Props = {
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    readonly onRender?: (ele: HTMLElement | null) => void;
-    readonly chatItem: ChatItemModel;
-    readonly onClickClose?: React.MouseEventHandler;
-};
+type Props = Readonly<{
+    onRender?: (ele?: HTMLElement) => void;
+    chatItem: ChatItemModel;
+    onClickClose?: (event: MouseEvent) => void;
+}>;
 
-const ChatItemRenderer: React.FC<Props> = ({
-    onRender,
-    chatItem,
-    onClickClose,
-}) => {
+const ChatItemRenderer: Component<Props> = (props) => {
     return (
         <>
-            {isSuperStickerItem(chatItem.value) && (
+            <Show when={isSuperStickerItem(props.chatItem.value)}>
                 <SuperChatSticker
-                    chatItem={chatItem.value}
-                    messageSettings={chatItem.messageSettings}
-                    onRender={onRender}
+                    chatItem={props.chatItem.value as SuperStickerItem}
+                    messageSettings={props.chatItem.messageSettings}
+                    onRender={props.onRender}
                 />
-            )}
-            {isNormalChatItem(chatItem.value) && (
+            </Show>
+            <Show when={isNormalChatItem(props.chatItem.value)}>
                 <TwoLinesMessage
-                    chatItem={chatItem.value}
-                    messageSettings={chatItem.messageSettings}
-                    onRender={onRender}
+                    chatItem={props.chatItem.value as NormalChatItem}
+                    messageSettings={props.chatItem.messageSettings}
+                    onRender={props.onRender}
                 />
-            )}
-            {isSuperChatItem(chatItem.value) && (
+            </Show>
+            <Show when={isSuperChatItem(props.chatItem.value)}>
                 <TwoLinesMessage
-                    chatItem={chatItem.value}
-                    messageSettings={chatItem.messageSettings}
-                    onRender={onRender}
+                    chatItem={props.chatItem.value as SuperChatItem}
+                    messageSettings={props.chatItem.messageSettings}
+                    onRender={props.onRender}
                 />
-            )}
-            {isMembershipItem(chatItem.value) && (
+            </Show>
+            <Show when={isMembershipItem(props.chatItem.value)}>
                 <TwoLinesMessage
-                    chatItem={chatItem.value}
-                    messageSettings={chatItem.messageSettings}
-                    onRender={onRender}
+                    chatItem={props.chatItem.value as MembershipItem}
+                    messageSettings={props.chatItem.messageSettings}
+                    onRender={props.onRender}
                 />
-            )}
-            {isPinnedItem(chatItem.value) && (
+            </Show>
+            <Show when={isPinnedItem(props.chatItem.value)}>
                 <PinnedMessage
-                    chatItem={chatItem.value}
-                    messageSettings={chatItem.messageSettings}
-                    onClickClose={onClickClose}
-                    onRender={onRender}
+                    chatItem={props.chatItem.value as PinnedChatItem}
+                    messageSettings={props.chatItem.messageSettings}
+                    onClickClose={props.onClickClose}
+                    onRender={props.onRender}
                 />
-            )}
+            </Show>
         </>
     );
 };

@@ -1,26 +1,27 @@
-import { observer } from 'mobx-react-lite';
-import ReactDOM from 'react-dom';
+import { type Component } from 'solid-js';
+import { Portal } from 'solid-js/web';
 
 import { useStore } from '@/contexts/root-store';
 
 import MessageSettingsPopup from './message-settings-popup';
 
-type Props = {
+type Props = Readonly<{
     playerControlContainer: HTMLSpanElement;
-};
+}>;
 
-const PopupContainer: React.FC<Props> = observer(
-    ({ playerControlContainer }) => {
-        const { uiStore } = useStore();
+const PopupContainer: Component<Props> = (props) => {
+    const store = useStore();
 
-        return ReactDOM.createPortal(
+    return (
+        <Portal mount={store.uiStore.videoPlayerEle}>
             <MessageSettingsPopup
-                isHidden={uiStore.currentPopup !== 'message-settings'}
-                playerControlContainer={playerControlContainer}
-            />,
-            uiStore.videoPlayerEle,
-        );
-    },
-);
+                isHidden={
+                    store.uiStore.currentPopup.value !== 'message-settings'
+                }
+                playerControlContainer={props.playerControlContainer}
+            />
+        </Portal>
+    );
+};
 
 export default PopupContainer;

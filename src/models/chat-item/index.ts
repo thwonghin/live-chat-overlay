@@ -1,5 +1,3 @@
-import { makeAutoObservable } from 'mobx';
-
 import {
     type MapActionsParameters,
     mapAddChatItemActions,
@@ -8,50 +6,62 @@ import {
 import type { ChatItem } from './types';
 import type { MessageSettings, SettingsModel } from '../settings';
 
-export class ChatItemModel {
-    static fromAction(
-        params: MapActionsParameters,
-        settings: SettingsModel,
-        isInitData: boolean,
-    ): ChatItemModel | undefined {
-        const chatItem = mapAddChatItemActions(params);
+export type ChatItemModel = {
+    width: number | undefined;
+    addTimestamp: number | undefined;
+    lineNumber: number | undefined;
+    readonly value: ChatItem;
+    readonly messageSettings: MessageSettings;
+    readonly numberOfLines: number;
+    readonly isInitData: boolean;
+    assignDisplayMeta: (lineNumber: number, addTimestamp: number) => void;
+};
 
-        if (!chatItem) {
-            return undefined;
-        }
+export const createChatItemModel = (
+    value: ChatItem,
+    messageSettings: MessageSettings,
+    numberOfLines: number,
+    isInitData: boolean,
+): ChatItemModel => {
+    const chatItemModel: ChatItemModel = {
+        value,
+        messageSettings,
+        numberOfLines,
+        isInitData,
+        width: undefined,
+        addTimestamp: undefined,
+        lineNumber: undefined,
+        assignDisplayMeta(lineNumber, addTimestamp) {
+            chatItemModel.lineNumber = lineNumber;
+            chatItemModel.addTimestamp = addTimestamp;
+        },
+    };
 
-        const messageSettings = settings.getMessageSettings(chatItem);
+    return chatItemModel;
+};
 
-        const numberOfLines =
-            isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
-                ? 1
-                : messageSettings.numberOfLines;
+export const createChatItemModelFromAction = (
+    params: MapActionsParameters,
+    settings: SettingsModel,
+    isInitData: boolean,
+): ChatItemModel | undefined => {
+    const chatItem = mapAddChatItemActions(params);
 
-        return new ChatItemModel(
-            chatItem,
-            messageSettings,
-            numberOfLines,
-            isInitData,
-        );
+    if (!chatItem) {
+        return undefined;
     }
 
-    width: number | undefined = undefined;
+    const messageSettings = settings.getMessageSettings(chatItem);
 
-    addTimestamp: number | undefined = undefined;
+    const numberOfLines =
+        isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
+            ? 1
+            : messageSettings.numberOfLines;
 
-    lineNumber: number | undefined = undefined;
-
-    constructor(
-        public readonly value: ChatItem,
-        public readonly messageSettings: MessageSettings,
-        public readonly numberOfLines: number,
-        public readonly isInitData: boolean,
-    ) {
-        makeAutoObservable(this);
-    }
-
-    assignDisplayMeta(lineNumber: number, addTimestamp: number) {
-        this.lineNumber = lineNumber;
-        this.addTimestamp = addTimestamp;
-    }
-}
+    return createChatItemModel(
+        chatItem,
+        messageSettings,
+        numberOfLines,
+        isInitData,
+    );
+};

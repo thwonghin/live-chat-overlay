@@ -1,3 +1,102 @@
 .form-label {
-    margin-right: 8px;
+    display: inline-flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+    font-size: 14px;
+    > div {
+        margin-top: 4px;
+    }
+}
+
+.trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 150px;
+    border-radius: 18px;
+    padding: 4px 8px 4px 8px;
+    line-height: 1;
+    color: var(--yt-spec-text-primary);
+    background-color: var(--yt-spec-raised-background);
+    border: var(--yt-spec-raised-background);
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition:
+        border-color 250ms,
+        color 250ms;
+
+    &:hover {
+        background-color: var(--yt-spec-menu-background);
+        border-color: var(--yt-spec-menu-background);
+    }
+}
+
+.value {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@keyframes contentShow {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes contentHide {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+}
+
+.content {
+    background-color: var(--yt-spec-raised-background);
+    border-radius: 18px;
+    box-shadow:
+        0 4px 6px -1px rgb(0 0 0 / 0.1),
+        0 2px 4px -2px rgb(0 0 0 / 0.1);
+    transform-origin: var(--kb-select-content-transform-origin);
+    animation: contentHide 250ms ease-in forwards;
+}
+
+.content[data-expanded] {
+    animation: contentShow 250ms ease-out;
+}
+
+.listbox {
+    overflow-y: auto;
+}
+
+.item {
+    line-height: 1;
+    font-size: 14px;
+    color: var(--yt-spec-text-primary);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px;
+    position: relative;
+    user-select: none;
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--yt-spec-menu-background);
+    }
+}
+
+.item[data-highlighted] {
+    outline: none;
+    background-color: var(--yt-spec-menu-background);
 }

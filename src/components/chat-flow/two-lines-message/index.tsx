@@ -1,4 +1,9 @@
-import * as React from 'react';
+import {
+    type Component,
+    createEffect,
+    createSignal,
+    createMemo,
+} from 'solid-js';
 
 import {
     isMembershipItem,
@@ -16,59 +21,69 @@ import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
 import MessagePartsRenderer from '../message-parts-renderer';
 
-type Props = {
-    readonly chatItem: NormalChatItem | MembershipItem | SuperChatItem;
-    readonly messageSettings: MessageSettings;
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    readonly onRender?: (ele: HTMLElement | null) => void;
-};
+type Props = Readonly<{
+    chatItem: NormalChatItem | MembershipItem | SuperChatItem;
+    messageSettings: MessageSettings;
+    onRender?: (ele?: HTMLElement) => void;
+}>;
 
-const TwoLinesMessage: React.FC<Props> = ({
-    onRender,
-    messageSettings,
-    chatItem,
-}) => {
-    const actualNumberOfLines =
-        chatItem.messageParts.length > 0 ? messageSettings.numberOfLines : 1;
+const TwoLinesMessage: Component<Props> = (props) => {
+    const [ref, setRef] = createSignal<HTMLDivElement>();
+    createEffect(() => {
+        setTimeout(() => {
+            props.onRender?.(ref());
+        });
+    });
 
-    const flexDirection = actualNumberOfLines === 2 ? 'column' : 'row';
+    const actualNumberOfLines = createMemo(() =>
+        props.chatItem.messageParts.length > 0
+            ? props.messageSettings.numberOfLines
+            : 1,
+    );
 
-    const bgColor =
-        isNormalChatItem(chatItem) || isMembershipItem(chatItem)
-            ? messageSettings.bgColor
-            : chatItem.color;
+    const flexDirection = createMemo(() =>
+        actualNumberOfLines() === 2 ? 'column' : 'row',
+    );
 
-    const donationAmount = isSuperChatItem(chatItem)
-        ? chatItem.donationAmount
-        : undefined;
+    const bgColor = createMemo(() =>
+        isNormalChatItem(props.chatItem) || isMembershipItem(props.chatItem)
+            ? props.messageSettings.bgColor
+            : props.chatItem.color,
+    );
+
+    const donationAmount = createMemo(() =>
+        isSuperChatItem(props.chatItem)
+            ? props.chatItem.donationAmount
+            : undefined,
+    );
 
     return (
         <div
-            ref={onRender}
-            className={styles.container}
+            ref={setRef}
+            class={styles.container}
             style={{
-                height: `${actualNumberOfLines}em`,
-                color: messageSettings.color,
-                fontWeight: messageSettings.weight,
-                opacity: messageSettings.opacity,
-                backgroundColor: bgColor,
-                WebkitTextStrokeColor: messageSettings.strokeColor,
-                WebkitTextStrokeWidth: `${messageSettings.strokeWidth}em`,
-                flexDirection,
-                justifyContent:
-                    flexDirection === 'column' ? 'center' : undefined,
-                alignItems: flexDirection === 'row' ? 'center' : undefined,
+                height: `${actualNumberOfLines()}em`,
+                color: props.messageSettings.color,
+                'font-weight': props.messageSettings.weight,
+                opacity: props.messageSettings.opacity,
+                'background-color': bgColor(),
+                '-webkit-text-stroke-color': props.messageSettings.strokeColor,
+                '-webkit-text-stroke-width': `${props.messageSettings.strokeWidth}em`,
+                'flex-direction': flexDirection(),
+                'justify-content':
+                    flexDirection() === 'column' ? 'center' : undefined,
+                'align-items': flexDirection() === 'row' ? 'center' : undefined,
             }}
         >
             <AuthorChip
-                avatars={chatItem.avatars}
-                name={chatItem.authorName}
-                donationAmount={donationAmount}
-                authorDisplaySetting={messageSettings.authorDisplay}
+                avatars={props.chatItem.avatars}
+                name={props.chatItem.authorName}
+                donationAmount={donationAmount()}
+                authorDisplaySetting={props.messageSettings.authorDisplay}
             />
             <MessagePartsRenderer
-                className={styles.message}
-                messageParts={chatItem.messageParts}
+                class={styles.message}
+                messageParts={props.chatItem.messageParts}
             />
         </div>
     );

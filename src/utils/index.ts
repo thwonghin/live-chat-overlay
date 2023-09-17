@@ -1,9 +1,11 @@
 import { isNil } from 'lodash-es';
 
+import { createError } from '@/utils/logger';
+
 export * as youtube from './youtube';
 
 export function assertNever(type: never): never {
-    throw new Error(`Unknown object: ${type as string}`);
+    throw createError(`Unknown object: ${type as string}`);
 }
 
 // Reference from Youtube livechat.js
@@ -34,7 +36,7 @@ export function injectScript(scriptSrc: string) {
 
 type BenchmarkResult<T> = {
     result: T;
-    runtime: number;
+    runtime?: number;
 };
 
 export function benchmark<T>(
@@ -47,7 +49,7 @@ export function benchmark<T>(
 
     return {
         result,
-        runtime: isDebugging ? performance.now() - beforeTime : 0,
+        runtime: isDebugging ? performance.now() - beforeTime : undefined,
     };
 }
 
@@ -82,24 +84,6 @@ export async function promiseSeries(
     for (const promise of promises) {
         // eslint-disable-next-line no-await-in-loop
         await promise();
-    }
-}
-
-export function filterInPlace<T>(
-    array: T[],
-    predicate: (item: T) => boolean,
-): void {
-    let j = 0;
-
-    for (const item of array) {
-        if (predicate(item)) {
-            array[j] = item;
-            j++;
-        }
-    }
-
-    while (j < array.length) {
-        array.pop();
     }
 }
 
@@ -139,4 +123,33 @@ export function attachKeydownEventListener({
     return () => {
         domToAttach.removeEventListener('keydown', handleKeyDown);
     };
+}
+
+export async function waitForValue<T>(
+    getValue: () => T | null | undefined,
+    createError: () => Error,
+    retryIntervalMs = 100,
+    maxRetryMs = 600000,
+): Promise<T> {
+    return new Promise((resolve, reject) => {
+        const value = getValue();
+        if (value) {
+            resolve(value);
+            return;
+        }
+
+        let retryTimeInMs = 0;
+        const interval = setInterval(() => {
+            const value = getValue();
+            if (value) {
+                resolve(value);
+                clearInterval(interval);
+            } else {
+                retryTimeInMs += retryIntervalMs;
+                if (retryTimeInMs >= maxRetryMs) {
+                    reject(createError());
+                }
+            }
+        }, retryIntervalMs);
+    });
 }

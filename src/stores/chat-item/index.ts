@@ -1,10 +1,5 @@
-import {
-    makeAutoObservable,
-    reaction,
-    observable,
-    runInAction,
-    type IReactionDisposer,
-} from 'mobx';
+import { createEffect, createRoot, onCleanup } from 'solid-js';
+import { createStore } from 'solid-js/store';
 
 import type {
     YoutubeChatResponse,
@@ -14,9 +9,13 @@ import type {
 } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { fetchInterceptor } from '@/services';
-import { benchmark, benchmarkAsync, filterInPlace, youtube } from '@/utils';
+import { benchmark, benchmarkAsync, youtube } from '@/utils';
+import { createError } from '@/utils/logger';
 
-import { assignChatItemRenderedWidth } from './get-chat-item-render-container-ele';
+import {
+    CHAT_ITEM_RENDER_ID,
+    assignChatItemRenderedWidth,
+} from './get-chat-item-render-container-ele';
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
@@ -46,234 +45,184 @@ type DebugInfo = Partial<{
 const DEQUEUE_INTERVAL = 1000 / 60; // 5 FPS
 const CLEAN_INTERVAL = 1000;
 
-export class ChatItemStore {
-    public readonly chatItemsByLineNumber = observable.map<
-        number,
-        ChatItemModel[]
-    >();
+export type ChatItemStoreValue = {
+    chatItemsByLineNumber: Record<number, ChatItemModel[]>;
+    stickyChatItems: {
+        values: ChatItemModel[];
+    };
+};
 
-    public readonly stickyChatItems = observable.array<ChatItemModel>();
+export type ChatItemStore = {
+    cleanup?: () => void;
+    removeStickyChatItemById(id: string): void;
+    importInitData(initData: InitData): void;
+} & ChatItemStoreValue;
 
-    private readonly chatItemStatusById = new Map<string, boolean>();
-    private isInitiated = false;
-    private mode = Mode.LIVE;
-    private tickId: number | undefined = undefined;
-    private cleanDisplayedIntervalId: number | undefined = undefined;
-    private readonly chatItemProcessQueue: ChatItemModel[] = [];
-    private readonly reactionDisposers: IReactionDisposer[] = [];
+export const createChatItemStore = (
+    attachChatEvent: (
+        callback: (e: fetchInterceptor.ChatEventDetail) => void,
+    ) => () => void,
+    uiStore: UiStore,
+    settingsStore: SettingsStore,
+    debugInfoStore: DebugInfoStore,
+): ChatItemStore => {
+    const chatItemStatusById = new Map<string, boolean>();
+    let isInitiated = false;
+    let mode = Mode.LIVE;
+    let tickId: number | undefined;
+    let cleanDisplayedIntervalId: number | undefined;
+    const chatItemProcessQueue: ChatItemModel[] = [];
+    let chatItemRenderForWidthEle: HTMLElement | null;
 
-    constructor(
-        private readonly chatEventName: string,
-        private readonly uiStore: UiStore,
-        private readonly settingsStore: SettingsStore,
-        private readonly debugInfoStore: DebugInfoStore,
-    ) {
-        makeAutoObservable(this);
+    const [state, setState] = createStore<ChatItemStoreValue>({
+        chatItemsByLineNumber: {},
+        stickyChatItems: {
+            values: [],
+        },
+    });
+
+    function getChatItemRenderForWidthEle() {
+        chatItemRenderForWidthEle =
+            chatItemRenderForWidthEle ??
+            document.getElementById(CHAT_ITEM_RENDER_ID);
+
+        if (!chatItemRenderForWidthEle) {
+            throw createError('Cannot find chat item render container');
+        }
+
+        return chatItemRenderForWidthEle;
     }
 
-    public async importInitData(initData: InitData): Promise<void> {
-        this.mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
-        await this.processChatItems(initData);
-        this.isInitiated = true;
+    function pause(): void {
+        clearAllIntervals();
     }
 
-    public init(): void {
-        window.addEventListener(this.chatEventName, this.onChatMessage);
-
-        this.reactionDisposers.push(
-            reaction(
-                () => this.debugInfoStore.isDebugging,
-                this.watchDebugStore,
-            ),
-        );
-        this.reactionDisposers.push(
-            reaction(
-                () => [
-                    this.uiStore.playerState.width,
-                    this.uiStore.playerState.height,
-                ],
-                this.resetNonStickyChatItems,
-            ),
-        );
-        this.reactionDisposers.push(
-            reaction(
-                () => this.uiStore.playerState.isPaused,
-                this.onPlayerPauseOrResume,
-            ),
-        );
-        this.reactionDisposers.push(
-            reaction(
-                () => this.uiStore.playerState.isSeeking,
-                this.onPlayerSeek,
-            ),
-        );
-
-        this.createAllIntervals();
+    function resume(): void {
+        createAllIntervals();
     }
 
-    public cleanup(): void {
-        window.removeEventListener(this.chatEventName, this.onChatMessage);
-        this.reactionDisposers.forEach((disposer) => {
-            disposer();
-        });
-        this.clearAllIntervals();
-    }
+    function reset(): void {
+        chatItemProcessQueue.splice(0);
+        setState('chatItemsByLineNumber', {});
+        setState('stickyChatItems', 'values', []);
+        chatItemStatusById.clear();
 
-    public pause(): void {
-        this.clearAllIntervals();
-    }
-
-    public resume(): void {
-        this.createAllIntervals();
-    }
-
-    public reset(): void {
-        this.chatItemProcessQueue.splice(0);
-        this.chatItemsByLineNumber.clear();
-        this.chatItemStatusById.clear();
-
-        this.updateDebugInfo({
+        updateDebugInfo({
             processChatEventQueueLength: 0,
         });
     }
 
-    public startDebug(): void {
-        this.updateDebugInfo({
-            processChatEventQueueLength: this.chatItemProcessQueue.length,
+    function startDebug(): void {
+        updateDebugInfo({
+            processChatEventQueueLength: chatItemProcessQueue.length,
         });
     }
 
-    public removeStickyChatItemById(id: string): void {
-        this.chatItemStatusById.delete(id);
-        filterInPlace(
-            this.stickyChatItems,
-            (chatItem) => chatItem.value.id !== id,
-        );
-    }
-
-    private readonly onPlayerPauseOrResume = (): void => {
-        if (this.uiStore.playerState.isPaused) {
-            this.pause();
+    function onPlayerPauseOrResume(isPaused: boolean): void {
+        if (isPaused) {
+            pause();
         } else {
-            this.resume();
+            resume();
         }
-    };
+    }
 
-    private readonly onPlayerSeek = (): void => {
-        if (this.uiStore.playerState.isSeeking) {
-            this.reset();
+    function onPlayerSeek(isSeeking: boolean): void {
+        if (isSeeking) {
+            resetNonStickyChatItems();
         }
-    };
+    }
 
-    private readonly resetNonStickyChatItems = (): void => {
-        runInAction(() => {
-            this.chatItemsByLineNumber.clear();
-            this.chatItemStatusById.clear();
-
-            // Add back sticky status
-            this.stickyChatItems.forEach((chatItem) => {
-                this.chatItemStatusById.set(chatItem.value.id, true);
-            });
+    function resetNonStickyChatItems(width?: number, height?: number): void {
+        Object.keys(state.chatItemsByLineNumber).forEach((lineNumber) => {
+            setState('chatItemsByLineNumber', Number(lineNumber), []);
         });
-    };
 
-    private createAllIntervals() {
-        this.clearAllIntervals();
+        chatItemStatusById.clear();
 
-        this.tickId = window.setInterval(
-            this.dequeueAvailableChatItems,
+        // Add back sticky status
+        state.stickyChatItems.values.forEach((chatItem) => {
+            chatItemStatusById.set(chatItem.value.id, true);
+        });
+    }
+
+    function createAllIntervals() {
+        clearAllIntervals();
+
+        tickId = window.setInterval(
+            dequeueAvailableChatItems,
             DEQUEUE_INTERVAL,
         );
 
-        this.cleanDisplayedIntervalId = window.setInterval(
-            this.cleanDisplayedChatItems,
+        cleanDisplayedIntervalId = window.setInterval(
+            cleanDisplayedChatItems,
             CLEAN_INTERVAL,
         );
     }
 
-    private clearAllIntervals() {
-        if (this.tickId !== undefined) {
-            window.clearInterval(this.tickId);
+    function clearAllIntervals() {
+        if (tickId !== undefined) {
+            window.clearInterval(tickId);
         }
 
-        if (this.cleanDisplayedIntervalId !== undefined) {
-            window.clearInterval(this.cleanDisplayedIntervalId);
+        if (cleanDisplayedIntervalId !== undefined) {
+            window.clearInterval(cleanDisplayedIntervalId);
         }
     }
 
-    private getCurrentTimeInfo(): {
+    function getCurrentTimeInfo(): {
         playerTimestampMs: number;
         currentTimestampMs: number;
     } {
         return {
             playerTimestampMs:
-                this.uiStore.playerState.videoCurrentTimeInSecs * 1000,
+                uiStore.playerState.videoCurrentTimeInSecs * 1000,
             currentTimestampMs: Date.now(),
         };
     }
 
-    private updateDebugInfo(info: DebugInfo) {
-        runInAction(() => {
-            if (!this.debugInfoStore.isDebugging) {
-                return;
-            }
+    function updateDebugInfo(info: DebugInfo) {
+        if (!debugInfoStore.debugInfo.isDebugging) {
+            return;
+        }
 
-            if (info.processChatEventMs) {
-                this.debugInfoStore.debugInfoModel.addProcessChatEventMetric(
-                    info.processChatEventMs,
-                );
-            }
+        if (info.processChatEventMs !== undefined) {
+            debugInfoStore.addProcessChatEventMetric(info.processChatEventMs);
+        }
 
-            if (info.processXhrResponseMs) {
-                this.debugInfoStore.debugInfoModel.addProcessXhrMetric(
-                    info.processXhrResponseMs,
-                );
-            }
+        if (info.processXhrResponseMs !== undefined) {
+            debugInfoStore.addProcessXhrMetric(info.processXhrResponseMs);
+        }
 
-            if (info.processChatEventQueueLength) {
-                this.debugInfoStore.debugInfoModel.updateProcessChatEventQueueLength(
-                    info.processChatEventQueueLength,
-                );
-            }
+        if (info.processChatEventQueueLength !== undefined) {
+            debugInfoStore.updateProcessChatEventQueueLength(
+                info.processChatEventQueueLength,
+            );
+        }
 
-            if (info.outdatedChatEventCount) {
-                this.debugInfoStore.debugInfoModel.addOutdatedRemovedChatEventCount(
-                    info.outdatedChatEventCount,
-                );
-            }
+        if (info.outdatedChatEventCount !== undefined) {
+            debugInfoStore.addOutdatedRemovedChatEventCount(
+                info.outdatedChatEventCount,
+            );
+        }
 
-            if (info.getEleWidthBenchmark) {
-                this.debugInfoStore.debugInfoModel.addChatItemEleWidthMetric(
-                    info.getEleWidthBenchmark,
-                );
-            }
+        if (info.getEleWidthBenchmark !== undefined) {
+            debugInfoStore.addChatItemEleWidthMetric(info.getEleWidthBenchmark);
+        }
 
-            if (info.cleanedChatItemCount) {
-                this.debugInfoStore.debugInfoModel.addCleanedChatItemCount(
-                    info.cleanedChatItemCount,
-                );
-            }
+        if (info.cleanedChatItemCount !== undefined) {
+            debugInfoStore.addCleanedChatItemCount(info.cleanedChatItemCount);
+        }
 
-            // Meaningless to measure this in replay mode
-            if (this.mode === Mode.LIVE && info.liveChatDelayInMs) {
-                this.debugInfoStore.debugInfoModel.addLiveChatDelay(
-                    info.liveChatDelayInMs,
-                );
-            }
-        });
+        // Meaningless to measure this in replay mode
+        if (mode === Mode.LIVE && info.liveChatDelayInMs !== undefined) {
+            debugInfoStore.addLiveChatDelay(info.liveChatDelayInMs);
+        }
     }
 
-    private readonly watchDebugStore = () => {
-        if (this.debugInfoStore.isDebugging) {
-            this.startDebug();
-        }
-    };
-
-    private readonly onChatMessage = async (event: Event): Promise<void> => {
-        const customEvent =
-            event as CustomEvent<fetchInterceptor.CustomEventDetail>;
-
-        const response = customEvent.detail.response as
+    async function onChatMessageEvent(
+        event: fetchInterceptor.ChatEventDetail,
+    ): Promise<void> {
+        const response = event.response as
             | YoutubeChatResponse
             | InitData
             | undefined;
@@ -282,106 +231,48 @@ export class ChatItemStore {
             return;
         }
 
-        await this.processChatItems(response);
-    };
-
-    private async processChatItems(
-        response: YoutubeChatResponse | InitData,
-    ): Promise<void> {
-        await runInAction(async () => {
-            const { continuationContents } = response;
-
-            if (!continuationContents) {
-                return;
-            }
-
-            const isInitData = youtube.isInitData(response);
-
-            if (isInitData) {
-                this.reset();
-            }
-
-            const { runtime } = await benchmarkAsync(async () => {
-                const timeInfo = this.getCurrentTimeInfo();
-                const chatItems =
-                    this.mode === Mode.REPLAY
-                        ? mapChatItemsFromReplayResponse(
-                              timeInfo,
-                              continuationContents as ReplayContinuationContents,
-                              this.settingsStore.settings,
-                              isInitData,
-                          )
-                        : mapChatItemsFromLiveResponse(
-                              timeInfo,
-                              continuationContents as LiveContinuationContents,
-                              this.settingsStore.settings,
-                              isInitData,
-                          );
-
-                const { runtime: getEleRuntime } = await benchmarkAsync(
-                    async () => assignChatItemRenderedWidth(chatItems),
-                    this.debugInfoStore.isDebugging,
-                );
-
-                chatItems.forEach((item) => {
-                    this.chatItemProcessQueue.push(item);
-                });
-
-                this.updateDebugInfo({
-                    getEleWidthBenchmark: getEleRuntime,
-                    processChatEventQueueLength:
-                        this.chatItemProcessQueue.length,
-                });
-            }, this.debugInfoStore.isDebugging);
-
-            this.updateDebugInfo({
-                processXhrResponseMs: runtime,
-                processChatEventQueueLength: this.chatItemProcessQueue.length,
-            });
-        });
+        await processChatItems(response);
     }
 
-    private readonly dequeueAvailableChatItems = () => {
-        if (!this.isInitiated) {
+    function dequeueAvailableChatItems() {
+        if (!isInitiated) {
             return;
         }
 
-        runInAction(() => {
-            while (this.dequeueChatItem()) {
-                continue;
-            }
-        });
-    };
+        while (dequeueChatItem()) {
+            continue;
+        }
+    }
 
     /**
      * Dequeue a chat item from processed item queue
      *
      * @returns {boolean} - Whether we can continue to dequeue
      */
-    private dequeueChatItem(): boolean {
+    function dequeueChatItem(): boolean {
         const currentPlayerTimeInMsc =
-            this.uiStore.playerState.videoCurrentTimeInSecs * 1000;
+            uiStore.playerState.videoCurrentTimeInSecs * 1000;
 
-        const chatItem = this.chatItemProcessQueue[0];
+        const chatItem = chatItemProcessQueue[0];
 
         if (!chatItem) {
             return false;
         }
 
         // Somehow duplicated
-        if (this.chatItemStatusById.get(chatItem.value.id)) {
-            this.chatItemProcessQueue.shift();
+        if (chatItemStatusById.get(chatItem.value.id)) {
+            chatItemProcessQueue.shift();
             return true;
         }
 
         // Outdated, continue next dequeue
-        if (this.isOutdatedChatItem(chatItem, currentPlayerTimeInMsc)) {
-            this.updateDebugInfo({
+        if (isOutdatedChatItemForPlayerTime(chatItem, currentPlayerTimeInMsc)) {
+            updateDebugInfo({
                 outdatedChatEventCount: 1,
                 liveChatDelayInMs:
                     currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
             });
-            this.chatItemProcessQueue.shift();
+            chatItemProcessQueue.shift();
             return true;
         }
 
@@ -393,45 +284,45 @@ export class ChatItemStore {
                     currentPlayerTimeInMsc,
                 })
             );
-        }, this.debugInfoStore.isDebugging);
+        }, debugInfoStore.debugInfo.isDebugging);
 
-        this.updateDebugInfo({
+        updateDebugInfo({
             processChatEventMs: runtime,
-            processChatEventQueueLength: this.chatItemProcessQueue.length,
+            processChatEventQueueLength: chatItemProcessQueue.length,
         });
 
         if (!isTime) {
             return false;
         }
 
-        this.updateDebugInfo({
+        updateDebugInfo({
             liveChatDelayInMs:
                 currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
         });
 
         const addTimestamp = Date.now();
-        const { settings } = this.settingsStore;
+        const { settings } = settingsStore;
         const { messageSettings } = chatItem;
 
         if (messageSettings.isSticky) {
             chatItem.assignDisplayMeta(-1, addTimestamp);
-            this.chatItemStatusById.set(chatItem.value.id, true);
-            this.stickyChatItems.push(chatItem);
-            this.chatItemProcessQueue.shift();
+            chatItemStatusById.set(chatItem.value.id, true);
+            setState('stickyChatItems', 'values', (s) => s.concat(chatItem));
+            chatItemProcessQueue.shift();
             return true;
         }
 
         if (!chatItem.width) {
-            throw new Error(`Unknown width for ${chatItem.value.id}`);
+            throw createError(`Unknown width for ${chatItem.value.id}`);
         }
 
         const lineNumber = getLineNumber({
-            chatItemsByLineNumber: this.chatItemsByLineNumber,
+            chatItemsByLineNumber: state.chatItemsByLineNumber,
             addTimestamp,
             elementWidth: chatItem.width,
             maxLineNumber: settings.totalNumberOfLines,
             flowTimeInSec: settings.flowTimeInSec,
-            containerWidth: this.uiStore.playerState.width,
+            containerWidth: uiStore.playerState.width,
             displayNumberOfLines: chatItem.numberOfLines,
         });
 
@@ -443,23 +334,20 @@ export class ChatItemStore {
         chatItem.assignDisplayMeta(lineNumber, addTimestamp);
 
         for (let i = lineNumber; i < lineNumber + chatItem.numberOfLines; i++) {
-            let chatItems = this.chatItemsByLineNumber.get(i);
-
-            if (!chatItems) {
-                chatItems = observable.array();
-                this.chatItemsByLineNumber.set(i, chatItems);
+            if (state.chatItemsByLineNumber[i]) {
+                setState('chatItemsByLineNumber', i, (s) => s.concat(chatItem));
+            } else {
+                setState('chatItemsByLineNumber', i, [chatItem]);
             }
-
-            chatItems.push(chatItem);
         }
 
-        this.chatItemStatusById.set(chatItem.value.id, true);
-        this.chatItemProcessQueue.shift();
+        chatItemStatusById.set(chatItem.value.id, true);
+        chatItemProcessQueue.shift();
 
         return true;
     }
 
-    private isOutdatedChatItem(
+    function isOutdatedChatItemForPlayerTime(
         chatItem: ChatItemModel,
         currentPlayerTimeInMsc: number,
     ): boolean {
@@ -467,7 +355,7 @@ export class ChatItemStore {
             return false;
         }
 
-        if (this.mode === Mode.LIVE && !chatItem.isInitData) {
+        if (mode === Mode.LIVE && !chatItem.isInitData) {
             return false;
         }
 
@@ -479,36 +367,183 @@ export class ChatItemStore {
         });
     }
 
-    private readonly cleanDisplayedChatItems = (): void => {
-        runInAction(() => {
-            const currentTimestamp = Date.now();
-            const flowTimeInMs =
-                this.settingsStore.settings.flowTimeInSec * 1000;
+    function cleanDisplayedChatItems(): void {
+        if (!isInitiated) {
+            return;
+        }
 
-            const cutoffTimestamp = currentTimestamp - flowTimeInMs;
+        const currentTimestamp = Date.now();
+        const flowTimeInMs = settingsStore.settings.flowTimeInSec * 1000;
 
-            let cleanedChatItemCount = 0;
-            const finishedChatItem = (chatItem: ChatItemModel) => {
-                if (chatItem.addTimestamp === undefined) {
-                    throw new Error(
-                        `Missing AddTimestamp for ${chatItem.value.id}`,
-                    );
-                }
+        const cutoffTimestamp = currentTimestamp - flowTimeInMs;
 
-                const shouldRemove = chatItem.addTimestamp < cutoffTimestamp;
-                if (shouldRemove) {
-                    this.chatItemStatusById.delete(chatItem.value.id);
-                    cleanedChatItemCount++;
-                }
-
-                return !shouldRemove;
-            };
-
-            for (const chatItems of this.chatItemsByLineNumber.values()) {
-                filterInPlace(chatItems, finishedChatItem);
+        let cleanedChatItemCount = 0;
+        const finishedChatItem = (chatItem: ChatItemModel) => {
+            if (chatItem.addTimestamp === undefined) {
+                throw createError(
+                    `Missing AddTimestamp for ${chatItem.value.id}`,
+                );
             }
 
-            this.updateDebugInfo({ cleanedChatItemCount });
+            const shouldRemove = chatItem.addTimestamp < cutoffTimestamp;
+            if (shouldRemove) {
+                chatItemStatusById.delete(chatItem.value.id);
+                cleanedChatItemCount++;
+            }
+
+            return !shouldRemove;
+        };
+
+        for (const lineNumber of Object.keys(state.chatItemsByLineNumber)) {
+            setState('chatItemsByLineNumber', Number(lineNumber), (s) =>
+                s.filter(finishedChatItem),
+            );
+        }
+
+        updateDebugInfo({ cleanedChatItemCount });
+    }
+
+    async function processChatItems(
+        response: YoutubeChatResponse | InitData,
+    ): Promise<void> {
+        const { continuationContents } = response;
+
+        if (!continuationContents) {
+            return;
+        }
+
+        const isInitData = youtube.isInitData(response);
+
+        if (isInitData) {
+            reset();
+        }
+
+        const { runtime } = await benchmarkAsync(async () => {
+            const timeInfo = getCurrentTimeInfo();
+            const chatItems =
+                mode === Mode.REPLAY
+                    ? mapChatItemsFromReplayResponse(
+                          timeInfo,
+                          continuationContents as ReplayContinuationContents,
+                          settingsStore.settings,
+                          isInitData,
+                      )
+                    : mapChatItemsFromLiveResponse(
+                          timeInfo,
+                          continuationContents as LiveContinuationContents,
+                          settingsStore.settings,
+                          isInitData,
+                      );
+
+            const { runtime: getEleRuntime } = await benchmarkAsync(
+                async () =>
+                    assignChatItemRenderedWidth(
+                        chatItems,
+                        getChatItemRenderForWidthEle(),
+                    ),
+                debugInfoStore.debugInfo.isDebugging,
+            );
+
+            chatItems.forEach((item) => {
+                chatItemProcessQueue.push(item);
+            });
+
+            updateDebugInfo({
+                getEleWidthBenchmark: getEleRuntime,
+                processChatEventQueueLength: chatItemProcessQueue.length,
+            });
+        }, debugInfoStore.debugInfo.isDebugging);
+
+        updateDebugInfo({
+            processXhrResponseMs: runtime,
+            processChatEventQueueLength: chatItemProcessQueue.length,
         });
+    }
+
+    async function importInitData(initData: InitData): Promise<void> {
+        mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
+        await processChatItems(initData);
+        isInitiated = true;
+    }
+
+    function removeStickyChatItemById(id: string): void {
+        chatItemStatusById.delete(id);
+        setState('stickyChatItems', 'values', (s) =>
+            s.filter((chatItem) => chatItem.value.id !== id),
+        );
+    }
+
+    let cleanup: (() => void) | undefined;
+
+    createRoot((dispose) => {
+        createEffect(() => {
+            const cleanup = attachChatEvent(onChatMessageEvent);
+            onCleanup(() => {
+                cleanup();
+            });
+        });
+
+        createEffect((prev) => {
+            if (prev === uiStore.playerState.isPaused) {
+                return;
+            }
+
+            onPlayerPauseOrResume(uiStore.playerState.isPaused);
+
+            return uiStore.playerState.isPaused;
+        });
+
+        createEffect((prev) => {
+            if (prev === uiStore.playerState.isSeeking) {
+                return;
+            }
+
+            onPlayerSeek(uiStore.playerState.isSeeking);
+
+            return uiStore.playerState.isSeeking;
+        });
+
+        createEffect((prev) => {
+            const newDimension = `${Math.round(
+                uiStore.playerState.width,
+            )},${Math.round(uiStore.playerState.height)}`;
+            if (prev === newDimension) {
+                return;
+            }
+
+            resetNonStickyChatItems(
+                uiStore.playerState.width,
+                uiStore.playerState.height,
+            );
+
+            return newDimension;
+        });
+
+        createEffect((prev) => {
+            if (prev === debugInfoStore.debugInfo.isDebugging) {
+                return;
+            }
+
+            if (debugInfoStore.debugInfo.isDebugging) {
+                startDebug();
+            }
+
+            return debugInfoStore.debugInfo.isDebugging;
+        });
+
+        createEffect(() => {
+            onCleanup(() => {
+                clearAllIntervals();
+            });
+        });
+
+        cleanup = dispose;
+    });
+
+    return {
+        ...state,
+        cleanup,
+        importInitData,
+        removeStickyChatItemById,
     };
-}
+};

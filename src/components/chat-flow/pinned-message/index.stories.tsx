@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { type Component, type JSXElement } from 'solid-js';
 
 import type { PinnedChatItem } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
@@ -28,9 +28,13 @@ const pinnedMessage: PinnedChatItem = {
     authorType: 'owner',
 };
 
-const Container: React.FC<React.PropsWithChildren> = ({ children }) => (
-    <div style={{ fontSize: 40, position: 'absolute', width: '100%' }}>
-        {children}
+type ContainerProps = Readonly<{
+    children: JSXElement;
+}>;
+
+const Container: Component<ContainerProps> = (props) => (
+    <div style={{ 'font-size': '40px', position: 'absolute', width: '100%' }}>
+        {props.children}
     </div>
 );
 
@@ -46,7 +50,7 @@ const messageSettings: MessageSettings = {
     isSticky: true,
 };
 
-export const PinnedChatMessage: React.FC = () => (
+export const PinnedChatMessage: Component = () => (
     <Container>
         <PinnedMessage
             chatItem={pinnedMessage}
@@ -58,7 +62,7 @@ export const PinnedChatMessage: React.FC = () => (
     </Container>
 );
 
-export const PinnedVeryLongChatMessage: React.FC = () => (
+export const PinnedVeryLongChatMessage: Component = () => (
     <Container>
         <PinnedMessage
             chatItem={{
@@ -77,7 +81,7 @@ export const PinnedVeryLongChatMessage: React.FC = () => (
     </Container>
 );
 
-export const PinnedVeryLongChatMessageWithImage: React.FC = () => (
+export const PinnedVeryLongChatMessageWithImage: Component = () => (
     <Container>
         <PinnedMessage
             chatItem={{

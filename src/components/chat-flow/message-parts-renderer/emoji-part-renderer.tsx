@@ -1,20 +1,19 @@
-import * as React from 'react';
-
 import { last } from 'lodash-es';
+import { createMemo, type Component } from 'solid-js';
 
 import type { EmojiPart } from '@/models/chat-item/types';
 
-type Props = {
-    readonly emojiPart: EmojiPart;
-};
+type Props = Readonly<{
+    emojiPart: EmojiPart;
+}>;
 
-const EmojiPartRenderer: React.FC<Props> = ({ emojiPart }) => {
-    const thumbnail = last(emojiPart.thumbnails);
+const EmojiPartRenderer: Component<Props> = (props) => {
+    const thumbnail = createMemo(() => last(props.emojiPart.thumbnails));
     return (
         <img
-            src={thumbnail?.url}
-            height={thumbnail?.height}
-            width={thumbnail?.width}
+            src={thumbnail()?.url}
+            height={thumbnail()?.height}
+            width={thumbnail()?.width}
         />
     );
 };

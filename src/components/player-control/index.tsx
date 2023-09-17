@@ -1,26 +1,21 @@
-import * as React from 'react';
-
-import ReactDOM from 'react-dom';
+import { type Component } from 'solid-js';
+import { Portal } from 'solid-js/web';
 
 import MessageSettingsBtn from '@/components/player-control/message-settings-btn';
 import SpeedSlider from '@/components/player-control/speed-slider';
 import ToggleBtn from '@/components/player-control/toggle-btn';
-import { useIsEleHovering } from '@/hooks';
 
-type Props = {
+type Props = Readonly<{
     playerControlContainer: HTMLSpanElement;
-};
+}>;
 
-const PlayerControl: React.FC<Props> = ({ playerControlContainer }) => {
-    const isHovering = useIsEleHovering(playerControlContainer);
-
-    return ReactDOM.createPortal(
-        <>
-            <SpeedSlider isHidden={!isHovering} />
+const PlayerControl: Component<Props> = (props) => {
+    return (
+        <Portal mount={props.playerControlContainer}>
+            <SpeedSlider />
             <ToggleBtn />
             <MessageSettingsBtn />
-        </>,
-        playerControlContainer,
+        </Portal>
     );
 };
 

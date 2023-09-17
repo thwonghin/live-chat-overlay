@@ -1,170 +1,157 @@
-import * as React from 'react';
+import { createForm } from '@felte/solid';
+import { Button } from '@kobalte/core';
+import { type Component } from 'solid-js';
+import browser from 'webextension-polyfill';
 
-import { TextField, Button, FormHelperText } from '@mui/material';
-import { useFormik } from 'formik';
-
-import { useI18n } from '@/contexts/i18n';
 import { type MessageSettings } from '@/models/settings';
 
 import styles from './index.module.scss';
 
-type Props = {
-    readonly globalOpacity: number;
-    readonly messageSettings: MessageSettings;
-    readonly onSubmit: (value: {
+type Props = Readonly<{
+    globalOpacity: number;
+    messageSettings: MessageSettings;
+    defaultValues: {
+        globalOpacity: number;
+        messageSettings: MessageSettings;
+    };
+    onSubmit: (value: {
         globalOpacity: number;
         messageSettings: MessageSettings;
     }) => void;
-    readonly isBackgroundColorEditable: boolean;
-};
+    isBackgroundColorEditable: boolean;
+}>;
 
-const MessageSettingsInputFormLayout: React.FC<Props> = ({
-    globalOpacity,
-    messageSettings,
-    onSubmit,
-    isBackgroundColorEditable,
-}) => {
-    const formik = useFormik({
+const MessageSettingsInputFormLayout: Component<Props> = (props) => {
+    const { form, reset } = createForm({
         initialValues: {
-            globalOpacity,
-            messageSettings,
+            globalOpacity: props.globalOpacity,
+            messageSettings: props.messageSettings,
         },
-        onSubmit,
+        onSubmit: props.onSubmit,
     });
-    const i18n = useI18n();
 
     return (
-        <form
-            className={styles['container-form']}
-            onSubmit={formik.handleSubmit}
-        >
-            <FormHelperText>
-                {i18n.getMessage('colorInputHelperText')}
-            </FormHelperText>
-            <div className={styles.row}>
-                <TextField
-                    variant="standard"
-                    color="secondary"
-                    label={i18n.getMessage('globalOpacityInputLabel')}
-                    value={formik.values.globalOpacity}
-                    name="globalOpacity"
-                    type="number"
-                    inputProps={{
-                        min: 0,
-                        max: 1,
-                        step: 0.01,
-                    }}
+        <form ref={form} class={styles['container-form']}>
+            <p class={styles['color-hint']}>
+                {browser.i18n.getMessage('colorInputHelperText')}
+            </p>
+            <div class={styles.row}>
+                <label
+                    class={styles['form-label']}
                     style={{
                         width: '100%',
                     }}
-                    onChange={formik.handleChange}
-                />
+                >
+                    {browser.i18n.getMessage('globalOpacityInputLabel')}
+                    <input
+                        name="globalOpacity"
+                        type="number"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                    />
+                </label>
             </div>
-            <div className={styles.row}>
-                <TextField
-                    variant="standard"
-                    color="secondary"
-                    label={i18n.getMessage('messageSettingsColorInputLabel')}
-                    value={formik.values.messageSettings.color}
-                    name="messageSettings.color"
-                    type="text"
+            <div class={styles.row}>
+                <label
+                    class={styles['form-label']}
                     style={{
                         width: '60%',
+                        'padding-right': '8px',
                     }}
-                    onChange={formik.handleChange}
-                />
-                <TextField
-                    variant="standard"
-                    color="secondary"
-                    label={i18n.getMessage('messageSettingsWeightInputLabel')}
-                    value={formik.values.messageSettings.weight}
-                    name="messageSettings.weight"
-                    type="number"
-                    inputProps={{
-                        min: 100,
-                        max: 900,
-                        step: 100,
-                    }}
+                >
+                    {browser.i18n.getMessage('messageSettingsColorInputLabel')}
+                    <input name="messageSettings.color" type="text" />
+                </label>
+                <label
+                    class={styles['form-label']}
                     style={{
                         width: '30%',
                     }}
-                    onChange={formik.handleChange}
-                />
+                >
+                    {browser.i18n.getMessage('messageSettingsWeightInputLabel')}
+                    <input
+                        name="messageSettings.weight"
+                        type="number"
+                        min="100"
+                        max="900"
+                        step="100"
+                    />
+                </label>
             </div>
-            <div className={styles.row}>
-                <TextField
-                    variant="standard"
-                    color="secondary"
-                    label={i18n.getMessage(
+            <div class={styles.row}>
+                <label
+                    class={styles['form-label']}
+                    style={{
+                        width: '60%',
+                        'padding-right': '8px',
+                    }}
+                >
+                    {browser.i18n.getMessage(
                         'messageSettingsStrokeColorInputLabel',
                     )}
-                    value={formik.values.messageSettings.strokeColor}
-                    name="messageSettings.strokeColor"
-                    type="text"
+                    <input name="messageSettings.strokeColor" type="text" />
+                </label>
+                <label
+                    class={styles['form-label']}
                     style={{
-                        width: '60%',
+                        width: '30%',
                     }}
-                    onChange={formik.handleChange}
-                />
-                <TextField
-                    variant="standard"
-                    color="secondary"
-                    label={i18n.getMessage(
+                >
+                    {browser.i18n.getMessage(
                         'messageSettingsStrokeWidthInputLabel',
                     )}
-                    value={formik.values.messageSettings.strokeWidth}
-                    name="messageSettings.strokeWidth"
-                    type="number"
-                    inputProps={{
-                        min: 0,
-                        max: 0.5,
-                        step: 0.001,
-                    }}
-                    style={{
-                        width: '30%',
-                    }}
-                    onChange={formik.handleChange}
-                />
+                    <input
+                        name="messageSettings.strokeWidth"
+                        type="number"
+                        min="0"
+                        max="0.5"
+                        step="0.001"
+                    />
+                </label>
             </div>
-            <div className={styles.row}>
-                <TextField
-                    variant="standard"
-                    color="secondary"
-                    label={i18n.getMessage('messageSettingsBgColorInputLabel')}
-                    disabled={!isBackgroundColorEditable}
-                    value={formik.values.messageSettings.bgColor}
-                    name="messageSettings.bgColor"
-                    type="text"
+            <div class={styles.row}>
+                <label
+                    class={styles['form-label']}
                     style={{
                         width: '60%',
+                        'padding-right': '8px',
                     }}
-                    onChange={formik.handleChange}
-                />
-                <TextField
-                    variant="standard"
-                    color="secondary"
-                    label={i18n.getMessage('messageSettingsOpacityInputLabel')}
-                    value={formik.values.messageSettings.opacity}
-                    name="messageSettings.opacity"
-                    type="number"
-                    inputProps={{
-                        min: 0,
-                        max: 1,
-                        step: 0.01,
-                    }}
+                >
+                    {browser.i18n.getMessage(
+                        'messageSettingsBgColorInputLabel',
+                    )}
+                    <input
+                        disabled={!props.isBackgroundColorEditable}
+                        name="messageSettings.bgColor"
+                        type="text"
+                    />
+                </label>
+                <label
+                    class={styles['form-label']}
                     style={{
                         width: '30%',
                     }}
-                    onChange={formik.handleChange}
-                />
+                >
+                    {browser.i18n.getMessage(
+                        'messageSettingsOpacityInputLabel',
+                    )}
+                    <input
+                        name="messageSettings.opacity"
+                        type="number"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                    />
+                </label>
             </div>
-            <div className={styles.row}>
-                <Button type="submit" color="primary" variant="contained">
-                    {i18n.getMessage('applyButtonText')}
-                </Button>
-                <Button type="button" onClick={formik.handleReset}>
-                    {i18n.getMessage('resetButtonText')}
-                </Button>
+            <div class={styles['btn-row']}>
+                <Button.Root type="submit" class={styles['btn-primary']}>
+                    {browser.i18n.getMessage('applyButtonText')}
+                </Button.Root>
+                <Button.Root type="button" class={styles.btn} onClick={reset}>
+                    {browser.i18n.getMessage('resetButtonText')}
+                </Button.Root>
             </div>
         </form>
     );

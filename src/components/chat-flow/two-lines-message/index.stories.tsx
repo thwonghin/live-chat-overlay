@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { type Component, type JSXElement } from 'solid-js';
 
 import type {
     MembershipItem,
@@ -65,11 +65,17 @@ const messageSettings: MessageSettings = {
     isSticky: false,
 };
 
-const Container: React.FC<React.PropsWithChildren> = ({ children }) => (
-    <div style={{ fontSize: 40, position: 'absolute' }}>{children}</div>
+type ContainerProps = Readonly<{
+    children: JSXElement;
+}>;
+
+const Container: Component<ContainerProps> = (props) => (
+    <div style={{ 'font-size': '40px', position: 'absolute' }}>
+        {props.children}
+    </div>
 );
 
-export const TwoLinesSuperChatMessage: React.FC = () => (
+export const TwoLinesSuperChatMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={superChatItem}
@@ -78,7 +84,7 @@ export const TwoLinesSuperChatMessage: React.FC = () => (
     </Container>
 );
 
-export const OneLineSuperChatMessage: React.FC = () => (
+export const OneLineSuperChatMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={superChatItem}
@@ -90,7 +96,7 @@ export const OneLineSuperChatMessage: React.FC = () => (
     </Container>
 );
 
-export const TwoLinesMembershipMessage: React.FC = () => (
+export const TwoLinesMembershipMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={membershipItem}
@@ -99,7 +105,7 @@ export const TwoLinesMembershipMessage: React.FC = () => (
     </Container>
 );
 
-export const OneLineMembershipMessage: React.FC = () => (
+export const OneLineMembershipMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={membershipItem}
@@ -111,7 +117,7 @@ export const OneLineMembershipMessage: React.FC = () => (
     </Container>
 );
 
-export const TwoLinesNormalMessage: React.FC = () => (
+export const TwoLinesNormalMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={normalMessageItem}
@@ -120,7 +126,7 @@ export const TwoLinesNormalMessage: React.FC = () => (
     </Container>
 );
 
-export const OneLineNormalMessage: React.FC = () => (
+export const OneLineNormalMessage: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={normalMessageItem}
@@ -132,7 +138,7 @@ export const OneLineNormalMessage: React.FC = () => (
     </Container>
 );
 
-export const TwoLinesSuperChatMessageWithoutAuthorDisplay: React.FC = () => (
+export const TwoLinesSuperChatMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={superChatItem}
@@ -144,7 +150,7 @@ export const TwoLinesSuperChatMessageWithoutAuthorDisplay: React.FC = () => (
     </Container>
 );
 
-export const OneLineSuperChatMessageWithoutAuthorDisplay: React.FC = () => (
+export const OneLineSuperChatMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={superChatItem}
@@ -157,7 +163,7 @@ export const OneLineSuperChatMessageWithoutAuthorDisplay: React.FC = () => (
     </Container>
 );
 
-export const TwoLinesMembershipMessageWithoutAuthorDisplay: React.FC = () => (
+export const TwoLinesMembershipMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={membershipItem}
@@ -169,7 +175,7 @@ export const TwoLinesMembershipMessageWithoutAuthorDisplay: React.FC = () => (
     </Container>
 );
 
-export const OneLineMembershipMessageWithoutAuthorDisplay: React.FC = () => (
+export const OneLineMembershipMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={membershipItem}
@@ -182,7 +188,7 @@ export const OneLineMembershipMessageWithoutAuthorDisplay: React.FC = () => (
     </Container>
 );
 
-export const TwoLinesNormalMessageWithoutAuthorDisplay: React.FC = () => (
+export const TwoLinesNormalMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={normalMessageItem}
@@ -194,7 +200,7 @@ export const TwoLinesNormalMessageWithoutAuthorDisplay: React.FC = () => (
     </Container>
 );
 
-export const OneLineNormalMessageWithoutAuthorDisplay: React.FC = () => (
+export const OneLineNormalMessageWithoutAuthorDisplay: Component = () => (
     <Container>
         <TwoLinesMessage
             chatItem={normalMessageItem}

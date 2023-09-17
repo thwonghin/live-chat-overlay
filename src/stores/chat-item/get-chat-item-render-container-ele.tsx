@@ -1,71 +1,37 @@
-import React, { useCallback } from 'react';
-
-import { type Root, createRoot } from 'react-dom/client';
+import { memoize } from 'lodash-es';
+import { For } from 'solid-js';
+import { render } from 'solid-js/web';
 
 import ChatItemRenderer from '@/components/chat-flow/chat-item-renderer';
 import type { ChatItemModel } from '@/models/chat-item';
 
 export const CHAT_ITEM_RENDER_ID = 'live-chat-overlay-test-rendering';
 
-let renderRoot: {
-    root: Root;
-    ele: HTMLElement;
-};
+type ChatItemRendererForWidthProps = Readonly<{
+    chatItem: ChatItemModel;
+    onRender: (chatItem: ChatItemModel, ele?: HTMLElement) => void;
+}>;
 
-function getChatItemRenderContainerRoot(): {
-    root: Root;
-    ele: HTMLElement;
-} {
-    if (!renderRoot) {
-        const containerEle = window.parent.document.querySelector<HTMLElement>(
-            `#${CHAT_ITEM_RENDER_ID}`,
-        );
-        if (!containerEle) {
-            throw new Error('Cannot find chat item render container');
-        }
-
-        renderRoot = {
-            ele: containerEle,
-            root: createRoot(containerEle),
-        };
+const ChatItemRendererForWidth = (props: ChatItemRendererForWidthProps) => {
+    function handleRender(ele?: HTMLElement) {
+        props.onRender(props.chatItem, ele);
     }
 
-    return renderRoot;
-}
-
-const ChatItemRendererForWidth: React.FC<{
-    readonly chatItem: ChatItemModel;
-
-    readonly onRender: (
-        chatItem: ChatItemModel,
-        ele: HTMLElement | undefined,
-    ) => void;
-}> = ({ chatItem, onRender }) => {
-    const handleRender = useCallback(
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        (ele: HTMLElement | null) => {
-            onRender(chatItem, ele);
-        },
-        [onRender, chatItem],
+    return (
+        <ChatItemRenderer chatItem={props.chatItem} onRender={handleRender} />
     );
-
-    return <ChatItemRenderer chatItem={chatItem} onRender={handleRender} />;
 };
 
 export async function assignChatItemRenderedWidth(
     chatItemModels: ChatItemModel[],
+    renderEle: HTMLElement,
 ): Promise<void> {
-    const { root } = getChatItemRenderContainerRoot();
-
     const totalChatItemCount = chatItemModels.length;
+    let cleanup: () => void;
     let currentCount = 0;
 
     await new Promise<void>((resolve) => {
-        const handleRender = (
-            chatItem: ChatItemModel,
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            ele: HTMLElement | null,
-        ) => {
+        const handleRender = (chatItem: ChatItemModel, ele?: HTMLElement) => {
             if (ele) {
                 chatItem.width =
                     ele.getBoundingClientRect()?.width ?? undefined;
@@ -74,21 +40,24 @@ export async function assignChatItemRenderedWidth(
                 }
 
                 if (currentCount === totalChatItemCount) {
+                    cleanup?.();
                     resolve();
                 }
             }
         };
 
-        root.render(
-            <>
-                {chatItemModels.map((chatItem) => (
-                    <ChatItemRendererForWidth
-                        key={chatItem.value.id}
-                        chatItem={chatItem}
-                        onRender={handleRender}
-                    />
-                ))}
-            </>,
+        cleanup = render(
+            () => (
+                <For each={chatItemModels}>
+                    {(item) => (
+                        <ChatItemRendererForWidth
+                            chatItem={item}
+                            onRender={handleRender}
+                        />
+                    )}
+                </For>
+            ),
+            renderEle,
         );
     });
 }

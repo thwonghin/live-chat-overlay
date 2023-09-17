@@ -1,41 +1,54 @@
-import { makeAutoObservable } from 'mobx';
 import browser from 'webextension-polyfill';
 
-import { LIVE_CHAT_API_INTERCEPT_EVENT } from '@/constants';
+import { type InitData } from '@/definitions/youtube';
+import { type ChatEventDetail } from '@/services/fetch-interceptor';
 
-import { ChatItemStore } from './chat-item';
-import { DebugInfoStore } from './debug-info';
-import { SettingsStore } from './settings';
-import { UiStore } from './ui';
+import { type ChatItemStore, createChatItemStore } from './chat-item';
+import { type DebugInfoStore, createDebugInfoStore } from './debug-info';
+import { type SettingsStore, createSettingsStore } from './settings';
+import { type UiStore, createUiStore } from './ui';
 
-export class RootStore {
-    settingsStore = new SettingsStore(browser);
-    debugInfoStore = new DebugInfoStore();
+export type RootStore = {
+    settingsStore: SettingsStore;
+    debugInfoStore: DebugInfoStore;
     uiStore: UiStore;
     chatItemStore: ChatItemStore;
+    init: (initData: InitData) => void;
+    cleanup: () => void;
+};
 
-    constructor(videoEle: HTMLVideoElement, videoPlayerEle: HTMLDivElement) {
-        this.uiStore = new UiStore(videoPlayerEle, videoEle);
-        this.chatItemStore = new ChatItemStore(
-            LIVE_CHAT_API_INTERCEPT_EVENT,
-            this.uiStore,
-            this.settingsStore,
-            this.debugInfoStore,
-        );
-        makeAutoObservable(this);
+export const createRootStore = async (
+    videoEle: HTMLVideoElement,
+    videoPlayerEle: HTMLDivElement,
+    attachChatEvent: (callback: (e: ChatEventDetail) => void) => () => void,
+): Promise<RootStore> => {
+    const settingsStore = await createSettingsStore(browser);
+    const debugInfoStore = createDebugInfoStore();
+    const uiStore = createUiStore(videoPlayerEle, videoEle);
+    const chatItemStore = createChatItemStore(
+        attachChatEvent,
+        uiStore,
+        settingsStore,
+        debugInfoStore,
+    );
+
+    function init(initData: InitData) {
+        chatItemStore.importInitData(initData);
     }
 
-    async init() {
-        await this.settingsStore.init();
-        this.uiStore.init();
-        this.chatItemStore.init();
-        this.debugInfoStore.init();
+    function cleanup() {
+        settingsStore.cleanup?.();
+        debugInfoStore.cleanup?.();
+        uiStore.cleanup?.();
+        chatItemStore.cleanup?.();
     }
 
-    cleanup() {
-        this.settingsStore.cleanup();
-        this.uiStore.cleanup();
-        this.chatItemStore.cleanup();
-        this.debugInfoStore.cleanup();
-    }
-}
+    return {
+        init,
+        cleanup,
+        settingsStore,
+        debugInfoStore,
+        uiStore,
+        chatItemStore,
+    };
+};

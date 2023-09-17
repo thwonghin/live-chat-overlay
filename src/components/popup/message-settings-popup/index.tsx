@@ -1,45 +1,65 @@
-import { useRef, useState } from 'react';
-
-import cx from 'classnames';
+import { createSignal, type Component, Index, Show } from 'solid-js';
 
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
 import { useNativeStopKeydownPropagation } from '@/hooks';
-import { type MessageSettingsKey } from '@/models/settings';
+import {
+    messageSettingsKeys,
+    type MessageSettingsKey,
+} from '@/models/settings';
 import { youtube } from '@/utils';
 
 import styles from './index.module.scss';
 
-type Props = {
+type Props = Readonly<{
     isHidden: boolean;
     playerControlContainer: HTMLSpanElement;
-};
+}>;
 
-const MessageSettingsPopup: React.FC<Props> = ({ isHidden }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
+const DEFAULT_MESSAGE_SETTING_KEY = 'guest' as const;
+
+const MessageSettingsPopup: Component<Props> = (props) => {
+    const [containerRef, setContainerRef] = createSignal<HTMLDivElement>();
     const [selectedMessageType, setSelectedMessageType] =
-        useState<MessageSettingsKey>('guest');
+        createSignal<MessageSettingsKey>(DEFAULT_MESSAGE_SETTING_KEY);
 
     // Workaround for cannot stop event propagation: use native event handler
-    // https://github.com/facebook/react/issues/11387#issuecomment-524113945
     useNativeStopKeydownPropagation(containerRef);
 
     return (
         <div
-            ref={containerRef}
-            className={cx(youtube.CLASS_POPUP, styles.container, {
-                [styles['container--hidden']]: isHidden,
-            })}
+            ref={setContainerRef}
+            classList={{
+                [youtube.CLASS_POPUP]: true,
+                [styles.container]: true,
+                [styles['container--hidden']]: props.isHidden,
+            }}
         >
-            <div className={cx(youtube.CLASS_PANEL, styles['nest-container'])}>
-                <div className={cx(youtube.CLASS_PANEL_MENU, styles.content)}>
+            <div
+                classList={{
+                    [youtube.CLASS_PANEL]: true,
+                    [styles['nest-container']]: true,
+                }}
+            >
+                <div
+                    classList={{
+                        [youtube.CLASS_PANEL_MENU]: true,
+                        [styles.content]: true,
+                    }}
+                >
                     <MessageSettingsTypeSelect
-                        value={selectedMessageType}
+                        defaultValue={DEFAULT_MESSAGE_SETTING_KEY}
                         onChange={setSelectedMessageType}
                     />
-                    <MessageSettingsInputForm
-                        messageSettingsKey={selectedMessageType}
-                    />
+                    <Index each={messageSettingsKeys}>
+                        {(item) => (
+                            <Show when={item() === selectedMessageType()}>
+                                <MessageSettingsInputForm
+                                    messageSettingsKey={item}
+                                />
+                            </Show>
+                        )}
+                    </Index>
                 </div>
             </div>
         </div>

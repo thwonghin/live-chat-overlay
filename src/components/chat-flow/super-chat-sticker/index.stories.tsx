@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { type Component, type JSXElement } from 'solid-js';
 
 import type { SuperStickerItem } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
@@ -47,11 +47,17 @@ const messageSettings: MessageSettings = {
     isSticky: false,
 };
 
-const Container: React.FC<React.PropsWithChildren> = ({ children }) => (
-    <div style={{ fontSize: 40, position: 'absolute' }}>{children}</div>
+type ContainerProps = {
+    children: JSXElement;
+};
+
+const Container: Component<ContainerProps> = (props) => (
+    <div style={{ 'font-size': '40px', position: 'absolute' }}>
+        {props.children}
+    </div>
 );
 
-export const TwoLinesSuperChatSticker: React.FC = () => (
+export const TwoLinesSuperChatSticker: Component = () => (
     <Container>
         <SuperChatSticker
             chatItem={superStickerItem}
@@ -60,7 +66,7 @@ export const TwoLinesSuperChatSticker: React.FC = () => (
     </Container>
 );
 
-export const OneLineSuperChatSticker: React.FC = () => (
+export const OneLineSuperChatSticker: Component = () => (
     <Container>
         <SuperChatSticker
             chatItem={superStickerItem}
@@ -72,7 +78,7 @@ export const OneLineSuperChatSticker: React.FC = () => (
     </Container>
 );
 
-export const TwoLinesSuperChatStickerWithoutAuthorDisplay: React.FC = () => (
+export const TwoLinesSuperChatStickerWithoutAuthorDisplay: Component = () => (
     <Container>
         <SuperChatSticker
             chatItem={superStickerItem}
@@ -84,7 +90,7 @@ export const TwoLinesSuperChatStickerWithoutAuthorDisplay: React.FC = () => (
     </Container>
 );
 
-export const OneLineSuperChatStickerWithoutAuthorDisplay: React.FC = () => (
+export const OneLineSuperChatStickerWithoutAuthorDisplay: Component = () => (
     <Container>
         <SuperChatSticker
             chatItem={superStickerItem}

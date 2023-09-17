@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite';
 import webExtension, { readJsonFile } from 'vite-plugin-web-extension';
-import react from '@vitejs/plugin-react-swc';
-import path from 'node:path';
+import solidPlugin from 'vite-plugin-solid';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import autoprefixer from 'autoprefixer';
 
 type Manifest = {
     version: string;
@@ -25,7 +25,6 @@ function generateManifest() {
                 return {
                     ...rest,
                     resources: [
-                        'style.css',
                         ...resources.map((filePath) => {
                             if (filePath.endsWith('.ts')) {
                                 return `${filePath.slice(0, -2)}js`;
@@ -43,22 +42,28 @@ function generateManifest() {
 export default defineConfig({
     plugins: [
         tsconfigPaths(),
-        react(),
+        solidPlugin(),
         webExtension({
             disableAutoLaunch: true,
+            skipManifestValidation: true,
             manifest: generateManifest,
+            scriptViteConfig: {
+                css: {
+                    postcss: {
+                        plugins: [autoprefixer],
+                    },
+                },
+                build: {
+                    sourcemap:
+                        process.env.NODE_ENV === 'production'
+                            ? false
+                            : 'inline',
+                },
+            },
             additionalInputs:
                 readManifest().web_accessible_resources?.flatMap(
                     ({ resources }) => resources ?? [],
                 ) ?? [],
         }),
     ],
-    resolve: {
-        alias: {
-            // In dev mode, make sure fast refresh works
-            '/@react-refresh': path.resolve(
-                'node_modules/@vitejs/plugin-react-swc/refresh-runtime.js',
-            ),
-        },
-    },
 });

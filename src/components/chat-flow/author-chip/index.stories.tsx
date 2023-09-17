@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { type Component, type JSXElement } from 'solid-js';
 
 import { AuthorDisplayMethod } from '@/models/settings';
 
@@ -17,11 +17,14 @@ const avatars = [
 ];
 const name = 'Author Name';
 
-const Container: React.FC<React.PropsWithChildren> = ({ children }) => (
-    <div style={{ fontSize: 40 }}>{children}</div>
-);
+type ContainerProps = Readonly<{
+    children: JSXElement;
+}>;
+const Container: Component<ContainerProps> = (props) => {
+    return <div style={{ 'font-size': '40px' }}>{props.children}</div>;
+};
 
-export const WithAllDisplay: React.FC = () => (
+export const WithAllDisplay: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -31,7 +34,7 @@ export const WithAllDisplay: React.FC = () => (
     </Container>
 );
 
-export const WithNameOnly: React.FC = () => (
+export const WithNameOnly: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -41,7 +44,7 @@ export const WithNameOnly: React.FC = () => (
     </Container>
 );
 
-export const WithAvatarOnly: React.FC = () => (
+export const WithAvatarOnly: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -51,7 +54,7 @@ export const WithAvatarOnly: React.FC = () => (
     </Container>
 );
 
-export const WithNone: React.FC = () => (
+export const WithNone: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -61,7 +64,7 @@ export const WithNone: React.FC = () => (
     </Container>
 );
 
-export const WithAllDisplayAndDonation: React.FC = () => (
+export const WithAllDisplayAndDonation: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -72,7 +75,7 @@ export const WithAllDisplayAndDonation: React.FC = () => (
     </Container>
 );
 
-export const WithNameOnlyAndDonation: React.FC = () => (
+export const WithNameOnlyAndDonation: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -83,7 +86,7 @@ export const WithNameOnlyAndDonation: React.FC = () => (
     </Container>
 );
 
-export const WithAvatarOnlyAndDonation: React.FC = () => (
+export const WithAvatarOnlyAndDonation: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}
@@ -94,7 +97,7 @@ export const WithAvatarOnlyAndDonation: React.FC = () => (
     </Container>
 );
 
-export const WithNoneAndDonation: React.FC = () => (
+export const WithNoneAndDonation: Component = () => (
     <Container>
         <AuthorChip
             avatars={avatars}

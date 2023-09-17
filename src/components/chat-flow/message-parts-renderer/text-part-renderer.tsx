@@ -1,14 +1,13 @@
-import * as React from 'react';
+import { type Component } from 'solid-js';
 
 import type { TextPart } from '@/models/chat-item/types';
 
-type Props = {
-    readonly textPart: TextPart;
-};
+type Props = Readonly<{
+    textPart: TextPart;
+}>;
 
-const TextPartRenderer: React.FC<Props> = ({ textPart }) => {
-    // eslint-disable-next-line react/jsx-no-useless-fragment
-    return <>{textPart.text}</>;
+const TextPartRenderer: Component<Props> = (props) => {
+    return <>{props.textPart.text}</>;
 };
 
 export default TextPartRenderer;

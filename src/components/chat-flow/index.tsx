@@ -1,122 +1,125 @@
-import React, {
-    useCallback,
-    useMemo,
-    type CSSProperties,
-    useEffect,
-} from 'react';
-
-import { observer } from 'mobx-react-lite';
+import {
+    type Component,
+    createMemo,
+    For,
+    Index,
+    type JSX,
+    onCleanup,
+    onMount,
+    Show,
+} from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
 import { CHAT_ITEM_RENDER_ID } from '@/stores/chat-item';
+import { createError } from '@/utils/logger';
 
 import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';
 import styles from './index.module.scss';
 import MessageFlower from './message-flower';
 
-type Props = {
+type Props = Readonly<{
     initData: InitData;
-};
+}>;
 
-function useInitStores(initData: InitData): void {
-    const { chatItemStore } = useStore();
-
-    useEffect(() => {
-        // Need to init here because it needs to determine the width
-        // that depends on React
-
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        chatItemStore.importInitData(initData);
-    }, [initData, chatItemStore]);
-}
-
-const ChatFlow: React.FC<Props> = observer(({ initData }) => {
-    useInitStores(initData);
+const ChatFlow: Component<Props> = (props) => {
     const store = useStore();
-    const {
-        debugInfoStore,
-        settingsStore: { settings },
-        chatItemStore,
-        uiStore: { playerState },
-    } = store;
 
-    const { chatItemsByLineNumber, stickyChatItems } = chatItemStore;
+    onMount(() => {
+        // Need to init here because it needs to determine the width
+        // that depends on SolidJS
+        store.init(props.initData);
 
-    const handleRemoveMessage = useCallback(
-        (chatItem: ChatItemModel) => {
-            chatItemStore.removeStickyChatItemById(chatItem.value.id);
-        },
-        [chatItemStore],
-    );
+        onCleanup(() => {
+            store.cleanup();
+        });
+    });
 
-    const style = useMemo<React.CSSProperties>(
-        () => ({
-            visibility: settings.isEnabled ? 'visible' : 'hidden',
-            opacity: settings.globalOpacity,
-        }),
-        [settings.isEnabled, settings.globalOpacity],
-    );
+    function handleRemoveMessage(chatItem: ChatItemModel) {
+        store.chatItemStore.removeStickyChatItemById(chatItem.value.id);
+    }
 
-    const containerWidth = playerState.width;
-    const lineHeight = useMemo(
-        () => playerState.height / settings.totalNumberOfLines,
-        [settings.totalNumberOfLines, playerState.height],
+    const style = createMemo<JSX.CSSProperties>(() => ({
+        visibility: store.settingsStore.settings.isEnabled
+            ? 'visible'
+            : 'hidden',
+        opacity: store.settingsStore.settings.globalOpacity,
+    }));
+
+    const lineHeight = createMemo(
+        () =>
+            store.uiStore.playerState.height /
+            store.settingsStore.settings.totalNumberOfLines,
     );
-    const containerStyle = useMemo<CSSProperties>(
-        () => ({
-            fontSize: lineHeight,
-        }),
-        [lineHeight],
-    );
+    const containerStyle = createMemo<JSX.CSSProperties>(() => ({
+        'font-size': `${lineHeight()}px`,
+    }));
 
     return (
-        <div className={styles.container} style={containerStyle}>
+        <div class={styles.container} style={containerStyle()}>
             <div
-                className={styles['test-render-container']}
+                class={styles['test-render-container']}
                 id={CHAT_ITEM_RENDER_ID}
             />
-            <div style={style}>
-                {Array.from(chatItemsByLineNumber.entries()).flatMap(
-                    ([lineNumber, chatItems]) =>
-                        chatItems.map((chatItem) => {
-                            if (chatItem.lineNumber === undefined) {
-                                throw new Error('Unknown line number');
+            <div style={style()}>
+                <Index
+                    each={Object.keys(
+                        store.chatItemStore.chatItemsByLineNumber,
+                    )}
+                >
+                    {(lineNumber) => (
+                        <For
+                            each={
+                                store.chatItemStore.chatItemsByLineNumber[
+                                    Number(lineNumber())
+                                ]
                             }
+                        >
+                            {(chatItem) => {
+                                if (chatItem.lineNumber === undefined) {
+                                    throw createError('Unknown line number');
+                                }
 
-                            // Two line items
-                            if (lineNumber !== chatItem.lineNumber) {
-                                return null;
-                            }
+                                // Two line items
+                                if (
+                                    Number(lineNumber()) !== chatItem.lineNumber
+                                ) {
+                                    return null;
+                                }
 
-                            return (
-                                <MessageFlower
-                                    key={chatItem.value.id}
-                                    top={lineHeight * chatItem.lineNumber}
-                                    containerWidth={containerWidth}
-                                >
-                                    <ChatItemRenderer chatItem={chatItem} />
-                                </MessageFlower>
-                            );
-                        }),
-                )}
-                {stickyChatItems.map((chatItem) => {
-                    return (
+                                return (
+                                    <MessageFlower
+                                        top={lineHeight() * chatItem.lineNumber}
+                                        width={chatItem.width!}
+                                        containerWidth={
+                                            store.uiStore.playerState.width
+                                        }
+                                    >
+                                        <ChatItemRenderer chatItem={chatItem} />
+                                    </MessageFlower>
+                                );
+                            }}
+                        </For>
+                    )}
+                </Index>
+                <For each={store.chatItemStore.stickyChatItems.values}>
+                    {(chatItem) => (
                         <ChatItemRenderer
-                            key={chatItem.value.id}
                             chatItem={chatItem}
                             onClickClose={() => {
                                 handleRemoveMessage(chatItem);
                             }}
                         />
-                    );
-                })}
+                    )}
+                </For>
             </div>
-            {debugInfoStore.isDebugging && <DebugOverlay />}
+            <Show when={store.debugInfoStore.debugInfo.isDebugging}>
+                <DebugOverlay />
+            </Show>
         </div>
     );
-});
+};
 
 export default ChatFlow;

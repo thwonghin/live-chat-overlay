@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 export enum AuthorDisplayMethod {
     AVATAR_ONLY = 'avatar-only',
     NAME_ONLY = 'name-only',
     ALL = 'all',
     NONE = 'none',
 }
-/* eslint-enable @typescript-eslint/naming-convention */
 
 export type MessageSettings = {
     color: string;
@@ -19,16 +17,19 @@ export type MessageSettings = {
     isSticky: boolean;
 };
 
-export type MessageSettingsKey =
-    | 'moderator'
-    | 'member'
-    | 'guest'
-    | 'owner'
-    | 'you'
-    | 'verified'
-    | 'membership'
-    | 'super-chat'
-    | 'pinned';
+export const messageSettingsKeys = [
+    'moderator',
+    'member',
+    'guest',
+    'owner',
+    'you',
+    'verified',
+    'membership',
+    'super-chat',
+    'pinned',
+] as const;
+
+export type MessageSettingsKey = (typeof messageSettingsKeys)[number];
 
 export type Settings = {
     isEnabled: boolean;

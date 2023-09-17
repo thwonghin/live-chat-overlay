@@ -1,29 +1,41 @@
-import { Tooltip } from '@mui/material';
+import { type IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { Tooltip } from '@kobalte/core';
+import { type Component } from 'solid-js';
+
+import FontAwesomeIcon from '@/components/font-awesome';
+import { youtube } from '@/utils';
 
 import styles from './index.module.scss';
 
-type Props = {
-    title: string;
-    children: React.ReactElement;
-};
+export const ICON_WIDTH = (2 / 3) * (512 / 640) * 100;
 
-const BtnTooltip: React.FC<Props> = ({ title, children }) => {
+type Props = Readonly<{
+    title: string;
+    onClickTrigger?: (event: MouseEvent) => void;
+    icon: IconDefinition;
+    iconWidth?: string;
+}>;
+
+const BtnTooltip: Component<Props> = (props) => {
     return (
-        <Tooltip
-            title={title}
-            classes={{
-                tooltip: styles.tooltip,
-            }}
-            placement="top"
-            PopperProps={{
-                disablePortal: true,
-            }}
-            TransitionProps={{
-                timeout: 0.1,
-            }}
-        >
-            {children}
-        </Tooltip>
+        <Tooltip.Root placement="top" openDelay={0} closeDelay={0}>
+            <Tooltip.Trigger
+                onClick={props.onClickTrigger}
+                classList={{
+                    [youtube.CLASS_PLAYER_CTL_BTN]: true,
+                    [styles.trigger]: true,
+                }}
+            >
+                <FontAwesomeIcon
+                    width={props.iconWidth ?? `${ICON_WIDTH}%`}
+                    height="100%"
+                    icon={props.icon}
+                />
+            </Tooltip.Trigger>
+            <Tooltip.Content class={styles.tooltip}>
+                <p>{props.title}</p>
+            </Tooltip.Content>
+        </Tooltip.Root>
     );
 };
 

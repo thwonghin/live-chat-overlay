@@ -1,5 +1,4 @@
 import { defaultsDeep } from 'lodash-es';
-import { makeAutoObservable } from 'mobx';
 
 import {
     isMembershipItem,
@@ -31,12 +30,12 @@ const commonMessageSettings: MessageSettings = {
     isSticky: false,
 } as const;
 
-class SettingsModel implements Settings {
-    public isEnabled = true;
-    public totalNumberOfLines = 15;
-    public flowTimeInSec = 10;
-    public globalOpacity = 0.7;
-    public messageSettings = {
+export const defaultSettings = {
+    isEnabled: true,
+    totalNumberOfLines: 15,
+    flowTimeInSec: 10,
+    globalOpacity: 0.7,
+    messageSettings: {
         guest: commonMessageSettings,
         member: {
             ...commonMessageSettings,
@@ -66,7 +65,6 @@ class SettingsModel implements Settings {
             numberOfLines: 1,
             authorDisplay: AuthorDisplayMethod.ALL,
         },
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         'super-chat': {
             ...commonMessageSettings,
             numberOfLines: 2,
@@ -80,37 +78,42 @@ class SettingsModel implements Settings {
             bgColor: '#224072',
             isSticky: true,
         },
+    },
+};
+
+export type SettingsModel = {
+    setRawSettings(settings: Settings): SettingsModel;
+    getMessageSettings(chatItem: ChatItem): MessageSettings;
+} & Settings;
+
+export const createSettingsModel = (): SettingsModel => {
+    const settingsModel: SettingsModel = {
+        ...defaultSettings,
+        setRawSettings(settings: Settings) {
+            Object.assign(settingsModel, defaultsDeep(settings, this));
+            return settingsModel;
+        },
+        getMessageSettings(chatItem: ChatItem): MessageSettings {
+            const { messageSettings } = settingsModel;
+            if (isNormalChatItem(chatItem)) {
+                return messageSettings[chatItem.authorType];
+            }
+
+            if (isMembershipItem(chatItem)) {
+                return messageSettings.membership;
+            }
+
+            if (isSuperChatItem(chatItem) || isSuperStickerItem(chatItem)) {
+                return messageSettings['super-chat'];
+            }
+
+            if (isPinnedItem(chatItem)) {
+                return messageSettings.pinned;
+            }
+
+            return assertNever(chatItem);
+        },
     };
 
-    constructor() {
-        makeAutoObservable(this);
-    }
-
-    setRawSettings(settings: Settings): this {
-        Object.assign(this, defaultsDeep(settings, this));
-        return this;
-    }
-
-    getMessageSettings(chatItem: ChatItem): MessageSettings {
-        const { messageSettings } = this;
-        if (isNormalChatItem(chatItem)) {
-            return messageSettings[chatItem.authorType];
-        }
-
-        if (isMembershipItem(chatItem)) {
-            return messageSettings.membership;
-        }
-
-        if (isSuperChatItem(chatItem) || isSuperStickerItem(chatItem)) {
-            return messageSettings['super-chat'];
-        }
-
-        if (isPinnedItem(chatItem)) {
-            return messageSettings.pinned;
-        }
-
-        return assertNever(chatItem);
-    }
-}
-
-export { SettingsModel };
+    return settingsModel;
+};

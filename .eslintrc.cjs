@@ -3,23 +3,20 @@ module.exports = {
         'xo',
         'xo/browser',
         'xo-typescript',
-        'xo-react/space',
+        'plugin:solid/typescript',
         'plugin:import/recommended',
         'plugin:import/typescript',
         'plugin:prettier/recommended',
         'plugin:storybook/recommended',
     ],
+    plugins: ['solid'],
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: './tsconfig.json',
         tsconfigRootDir: __dirname,
     },
     rules: {
-        'react/jsx-uses-react': 'off',
-        'react/react-in-jsx-scope': 'off',
-        'react/prop-types': 'off',
         'unicorn/no-array-callback-reference': 'off',
-        'react-hooks/exhaustive-deps': 'error',
         'node/file-extension-in-import': 'off',
         '@typescript-eslint/no-implicit-any-catch': 'off',
         // using 'useUnknownInCatchVariables' in tsconfig by default
@@ -52,37 +49,15 @@ module.exports = {
                 },
             },
         ],
-        'react/function-component-definition': [
+        '@typescript-eslint/naming-convention': 'off',
+        '@typescript-eslint/ban-types': [
             'error',
             {
-                namedComponents: 'arrow-function',
-            },
-        ],
-        '@typescript-eslint/naming-convention': [
-            'error',
-            {
-                selector: 'default',
-                format: ['strictCamelCase'],
-                filter: {
-                    match: false,
-                    regex: '^Webkit.*',
-                },
-            },
-            {
-                selector: 'typeLike',
-                format: ['StrictPascalCase'],
-            },
-            {
-                selector: 'variable',
-                modifiers: ['const'],
-                format: ['strictCamelCase', 'StrictPascalCase', 'UPPER_CASE'],
+                extendDefaults: true,
             },
         ],
     },
     settings: {
-        react: {
-            version: 'detect',
-        },
         'import/resolver': {
             node: {
                 extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],

@@ -6,16 +6,18 @@ import type {
     ReplayInitData,
     InitData,
 } from '@/definitions/youtube';
-import { ChatItemModel } from '@/models/chat-item';
+import {
+    type ChatItemModel,
+    createChatItemModelFromAction,
+} from '@/models/chat-item';
 import { isNormalChatItem } from '@/models/chat-item/mapper';
 import type { ChatItem } from '@/models/chat-item/types';
 import type { SettingsModel } from '@/models/settings';
 import { isNotNil } from '@/utils';
+import { createError } from '@/utils/logger';
 
 export enum Mode {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     LIVE = 'live',
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     REPLAY = 'replay',
 }
 
@@ -45,7 +47,7 @@ export function mapChatItemsFromReplayResponse(
             const videoTimestampInMs = Number(a.videoOffsetTimeMsec);
             const items = actions
                 .map((action) =>
-                    ChatItemModel.fromAction(
+                    createChatItemModelFromAction(
                         {
                             action,
                             currentTimestampMs: timeInfo.currentTimestampMs,
@@ -72,7 +74,7 @@ export function mapChatItemsFromLiveResponse(
         .map((v) => v.addChatItemAction ?? v.addBannerToLiveChatCommand)
         .filter(isNotNil)
         .map((action) =>
-            ChatItemModel.fromAction(
+            createChatItemModelFromAction(
                 {
                     action,
                     currentTimestampMs: timeInfo.currentTimestampMs,
@@ -151,14 +153,14 @@ function hasSpaceInLine({
     containerWidth,
 }: HasSpaceInLineParameters): boolean {
     if (isNil(lastMessageInLine.addTimestamp)) {
-        throw new Error('Missing timestamp');
+        throw createError('Missing timestamp');
     }
 
     const lastMessageFlowedTime =
         (addTimestamp - lastMessageInLine.addTimestamp) / 1000;
     const lastMessageWidth = lastMessageInLine.width;
     if (isNil(lastMessageWidth)) {
-        throw new Error('Unknown width');
+        throw createError('Unknown width');
     }
 
     const lastMessageSpeed =
@@ -174,7 +176,7 @@ function hasSpaceInLine({
 }
 
 type GetLineNumberParameters = {
-    chatItemsByLineNumber: Map<number, ChatItemModel[]>;
+    chatItemsByLineNumber: Record<number, ChatItemModel[]>;
     elementWidth: number;
     maxLineNumber: number;
     addTimestamp: number;
@@ -209,7 +211,7 @@ export function getLineNumber({
                 .map((v, index) => index + lineNumber)
                 .every((loopLineNumber) => {
                     const lastMessageInLine = last(
-                        chatItemsByLineNumber.get(loopLineNumber),
+                        chatItemsByLineNumber[loopLineNumber],
                     );
 
                     return (

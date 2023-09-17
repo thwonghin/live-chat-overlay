@@ -1,7 +1,7 @@
 import { mapValues } from 'lodash-es';
 
-import { calculateBenchmark } from '@/models/debug-info/helpers';
-import type { Benchmark } from '@/models/debug-info/types';
+import { calculateBenchmark } from '@/stores/debug-info/helpers';
+import type { Benchmark } from '@/stores/debug-info/types';
 
 type TestParameters = {
     condition: string;

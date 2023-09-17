@@ -1,4 +1,4 @@
-export type CustomEventDetail = {
+export type ChatEventDetail = {
     response: unknown;
     url: string;
 };
@@ -29,7 +29,7 @@ export function initInterceptor(
             const clonedResult = fetchResult.clone();
 
             setTimeout(async () => {
-                const event = new CustomEvent<CustomEventDetail>(eventName, {
+                const event = new CustomEvent<ChatEventDetail>(eventName, {
                     detail: {
                         response: await clonedResult.json(),
                         url: requestUrl,

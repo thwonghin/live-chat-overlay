@@ -1,50 +1,57 @@
-import { useCallback } from 'react';
-
-import { runInAction } from 'mobx';
-import { observer } from 'mobx-react-lite';
+import { type Accessor, type Component } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
 import {
     type MessageSettingsKey,
     type MessageSettings,
+    defaultSettings,
 } from '@/models/settings';
 
 import Layout from './layout';
 
-type Props = {
-    messageSettingsKey: MessageSettingsKey;
+type Props = Readonly<{
+    messageSettingsKey: Accessor<MessageSettingsKey>;
+}>;
+
+const MessageSettingsInputForm: Component<Props> = (props) => {
+    const store = useStore();
+
+    const handleSubmit = (value: {
+        globalOpacity: number;
+        messageSettings: MessageSettings;
+    }) => {
+        store.settingsStore.setSettings(
+            'settings',
+            'globalOpacity',
+            value.globalOpacity,
+        );
+        store.settingsStore.setSettings(
+            'settings',
+            'messageSettings',
+            props.messageSettingsKey(),
+            { ...value.messageSettings },
+        );
+    };
+
+    return (
+        <Layout
+            globalOpacity={store.settingsStore.settings.globalOpacity}
+            defaultValues={{
+                globalOpacity: defaultSettings.globalOpacity,
+                messageSettings:
+                    defaultSettings.messageSettings[props.messageSettingsKey()],
+            }}
+            messageSettings={
+                store.settingsStore.settings.messageSettings[
+                    props.messageSettingsKey()
+                ]
+            }
+            isBackgroundColorEditable={
+                props.messageSettingsKey() !== 'super-chat'
+            }
+            onSubmit={handleSubmit}
+        />
+    );
 };
-
-const MessageSettingsInputForm: React.FC<Props> = observer(
-    ({ messageSettingsKey }) => {
-        const {
-            settingsStore: { settings },
-        } = useStore();
-
-        const handleSubmit = useCallback(
-            (value: {
-                globalOpacity: number;
-                messageSettings: MessageSettings;
-            }) => {
-                runInAction(() => {
-                    settings.globalOpacity = value.globalOpacity;
-                    settings.messageSettings[messageSettingsKey] =
-                        value.messageSettings;
-                });
-            },
-            [settings, messageSettingsKey],
-        );
-
-        return (
-            <Layout
-                key={messageSettingsKey}
-                globalOpacity={settings.globalOpacity}
-                messageSettings={settings.messageSettings[messageSettingsKey]}
-                isBackgroundColorEditable={messageSettingsKey !== 'super-chat'}
-                onSubmit={handleSubmit}
-            />
-        );
-    },
-);
 
 export default MessageSettingsInputForm;

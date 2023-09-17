@@ -1,6 +1,6 @@
-import * as React from 'react';
+import { type Component } from 'solid-js';
 
-import { ChatItemModel } from '@/models/chat-item';
+import { createChatItemModel } from '@/models/chat-item';
 
 import { DebugOverlayLayout } from '.';
 
@@ -8,19 +8,14 @@ const settings = { title: 'DebugOverlay' };
 
 export default settings;
 
-export const DebugOverlay: React.FC = () => {
+export const DebugOverlay: Component = () => {
     return (
-        <div style={{ width: 800, height: 800, position: 'relative' }}>
+        <div style={{ width: '800px', height: '800px', position: 'relative' }}>
             <DebugOverlayLayout
-                chatItemsByLineNumber={
-                    new Map([
-                        [
-                            1,
-                            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                            [new ChatItemModel({} as any, {} as any, 1, false)],
-                        ],
-                    ])
-                }
+                chatItemsByLineNumber={{
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    '1': [createChatItemModel({} as any, {} as any, 1, false)],
+                }}
                 getEleWidthBenchmark={{
                     min: '100.00',
                     max: '200.00',
