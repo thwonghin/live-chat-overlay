@@ -16,7 +16,7 @@
     "content_scripts": [
         {
             "run_at": "document_start",
-            "matches": ["https://www.youtube.com/watch*"],
+            "matches": ["https://www.youtube.com/*"],
             "exclude_globs": ["https://www.youtube.com/live_chat*"],
             "all_frames": true,
             "js": ["src/content-script.ts"]
