@@ -3,21 +3,13 @@
 import { type Accessor, createEffect, createSignal, onCleanup } from 'solid-js';
 
 export type RectResult = {
-    bottom: number;
     height: number;
-    left: number;
-    right: number;
-    top: number;
     width: number;
 };
 
 function getRect<T extends HTMLElement>(element?: T): RectResult {
     let rect: RectResult = {
-        bottom: 0,
         height: 0,
-        left: 0,
-        right: 0,
-        top: 0,
         width: 0,
     };
     if (element) rect = element.getBoundingClientRect();

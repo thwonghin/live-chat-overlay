@@ -32,7 +32,11 @@ const Slider: Component<Props> = (props) => {
     const [isDragging, setIsDragging] = createSignal(false);
 
     const updatePosition = (e: MouseEvent) => {
-        const rect = trackRect();
+        const rect = trackEle()?.getBoundingClientRect();
+        if (!rect) {
+            return;
+        }
+
         const newPosition = clamp(
             e.clientX - rect.left - handleRect().width / 2,
             0,
