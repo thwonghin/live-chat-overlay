@@ -1,4 +1,3 @@
-import { memoize } from 'lodash-es';
 import { For } from 'solid-js';
 import { render } from 'solid-js/web';
 
@@ -26,7 +25,10 @@ export async function assignChatItemRenderedWidth(
     chatItemModels: ChatItemModel[],
     renderEle: HTMLElement,
 ): Promise<void> {
-    const totalChatItemCount = chatItemModels.length;
+    const chatItemsExceptSticky = chatItemModels.filter(
+        (chatItem) => !chatItem.messageSettings.isSticky,
+    );
+
     let cleanup: () => void;
     let currentCount = 0;
 
@@ -39,7 +41,7 @@ export async function assignChatItemRenderedWidth(
                     currentCount++;
                 }
 
-                if (currentCount === totalChatItemCount) {
+                if (currentCount === chatItemsExceptSticky.length) {
                     cleanup?.();
                     resolve();
                 }
@@ -48,7 +50,7 @@ export async function assignChatItemRenderedWidth(
 
         cleanup = render(
             () => (
-                <For each={chatItemModels}>
+                <For each={chatItemsExceptSticky}>
                     {(item) => (
                         <ChatItemRendererForWidth
                             chatItem={item}

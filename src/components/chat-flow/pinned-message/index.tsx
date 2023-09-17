@@ -1,10 +1,5 @@
 import { faThumbtack, faTimes } from '@fortawesome/free-solid-svg-icons';
-import {
-    type Component,
-    createEffect,
-    createSignal,
-    onCleanup,
-} from 'solid-js';
+import { type Component, createSignal } from 'solid-js';
 
 import FontAwesomeIcon from '@/components/font-awesome';
 import type { PinnedChatItem } from '@/models/chat-item/types';
@@ -18,18 +13,9 @@ type Props = Readonly<{
     chatItem: PinnedChatItem;
     messageSettings: MessageSettings;
     onClickClose?: (event: MouseEvent) => void;
-    onRender?: (ele?: HTMLElement) => void;
 }>;
 
 const PinnedMessage: Component<Props> = (props) => {
-    const [ref, setRef] = createSignal<HTMLDivElement>();
-    const [closeIconRef, setCloseIconRef] = createSignal<SVGSVGElement>();
-    createEffect(() => {
-        setTimeout(() => {
-            props.onRender?.(ref());
-        });
-    });
-
     const [isExpended, setIsExpended] = createSignal(false);
     const handleClick = (event: MouseEvent) => {
         event.preventDefault();
@@ -43,24 +29,9 @@ const PinnedMessage: Component<Props> = (props) => {
         props.onClickClose?.(event);
     };
 
-    // Workarounds on cannot stop event propagation that stops the video
-    createEffect(() => {
-        ref()?.addEventListener('click', handleClick);
-        onCleanup(() => {
-            ref()?.removeEventListener('click', handleClick);
-        });
-    });
-
-    createEffect(() => {
-        closeIconRef()?.addEventListener('click', handleClickClose);
-        onCleanup(() => {
-            closeIconRef()?.removeEventListener('click', handleClick);
-        });
-    });
-
     return (
         <div
-            ref={setRef}
+            on:click={handleClick}
             class={styles.container}
             style={{
                 color: props.messageSettings.color,
@@ -85,7 +56,7 @@ const PinnedMessage: Component<Props> = (props) => {
                 messageParts={props.chatItem.messageParts}
             />
             <FontAwesomeIcon
-                ref={setCloseIconRef}
+                on:click={handleClickClose}
                 class={styles['close-icon']}
                 icon={faTimes}
             />

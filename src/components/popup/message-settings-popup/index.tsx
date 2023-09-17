@@ -2,7 +2,6 @@ import { createSignal, type Component, Index, Show } from 'solid-js';
 
 import MessageSettingsInputForm from '@/components/popup/message-settings-input-form';
 import MessageSettingsTypeSelect from '@/components/popup/message-settings-type-select';
-import { useNativeStopKeydownPropagation } from '@/hooks';
 import {
     messageSettingsKeys,
     type MessageSettingsKey,
@@ -19,16 +18,16 @@ type Props = Readonly<{
 const DEFAULT_MESSAGE_SETTING_KEY = 'guest' as const;
 
 const MessageSettingsPopup: Component<Props> = (props) => {
-    const [containerRef, setContainerRef] = createSignal<HTMLDivElement>();
     const [selectedMessageType, setSelectedMessageType] =
         createSignal<MessageSettingsKey>(DEFAULT_MESSAGE_SETTING_KEY);
 
-    // Workaround for cannot stop event propagation: use native event handler
-    useNativeStopKeydownPropagation(containerRef);
+    function stopPropagation(event: KeyboardEvent): void {
+        event.stopPropagation();
+    }
 
     return (
         <div
-            ref={setContainerRef}
+            on:keydown={stopPropagation}
             classList={{
                 [youtube.CLASS_POPUP]: true,
                 [styles.container]: true,

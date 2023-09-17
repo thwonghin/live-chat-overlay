@@ -1,9 +1,4 @@
-import {
-    type Component,
-    createEffect,
-    createSignal,
-    createMemo,
-} from 'solid-js';
+import { type Component, createSignal, createMemo, onMount } from 'solid-js';
 
 import type { SuperStickerItem } from '@/models/chat-item/types';
 import type { MessageSettings } from '@/models/settings';
@@ -18,11 +13,9 @@ type Props = Readonly<{
 }>;
 
 const SuperChatSticker: Component<Props> = (props) => {
-    const [ref, setRef] = createSignal<HTMLDivElement>();
-    createEffect(() => {
-        setTimeout(() => {
-            props.onRender?.(ref());
-        });
+    let ref: HTMLDivElement | undefined;
+    onMount(() => {
+        props.onRender?.(ref);
     });
 
     const imageSize = createMemo(
@@ -31,7 +24,7 @@ const SuperChatSticker: Component<Props> = (props) => {
 
     return (
         <div
-            ref={setRef}
+            ref={ref}
             class={styles.container}
             style={{
                 height: `${props.messageSettings.numberOfLines}em`,

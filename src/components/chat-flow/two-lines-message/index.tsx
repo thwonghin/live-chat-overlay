@@ -1,9 +1,4 @@
-import {
-    type Component,
-    createEffect,
-    createSignal,
-    createMemo,
-} from 'solid-js';
+import { type Component, createSignal, createMemo, onMount } from 'solid-js';
 
 import {
     isMembershipItem,
@@ -28,11 +23,9 @@ type Props = Readonly<{
 }>;
 
 const TwoLinesMessage: Component<Props> = (props) => {
-    const [ref, setRef] = createSignal<HTMLDivElement>();
-    createEffect(() => {
-        setTimeout(() => {
-            props.onRender?.(ref());
-        });
+    let ref: HTMLDivElement | undefined;
+    onMount(() => {
+        props.onRender?.(ref);
     });
 
     const actualNumberOfLines = createMemo(() =>
@@ -59,7 +52,7 @@ const TwoLinesMessage: Component<Props> = (props) => {
 
     return (
         <div
-            ref={setRef}
+            ref={ref}
             class={styles.container}
             style={{
                 height: `${actualNumberOfLines()}em`,

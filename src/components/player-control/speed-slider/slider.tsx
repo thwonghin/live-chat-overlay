@@ -5,6 +5,7 @@ import {
     createMemo,
     createSignal,
     onCleanup,
+    onMount,
 } from 'solid-js';
 
 import { useRect } from '@/hooks';
@@ -17,7 +18,7 @@ type Props = Readonly<{
 }>;
 
 const Slider: Component<Props> = (props) => {
-    const [trackEle, setTrackEle] = createSignal<HTMLElement>();
+    const [trackEle, setTrackEle] = createSignal<HTMLDivElement>();
     const trackRect = useRect(trackEle);
 
     const [handleEle, setHandleEle] = createSignal<HTMLDivElement>();
@@ -66,14 +67,14 @@ const Slider: Component<Props> = (props) => {
         props.onChange((position() / maxWidth()) * 100);
     };
 
-    createEffect(() => {
+    onMount(() => {
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseup', handleMouseUp);
+    });
 
-        onCleanup(() => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('mouseup', handleMouseUp);
-        });
+    onCleanup(() => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('mouseup', handleMouseUp);
     });
 
     createEffect(() => {
@@ -83,15 +84,10 @@ const Slider: Component<Props> = (props) => {
     });
 
     return (
-        <div
-            ref={setTrackEle}
-            class={styles.slider}
-            draggable="true"
-            style={{ 'touch-action': 'none' }}
-        >
+        <div ref={setTrackEle} class={styles.slider} onClick={handleClick}>
             <div
                 ref={setHandleEle}
-                onClick={handleClick}
+                draggable="true"
                 onMouseDown={handleMouseDown}
                 class={styles.handle}
                 style={{ left: `${position()}px` }}

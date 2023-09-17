@@ -62,7 +62,6 @@ const ChatItemRenderer: Component<Props> = (props) => {
                     chatItem={props.chatItem.value as PinnedChatItem}
                     messageSettings={props.chatItem.messageSettings}
                     onClickClose={props.onClickClose}
-                    onRender={props.onRender}
                 />
             </Show>
         </>
