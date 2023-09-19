@@ -1,5 +1,6 @@
-import { isOutdatedChatItem } from '@/stores/chat-item/helpers';
+import { describe, it, expect } from 'vitest';
 
+import { isOutdatedChatItem } from '@/stores/chat-item/helpers';
 const chatItemVideoTimestamp = 5000;
 
 type TestParameters = {
