@@ -31,7 +31,7 @@ jobs:
           pnpm audit
       - name: Lint & Test
         run: |
-          pnpm lint && pnpm test:unit --ci
+          pnpm lint && pnpm test:unit
       - name: Build
         run: |
           pnpm build
