@@ -67,4 +67,14 @@ module.exports = {
             },
         },
     },
+    overrides: [
+        {
+            files: ['tests/**'],
+            extends: ['plugin:vitest/recommended'],
+            parserOptions: {
+                project: './tests/tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+        },
+    ],
 };

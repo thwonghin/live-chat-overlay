@@ -1,3 +1,5 @@
+import { describe, it, expect } from 'vitest';
+
 import type { LiveChatPaidMessageRenderer } from '@/definitions/youtube';
 import { mapLiveChatPaidMessageItemRenderer } from '@/models/chat-item/mapper/helpers';
 

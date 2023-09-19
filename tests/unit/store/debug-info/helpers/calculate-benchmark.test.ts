@@ -1,4 +1,5 @@
 import { mapValues } from 'lodash-es';
+import { describe, it, expect } from 'vitest';
 
 import { calculateBenchmark } from '@/stores/debug-info/helpers';
 import type { Benchmark } from '@/stores/debug-info/types';
