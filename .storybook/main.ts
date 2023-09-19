@@ -14,6 +14,13 @@ const config: StorybookConfig = {
     docs: {
         autodocs: 'tag',
     },
+    viteFinal: (config) => {
+        // we don't need to build the script for storybook
+        config.plugins = config.plugins?.filter(
+            (plugin) => (plugin as any).name !== 'web-extension:manifest',
+        );
+        return config;
+    },
 };
 
 export default config;
