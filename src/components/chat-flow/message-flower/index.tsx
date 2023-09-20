@@ -5,6 +5,7 @@ import {
     type JSX,
     type JSXElement,
     onMount,
+    createEffect,
 } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
@@ -12,10 +13,11 @@ import { useStore } from '@/contexts/root-store';
 import styles from './index.module.scss';
 
 type Props = Readonly<{
+    shouldFlow: boolean;
     children: JSXElement;
     top: number;
     containerWidth: number;
-    width: number;
+    width?: number;
 }>;
 
 const MessageFlower: Component<Props> = (props) => {
@@ -31,15 +33,15 @@ const MessageFlower: Component<Props> = (props) => {
             left: `${props.containerWidth || 99999}px`,
             top: `${props.top}px`,
             transform: isFlowing()
-                ? `translate3d(-${props.containerWidth + props.width}px, 0, 0)`
+                ? `translate3d(-${props.containerWidth + props.width!}px, 0, 0)`
                 : 'translate3d(0, 0, 0)',
         };
     });
 
-    onMount(() => {
-        setTimeout(() => {
+    createEffect(() => {
+        if (props.shouldFlow) {
             setIsFlowing(true);
-        }, 10);
+        }
     });
 
     return (

@@ -21,40 +21,46 @@ import SuperChatSticker from '../super-chat-sticker';
 import TwoLinesMessage from '../two-lines-message';
 
 type Props = Readonly<{
-    onRender?: (ele?: HTMLElement) => void;
+    onRender?: [(chatItemId: string, ele: HTMLElement) => void, string];
     chatItem: ChatItemModel;
     onClickClose?: (event: MouseEvent) => void;
 }>;
 
 const ChatItemRenderer: Component<Props> = (props) => {
+    function handleRender(ele: HTMLElement) {
+        if (props.onRender) {
+            props.onRender[0](props.onRender[1], ele);
+        }
+    }
+
     return (
         <>
             <Show when={isSuperStickerItem(props.chatItem.value)}>
                 <SuperChatSticker
                     chatItem={props.chatItem.value as SuperStickerItem}
                     messageSettings={props.chatItem.messageSettings}
-                    onRender={props.onRender}
+                    onRender={handleRender}
                 />
             </Show>
             <Show when={isNormalChatItem(props.chatItem.value)}>
                 <TwoLinesMessage
                     chatItem={props.chatItem.value as NormalChatItem}
                     messageSettings={props.chatItem.messageSettings}
-                    onRender={props.onRender}
+                    onRender={handleRender}
                 />
             </Show>
             <Show when={isSuperChatItem(props.chatItem.value)}>
                 <TwoLinesMessage
                     chatItem={props.chatItem.value as SuperChatItem}
                     messageSettings={props.chatItem.messageSettings}
-                    onRender={props.onRender}
+                    onRender={handleRender}
                 />
             </Show>
             <Show when={isMembershipItem(props.chatItem.value)}>
                 <TwoLinesMessage
                     chatItem={props.chatItem.value as MembershipItem}
                     messageSettings={props.chatItem.messageSettings}
-                    onRender={props.onRender}
+                    onRender={handleRender}
                 />
             </Show>
             <Show when={isPinnedItem(props.chatItem.value)}>

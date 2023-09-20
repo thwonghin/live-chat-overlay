@@ -2,18 +2,16 @@ import {
     type Component,
     createMemo,
     For,
-    Index,
     type JSX,
     onCleanup,
     onMount,
     Show,
+    createEffect,
 } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
 import type { InitData } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
-import { CHAT_ITEM_RENDER_ID } from '@/stores/chat-item';
-import { createError } from '@/utils/logger';
 
 import ChatItemRenderer from './chat-item-renderer';
 import DebugOverlay from './debug-overlay';
@@ -57,54 +55,37 @@ const ChatFlow: Component<Props> = (props) => {
         'font-size': `${lineHeight()}px`,
     }));
 
+    function handleRenderChatItem(chatItemId: string, element: HTMLElement) {
+        store.chatItemStore.assignChatItemWidth(
+            chatItemId,
+            element.getBoundingClientRect().width,
+        );
+    }
+
     return (
         <div class={styles.container} style={containerStyle()}>
-            <div
-                class={styles['test-render-container']}
-                id={CHAT_ITEM_RENDER_ID}
-            />
             <div style={style()}>
-                <Index
-                    each={Object.keys(
-                        store.chatItemStore.chatItemsByLineNumber,
-                    )}
-                >
-                    {(lineNumber) => (
-                        <For
-                            each={
-                                store.chatItemStore.chatItemsByLineNumber[
-                                    Number(lineNumber())
-                                ]
-                            }
-                        >
-                            {(chatItem) => {
-                                if (chatItem.lineNumber === undefined) {
-                                    throw createError('Unknown line number');
-                                }
-
-                                // Two line items
-                                if (
-                                    Number(lineNumber()) !== chatItem.lineNumber
-                                ) {
-                                    return null;
-                                }
-
-                                return (
-                                    <MessageFlower
-                                        top={lineHeight() * chatItem.lineNumber}
-                                        width={chatItem.width!}
-                                        containerWidth={
-                                            store.uiStore.playerState.width
-                                        }
-                                    >
-                                        <ChatItemRenderer chatItem={chatItem} />
-                                    </MessageFlower>
-                                );
-                            }}
-                        </For>
-                    )}
-                </Index>
-                <For each={store.chatItemStore.stickyChatItems.values}>
+                <For each={store.chatItemStore.value.normalChatItems}>
+                    {(chatItem) => {
+                        return (
+                            <MessageFlower
+                                shouldFlow={Boolean(chatItem.addTimestamp)}
+                                top={lineHeight() * (chatItem.lineNumber ?? -1)}
+                                width={chatItem.width}
+                                containerWidth={store.uiStore.playerState.width}
+                            >
+                                <ChatItemRenderer
+                                    chatItem={chatItem}
+                                    onRender={[
+                                        handleRenderChatItem,
+                                        chatItem.value.id,
+                                    ]}
+                                />
+                            </MessageFlower>
+                        );
+                    }}
+                </For>
+                <For each={store.chatItemStore.value.stickyChatItems}>
                     {(chatItem) => (
                         <ChatItemRenderer
                             chatItem={chatItem}
