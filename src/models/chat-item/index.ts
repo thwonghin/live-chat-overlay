@@ -14,7 +14,6 @@ export type ChatItemModel = {
     readonly messageSettings: MessageSettings;
     readonly numberOfLines: number;
     readonly isInitData: boolean;
-    assignDisplayMeta: (lineNumber: number, addTimestamp: number) => void;
 };
 
 export const createChatItemModel = (
@@ -31,10 +30,6 @@ export const createChatItemModel = (
         width: undefined,
         addTimestamp: undefined,
         lineNumber: undefined,
-        assignDisplayMeta(lineNumber, addTimestamp) {
-            chatItemModel.lineNumber = lineNumber;
-            chatItemModel.addTimestamp = addTimestamp;
-        },
     };
 
     return chatItemModel;

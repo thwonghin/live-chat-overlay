@@ -4,7 +4,7 @@ import {
     createSignal,
     type JSX,
     type JSXElement,
-    onMount,
+    createEffect,
 } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
@@ -12,15 +12,14 @@ import { useStore } from '@/contexts/root-store';
 import styles from './index.module.scss';
 
 type Props = Readonly<{
+    shouldFlow: boolean;
     children: JSXElement;
     top: number;
     containerWidth: number;
-    width: number;
+    width?: number;
 }>;
 
 const MessageFlower: Component<Props> = (props) => {
-    const [isFlowing, setIsFlowing] = createSignal(false);
-
     const store = useStore();
 
     const style = createMemo<JSX.CSSProperties>(() => {
@@ -30,16 +29,10 @@ const MessageFlower: Component<Props> = (props) => {
             }ms`,
             left: `${props.containerWidth || 99999}px`,
             top: `${props.top}px`,
-            transform: isFlowing()
-                ? `translate3d(-${props.containerWidth + props.width}px, 0, 0)`
+            transform: props.shouldFlow
+                ? `translate3d(-${props.containerWidth + props.width!}px, 0, 0)`
                 : 'translate3d(0, 0, 0)',
         };
-    });
-
-    onMount(() => {
-        setTimeout(() => {
-            setIsFlowing(true);
-        }, 10);
     });
 
     return (

@@ -176,7 +176,7 @@ function hasSpaceInLine({
 }
 
 type GetLineNumberParameters = {
-    chatItemsByLineNumber: Record<number, ChatItemModel[]>;
+    chatItemsByLineNumber: Map<number, ChatItemModel[]>;
     elementWidth: number;
     maxLineNumber: number;
     addTimestamp: number;
@@ -211,7 +211,7 @@ export function getLineNumber({
                 .map((v, index) => index + lineNumber)
                 .every((loopLineNumber) => {
                     const lastMessageInLine = last(
-                        chatItemsByLineNumber[loopLineNumber],
+                        chatItemsByLineNumber.get(loopLineNumber),
                     );
 
                     return (

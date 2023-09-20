@@ -13,13 +13,13 @@ export type RootStore = {
     debugInfoStore: DebugInfoStore;
     uiStore: UiStore;
     chatItemStore: ChatItemStore;
-    init: (initData: InitData) => void;
     cleanup: () => void;
 };
 
 export const createRootStore = async (
     videoEle: HTMLVideoElement,
     videoPlayerEle: HTMLDivElement,
+    initData: InitData,
     attachChatEvent: (callback: (e: ChatEventDetail) => void) => () => void,
 ): Promise<RootStore> => {
     const settingsStore = await createSettingsStore(browser);
@@ -30,11 +30,8 @@ export const createRootStore = async (
         uiStore,
         settingsStore,
         debugInfoStore,
+        initData,
     );
-
-    function init(initData: InitData) {
-        chatItemStore.importInitData(initData);
-    }
 
     function cleanup() {
         settingsStore.cleanup?.();
@@ -44,7 +41,6 @@ export const createRootStore = async (
     }
 
     return {
-        init,
         cleanup,
         settingsStore,
         debugInfoStore,

@@ -1,7 +1,6 @@
 import { type Component, For, Index, Show, createMemo } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
-import type { ChatItemModel } from '@/models/chat-item';
 import type { Benchmark } from '@/stores/debug-info/types';
 
 import styles from './index.module.scss';
@@ -33,7 +32,7 @@ function renderBenchmark(benchmark: RoundedBenchmark): string[] {
 }
 
 type DebugOverlayLayoutProps = Readonly<{
-    chatItemsByLineNumber: Record<number, ChatItemModel[]>;
+    chatItemsCountByLineNumber: Record<number, number>;
     getEleWidthBenchmark: RoundedBenchmark;
     processXhrBenchmark: RoundedBenchmark;
     processChatEventBenchmark: RoundedBenchmark;
@@ -46,9 +45,6 @@ type DebugOverlayLayoutProps = Readonly<{
 export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
     props,
 ) => {
-    const chatItems = createMemo(() => {
-        return Object.entries(props.chatItemsByLineNumber);
-    });
     const getElementWidthBenchMark = createMemo(() => {
         return renderBenchmark(props.getEleWidthBenchmark);
     });
@@ -66,11 +62,11 @@ export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
         <>
             <div class={styles['debug-container']}>
                 <p class={styles['debug-text']}>Message Count By Position:</p>
-                <For each={chatItems()}>
-                    {([lineNumber, chatItems]) => (
+                <For each={Object.entries(props.chatItemsCountByLineNumber)}>
+                    {([lineNumber, count]) => (
                         <p class={styles['debug-text']}>{`${
                             Number(lineNumber) + 1
-                        }: ${(chatItems ?? []).length}`}</p>
+                        }: ${count}`}</p>
                     )}
                 </For>
             </div>
@@ -143,10 +139,20 @@ const DebugOverlay: Component = () => {
     const roundedLiveChatDelay = createMemo(() => {
         return roundBenchmark(store.debugInfoStore.debugInfo.liveChatDelay);
     });
+    const chatItemsCountByLineNumber = createMemo(() => {
+        const grouped: Record<number, number> = {};
+        store.chatItemStore.value.normalChatItems.forEach((item) => {
+            if (item.lineNumber !== undefined) {
+                grouped[item.lineNumber] = (grouped[item.lineNumber] ?? 0) + 1;
+            }
+        });
+
+        return grouped;
+    });
 
     return (
         <DebugOverlayLayout
-            chatItemsByLineNumber={store.chatItemStore.chatItemsByLineNumber}
+            chatItemsCountByLineNumber={chatItemsCountByLineNumber()}
             getEleWidthBenchmark={roundedGetEleWidthBenchmark()}
             processChatEventBenchmark={roundedProcessChatEventBenchmark()}
             processXhrBenchmark={roundedProcessXhrBenchmark()}

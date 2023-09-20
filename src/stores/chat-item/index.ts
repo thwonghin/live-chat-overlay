@@ -10,12 +10,8 @@ import type {
 import type { ChatItemModel } from '@/models/chat-item';
 import type { fetchInterceptor } from '@/services';
 import { benchmark, benchmarkAsync, youtube } from '@/utils';
-import { createError } from '@/utils/logger';
+import { createError, logInfo } from '@/utils/logger';
 
-import {
-    CHAT_ITEM_RENDER_ID,
-    assignChatItemRenderedWidth,
-} from './get-chat-item-render-container-ele';
 import {
     mapChatItemsFromReplayResponse,
     mapChatItemsFromLiveResponse,
@@ -30,15 +26,12 @@ import type { DebugInfoStore } from '../debug-info';
 import type { SettingsStore } from '../settings';
 import type { UiStore } from '../ui';
 
-export { CHAT_ITEM_RENDER_ID } from './get-chat-item-render-container-ele';
-
 type DebugInfo = Partial<{
     processXhrResponseMs: number;
     processChatEventMs: number;
     processChatEventQueueLength: number;
     outdatedChatEventCount: number;
     cleanedChatItemCount: number;
-    getEleWidthBenchmark: number;
     liveChatDelayInMs: number;
 }>;
 
@@ -46,17 +39,16 @@ const DEQUEUE_INTERVAL = 1000 / 60; // 5 FPS
 const CLEAN_INTERVAL = 1000;
 
 export type ChatItemStoreValue = {
-    chatItemsByLineNumber: Record<number, ChatItemModel[]>;
-    stickyChatItems: {
-        values: ChatItemModel[];
-    };
+    normalChatItems: ChatItemModel[];
+    stickyChatItems: ChatItemModel[];
 };
 
 export type ChatItemStore = {
+    value: ChatItemStoreValue;
     cleanup?: () => void;
     removeStickyChatItemById(id: string): void;
-    importInitData(initData: InitData): void;
-} & ChatItemStoreValue;
+    assignChatItemWidth(id: string, width: number): void;
+};
 
 export const createChatItemStore = (
     attachChatEvent: (
@@ -65,33 +57,26 @@ export const createChatItemStore = (
     uiStore: UiStore,
     settingsStore: SettingsStore,
     debugInfoStore: DebugInfoStore,
+    initData: InitData,
+    // eslint-disable-next-line max-params
 ): ChatItemStore => {
-    const chatItemStatusById = new Map<string, boolean>();
     let isInitiated = false;
-    let mode = Mode.LIVE;
+    const mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
     let tickId: number | undefined;
     let cleanDisplayedIntervalId: number | undefined;
-    const chatItemProcessQueue: ChatItemModel[] = [];
-    let chatItemRenderForWidthEle: HTMLElement | null;
+
+    let normalChatItemQueue: string[] = [];
+    const chatItemsByLineNumber = new Map<number, ChatItemModel[]>();
+    const chatItemIds = new Set<string>();
 
     const [state, setState] = createStore<ChatItemStoreValue>({
-        chatItemsByLineNumber: {},
-        stickyChatItems: {
-            values: [],
-        },
+        normalChatItems: [],
+        stickyChatItems: [],
     });
 
-    function getChatItemRenderForWidthEle() {
-        chatItemRenderForWidthEle =
-            chatItemRenderForWidthEle ??
-            document.getElementById(CHAT_ITEM_RENDER_ID);
-
-        if (!chatItemRenderForWidthEle) {
-            throw createError('Cannot find chat item render container');
-        }
-
-        return chatItemRenderForWidthEle;
-    }
+    void processChatItems(initData).then(() => {
+        isInitiated = true;
+    });
 
     function pause(): void {
         clearAllIntervals();
@@ -102,12 +87,12 @@ export const createChatItemStore = (
     }
 
     function reset(): void {
-        chatItemProcessQueue.splice(0);
-        Object.keys(state.chatItemsByLineNumber).forEach((lineNumber) => {
-            setState('chatItemsByLineNumber', Number(lineNumber), []);
-        });
-        setState('stickyChatItems', 'values', []);
-        chatItemStatusById.clear();
+        chatItemsByLineNumber.clear();
+        chatItemIds.clear();
+        normalChatItemQueue = [];
+
+        setState('normalChatItems', []);
+        setState('stickyChatItems', []);
 
         updateDebugInfo({
             processChatEventQueueLength: 0,
@@ -116,7 +101,7 @@ export const createChatItemStore = (
 
     function startDebug(): void {
         updateDebugInfo({
-            processChatEventQueueLength: chatItemProcessQueue.length,
+            processChatEventQueueLength: normalChatItemQueue.length,
         });
     }
 
@@ -129,15 +114,15 @@ export const createChatItemStore = (
     }
 
     function resetNonStickyChatItems(width?: number, height?: number): void {
-        Object.keys(state.chatItemsByLineNumber).forEach((lineNumber) => {
-            setState('chatItemsByLineNumber', Number(lineNumber), []);
-        });
-        chatItemProcessQueue.splice(0);
-        chatItemStatusById.clear();
+        setState('normalChatItems', []);
+        normalChatItemQueue = [];
+
+        chatItemIds.clear();
+        chatItemsByLineNumber.clear();
 
         // Add back sticky status
-        state.stickyChatItems.values.forEach((chatItem) => {
-            chatItemStatusById.set(chatItem.value.id, true);
+        state.stickyChatItems.forEach((chatItem) => {
+            chatItemIds.add(chatItem.value.id);
         });
     }
 
@@ -201,10 +186,6 @@ export const createChatItemStore = (
             );
         }
 
-        if (info.getEleWidthBenchmark !== undefined) {
-            debugInfoStore.addChatItemEleWidthMetric(info.getEleWidthBenchmark);
-        }
-
         if (info.cleanedChatItemCount !== undefined) {
             debugInfoStore.addCleanedChatItemCount(info.cleanedChatItemCount);
         }
@@ -235,9 +216,15 @@ export const createChatItemStore = (
             return;
         }
 
-        while (dequeueChatItem()) {
+        while (dequeueNormalChatItem()) {
             continue;
         }
+    }
+
+    function assignChatItemWidth(chatItemId: string, width: number) {
+        setState('normalChatItems', (item) => item.value.id === chatItemId, {
+            width,
+        });
     }
 
     /**
@@ -245,46 +232,51 @@ export const createChatItemStore = (
      *
      * @returns {boolean} - Whether we can continue to dequeue
      */
-    function dequeueChatItem(): boolean {
+    function dequeueNormalChatItem(): boolean {
         const currentPlayerTimeInMsc =
             uiStore.playerState.videoCurrentTimeInSecs * 1000;
 
-        const chatItem = chatItemProcessQueue[0];
+        const chatItemId = normalChatItemQueue[0];
 
-        if (!chatItem) {
+        if (!chatItemId) {
             return false;
         }
 
-        // Somehow duplicated
-        if (chatItemStatusById.get(chatItem.value.id)) {
-            chatItemProcessQueue.shift();
-            return true;
+        const chatItem = state.normalChatItems.find(
+            (item) => item.value.id === chatItemId,
+        );
+        if (!chatItem) {
+            throw createError(`Chat Item not found for id = ${chatItemId}`);
         }
 
         // Outdated, continue next dequeue
         if (isOutdatedChatItemForPlayerTime(chatItem, currentPlayerTimeInMsc)) {
+            logInfo('Outdated chat item', chatItem.value.id);
             updateDebugInfo({
                 outdatedChatEventCount: 1,
                 liveChatDelayInMs:
                     currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
             });
-            chatItemProcessQueue.shift();
+
+            chatItemIds.delete(chatItemId);
+            setState('normalChatItems', (s) =>
+                s.filter((item) => item.value.id !== chatItemId),
+            );
+
+            normalChatItemQueue.shift();
             return true;
         }
 
         const { result: isTime, runtime } = benchmark(() => {
-            return (
-                chatItem.value.chatType === 'pinned' ||
-                isTimeToDispatch({
-                    chatItem: chatItem.value,
-                    currentPlayerTimeInMsc,
-                })
-            );
+            return isTimeToDispatch({
+                chatItem: chatItem.value,
+                currentPlayerTimeInMsc,
+            });
         }, debugInfoStore.debugInfo.isDebugging);
 
         updateDebugInfo({
             processChatEventMs: runtime,
-            processChatEventQueueLength: chatItemProcessQueue.length,
+            processChatEventQueueLength: normalChatItemQueue.length,
         });
 
         if (!isTime) {
@@ -298,24 +290,16 @@ export const createChatItemStore = (
 
         const addTimestamp = Date.now();
         const { settings } = settingsStore;
-        const { messageSettings } = chatItem;
 
-        if (messageSettings.isSticky) {
-            chatItem.assignDisplayMeta(-1, addTimestamp);
-            chatItemStatusById.set(chatItem.value.id, true);
-            setState('stickyChatItems', 'values', (s) => s.concat(chatItem));
-            chatItemProcessQueue.shift();
-            return true;
-        }
-
+        // Wait until the width is determined
         if (!chatItem.width) {
-            throw createError(`Unknown width for ${chatItem.value.id}`);
+            return false;
         }
 
         const lineNumber = getLineNumber({
-            chatItemsByLineNumber: state.chatItemsByLineNumber,
-            addTimestamp,
+            chatItemsByLineNumber,
             elementWidth: chatItem.width,
+            addTimestamp,
             maxLineNumber: settings.totalNumberOfLines,
             flowTimeInSec: settings.flowTimeInSec,
             containerWidth: uiStore.playerState.width,
@@ -327,18 +311,25 @@ export const createChatItemStore = (
             return false;
         }
 
-        chatItem.assignDisplayMeta(lineNumber, addTimestamp);
-
         for (let i = lineNumber; i < lineNumber + chatItem.numberOfLines; i++) {
-            if (state.chatItemsByLineNumber[i]) {
-                setState('chatItemsByLineNumber', i, (s) => s.concat(chatItem));
+            const line = chatItemsByLineNumber.get(i);
+            if (line) {
+                line.push(chatItem);
             } else {
-                setState('chatItemsByLineNumber', i, [chatItem]);
+                chatItemsByLineNumber.set(i, [chatItem]);
             }
         }
 
-        chatItemStatusById.set(chatItem.value.id, true);
-        chatItemProcessQueue.shift();
+        setState(
+            'normalChatItems',
+            (item) => item.value.id === chatItem.value.id,
+            {
+                lineNumber,
+                addTimestamp,
+            },
+        );
+
+        normalChatItemQueue.shift();
 
         return true;
     }
@@ -374,27 +365,49 @@ export const createChatItemStore = (
         const cutoffTimestamp = currentTimestamp - flowTimeInMs;
 
         let cleanedChatItemCount = 0;
-        const finishedChatItem = (chatItem: ChatItemModel) => {
-            if (chatItem.addTimestamp === undefined) {
+
+        function shouldKeepChatItem(item: ChatItemModel) {
+            if (item.addTimestamp === undefined) {
+                // Waiting to be added, keep it
+                return true;
+            }
+
+            return item.addTimestamp >= cutoffTimestamp;
+        }
+
+        state.normalChatItems.forEach((chatItem) => {
+            if (shouldKeepChatItem(chatItem)) {
+                return;
+            }
+
+            if (chatItem.lineNumber === undefined) {
                 throw createError(
-                    `Missing AddTimestamp for ${chatItem.value.id}`,
+                    `Unknown line number for ${chatItem.value.id}`,
                 );
             }
 
-            const shouldRemove = chatItem.addTimestamp < cutoffTimestamp;
-            if (shouldRemove) {
-                chatItemStatusById.delete(chatItem.value.id);
-                cleanedChatItemCount++;
+            const line = chatItemsByLineNumber.get(chatItem.lineNumber) ?? [];
+            const index = line.findIndex(
+                (i) => i.value.id === chatItem.value.id,
+            );
+
+            if (index === -1) {
+                throw createError(
+                    `Unknown index in line number ${chatItem.lineNumber} for ${chatItem.value.id}`,
+                );
             }
 
-            return !shouldRemove;
-        };
-
-        for (const lineNumber of Object.keys(state.chatItemsByLineNumber)) {
-            setState('chatItemsByLineNumber', Number(lineNumber), (s) =>
-                s.filter(finishedChatItem),
+            line.splice(
+                line.findIndex((i) => i.value.id === chatItem.value.id),
+                1,
             );
-        }
+            chatItemIds.delete(chatItem.value.id);
+            cleanedChatItemCount++;
+        });
+
+        setState('normalChatItems', (items) =>
+            items.filter(shouldKeepChatItem),
+        );
 
         updateDebugInfo({ cleanedChatItemCount });
     }
@@ -431,40 +444,40 @@ export const createChatItemStore = (
                           isInitData,
                       );
 
-            const { runtime: getEleRuntime } = await benchmarkAsync(
-                async () =>
-                    assignChatItemRenderedWidth(
-                        chatItems,
-                        getChatItemRenderForWidthEle(),
-                    ),
-                debugInfoStore.debugInfo.isDebugging,
+            const nonDuplicatedChatItems = chatItems.filter(
+                (item) => !chatItemIds.has(item.value.id),
             );
-
-            chatItems.forEach((item) => {
-                chatItemProcessQueue.push(item);
+            nonDuplicatedChatItems.forEach((item) => {
+                chatItemIds.add(item.value.id);
             });
 
+            const stickyChatItems = nonDuplicatedChatItems.filter(
+                (chatItem) => chatItem.messageSettings.isSticky,
+            );
+            const normalChatItems = nonDuplicatedChatItems.filter(
+                (chatItem) => !chatItem.messageSettings.isSticky,
+            );
+            normalChatItemQueue.push(
+                ...normalChatItems.map((item) => item.value.id),
+            );
+
+            setState('normalChatItems', (s) => s.concat(normalChatItems));
+            setState('stickyChatItems', (s) => s.concat(stickyChatItems));
+
             updateDebugInfo({
-                getEleWidthBenchmark: getEleRuntime,
-                processChatEventQueueLength: chatItemProcessQueue.length,
+                processChatEventQueueLength: normalChatItemQueue.length,
             });
         }, debugInfoStore.debugInfo.isDebugging);
 
         updateDebugInfo({
             processXhrResponseMs: runtime,
-            processChatEventQueueLength: chatItemProcessQueue.length,
+            processChatEventQueueLength: normalChatItemQueue.length,
         });
     }
 
-    async function importInitData(initData: InitData): Promise<void> {
-        mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
-        await processChatItems(initData);
-        isInitiated = true;
-    }
-
     function removeStickyChatItemById(id: string): void {
-        chatItemStatusById.delete(id);
-        setState('stickyChatItems', 'values', (s) =>
+        chatItemIds.delete(id);
+        setState('stickyChatItems', (s) =>
             s.filter((chatItem) => chatItem.value.id !== id),
         );
     }
@@ -473,6 +486,7 @@ export const createChatItemStore = (
 
     createRoot((dispose) => {
         onMount(() => {
+            logInfo('attach chat event listener');
             const cleanup = attachChatEvent(onChatMessageEvent);
             onCleanup(() => {
                 cleanup();
@@ -525,9 +539,9 @@ export const createChatItemStore = (
     });
 
     return {
-        ...state,
+        value: state,
         cleanup,
-        importInitData,
         removeStickyChatItemById,
+        assignChatItemWidth,
     };
 };

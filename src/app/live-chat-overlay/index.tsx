@@ -1,8 +1,6 @@
 import { render } from 'solid-js/web';
-import type { Browser } from 'webextension-polyfill';
 
 import * as contexts from '@/contexts';
-import type { InitData } from '@/definitions/youtube';
 import type { RootStore } from '@/stores';
 import { youtube } from '@/utils';
 import { createError } from '@/utils/logger';
@@ -14,7 +12,6 @@ const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
 const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
 export async function injectLiveChatOverlay(
-    initData: InitData,
     store: RootStore,
 ): Promise<() => void> {
     const videoPlayerContainer = youtube.getVideoPlayerContainer();
@@ -42,10 +39,7 @@ export async function injectLiveChatOverlay(
     const cleanupRender = render(
         () => (
             <contexts.rootStore.StoreProvider store={store}>
-                <App
-                    initData={initData}
-                    playerControlContainer={playerControlContainer}
-                />
+                <App playerControlContainer={playerControlContainer} />
             </contexts.rootStore.StoreProvider>
         ),
         liveChatContainer,

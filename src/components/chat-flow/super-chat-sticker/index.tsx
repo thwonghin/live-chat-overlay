@@ -2,12 +2,13 @@ import { type Component, createSignal, createMemo, onMount } from 'solid-js';
 
 import type { SuperStickerItem } from '@/models/chat-item/types';
 import type { MessageSettings } from '@/models/settings';
+import { createError } from '@/utils/logger';
 
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
 
 type Props = Readonly<{
-    onRender?: (ele?: HTMLElement) => void;
+    onRender?: (ele: HTMLElement) => void;
     messageSettings: MessageSettings;
     chatItem: SuperStickerItem;
 }>;
@@ -15,7 +16,9 @@ type Props = Readonly<{
 const SuperChatSticker: Component<Props> = (props) => {
     let ref: HTMLDivElement | undefined;
     onMount(() => {
-        props.onRender?.(ref);
+        if (ref) {
+            props.onRender?.(ref);
+        }
     });
 
     const imageSize = createMemo(
@@ -26,6 +29,7 @@ const SuperChatSticker: Component<Props> = (props) => {
         <div
             ref={ref}
             class={styles.container}
+            data-id={props.chatItem.id}
             style={{
                 height: `${props.messageSettings.numberOfLines}em`,
                 color: props.messageSettings.color,

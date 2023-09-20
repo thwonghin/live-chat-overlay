@@ -11,6 +11,7 @@ import type {
     SuperChatItem,
 } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
+import { createError } from '@/utils/logger';
 
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
@@ -19,13 +20,15 @@ import MessagePartsRenderer from '../message-parts-renderer';
 type Props = Readonly<{
     chatItem: NormalChatItem | MembershipItem | SuperChatItem;
     messageSettings: MessageSettings;
-    onRender?: (ele?: HTMLElement) => void;
+    onRender?: (ele: HTMLElement) => void;
 }>;
 
 const TwoLinesMessage: Component<Props> = (props) => {
     let ref: HTMLDivElement | undefined;
     onMount(() => {
-        props.onRender?.(ref);
+        if (ref) {
+            props.onRender?.(ref);
+        }
     });
 
     const actualNumberOfLines = createMemo(() =>
@@ -54,6 +57,7 @@ const TwoLinesMessage: Component<Props> = (props) => {
         <div
             ref={ref}
             class={styles.container}
+            data-id={props.chatItem.id}
             style={{
                 height: `${actualNumberOfLines()}em`,
                 color: props.messageSettings.color,
