@@ -47,7 +47,6 @@ export type ChatItemStore = {
     value: ChatItemStoreValue;
     cleanup?: () => void;
     removeStickyChatItemById(id: string): void;
-    importInitData(initData: InitData): void;
     assignChatItemWidth(id: string, width: number): void;
 };
 
@@ -58,9 +57,11 @@ export const createChatItemStore = (
     uiStore: UiStore,
     settingsStore: SettingsStore,
     debugInfoStore: DebugInfoStore,
+    initData: InitData,
+    // eslint-disable-next-line max-params
 ): ChatItemStore => {
     let isInitiated = false;
-    let mode = Mode.LIVE;
+    const mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
     let tickId: number | undefined;
     let cleanDisplayedIntervalId: number | undefined;
 
@@ -71,6 +72,10 @@ export const createChatItemStore = (
     const [state, setState] = createStore<ChatItemStoreValue>({
         normalChatItems: [],
         stickyChatItems: [],
+    });
+
+    void processChatItems(initData).then(() => {
+        isInitiated = true;
     });
 
     function pause(): void {
@@ -470,12 +475,6 @@ export const createChatItemStore = (
         });
     }
 
-    async function importInitData(initData: InitData): Promise<void> {
-        mode = isReplayInitData(initData) ? Mode.REPLAY : Mode.LIVE;
-        await processChatItems(initData);
-        isInitiated = true;
-    }
-
     function removeStickyChatItemById(id: string): void {
         chatItemIds.delete(id);
         setState('stickyChatItems', (s) =>
@@ -542,7 +541,6 @@ export const createChatItemStore = (
     return {
         value: state,
         cleanup,
-        importInitData,
         removeStickyChatItemById,
         assignChatItemWidth,
     };

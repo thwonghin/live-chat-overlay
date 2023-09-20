@@ -84,10 +84,11 @@ async function init() {
     const store = await createRootStore(
         videoEle,
         videoPlayerEle,
+        initData,
         attachChatEvent,
     );
 
-    const cleanupLiveChat = await injectLiveChatOverlay(initData, store);
+    const cleanupLiveChat = await injectLiveChatOverlay(store);
 
     function cleanup(): void {
         logInfo('cleaning up in main player page');

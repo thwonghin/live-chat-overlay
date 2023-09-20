@@ -1,16 +1,6 @@
-import {
-    type Component,
-    createMemo,
-    For,
-    type JSX,
-    onCleanup,
-    onMount,
-    Show,
-    createEffect,
-} from 'solid-js';
+import { type Component, createMemo, For, type JSX, Show } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
-import type { InitData } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
 
 import ChatItemRenderer from './chat-item-renderer';
@@ -18,22 +8,8 @@ import DebugOverlay from './debug-overlay';
 import styles from './index.module.scss';
 import MessageFlower from './message-flower';
 
-type Props = Readonly<{
-    initData: InitData;
-}>;
-
-const ChatFlow: Component<Props> = (props) => {
+const ChatFlow: Component = () => {
     const store = useStore();
-
-    onMount(() => {
-        // Need to init here because it needs to determine the width
-        // that depends on SolidJS
-        store.init(props.initData);
-
-        onCleanup(() => {
-            store.cleanup();
-        });
-    });
 
     function handleRemoveMessage(chatItem: ChatItemModel) {
         store.chatItemStore.removeStickyChatItemById(chatItem.value.id);
