@@ -123,25 +123,23 @@ const DebugOverlay: Component = () => {
 
     const roundedGetEleWidthBenchmark = createMemo(() => {
         return roundBenchmark(
-            store.debugInfoStore.debugInfo.getChatItemEleWidthBenchmark,
+            store.debugInfoStore.state.getChatItemEleWidthBenchmark,
         );
     });
     const roundedProcessXhrBenchmark = createMemo(() => {
-        return roundBenchmark(
-            store.debugInfoStore.debugInfo.processXhrBenchmark,
-        );
+        return roundBenchmark(store.debugInfoStore.state.processXhrBenchmark);
     });
     const roundedProcessChatEventBenchmark = createMemo(() => {
         return roundBenchmark(
-            store.debugInfoStore.debugInfo.processChatEventBenchmark,
+            store.debugInfoStore.state.processChatEventBenchmark,
         );
     });
     const roundedLiveChatDelay = createMemo(() => {
-        return roundBenchmark(store.debugInfoStore.debugInfo.liveChatDelay);
+        return roundBenchmark(store.debugInfoStore.state.liveChatDelay);
     });
     const chatItemsCountByLineNumber = createMemo(() => {
         const grouped: Record<number, number> = {};
-        store.chatItemStore.value.normalChatItems.forEach((item) => {
+        store.chatItemStore.state.normalChatItems.forEach((item) => {
             if (item.lineNumber !== undefined) {
                 grouped[item.lineNumber] = (grouped[item.lineNumber] ?? 0) + 1;
             }
@@ -157,13 +155,13 @@ const DebugOverlay: Component = () => {
             processChatEventBenchmark={roundedProcessChatEventBenchmark()}
             processXhrBenchmark={roundedProcessXhrBenchmark()}
             processChatEventQueueLength={
-                store.debugInfoStore.debugInfo.processChatEventQueueLength
+                store.debugInfoStore.state.processChatEventQueueLength
             }
             outdatedRemovedChatEventCount={
-                store.debugInfoStore.debugInfo.outdatedRemovedChatEventCount
+                store.debugInfoStore.state.outdatedRemovedChatEventCount
             }
             cleanedChatItemCount={
-                store.debugInfoStore.debugInfo.cleanedChatItemCount
+                store.debugInfoStore.state.cleanedChatItemCount
             }
             liveChatDelay={roundedLiveChatDelay()}
         />

@@ -24,7 +24,7 @@ const ChatFlow: Component = () => {
 
     const lineHeight = createMemo(
         () =>
-            store.uiStore.playerState.height /
+            store.uiStore.state.playerState.height /
             store.settingsStore.settings.totalNumberOfLines,
     );
     const containerStyle = createMemo<JSX.CSSProperties>(() => ({
@@ -38,7 +38,7 @@ const ChatFlow: Component = () => {
     return (
         <div class={styles['container']} style={containerStyle()}>
             <div style={style()}>
-                <For each={store.chatItemStore.value.normalChatItems}>
+                <For each={store.chatItemStore.state.normalChatItems}>
                     {(chatItem) => {
                         return (
                             <MessageFlower
@@ -49,7 +49,9 @@ const ChatFlow: Component = () => {
                                         : lineHeight() * chatItem.lineNumber
                                 }
                                 width={chatItem.width}
-                                containerWidth={store.uiStore.playerState.width}
+                                containerWidth={
+                                    store.uiStore.state.playerState.width
+                                }
                             >
                                 <ChatItemRenderer
                                     chatItem={chatItem}
@@ -62,7 +64,7 @@ const ChatFlow: Component = () => {
                         );
                     }}
                 </For>
-                <For each={store.chatItemStore.value.stickyChatItems}>
+                <For each={store.chatItemStore.state.stickyChatItems}>
                     {(chatItem) => (
                         <ChatItemRenderer
                             chatItem={chatItem}
@@ -73,7 +75,7 @@ const ChatFlow: Component = () => {
                     )}
                 </For>
             </div>
-            <Show when={store.debugInfoStore.debugInfo.isDebugging}>
+            <Show when={store.debugInfoStore.state.isDebugging}>
                 <DebugOverlay />
             </Show>
         </div>

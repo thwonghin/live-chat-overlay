@@ -16,7 +16,7 @@ const PopupContainer: Component<Props> = (props) => {
         <Portal mount={store.uiStore.videoPlayerEle}>
             <MessageSettingsPopup
                 isHidden={
-                    store.uiStore.currentPopup.value !== 'message-settings'
+                    store.uiStore.state.currentPopup !== 'message-settings'
                 }
                 playerControlContainer={props.playerControlContainer}
             />

@@ -22,7 +22,7 @@ const SpeedSlider: Component = () => {
             const value = reverse(
                 (maxValue - minValue) * (percentage / 100) + minValue,
             );
-            store.settingsStore.setSettings('settings', 'flowTimeInSec', value);
+            store.settingsStore.setSettings('flowTimeInSec', value);
         },
         100,
     );

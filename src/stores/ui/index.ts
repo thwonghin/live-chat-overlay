@@ -12,19 +12,17 @@ export type PlayerStateModel = {
     get videoCurrentTimeInSecs(): number;
 };
 
-export type UiStoreValue = {
-    currentPopup: {
-        value?: PopupType;
-    };
+export type UiStoreState = {
+    currentPopup?: PopupType;
     playerState: PlayerStateModel;
 };
 
 export type UiStore = Readonly<{
+    state: UiStoreState;
     videoPlayerEle: HTMLDivElement;
     togglePopup: (type: PopupType) => void;
     cleanup?: () => void;
-}> &
-    UiStoreValue;
+}>;
 
 const VIDEO_EVENTS_TO_SUBSCRIBE: Array<keyof HTMLVideoElementEventMap> = [
     'seeking',
@@ -38,10 +36,8 @@ export const createUiStore = (
     videoPlayerEle: HTMLDivElement,
     videoEle: HTMLVideoElement,
 ): UiStore => {
-    const [state, setState] = createStore<UiStoreValue>({
-        currentPopup: {
-            value: undefined,
-        },
+    const [state, setState] = createStore<UiStoreState>({
+        currentPopup: undefined,
         playerState: {
             width: 0,
             height: 0,
@@ -55,9 +51,7 @@ export const createUiStore = (
     });
 
     function togglePopup(type: PopupType) {
-        setState('currentPopup', 'value', (s) =>
-            type === s ? undefined : type,
-        );
+        setState('currentPopup', (s) => (type === s ? undefined : type));
     }
 
     let cleanup: (() => void) | undefined;
@@ -68,9 +62,12 @@ export const createUiStore = (
                 const { width, height } =
                     videoPlayerEle.getBoundingClientRect();
 
-                setState('playerState', 'width', width);
-                setState('playerState', 'height', height);
+                setState('playerState', {
+                    width,
+                    height,
+                });
             });
+
             resizeObserver.observe(videoPlayerEle);
 
             onCleanup(() => {
@@ -98,7 +95,7 @@ export const createUiStore = (
     });
 
     return {
-        ...state,
+        state,
         cleanup,
         togglePopup,
         videoPlayerEle,

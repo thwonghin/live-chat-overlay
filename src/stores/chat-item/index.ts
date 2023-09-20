@@ -38,17 +38,17 @@ type DebugInfo = Partial<{
 const DEQUEUE_INTERVAL = 1000 / 60; // 5 FPS
 const CLEAN_INTERVAL = 1000;
 
-export type ChatItemStoreValue = {
+export type ChatItemStoreState = {
     normalChatItems: ChatItemModel[];
     stickyChatItems: ChatItemModel[];
 };
 
-export type ChatItemStore = {
-    value: ChatItemStoreValue;
+export type ChatItemStore = Readonly<{
+    state: ChatItemStoreState;
     cleanup?: () => void;
     removeStickyChatItemById(id: string): void;
     assignChatItemEle(id: string, element: HTMLElement): void;
-};
+}>;
 
 export const createChatItemStore = (
     attachChatEvent: (
@@ -69,7 +69,7 @@ export const createChatItemStore = (
     const chatItemsByLineNumber = new Map<number, ChatItemModel[]>();
     const chatItemIds = new Set<string>();
 
-    const [state, setState] = createStore<ChatItemStoreValue>({
+    const [state, setState] = createStore<ChatItemStoreState>({
         normalChatItems: [],
         stickyChatItems: [],
     });
@@ -162,13 +162,13 @@ export const createChatItemStore = (
     } {
         return {
             playerTimestampMs:
-                uiStore.playerState.videoCurrentTimeInSecs * 1000,
+                uiStore.state.playerState.videoCurrentTimeInSecs * 1000,
             currentTimestampMs: Date.now(),
         };
     }
 
     function updateDebugInfo(info: DebugInfo) {
-        if (!debugInfoStore.debugInfo.isDebugging) {
+        if (!debugInfoStore.state.isDebugging) {
             return;
         }
 
@@ -242,7 +242,7 @@ export const createChatItemStore = (
      */
     function dequeueNormalChatItem(): boolean {
         const currentPlayerTimeInMsc =
-            uiStore.playerState.videoCurrentTimeInSecs * 1000;
+            uiStore.state.playerState.videoCurrentTimeInSecs * 1000;
 
         const chatItemId = normalChatItemQueue[0];
 
@@ -280,7 +280,7 @@ export const createChatItemStore = (
                 chatItem: chatItem.value,
                 currentPlayerTimeInMsc,
             });
-        }, debugInfoStore.debugInfo.isDebugging);
+        }, debugInfoStore.state.isDebugging);
 
         updateDebugInfo({
             processChatEventMs: runtime,
@@ -297,7 +297,6 @@ export const createChatItemStore = (
         });
 
         const addTimestamp = Date.now();
-        const { settings } = settingsStore;
 
         // Wait until the width is determined
         if (!chatItem.element) {
@@ -308,9 +307,9 @@ export const createChatItemStore = (
             chatItemsByLineNumber,
             elementWidth: chatItem.element.getBoundingClientRect().width,
             addTimestamp,
-            maxLineNumber: settings.totalNumberOfLines,
-            flowTimeInSec: settings.flowTimeInSec,
-            containerWidth: uiStore.playerState.width,
+            maxLineNumber: settingsStore.settings.totalNumberOfLines,
+            flowTimeInSec: settingsStore.settings.flowTimeInSec,
+            containerWidth: uiStore.state.playerState.width,
             displayNumberOfLines: chatItem.numberOfLines,
         });
 
@@ -478,7 +477,7 @@ export const createChatItemStore = (
             updateDebugInfo({
                 processChatEventQueueLength: normalChatItemQueue.length,
             });
-        }, debugInfoStore.debugInfo.isDebugging);
+        }, debugInfoStore.state.isDebugging);
 
         updateDebugInfo({
             processXhrResponseMs: runtime,
@@ -505,41 +504,41 @@ export const createChatItemStore = (
         });
 
         createEffect((prev) => {
-            if (prev === uiStore.playerState.isPaused) {
+            if (prev === uiStore.state.playerState.isPaused) {
                 return;
             }
 
-            onPlayerPauseOrResume(uiStore.playerState.isPaused);
+            onPlayerPauseOrResume(uiStore.state.playerState.isPaused);
 
-            return uiStore.playerState.isPaused;
+            return uiStore.state.playerState.isPaused;
         });
 
         createEffect((prev) => {
             const newDimension = `${Math.round(
-                uiStore.playerState.width,
-            )},${Math.round(uiStore.playerState.height)}`;
+                uiStore.state.playerState.width,
+            )},${Math.round(uiStore.state.playerState.height)}`;
             if (prev === newDimension) {
                 return;
             }
 
             resetNonStickyChatItems(
-                uiStore.playerState.width,
-                uiStore.playerState.height,
+                uiStore.state.playerState.width,
+                uiStore.state.playerState.height,
             );
 
             return newDimension;
         });
 
         createEffect((prev) => {
-            if (prev === debugInfoStore.debugInfo.isDebugging) {
+            if (prev === debugInfoStore.state.isDebugging) {
                 return;
             }
 
-            if (debugInfoStore.debugInfo.isDebugging) {
+            if (debugInfoStore.state.isDebugging) {
                 startDebug();
             }
 
-            return debugInfoStore.debugInfo.isDebugging;
+            return debugInfoStore.state.isDebugging;
         });
 
         onCleanup(() => {
@@ -550,7 +549,7 @@ export const createChatItemStore = (
     });
 
     return {
-        value: state,
+        state,
         cleanup,
         removeStickyChatItemById,
         assignChatItemEle,

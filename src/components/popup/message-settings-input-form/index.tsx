@@ -20,13 +20,8 @@ const MessageSettingsInputForm: Component<Props> = (props) => {
         globalOpacity: number;
         messageSettings: MessageSettings;
     }) => {
+        store.settingsStore.setSettings('globalOpacity', value.globalOpacity);
         store.settingsStore.setSettings(
-            'settings',
-            'globalOpacity',
-            value.globalOpacity,
-        );
-        store.settingsStore.setSettings(
-            'settings',
             'messageSettings',
             props.messageSettingsKey(),
             { ...value.messageSettings },
