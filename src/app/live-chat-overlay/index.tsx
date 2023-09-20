@@ -28,12 +28,12 @@ export async function injectLiveChatOverlay(
 
     const liveChatContainer = document.createElement('div');
     liveChatContainer.id = OVERLAY_CONTAINER;
-    liveChatContainer.className = styles['live-chat-container'];
+    liveChatContainer.className = styles['live-chat-container']!;
     videoPlayerContainer.append(liveChatContainer);
 
     const playerControlContainer = document.createElement('span');
     playerControlContainer.id = PLAYER_CONTROL_CONTAINER;
-    playerControlContainer.className = styles['player-control-container'];
+    playerControlContainer.className = styles['player-control-container']!;
     rightControlEle.prepend(playerControlContainer);
 
     const cleanupRender = render(

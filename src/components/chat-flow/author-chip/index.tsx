@@ -31,8 +31,8 @@ const AuthorChip: Component<Props> = (props) => {
                 <Show when={isAvatarShown()}>
                     <img
                         classList={{
-                            [styles['author-avatar']]: true,
-                            [styles['author-avatar-margin-right']]:
+                            [styles['author-avatar']!]: true,
+                            [styles['author-avatar-margin-right']!]:
                                 isNameShown() || Boolean(props.donationAmount),
                         }}
                         src={props.avatars[0]?.url}
@@ -44,8 +44,8 @@ const AuthorChip: Component<Props> = (props) => {
                 <Show when={isNameShown()}>
                     <span
                         classList={{
-                            [styles['author-name']]: true,
-                            [styles['author-name-margin-right']]: Boolean(
+                            [styles['author-name']!]: true,
+                            [styles['author-name-margin-right']!]: Boolean(
                                 props.donationAmount,
                             ),
                         }}

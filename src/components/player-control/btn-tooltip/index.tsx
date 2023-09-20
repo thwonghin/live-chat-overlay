@@ -23,7 +23,7 @@ const BtnTooltip: Component<Props> = (props) => {
                 onClick={props.onClickTrigger}
                 classList={{
                     [youtube.CLASS_PLAYER_CTL_BTN]: true,
-                    [styles.trigger]: true,
+                    [styles.trigger!]: true,
                 }}
             >
                 <FontAwesomeIcon

@@ -52,7 +52,7 @@ const PinnedMessage: Component<Props> = (props) => {
             <MessagePartsRenderer
                 class={styles.message}
                 classList={{
-                    [styles['message-truncated']]: !isExpended(),
+                    [styles['message-truncated']!]: !isExpended(),
                 }}
                 messageParts={props.chatItem.messageParts}
             />

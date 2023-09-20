@@ -16,7 +16,7 @@
         "isolatedModules": true,
         "baseUrl": ".",
         "noUncheckedIndexedAccess": true,
-        "noPropertyAccessFromIndexSignature": true,
+        "noPropertyAccessFromIndexSignature": false,
         "noImplicitOverride": true,
         "strictPropertyInitialization": true,
         "jsx": "preserve",
@@ -27,7 +27,10 @@
         },
         "plugins": [
             {
-                "name": "typescript-plugin-css-modules"
+                "name": "typescript-plugin-css-modules",
+                "options": {
+                    "noUncheckedIndexedAccess": true
+                }
             }
         ]
     },
