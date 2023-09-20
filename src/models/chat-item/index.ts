@@ -7,6 +7,7 @@ import type { ChatItem } from './types';
 import type { MessageSettings, SettingsModel } from '../settings';
 
 export type ChatItemModel = {
+    element: HTMLElement | undefined;
     width: number | undefined;
     addTimestamp: number | undefined;
     lineNumber: number | undefined;
@@ -28,6 +29,7 @@ export const createChatItemModel = (
         numberOfLines,
         isInitData,
         width: undefined,
+        element: undefined,
         addTimestamp: undefined,
         lineNumber: undefined,
     };

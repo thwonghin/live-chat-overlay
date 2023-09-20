@@ -32,10 +32,7 @@ const ChatFlow: Component = () => {
     }));
 
     function handleRenderChatItem(chatItemId: string, element: HTMLElement) {
-        store.chatItemStore.assignChatItemWidth(
-            chatItemId,
-            element.getBoundingClientRect().width,
-        );
+        store.chatItemStore.assignChatItemEle(chatItemId, element);
     }
 
     return (

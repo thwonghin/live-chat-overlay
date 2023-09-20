@@ -1,4 +1,4 @@
-import { type Component, createSignal, createMemo, onMount } from 'solid-js';
+import { type Component, createMemo, onMount } from 'solid-js';
 
 import {
     isMembershipItem,
@@ -11,7 +11,6 @@ import type {
     SuperChatItem,
 } from '@/models/chat-item/types';
 import { type MessageSettings } from '@/models/settings';
-import { createError } from '@/utils/logger';
 
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
