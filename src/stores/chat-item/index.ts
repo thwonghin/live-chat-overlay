@@ -1,5 +1,5 @@
-import { batch, createEffect, createRoot, onCleanup, onMount } from 'solid-js';
-import { createStore, reconcile } from 'solid-js/store';
+import { createEffect, createRoot, onCleanup, onMount } from 'solid-js';
+import { createStore } from 'solid-js/store';
 
 import type {
     YoutubeChatResponse,
@@ -59,14 +59,14 @@ export const createChatItemStore = (
     settingsStore: SettingsStore,
     debugInfoStore: DebugInfoStore,
 ): ChatItemStore => {
-    const chatItemStatusById = new Map<string, boolean>();
     let isInitiated = false;
     let mode = Mode.LIVE;
     let tickId: number | undefined;
     let cleanDisplayedIntervalId: number | undefined;
 
-    let chatItemProcessQueue: string[] = [];
+    let normalChatItemQueue: string[] = [];
     const chatItemsByLineNumber = new Map<number, ChatItemModel[]>();
+    const chatItemIds = new Set<string>();
 
     const [state, setState] = createStore<ChatItemStoreValue>({
         normalChatItems: [],
@@ -83,8 +83,8 @@ export const createChatItemStore = (
 
     function reset(): void {
         chatItemsByLineNumber.clear();
-        chatItemStatusById.clear();
-        chatItemProcessQueue = [];
+        chatItemIds.clear();
+        normalChatItemQueue = [];
 
         setState('normalChatItems', []);
         setState('stickyChatItems', []);
@@ -96,7 +96,7 @@ export const createChatItemStore = (
 
     function startDebug(): void {
         updateDebugInfo({
-            processChatEventQueueLength: chatItemProcessQueue.length,
+            processChatEventQueueLength: normalChatItemQueue.length,
         });
     }
 
@@ -110,13 +110,14 @@ export const createChatItemStore = (
 
     function resetNonStickyChatItems(width?: number, height?: number): void {
         setState('normalChatItems', []);
-        chatItemProcessQueue = [];
-        chatItemStatusById.clear();
+        normalChatItemQueue = [];
+
+        chatItemIds.clear();
         chatItemsByLineNumber.clear();
 
         // Add back sticky status
         state.stickyChatItems.forEach((chatItem) => {
-            chatItemStatusById.set(chatItem.value.id, true);
+            chatItemIds.add(chatItem.value.id);
         });
     }
 
@@ -210,7 +211,7 @@ export const createChatItemStore = (
             return;
         }
 
-        while (dequeueChatItem()) {
+        while (dequeueNormalChatItem()) {
             continue;
         }
     }
@@ -221,40 +222,19 @@ export const createChatItemStore = (
         });
     }
 
-    function removeChatItemFromQueue() {
-        const chatItemId = chatItemProcessQueue.shift();
-        if (!chatItemId) {
-            return;
-        }
-
-        chatItemStatusById.delete(chatItemId);
-        setState('normalChatItems', (s) =>
-            s.filter((item) => item.value.id === chatItemId),
-        );
-        setState('stickyChatItems', (s) =>
-            s.filter((item) => item.value.id === chatItemId),
-        );
-    }
-
     /**
      * Dequeue a chat item from processed item queue
      *
      * @returns {boolean} - Whether we can continue to dequeue
      */
-    function dequeueChatItem(): boolean {
+    function dequeueNormalChatItem(): boolean {
         const currentPlayerTimeInMsc =
             uiStore.playerState.videoCurrentTimeInSecs * 1000;
 
-        const chatItemId = chatItemProcessQueue[0];
+        const chatItemId = normalChatItemQueue[0];
 
         if (!chatItemId) {
             return false;
-        }
-
-        // Somehow duplicated
-        if (chatItemStatusById.get(chatItemId)) {
-            chatItemProcessQueue.shift();
-            return true;
         }
 
         const chatItem = state.normalChatItems.find(
@@ -266,28 +246,32 @@ export const createChatItemStore = (
 
         // Outdated, continue next dequeue
         if (isOutdatedChatItemForPlayerTime(chatItem, currentPlayerTimeInMsc)) {
+            logInfo('Outdated chat item', chatItem.value.id);
             updateDebugInfo({
                 outdatedChatEventCount: 1,
                 liveChatDelayInMs:
                     currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
             });
-            removeChatItemFromQueue();
+
+            chatItemIds.delete(chatItemId);
+            setState('normalChatItems', (s) =>
+                s.filter((item) => item.value.id !== chatItemId),
+            );
+
+            normalChatItemQueue.shift();
             return true;
         }
 
         const { result: isTime, runtime } = benchmark(() => {
-            return (
-                chatItem.value.chatType === 'pinned' ||
-                isTimeToDispatch({
-                    chatItem: chatItem.value,
-                    currentPlayerTimeInMsc,
-                })
-            );
+            return isTimeToDispatch({
+                chatItem: chatItem.value,
+                currentPlayerTimeInMsc,
+            });
         }, debugInfoStore.debugInfo.isDebugging);
 
         updateDebugInfo({
             processChatEventMs: runtime,
-            processChatEventQueueLength: chatItemProcessQueue.length,
+            processChatEventQueueLength: normalChatItemQueue.length,
         });
 
         if (!isTime) {
@@ -340,8 +324,7 @@ export const createChatItemStore = (
             },
         );
 
-        chatItemStatusById.set(chatItem.value.id, true);
-        chatItemProcessQueue.shift();
+        normalChatItemQueue.shift();
 
         return true;
     }
@@ -378,24 +361,47 @@ export const createChatItemStore = (
 
         let cleanedChatItemCount = 0;
 
+        function shouldKeepChatItem(item: ChatItemModel) {
+            if (item.addTimestamp === undefined) {
+                // Waiting to be added, keep it
+                return true;
+            }
+
+            return item.addTimestamp >= cutoffTimestamp;
+        }
+
+        state.normalChatItems.forEach((chatItem) => {
+            if (shouldKeepChatItem(chatItem)) {
+                return;
+            }
+
+            if (chatItem.lineNumber === undefined) {
+                throw createError(
+                    `Unknown line number for ${chatItem.value.id}`,
+                );
+            }
+
+            const line = chatItemsByLineNumber.get(chatItem.lineNumber) ?? [];
+            const index = line.findIndex(
+                (i) => i.value.id === chatItem.value.id,
+            );
+
+            if (index === -1) {
+                throw createError(
+                    `Unknown index in line number ${chatItem.lineNumber} for ${chatItem.value.id}`,
+                );
+            }
+
+            line.splice(
+                line.findIndex((i) => i.value.id === chatItem.value.id),
+                1,
+            );
+            chatItemIds.delete(chatItem.value.id);
+            cleanedChatItemCount++;
+        });
+
         setState('normalChatItems', (items) =>
-            items.filter((chatItem) => {
-                if (chatItem.addTimestamp === undefined) {
-                    // Waiting to be added, keep it
-                    return true;
-                }
-
-                const shouldRemove = chatItem.addTimestamp < cutoffTimestamp;
-                if (shouldRemove) {
-                    chatItemStatusById.delete(chatItem.value.id);
-                    const line =
-                        chatItemsByLineNumber.get(chatItem.lineNumber!) ?? [];
-                    line.splice(line.indexOf(chatItem), 1);
-                    cleanedChatItemCount++;
-                }
-
-                return !shouldRemove;
-            }),
+            items.filter(shouldKeepChatItem),
         );
 
         updateDebugInfo({ cleanedChatItemCount });
@@ -433,30 +439,34 @@ export const createChatItemStore = (
                           isInitData,
                       );
 
-            const stickyChatItems = chatItems.filter(
+            const nonDuplicatedChatItems = chatItems.filter(
+                (item) => !chatItemIds.has(item.value.id),
+            );
+            nonDuplicatedChatItems.forEach((item) => {
+                chatItemIds.add(item.value.id);
+            });
+
+            const stickyChatItems = nonDuplicatedChatItems.filter(
                 (chatItem) => chatItem.messageSettings.isSticky,
             );
-            const normalChatItems = chatItems.filter(
+            const normalChatItems = nonDuplicatedChatItems.filter(
                 (chatItem) => !chatItem.messageSettings.isSticky,
             );
-            chatItemProcessQueue.push(
-                ...chatItems.map((item) => item.value.id),
+            normalChatItemQueue.push(
+                ...normalChatItems.map((item) => item.value.id),
             );
 
             setState('normalChatItems', (s) => s.concat(normalChatItems));
             setState('stickyChatItems', (s) => s.concat(stickyChatItems));
-            stickyChatItems.forEach((item) => {
-                chatItemStatusById.set(item.value.id, true);
-            });
 
             updateDebugInfo({
-                processChatEventQueueLength: chatItemProcessQueue.length,
+                processChatEventQueueLength: normalChatItemQueue.length,
             });
         }, debugInfoStore.debugInfo.isDebugging);
 
         updateDebugInfo({
             processXhrResponseMs: runtime,
-            processChatEventQueueLength: chatItemProcessQueue.length,
+            processChatEventQueueLength: normalChatItemQueue.length,
         });
     }
 
@@ -467,7 +477,7 @@ export const createChatItemStore = (
     }
 
     function removeStickyChatItemById(id: string): void {
-        chatItemStatusById.delete(id);
+        chatItemIds.delete(id);
         setState('stickyChatItems', (s) =>
             s.filter((chatItem) => chatItem.value.id !== id),
         );
@@ -477,6 +487,7 @@ export const createChatItemStore = (
 
     createRoot((dispose) => {
         onMount(() => {
+            logInfo('attach chat event listener');
             const cleanup = attachChatEvent(onChatMessageEvent);
             onCleanup(() => {
                 cleanup();

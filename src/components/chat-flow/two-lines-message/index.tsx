@@ -28,8 +28,6 @@ const TwoLinesMessage: Component<Props> = (props) => {
     onMount(() => {
         if (ref) {
             props.onRender?.(ref);
-        } else {
-            throw createError(`Missing ref for id = ${props.chatItem.id}`);
         }
     });
 
@@ -59,6 +57,7 @@ const TwoLinesMessage: Component<Props> = (props) => {
         <div
             ref={ref}
             class={styles.container}
+            data-id={props.chatItem.id}
             style={{
                 height: `${actualNumberOfLines()}em`,
                 color: props.messageSettings.color,

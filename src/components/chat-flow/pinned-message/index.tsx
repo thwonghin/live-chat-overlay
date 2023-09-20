@@ -33,6 +33,7 @@ const PinnedMessage: Component<Props> = (props) => {
         <div
             on:click={handleClick}
             class={styles.container}
+            data-id={props.chatItem.id}
             style={{
                 color: props.messageSettings.color,
                 'font-weight': props.messageSettings.weight,

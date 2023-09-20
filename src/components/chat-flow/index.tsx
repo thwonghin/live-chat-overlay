@@ -70,7 +70,11 @@ const ChatFlow: Component<Props> = (props) => {
                         return (
                             <MessageFlower
                                 shouldFlow={Boolean(chatItem.addTimestamp)}
-                                top={lineHeight() * (chatItem.lineNumber ?? -1)}
+                                top={
+                                    chatItem.lineNumber === undefined
+                                        ? 0
+                                        : lineHeight() * chatItem.lineNumber
+                                }
                                 width={chatItem.width}
                                 containerWidth={store.uiStore.playerState.width}
                             >
