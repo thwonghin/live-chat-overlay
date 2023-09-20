@@ -12,9 +12,8 @@ export const DebugOverlay: Component = () => {
     return (
         <div style={{ width: '800px', height: '800px', position: 'relative' }}>
             <DebugOverlayLayout
-                chatItemsByLineNumber={{
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                    '1': [createChatItemModel({} as any, {} as any, 1, false)],
+                chatItemsCountByLineNumber={{
+                    1: 1,
                 }}
                 getEleWidthBenchmark={{
                     min: '100.00',
