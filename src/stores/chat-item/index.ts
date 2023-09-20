@@ -47,7 +47,7 @@ export type ChatItemStore = {
     value: ChatItemStoreValue;
     cleanup?: () => void;
     removeStickyChatItemById(id: string): void;
-    assignChatItemWidth(id: string, width: number): void;
+    assignChatItemEle(id: string, element: HTMLElement): void;
 };
 
 export const createChatItemStore = (
@@ -114,16 +114,22 @@ export const createChatItemStore = (
     }
 
     function resetNonStickyChatItems(width?: number, height?: number): void {
-        setState('normalChatItems', []);
-        normalChatItemQueue = [];
-
+        setState('normalChatItems', (items) =>
+            // Only remove the items that are displaying
+            items.filter((item) => !item.addTimestamp),
+        );
         chatItemIds.clear();
-        chatItemsByLineNumber.clear();
-
-        // Add back sticky status
+        state.normalChatItems.forEach((chatItem) => {
+            chatItemIds.add(chatItem.value.id);
+        });
         state.stickyChatItems.forEach((chatItem) => {
             chatItemIds.add(chatItem.value.id);
         });
+        normalChatItemQueue = normalChatItemQueue.filter((itemId) =>
+            chatItemIds.has(itemId),
+        );
+
+        chatItemsByLineNumber.clear();
     }
 
     function createAllIntervals() {
@@ -221,9 +227,11 @@ export const createChatItemStore = (
         }
     }
 
-    function assignChatItemWidth(chatItemId: string, width: number) {
+    function assignChatItemEle(chatItemId: string, element: HTMLElement) {
+        // Storing ele instead of width here so we can get the latest width value
+        // when the player size is updated
         setState('normalChatItems', (item) => item.value.id === chatItemId, {
-            width,
+            element,
         });
     }
 
@@ -292,13 +300,13 @@ export const createChatItemStore = (
         const { settings } = settingsStore;
 
         // Wait until the width is determined
-        if (!chatItem.width) {
+        if (!chatItem.element) {
             return false;
         }
 
         const lineNumber = getLineNumber({
             chatItemsByLineNumber,
-            elementWidth: chatItem.width,
+            elementWidth: chatItem.element.getBoundingClientRect().width,
             addTimestamp,
             maxLineNumber: settings.totalNumberOfLines,
             flowTimeInSec: settings.flowTimeInSec,
@@ -326,6 +334,9 @@ export const createChatItemStore = (
             {
                 lineNumber,
                 addTimestamp,
+                // Freeze the width value for performance
+                // This item should be removed anyway when the player width is updated
+                width: chatItem.element?.getBoundingClientRect().width,
             },
         );
 
@@ -542,6 +553,6 @@ export const createChatItemStore = (
         value: state,
         cleanup,
         removeStickyChatItemById,
-        assignChatItemWidth,
+        assignChatItemEle,
     };
 };
