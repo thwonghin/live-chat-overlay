@@ -40,7 +40,7 @@ const SpeedSlider: Component = () => {
     });
 
     return (
-        <div class={styles.container} role="slider">
+        <div class={styles['container']} role="slider">
             <Slider onChange={handleChange} percentage={percentage()} />
         </div>
     );

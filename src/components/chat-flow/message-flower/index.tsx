@@ -36,7 +36,7 @@ const MessageFlower: Component<Props> = (props) => {
     });
 
     return (
-        <div class={styles.container} style={style()}>
+        <div class={styles['container']} style={style()}>
             {props.children}
         </div>
     );

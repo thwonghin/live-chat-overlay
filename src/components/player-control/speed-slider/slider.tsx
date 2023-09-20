@@ -84,12 +84,12 @@ const Slider: Component<Props> = (props) => {
     });
 
     return (
-        <div ref={setTrackEle} class={styles.slider} onClick={handleClick}>
+        <div ref={setTrackEle} class={styles['slider']} onClick={handleClick}>
             <div
                 ref={setHandleEle}
                 draggable="true"
                 onMouseDown={handleMouseDown}
-                class={styles.handle}
+                class={styles['handle']}
                 style={{ left: `${position()}px` }}
             />
         </div>

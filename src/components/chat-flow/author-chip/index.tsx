@@ -27,7 +27,7 @@ const AuthorChip: Component<Props> = (props) => {
 
     return (
         <Show when={isAvatarShown() || isNameShown() || props.donationAmount}>
-            <div class={styles.container}>
+            <div class={styles['container']}>
                 <Show when={isAvatarShown()}>
                     <img
                         classList={{

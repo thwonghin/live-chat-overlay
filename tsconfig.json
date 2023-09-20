@@ -16,7 +16,7 @@
         "isolatedModules": true,
         "baseUrl": ".",
         "noUncheckedIndexedAccess": true,
-        "noPropertyAccessFromIndexSignature": false,
+        "noPropertyAccessFromIndexSignature": true,
         "noImplicitOverride": true,
         "strictPropertyInitialization": true,
         "jsx": "preserve",
