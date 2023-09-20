@@ -1,3 +1,4 @@
+import { createEffect, createRoot } from 'solid-js';
 import { type SetStoreFunction, createStore } from 'solid-js/store';
 import { type Browser } from 'webextension-polyfill';
 
@@ -11,14 +12,11 @@ import { catchWithFallback, promiseSeries } from '@/utils';
 import { MIGRATIONS_STORAGE_KEY, SETTINGS_STORAGE_KEY } from './const';
 import { migrations } from './migrations';
 
-export type SettingsStoreValue = {
+export type SettingsStore = Readonly<{
     settings: SettingsModel;
-};
-
-export type SettingsStore = {
-    setSettings: SetStoreFunction<SettingsStoreValue>;
+    setSettings: SetStoreFunction<SettingsModel>;
     cleanup?: () => void;
-} & SettingsStoreValue;
+}>;
 
 export const createSettingsStore = async (
     browser: Browser,
@@ -66,9 +64,9 @@ export const createSettingsStore = async (
         return settings;
     }
 
-    const [state, setState] = createStore<SettingsStoreValue>({
-        settings: await loadFromStorage(),
-    });
+    const [state, setState] = createStore<SettingsModel>(
+        await loadFromStorage(),
+    );
 
     async function updateSettingsInStorage(settings: SettingsModel) {
         return browser.storage.sync.set({
@@ -76,18 +74,18 @@ export const createSettingsStore = async (
         });
     }
 
-    const wrappedSetState: typeof setState = (...args: any[]) => {
-        // Super hacky workaround to tame the typescript compiler
-        // eslint-disable-next-line prefer-spread
-        setState.apply(null, args as never);
-        void updateSettingsInStorage(state.settings);
-    };
-
     let cleanup: (() => void) | undefined;
+    createRoot((dispose) => {
+        createEffect(() => {
+            void updateSettingsInStorage(state);
+        });
+
+        cleanup = dispose;
+    });
 
     return {
-        ...state,
-        setSettings: wrappedSetState,
+        settings: state,
+        setSettings: setState,
         cleanup,
     };
 };

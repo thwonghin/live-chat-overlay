@@ -6,13 +6,10 @@ import { attachKeydownEventListener } from '@/utils';
 import { calculateBenchmark } from './helpers';
 import { type DebugInfo } from './types';
 
-export type DebugInfoStoreValues = {
-    debugInfo: DebugInfo & {
+export type DebugInfoStore = Readonly<{
+    state: DebugInfo & {
         isDebugging: boolean;
     };
-};
-
-export type DebugInfoStore = {
     cleanup?: () => void;
     resetMetrics: () => void;
     reset: () => void;
@@ -23,7 +20,7 @@ export type DebugInfoStore = {
     updateProcessChatEventQueueLength(queueLength: number): void;
     addOutdatedRemovedChatEventCount(count: number): void;
     addCleanedChatItemCount(count: number): void;
-} & DebugInfoStoreValues;
+}>;
 
 const DEFAULT_DEBUG_INFO: Readonly<DebugInfo> = Object.freeze({
     getChatItemEleWidthBenchmark: {
@@ -60,61 +57,57 @@ const DEFAULT_DEBUG_INFO: Readonly<DebugInfo> = Object.freeze({
 });
 
 export const createDebugInfoStore = (): DebugInfoStore => {
-    const [state, setState] = createStore<DebugInfoStoreValues>({
-        debugInfo: { ...DEFAULT_DEBUG_INFO, isDebugging: false },
-    });
+    const [state, setState] = createStore<
+        DebugInfo & {
+            isDebugging: boolean;
+        }
+    >({ ...DEFAULT_DEBUG_INFO, isDebugging: false });
 
     function toggleIsDebugging() {
-        setState('debugInfo', 'isDebugging', (s) => !s);
+        setState('isDebugging', (s) => !s);
     }
 
     function resetMetrics() {
-        setState('debugInfo', { ...DEFAULT_DEBUG_INFO, isDebugging: false });
+        setState({ ...DEFAULT_DEBUG_INFO, isDebugging: false });
     }
 
     function reset() {
         resetMetrics();
-        setState('debugInfo', 'isDebugging', false);
+        setState('isDebugging', false);
     }
 
     function addChatItemEleWidthMetric(value: number) {
-        setState('debugInfo', 'getChatItemEleWidthBenchmark', (s) =>
+        setState('getChatItemEleWidthBenchmark', (s) =>
             calculateBenchmark(s, value * 1000),
         );
     }
 
     function addProcessXhrMetric(value: number) {
-        setState('debugInfo', 'processXhrBenchmark', (s) =>
+        setState('processXhrBenchmark', (s) =>
             calculateBenchmark(s, value * 1000),
         );
     }
 
     function addProcessChatEventMetric(value: number) {
-        setState('debugInfo', 'processChatEventBenchmark', (s) =>
+        setState('processChatEventBenchmark', (s) =>
             calculateBenchmark(s, value * 1000),
         );
     }
 
     function addLiveChatDelay(ms: number) {
-        setState('debugInfo', 'liveChatDelay', (s) =>
-            calculateBenchmark(s, ms / 1000),
-        );
+        setState('liveChatDelay', (s) => calculateBenchmark(s, ms / 1000));
     }
 
     function updateProcessChatEventQueueLength(queueLength: number) {
-        setState('debugInfo', 'processChatEventQueueLength', queueLength);
+        setState('processChatEventQueueLength', queueLength);
     }
 
     function addOutdatedRemovedChatEventCount(count: number) {
-        setState(
-            'debugInfo',
-            'outdatedRemovedChatEventCount',
-            (s) => s + count,
-        );
+        setState('outdatedRemovedChatEventCount', (s) => s + count);
     }
 
     function addCleanedChatItemCount(count: number) {
-        setState('debugInfo', 'cleanedChatItemCount', (s) => s + count);
+        setState('cleanedChatItemCount', (s) => s + count);
     }
 
     let cleanup: (() => void) | undefined;
@@ -137,7 +130,7 @@ export const createDebugInfoStore = (): DebugInfoStore => {
     });
 
     return {
-        ...state,
+        state,
         cleanup,
         resetMetrics,
         reset,
