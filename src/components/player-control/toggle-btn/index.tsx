@@ -25,7 +25,7 @@ const ToggleBtn: Component = () => {
 
     function handleClick(event: MouseEvent) {
         event.preventDefault();
-        store.settingsStore.setSettings('settings', 'isEnabled', (s) => !s);
+        store.settingsStore.setSettings('isEnabled', (s) => !s);
     }
 
     return (
