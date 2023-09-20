@@ -36,7 +36,7 @@ const ChatFlow: Component = () => {
     }
 
     return (
-        <div class={styles.container} style={containerStyle()}>
+        <div class={styles['container']} style={containerStyle()}>
             <div style={style()}>
                 <For each={store.chatItemStore.state.normalChatItems}>
                     {(chatItem) => {

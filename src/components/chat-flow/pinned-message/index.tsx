@@ -32,7 +32,7 @@ const PinnedMessage: Component<Props> = (props) => {
     return (
         <div
             on:click={handleClick}
-            class={styles.container}
+            class={styles['container']}
             data-id={props.chatItem.id}
             style={{
                 color: props.messageSettings.color,
@@ -43,16 +43,16 @@ const PinnedMessage: Component<Props> = (props) => {
                 '-webkit-text-stroke-width': `${props.messageSettings.strokeWidth}em`,
             }}
         >
-            <FontAwesomeIcon class={styles.icon} icon={faThumbtack} />
+            <FontAwesomeIcon class={styles['icon']} icon={faThumbtack} />
             <AuthorChip
                 avatars={props.chatItem.avatars}
                 name={props.chatItem.authorName}
                 authorDisplaySetting={props.messageSettings.authorDisplay}
             />
             <MessagePartsRenderer
-                class={styles.message}
+                class={styles['message']}
                 classList={{
-                    [styles['message-truncated']]: !isExpended(),
+                    [styles['message-truncated']!]: !isExpended(),
                 }}
                 messageParts={props.chatItem.messageParts}
             />

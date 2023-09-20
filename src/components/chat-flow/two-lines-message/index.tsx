@@ -55,7 +55,7 @@ const TwoLinesMessage: Component<Props> = (props) => {
     return (
         <div
             ref={ref}
-            class={styles.container}
+            class={styles['container']}
             data-id={props.chatItem.id}
             style={{
                 height: `${actualNumberOfLines()}em`,
@@ -78,7 +78,7 @@ const TwoLinesMessage: Component<Props> = (props) => {
                 authorDisplaySetting={props.messageSettings.authorDisplay}
             />
             <MessagePartsRenderer
-                class={styles.message}
+                class={styles['message']}
                 messageParts={props.chatItem.messageParts}
             />
         </div>

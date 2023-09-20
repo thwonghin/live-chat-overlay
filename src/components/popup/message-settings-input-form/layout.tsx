@@ -35,7 +35,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
             <p class={styles['color-hint']}>
                 {browser.i18n.getMessage('colorInputHelperText')}
             </p>
-            <div class={styles.row}>
+            <div class={styles['row']}>
                 <label
                     class={styles['form-label']}
                     style={{
@@ -52,7 +52,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                     />
                 </label>
             </div>
-            <div class={styles.row}>
+            <div class={styles['row']}>
                 <label
                     class={styles['form-label']}
                     style={{
@@ -79,7 +79,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                     />
                 </label>
             </div>
-            <div class={styles.row}>
+            <div class={styles['row']}>
                 <label
                     class={styles['form-label']}
                     style={{
@@ -110,7 +110,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                     />
                 </label>
             </div>
-            <div class={styles.row}>
+            <div class={styles['row']}>
                 <label
                     class={styles['form-label']}
                     style={{
@@ -149,7 +149,11 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                 <Button.Root type="submit" class={styles['btn-primary']}>
                     {browser.i18n.getMessage('applyButtonText')}
                 </Button.Root>
-                <Button.Root type="button" class={styles.btn} onClick={reset}>
+                <Button.Root
+                    type="button"
+                    class={styles['btn']}
+                    onClick={reset}
+                >
                     {browser.i18n.getMessage('resetButtonText')}
                 </Button.Root>
             </div>

@@ -30,20 +30,20 @@ const MessageSettingsPopup: Component<Props> = (props) => {
             on:keydown={stopPropagation}
             classList={{
                 [youtube.CLASS_POPUP]: true,
-                [styles.container]: true,
-                [styles['container-hidden']]: props.isHidden,
+                [styles['container']!]: true,
+                [styles['container-hidden']!]: props.isHidden,
             }}
         >
             <div
                 classList={{
                     [youtube.CLASS_PANEL]: true,
-                    [styles['nest-container']]: true,
+                    [styles['nest-container']!]: true,
                 }}
             >
                 <div
                     classList={{
                         [youtube.CLASS_PANEL_MENU]: true,
-                        [styles.content]: true,
+                        [styles['content']!]: true,
                     }}
                 >
                     <MessageSettingsTypeSelect

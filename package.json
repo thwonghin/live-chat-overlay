@@ -18,7 +18,7 @@
         "lint:test": "pnpm lint:script tests",
         "lint:style": "stylelint './src/**/*.scss'",
         "lint:fix": "pnpm lint:src --fix && pnpm lint:style --fix && pnpm lint:test --fix",
-        "type-check": "tsc --noEmit",
+        "type-check": "tsc --noEmit && tsc -p tests --noEmit",
         "clean": "rm -rf dist .storybook/dist",
         "dev": "vite dev",
         "build": "vite build",

@@ -28,7 +28,7 @@ const SuperChatSticker: Component<Props> = (props) => {
     return (
         <div
             ref={ref}
-            class={styles.container}
+            class={styles['container']}
             data-id={props.chatItem.id}
             style={{
                 height: `${props.messageSettings.numberOfLines}em`,
@@ -46,7 +46,7 @@ const SuperChatSticker: Component<Props> = (props) => {
                 donationAmount={props.chatItem.donationAmount}
                 authorDisplaySetting={props.messageSettings.authorDisplay}
             />
-            <span class={styles.message}>
+            <span class={styles['message']}>
                 <img
                     src={props.chatItem.stickers[0]?.url}
                     style={{
