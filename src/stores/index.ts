@@ -4,7 +4,7 @@ import { type ChatEventDetail } from '@/services/fetch-interceptor';
 import { type ChatItemStore, createChatItemStore } from './chat-item';
 import { DebugInfoStore } from './debug-info';
 import { SettingsStore } from './settings';
-import { type UiStore, createUiStore } from './ui';
+import { UiStore } from './ui';
 
 export type RootStore = {
     settingsStore: SettingsStore;
@@ -23,7 +23,7 @@ export const createRootStore = (
 ): RootStore => {
     const settingsStore = new SettingsStore();
     const debugInfoStore = new DebugInfoStore();
-    const uiStore = createUiStore(videoPlayerEle, videoEle);
+    const uiStore = new UiStore(videoPlayerEle, videoEle);
     const chatItemStore = createChatItemStore(
         attachChatEvent,
         uiStore,
@@ -42,6 +42,7 @@ export const createRootStore = (
     async function init() {
         await settingsStore.init();
         debugInfoStore.init();
+        uiStore.init();
     }
 
     return {
