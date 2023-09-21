@@ -1,3 +1,4 @@
+import { last } from 'lodash-es';
 import { createEffect, createRoot, onCleanup, onMount } from 'solid-js';
 import { createStore } from 'solid-js/store';
 
@@ -453,6 +454,19 @@ export const createChatItemStore = (
                           settingsStore.settings,
                           isInitData,
                       );
+
+            const newItemTimestamp = chatItems[0]?.value.videoTimestampInMs;
+            const oldItemTimestamp = last(state.normalChatItems)?.value
+                .videoTimestampInMs;
+
+            if (
+                newItemTimestamp !== undefined &&
+                oldItemTimestamp !== undefined &&
+                newItemTimestamp < oldItemTimestamp
+            ) {
+                // New seek happened older than the current time
+                reset();
+            }
 
             const nonDuplicatedChatItems = chatItems.filter(
                 (item) => !chatItemIds.has(item.value.id),
