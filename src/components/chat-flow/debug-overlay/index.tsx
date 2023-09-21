@@ -33,7 +33,6 @@ function renderMetrics(metrics: RoundedMetrics): string[] {
 
 type DebugOverlayLayoutProps = Readonly<{
     chatItemsCountByLineNumber: Record<number, number>;
-    getEleWidthMetrics: RoundedMetrics;
     processXhrMetrics: RoundedMetrics;
     processChatEventMetrics: RoundedMetrics;
     processChatEventQueueLength: number;
@@ -45,9 +44,6 @@ type DebugOverlayLayoutProps = Readonly<{
 export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
     props,
 ) => {
-    const getElementWidthMetrics = createMemo(() => {
-        return renderMetrics(props.getEleWidthMetrics);
-    });
     const processXhrMetrics = createMemo(() => {
         return renderMetrics(props.processXhrMetrics);
     });
@@ -71,15 +67,6 @@ export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
                 </For>
             </div>
             <div class={styles['metrics-container']}>
-                <Show when={props.getEleWidthMetrics.count !== 0}>
-                    <p class={styles['debug-text']}>
-                        Get element width metrics (μs):
-                    </p>
-                    <Index each={getElementWidthMetrics()}>
-                        {(item) => <p class={styles['debug-text']}>{item()}</p>}
-                    </Index>
-                </Show>
-                <br />
                 <Show when={props.processXhrMetrics.count !== 0}>
                     <p class={styles['debug-text']}>
                         Process response metrics (μs):
@@ -121,11 +108,6 @@ export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
 const DebugOverlay: Component = () => {
     const store = useStore();
 
-    const roundedGetEleWidthMetrics = createMemo(() => {
-        return roundMetrics(
-            store.debugInfoStore.state.getChatItemEleWidthMetrics,
-        );
-    });
     const roundedProcessXhrMetrics = createMemo(() => {
         return roundMetrics(store.debugInfoStore.state.processXhrMetrics);
     });
@@ -149,7 +131,6 @@ const DebugOverlay: Component = () => {
     return (
         <DebugOverlayLayout
             chatItemsCountByLineNumber={chatItemsCountByLineNumber()}
-            getEleWidthMetrics={roundedGetEleWidthMetrics()}
             processChatEventMetrics={roundedProcessChatEventMetrics()}
             processXhrMetrics={roundedProcessXhrMetrics()}
             processChatEventQueueLength={

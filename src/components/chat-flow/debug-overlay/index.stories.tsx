@@ -13,13 +13,6 @@ export const DebugOverlay: Component = () => {
                 chatItemsCountByLineNumber={{
                     1: 1,
                 }}
-                getEleWidthMetrics={{
-                    min: '100.00',
-                    max: '200.00',
-                    avg: '150.00',
-                    count: 10,
-                    latest: '10',
-                }}
                 processChatEventMetrics={{
                     min: '100.00',
                     max: '200.00',

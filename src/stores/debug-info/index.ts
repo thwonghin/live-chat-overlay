@@ -8,13 +8,6 @@ import { updateMetrics } from '@/utils/metrics';
 import { type DebugInfo } from './types';
 
 const DEFAULT_DEBUG_INFO: Readonly<DebugInfo> = Object.freeze({
-    getChatItemEleWidthMetrics: {
-        min: Number.MAX_SAFE_INTEGER,
-        max: 0,
-        avg: 0,
-        count: 0,
-        latest: 0,
-    },
     processXhrMetrics: {
         min: Number.MAX_SAFE_INTEGER,
         max: 0,
@@ -72,12 +65,6 @@ export class DebugInfoStore {
     reset() {
         this.resetMetrics();
         this.setState('isDebugging', false);
-    }
-
-    addChatItemEleWidthBenchmark(value: number) {
-        this.setState('getChatItemEleWidthMetrics', (s) =>
-            updateMetrics(s, value * 1000),
-        );
     }
 
     addProcessXhrBenchmark(value: number) {
