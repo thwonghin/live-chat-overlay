@@ -81,12 +81,13 @@ async function init() {
         throw createError('Video Ele not found');
     }
 
-    const store = await createRootStore(
+    const store = createRootStore(
         videoEle,
         videoPlayerEle,
         initData,
         attachChatEvent,
     );
+    await store.init();
 
     const cleanupLiveChat = await injectLiveChatOverlay(store);
 

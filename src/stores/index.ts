@@ -1,11 +1,9 @@
-import browser from 'webextension-polyfill';
-
 import { type InitData } from '@/definitions/youtube';
 import { type ChatEventDetail } from '@/services/fetch-interceptor';
 
 import { type ChatItemStore, createChatItemStore } from './chat-item';
 import { type DebugInfoStore, createDebugInfoStore } from './debug-info';
-import { type SettingsStore, createSettingsStore } from './settings';
+import { SettingsStore } from './settings';
 import { type UiStore, createUiStore } from './ui';
 
 export type RootStore = {
@@ -14,15 +12,16 @@ export type RootStore = {
     uiStore: UiStore;
     chatItemStore: ChatItemStore;
     cleanup: () => void;
+    init: () => Promise<void>;
 };
 
-export const createRootStore = async (
+export const createRootStore = (
     videoEle: HTMLVideoElement,
     videoPlayerEle: HTMLDivElement,
     initData: InitData,
     attachChatEvent: (callback: (e: ChatEventDetail) => void) => () => void,
-): Promise<RootStore> => {
-    const settingsStore = await createSettingsStore(browser);
+): RootStore => {
+    const settingsStore = new SettingsStore();
     const debugInfoStore = createDebugInfoStore();
     const uiStore = createUiStore(videoPlayerEle, videoEle);
     const chatItemStore = createChatItemStore(
@@ -40,11 +39,16 @@ export const createRootStore = async (
         chatItemStore.cleanup?.();
     }
 
+    async function init() {
+        await settingsStore.init();
+    }
+
     return {
         cleanup,
         settingsStore,
         debugInfoStore,
         uiStore,
         chatItemStore,
+        init,
     };
 };
