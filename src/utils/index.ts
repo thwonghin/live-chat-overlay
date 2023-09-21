@@ -63,7 +63,7 @@ export async function benchmarkAsync<T>(
 
     return {
         result,
-        runtime: isDebugging ? performance.now() - beforeTime : 0,
+        runtime: isDebugging ? performance.now() - beforeTime : undefined,
     };
 }
 
