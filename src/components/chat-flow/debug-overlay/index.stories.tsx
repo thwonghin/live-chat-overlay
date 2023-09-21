@@ -1,7 +1,5 @@
 import { type Component } from 'solid-js';
 
-import { createChatItemModel } from '@/models/chat-item';
-
 import { DebugOverlayLayout } from '.';
 
 const settings = { title: 'DebugOverlay' };
@@ -15,21 +13,21 @@ export const DebugOverlay: Component = () => {
                 chatItemsCountByLineNumber={{
                     1: 1,
                 }}
-                getEleWidthBenchmark={{
+                getEleWidthMetrics={{
                     min: '100.00',
                     max: '200.00',
                     avg: '150.00',
                     count: 10,
                     latest: '10',
                 }}
-                processChatEventBenchmark={{
+                processChatEventMetrics={{
                     min: '100.00',
                     max: '200.00',
                     avg: '150.00',
                     count: 10,
                     latest: '10',
                 }}
-                processXhrBenchmark={{
+                processXhrMetrics={{
                     min: '100.00',
                     max: '200.00',
                     avg: '150.00',

@@ -1,8 +1,7 @@
 import { mapValues } from 'lodash-es';
 import { describe, it, expect } from 'vitest';
 
-import { calculateBenchmark } from '@/stores/debug-info/helpers';
-import type { Benchmark } from '@/stores/debug-info/types';
+import { updateMetrics, type Metrics } from '@/utils/metrics';
 
 type TestParameters = {
     condition: string;
@@ -17,7 +16,7 @@ type TestParameters = {
     value: number;
 };
 
-describe('calculateBenchmark', () => {
+describe('calculateMetrics', () => {
     describe.each`
         condition                                      | min                        | max    | avg   | count | value  | nextMin | nextMax | nextAvg  | nextCount
         ${'when it is from initial state'}             | ${Number.MAX_SAFE_INTEGER} | ${0}   | ${0}  | ${0}  | ${10}  | ${10}   | ${10}   | ${10}    | ${1}
@@ -26,7 +25,7 @@ describe('calculateBenchmark', () => {
         ${'when it consume value more than max'}       | ${12}                      | ${100} | ${50} | ${20} | ${200} | ${12}   | ${200}  | ${57.14} | ${21}
     `('$condition', (parameters: TestParameters) => {
         it('should return correct result', () => {
-            const nowBenchmark: Benchmark = {
+            const nowMetrics: Metrics = {
                 min: parameters.min,
                 max: parameters.max,
                 avg: parameters.avg,
@@ -34,7 +33,7 @@ describe('calculateBenchmark', () => {
                 latest: parameters.value,
             };
 
-            const expectedResult: Benchmark = {
+            const expectedResult: Metrics = {
                 min: parameters.nextMin,
                 max: parameters.nextMax,
                 avg: parameters.nextAvg,
@@ -42,7 +41,7 @@ describe('calculateBenchmark', () => {
                 latest: parameters.value,
             };
 
-            const result = calculateBenchmark(nowBenchmark, parameters.value);
+            const result = updateMetrics(nowMetrics, parameters.value);
 
             expect(mapValues(result, (value) => value.toFixed(2))).toEqual(
                 mapValues(expectedResult, (value) => value.toFixed(2)),

@@ -34,39 +34,6 @@ export function injectScript(scriptSrc: string) {
     document.head.appendChild(scriptTag);
 }
 
-type BenchmarkResult<T> = {
-    result: T;
-    runtime?: number;
-};
-
-export function benchmark<T>(
-    callback: () => T,
-    isDebugging: boolean,
-): BenchmarkResult<T> {
-    const beforeTime = isDebugging ? performance.now() : 0;
-
-    const result = callback();
-
-    return {
-        result,
-        runtime: isDebugging ? performance.now() - beforeTime : undefined,
-    };
-}
-
-export async function benchmarkAsync<T>(
-    callback: () => Promise<T>,
-    isDebugging: boolean,
-): Promise<BenchmarkResult<T>> {
-    const beforeTime = isDebugging ? performance.now() : 0;
-
-    const result = await callback();
-
-    return {
-        result,
-        runtime: isDebugging ? performance.now() - beforeTime : undefined,
-    };
-}
-
 export async function catchWithFallback<T>(
     func: () => Promise<T>,
     fallbackValue: T,
