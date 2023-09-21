@@ -460,6 +460,7 @@ export const createChatItemStore = (
                 .videoTimestampInMs;
 
             if (
+                mode === Mode.REPLAY &&
                 newItemTimestamp !== undefined &&
                 oldItemTimestamp !== undefined &&
                 newItemTimestamp < oldItemTimestamp
