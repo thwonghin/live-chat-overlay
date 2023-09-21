@@ -28,13 +28,14 @@ const VIDEO_EVENTS_TO_SUBSCRIBE: Array<keyof HTMLVideoElementEventMap> = [
 
 export class UiStore {
     state: UiStoreState;
-    videoPlayerEle: HTMLDivElement;
     cleanup = noop;
 
-    private readonly videoEle: HTMLVideoElement;
     private readonly setState: SetStoreFunction<UiStoreState>;
 
-    constructor(videoPlayerEle: HTMLDivElement, videoEle: HTMLVideoElement) {
+    constructor(
+        public videoPlayerEle: HTMLDivElement,
+        private readonly videoEle: HTMLVideoElement,
+    ) {
         const [state, setState] = createStore<UiStoreState>({
             currentPopup: undefined,
             playerState: {
@@ -48,12 +49,10 @@ export class UiStore {
                 },
             },
         });
-        this.videoPlayerEle = videoPlayerEle;
 
         // eslint-disable-next-line solid/reactivity
         this.state = state;
         this.setState = setState;
-        this.videoEle = videoEle;
     }
 
     init() {
