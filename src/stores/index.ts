@@ -2,7 +2,7 @@ import { type InitData } from '@/definitions/youtube';
 import { type ChatEventDetail } from '@/services/fetch-interceptor';
 
 import { type ChatItemStore, createChatItemStore } from './chat-item';
-import { type DebugInfoStore, createDebugInfoStore } from './debug-info';
+import { DebugInfoStore } from './debug-info';
 import { SettingsStore } from './settings';
 import { type UiStore, createUiStore } from './ui';
 
@@ -22,7 +22,7 @@ export const createRootStore = (
     attachChatEvent: (callback: (e: ChatEventDetail) => void) => () => void,
 ): RootStore => {
     const settingsStore = new SettingsStore();
-    const debugInfoStore = createDebugInfoStore();
+    const debugInfoStore = new DebugInfoStore();
     const uiStore = createUiStore(videoPlayerEle, videoEle);
     const chatItemStore = createChatItemStore(
         attachChatEvent,
@@ -33,14 +33,15 @@ export const createRootStore = (
     );
 
     function cleanup() {
-        settingsStore.cleanup?.();
-        debugInfoStore.cleanup?.();
+        settingsStore.cleanup();
+        debugInfoStore.cleanup();
         uiStore.cleanup?.();
         chatItemStore.cleanup?.();
     }
 
     async function init() {
         await settingsStore.init();
+        debugInfoStore.init();
     }
 
     return {

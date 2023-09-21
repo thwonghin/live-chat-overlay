@@ -1,3 +1,4 @@
+import { noop } from 'lodash-es';
 import { createEffect, createRoot } from 'solid-js';
 import { type SetStoreFunction, createStore } from 'solid-js/store';
 import browser from 'webextension-polyfill';
@@ -56,33 +57,36 @@ async function loadFromStorage() {
 export class SettingsStore {
     settings: SettingsModel;
     setSettings: SetStoreFunction<SettingsModel>;
-    cleanup?: () => void;
+    cleanup = noop;
 
     constructor() {
         const [state, setState] = createStore<SettingsModel>(
             createSettingsModel(),
         );
+        // eslint-disable-next-line solid/reactivity
         this.settings = state;
         this.setSettings = setState;
     }
 
     async init() {
         await runMigrations();
-
         this.setSettings(await loadFromStorage());
+        this.attachReactiveContext();
+    }
 
+    async updateSettingsInStorage(settings: SettingsModel) {
+        return browser.storage.sync.set({
+            [SETTINGS_STORAGE_KEY]: settings,
+        });
+    }
+
+    private attachReactiveContext() {
         createRoot((dispose) => {
             createEffect(() => {
                 void this.updateSettingsInStorage(this.settings);
             });
 
             this.cleanup = dispose;
-        });
-    }
-
-    async updateSettingsInStorage(settings: SettingsModel) {
-        return browser.storage.sync.set({
-            [SETTINGS_STORAGE_KEY]: settings,
         });
     }
 }

@@ -1,26 +1,11 @@
+import { noop } from 'lodash-es';
 import { createRoot, onCleanup, onMount } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { type SetStoreFunction, createStore } from 'solid-js/store';
 
 import { attachKeydownEventListener } from '@/utils';
 
 import { calculateBenchmark } from './helpers';
 import { type DebugInfo } from './types';
-
-export type DebugInfoStore = Readonly<{
-    state: DebugInfo & {
-        isDebugging: boolean;
-    };
-    cleanup?: () => void;
-    resetMetrics: () => void;
-    reset: () => void;
-    addChatItemEleWidthMetric(value: number): void;
-    addProcessXhrMetric(value: number): void;
-    addProcessChatEventMetric(value: number): void;
-    addLiveChatDelay(ms: number): void;
-    updateProcessChatEventQueueLength(queueLength: number): void;
-    addOutdatedRemovedChatEventCount(count: number): void;
-    addCleanedChatItemCount(count: number): void;
-}>;
 
 const DEFAULT_DEBUG_INFO: Readonly<DebugInfo> = Object.freeze({
     getChatItemEleWidthBenchmark: {
@@ -56,90 +41,93 @@ const DEFAULT_DEBUG_INFO: Readonly<DebugInfo> = Object.freeze({
     },
 });
 
-export const createDebugInfoStore = (): DebugInfoStore => {
-    const [state, setState] = createStore<
-        DebugInfo & {
-            isDebugging: boolean;
-        }
-    >({ ...DEFAULT_DEBUG_INFO, isDebugging: false });
-
-    function toggleIsDebugging() {
-        setState('isDebugging', (s) => !s);
-    }
-
-    function resetMetrics() {
-        setState({ ...DEFAULT_DEBUG_INFO, isDebugging: false });
-    }
-
-    function reset() {
-        resetMetrics();
-        setState('isDebugging', false);
-    }
-
-    function addChatItemEleWidthMetric(value: number) {
-        setState('getChatItemEleWidthBenchmark', (s) =>
-            calculateBenchmark(s, value * 1000),
-        );
-    }
-
-    function addProcessXhrMetric(value: number) {
-        setState('processXhrBenchmark', (s) =>
-            calculateBenchmark(s, value * 1000),
-        );
-    }
-
-    function addProcessChatEventMetric(value: number) {
-        setState('processChatEventBenchmark', (s) =>
-            calculateBenchmark(s, value * 1000),
-        );
-    }
-
-    function addLiveChatDelay(ms: number) {
-        setState('liveChatDelay', (s) => calculateBenchmark(s, ms / 1000));
-    }
-
-    function updateProcessChatEventQueueLength(queueLength: number) {
-        setState('processChatEventQueueLength', queueLength);
-    }
-
-    function addOutdatedRemovedChatEventCount(count: number) {
-        setState('outdatedRemovedChatEventCount', (s) => s + count);
-    }
-
-    function addCleanedChatItemCount(count: number) {
-        setState('cleanedChatItemCount', (s) => s + count);
-    }
-
-    let cleanup: (() => void) | undefined;
-
-    createRoot((dispose) => {
-        onMount(() => {
-            const disposeKeyboardListener = attachKeydownEventListener({
-                withAlt: true,
-                withCtrl: true,
-                key: 'd',
-                domToAttach: document.body,
-                callback: toggleIsDebugging,
-            });
-            onCleanup(() => {
-                disposeKeyboardListener();
-            });
-        });
-
-        cleanup = dispose;
-    });
-
-    return {
-        state,
-        cleanup,
-        resetMetrics,
-        reset,
-        addChatItemEleWidthMetric,
-        addProcessXhrMetric,
-        addProcessChatEventMetric,
-        addLiveChatDelay,
-        updateProcessChatEventQueueLength,
-        addOutdatedRemovedChatEventCount,
-        addCleanedChatItemCount,
-    };
+type DebugInfoStoreState = DebugInfo & {
+    isDebugging: boolean;
 };
+
+export class DebugInfoStore {
+    cleanup = noop;
+    state: DebugInfoStoreState;
+    private readonly setState: SetStoreFunction<DebugInfoStoreState>;
+
+    constructor() {
+        const [state, setState] = createStore<
+            DebugInfo & {
+                isDebugging: boolean;
+            }
+        >({ ...DEFAULT_DEBUG_INFO, isDebugging: false });
+        // eslint-disable-next-line solid/reactivity
+        this.state = state;
+        this.setState = setState;
+    }
+
+    init() {
+        this.attachReactiveContext();
+    }
+
+    resetMetrics() {
+        this.setState({ ...DEFAULT_DEBUG_INFO, isDebugging: false });
+    }
+
+    reset() {
+        this.resetMetrics();
+        this.setState('isDebugging', false);
+    }
+
+    addChatItemEleWidthMetric(value: number) {
+        this.setState('getChatItemEleWidthBenchmark', (s) =>
+            calculateBenchmark(s, value * 1000),
+        );
+    }
+
+    addProcessXhrMetric(value: number) {
+        this.setState('processXhrBenchmark', (s) =>
+            calculateBenchmark(s, value * 1000),
+        );
+    }
+
+    addProcessChatEventMetric(value: number) {
+        this.setState('processChatEventBenchmark', (s) =>
+            calculateBenchmark(s, value * 1000),
+        );
+    }
+
+    addLiveChatDelay(ms: number) {
+        this.setState('liveChatDelay', (s) => calculateBenchmark(s, ms / 1000));
+    }
+
+    updateProcessChatEventQueueLength(queueLength: number) {
+        this.setState('processChatEventQueueLength', queueLength);
+    }
+
+    addOutdatedRemovedChatEventCount(count: number) {
+        this.setState('outdatedRemovedChatEventCount', (s) => s + count);
+    }
+
+    addCleanedChatItemCount(count: number) {
+        this.setState('cleanedChatItemCount', (s) => s + count);
+    }
+
+    private readonly toggleIsDebugging = () => {
+        this.setState('isDebugging', (s) => !s);
+    };
+
+    private attachReactiveContext() {
+        createRoot((dispose) => {
+            onMount(() => {
+                const disposeKeyboardListener = attachKeydownEventListener({
+                    withAlt: true,
+                    withCtrl: true,
+                    key: 'd',
+                    domToAttach: document.body,
+                    callback: this.toggleIsDebugging,
+                });
+                onCleanup(() => {
+                    disposeKeyboardListener();
+                });
+            });
+
+            this.cleanup = dispose;
+        });
+    }
+}
