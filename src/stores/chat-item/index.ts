@@ -10,8 +10,9 @@ import type {
 } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { fetchInterceptor } from '@/services';
-import { benchmark, benchmarkAsync, youtube } from '@/utils';
+import { youtube } from '@/utils';
 import { createError, logInfo } from '@/utils/logger';
+import { benchmarkRuntime, benchmarkRuntimeAsync } from '@/utils/metrics';
 
 import {
     mapChatItemsFromReplayResponse,
@@ -186,13 +187,15 @@ export class ChatItemStore {
         }
 
         if (info.processChatEventMs !== undefined) {
-            this.debugInfoStore.addProcessChatEventMetric(
+            this.debugInfoStore.addProcessChatEventBenchmark(
                 info.processChatEventMs,
             );
         }
 
         if (info.processXhrResponseMs !== undefined) {
-            this.debugInfoStore.addProcessXhrMetric(info.processXhrResponseMs);
+            this.debugInfoStore.addProcessXhrBenchmark(
+                info.processXhrResponseMs,
+            );
         }
 
         if (info.processChatEventQueueLength !== undefined) {
@@ -311,7 +314,7 @@ export class ChatItemStore {
                 currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
         });
 
-        const isInserted = benchmark((): boolean => {
+        const isInserted = benchmarkRuntime((): boolean => {
             const addTimestamp = Date.now();
             const lineNumber = getLineNumber({
                 chatItemsByLineNumber: this.chatItemsByLineNumber,
@@ -460,7 +463,7 @@ export class ChatItemStore {
             this.reset();
         }
 
-        const { runtime } = await benchmarkAsync(async () => {
+        const { runtime } = await benchmarkRuntimeAsync(async () => {
             const timeInfo = this.getCurrentTimeInfo();
             const chatItems =
                 this.mode === Mode.REPLAY

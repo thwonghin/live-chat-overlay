@@ -1,17 +1,10 @@
-export type Benchmark = {
-    min: number;
-    max: number;
-    avg: number;
-    count: number;
-    latest: number;
-};
+import { type Metrics } from '@/utils/metrics';
 
 export type DebugInfo = {
-    getChatItemEleWidthBenchmark: Benchmark;
-    processXhrBenchmark: Benchmark;
-    processChatEventBenchmark: Benchmark;
+    processXhrMetrics: Metrics;
+    processChatEventMetrics: Metrics;
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
     cleanedChatItemCount: number;
-    liveChatDelay: Benchmark;
+    liveChatDelay: Metrics;
 };
