@@ -1,5 +1,6 @@
+import { noop } from 'lodash-es';
 import { createRoot, onCleanup, onMount } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { type SetStoreFunction, createStore } from 'solid-js/store';
 
 import type { PopupType } from './types';
 
@@ -17,13 +18,6 @@ export type UiStoreState = {
     playerState: PlayerStateModel;
 };
 
-export type UiStore = Readonly<{
-    state: UiStoreState;
-    videoPlayerEle: HTMLDivElement;
-    togglePopup: (type: PopupType) => void;
-    cleanup?: () => void;
-}>;
-
 const VIDEO_EVENTS_TO_SUBSCRIBE: Array<keyof HTMLVideoElementEventMap> = [
     'seeking',
     'pause',
@@ -32,72 +26,86 @@ const VIDEO_EVENTS_TO_SUBSCRIBE: Array<keyof HTMLVideoElementEventMap> = [
     'seeked',
 ];
 
-export const createUiStore = (
-    videoPlayerEle: HTMLDivElement,
-    videoEle: HTMLVideoElement,
-): UiStore => {
-    const [state, setState] = createStore<UiStoreState>({
-        currentPopup: undefined,
-        playerState: {
-            width: 0,
-            height: 0,
-            isPaused: false,
-            videoPlayerEle,
-            videoEle,
-            get videoCurrentTimeInSecs() {
-                return videoEle.currentTime;
-            },
-        },
-    });
+export class UiStore {
+    state: UiStoreState;
+    cleanup = noop;
 
-    function togglePopup(type: PopupType) {
-        setState('currentPopup', (s) => (type === s ? undefined : type));
+    private readonly setState: SetStoreFunction<UiStoreState>;
+
+    constructor(
+        public videoPlayerEle: HTMLDivElement,
+        private readonly videoEle: HTMLVideoElement,
+    ) {
+        const [state, setState] = createStore<UiStoreState>({
+            currentPopup: undefined,
+            playerState: {
+                width: 0,
+                height: 0,
+                isPaused: false,
+                videoPlayerEle,
+                videoEle,
+                get videoCurrentTimeInSecs() {
+                    return videoEle.currentTime;
+                },
+            },
+        });
+
+        // eslint-disable-next-line solid/reactivity
+        this.state = state;
+        this.setState = setState;
     }
 
-    let cleanup: (() => void) | undefined;
+    init() {
+        this.attachReactiveContext();
+    }
 
-    createRoot((dispose) => {
-        onMount(() => {
-            const resizeObserver = new ResizeObserver(() => {
-                const { width, height } =
-                    videoPlayerEle.getBoundingClientRect();
+    togglePopup(type: PopupType) {
+        this.setState('currentPopup', (s) => (type === s ? undefined : type));
+    }
 
-                setState('playerState', {
-                    width,
-                    height,
-                });
-            });
-
-            resizeObserver.observe(videoPlayerEle);
-
-            onCleanup(() => {
-                resizeObserver.disconnect();
-            });
-        });
-
-        onMount(() => {
-            function onVideoStateChange() {
-                setState('playerState', 'isPaused', videoEle.paused);
-            }
-
-            VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
-                videoEle.addEventListener(event, onVideoStateChange);
-            });
-
-            onCleanup(() => {
-                VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
-                    videoEle.removeEventListener(event, onVideoStateChange);
-                });
-            });
-        });
-
-        cleanup = dispose;
-    });
-
-    return {
-        state,
-        cleanup,
-        togglePopup,
-        videoPlayerEle,
+    private readonly handleVideoStateChange = () => {
+        this.setState('playerState', 'isPaused', this.videoEle.paused);
     };
-};
+
+    private readonly handleResize = () => {
+        const { width, height } = this.videoPlayerEle.getBoundingClientRect();
+
+        this.setState('playerState', {
+            width,
+            height,
+        });
+    };
+
+    private attachReactiveContext() {
+        createRoot((dispose) => {
+            onMount(() => {
+                const resizeObserver = new ResizeObserver(this.handleResize);
+                resizeObserver.observe(this.videoPlayerEle);
+
+                onCleanup(() => {
+                    resizeObserver.disconnect();
+                });
+            });
+
+            onMount(() => {
+                VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
+                    this.videoEle.addEventListener(
+                        event,
+                        this.handleVideoStateChange,
+                    );
+                });
+
+                onCleanup(() => {
+                    VIDEO_EVENTS_TO_SUBSCRIBE.forEach((event) => {
+                        this.videoEle.removeEventListener(
+                            event,
+                            this.handleVideoStateChange,
+                        );
+                    });
+                });
+            });
+
+            this.cleanup = dispose;
+        });
+    }
+}

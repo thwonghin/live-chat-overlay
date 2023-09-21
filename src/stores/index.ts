@@ -1,12 +1,10 @@
-import browser from 'webextension-polyfill';
-
 import { type InitData } from '@/definitions/youtube';
 import { type ChatEventDetail } from '@/services/fetch-interceptor';
 
-import { type ChatItemStore, createChatItemStore } from './chat-item';
-import { type DebugInfoStore, createDebugInfoStore } from './debug-info';
-import { type SettingsStore, createSettingsStore } from './settings';
-import { type UiStore, createUiStore } from './ui';
+import { ChatItemStore } from './chat-item';
+import { DebugInfoStore } from './debug-info';
+import { SettingsStore } from './settings';
+import { UiStore } from './ui';
 
 export type RootStore = {
     settingsStore: SettingsStore;
@@ -14,37 +12,48 @@ export type RootStore = {
     uiStore: UiStore;
     chatItemStore: ChatItemStore;
     cleanup: () => void;
+    init: (
+        initData: InitData,
+        attachChatEvent: (callback: (e: ChatEventDetail) => void) => () => void,
+    ) => Promise<void>;
 };
 
-export const createRootStore = async (
+export const createRootStore = (
     videoEle: HTMLVideoElement,
     videoPlayerEle: HTMLDivElement,
-    initData: InitData,
-    attachChatEvent: (callback: (e: ChatEventDetail) => void) => () => void,
-): Promise<RootStore> => {
-    const settingsStore = await createSettingsStore(browser);
-    const debugInfoStore = createDebugInfoStore();
-    const uiStore = createUiStore(videoPlayerEle, videoEle);
-    const chatItemStore = createChatItemStore(
-        attachChatEvent,
+): RootStore => {
+    const settingsStore = new SettingsStore();
+    const debugInfoStore = new DebugInfoStore();
+    const uiStore = new UiStore(videoPlayerEle, videoEle);
+    const chatItemStore = new ChatItemStore(
         uiStore,
         settingsStore,
         debugInfoStore,
-        initData,
     );
 
     function cleanup() {
-        settingsStore.cleanup?.();
-        debugInfoStore.cleanup?.();
-        uiStore.cleanup?.();
+        settingsStore.cleanup();
+        debugInfoStore.cleanup();
+        uiStore.cleanup();
         chatItemStore.cleanup?.();
     }
 
+    async function init(
+        initData: InitData,
+        attachChatEvent: (callback: (e: ChatEventDetail) => void) => () => void,
+    ) {
+        await settingsStore.init();
+        debugInfoStore.init();
+        uiStore.init();
+        await chatItemStore.init(attachChatEvent, initData);
+    }
+
     return {
-        cleanup,
         settingsStore,
         debugInfoStore,
         uiStore,
         chatItemStore,
+        init,
+        cleanup,
     };
 };
