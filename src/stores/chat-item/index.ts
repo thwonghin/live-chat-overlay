@@ -276,7 +276,6 @@ export class ChatItemStore {
                 currentPlayerTimeInMsc,
             )
         ) {
-            logInfo('Outdated chat item', chatItem.value.id);
             this.updateDebugInfo({
                 outdatedChatEventCount: 1,
                 liveChatDelayInMs:
