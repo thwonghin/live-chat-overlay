@@ -27,11 +27,17 @@ const Slider: Component<Props> = (props) => {
         return trackRect().width - handleRect().width;
     };
 
+    const hasInitiated = () => trackRect().width > 0 && handleRect().width > 0;
+
     const [position, setPosition] = createSignal(0);
 
     const [isDragging, setIsDragging] = createSignal(false);
 
     const updatePosition = (e: MouseEvent) => {
+        if (!hasInitiated()) {
+            return;
+        }
+
         const rect = trackEle()?.getBoundingClientRect();
         if (!rect) {
             return;
@@ -51,16 +57,27 @@ const Slider: Component<Props> = (props) => {
     };
 
     const handleMouseUp = () => {
+        if (!hasInitiated()) {
+            return;
+        }
+
         props.onChange((position() / maxWidth()) * 100);
         setIsDragging(false);
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-        if (!isDragging() || !handleEle()) return;
+        if (!isDragging() || !hasInitiated()) {
+            return;
+        }
+
         updatePosition(e);
     };
 
     const handleClick = (e: MouseEvent) => {
+        if (!hasInitiated()) {
+            return;
+        }
+
         updatePosition(e);
         e.preventDefault();
         props.onChange((position() / maxWidth()) * 100);
@@ -77,13 +94,26 @@ const Slider: Component<Props> = (props) => {
     });
 
     createEffect(() => {
-        if (!isDragging()) {
-            setPosition((maxWidth() * props.percentage) / 100);
+        if (!hasInitiated() || isDragging()) {
+            return;
         }
+
+        setPosition((maxWidth() * props.percentage) / 100);
     });
 
     return (
-        <div ref={setTrackEle} class={styles['slider']} onClick={handleClick}>
+        <div
+            ref={setTrackEle}
+            class={styles['slider']}
+            onClick={handleClick}
+            style={
+                hasInitiated()
+                    ? undefined
+                    : {
+                          visibility: 'hidden',
+                      }
+            }
+        >
             <div
                 ref={setHandleEle}
                 draggable="true"
