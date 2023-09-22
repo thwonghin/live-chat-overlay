@@ -14,8 +14,14 @@
     "messageSettingsButtonTitle": {
         "message": "Message Theme Settings"
     },
+    "globalSettingsTitle": {
+        "message": "Global"
+    },
+    "messageSettingsTitle": {
+        "message": "Message"
+    },
     "globalOpacityInputLabel": {
-        "message": "Gloabl Opacity"
+        "message": "Global Opacity"
     },
     "messageSettingsColorInputLabel": {
         "message": "Text Color"

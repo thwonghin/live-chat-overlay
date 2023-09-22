@@ -11,6 +11,12 @@
     "toggleButtonShowTitle": {
         "message": "顯示評論"
     },
+    "globalSettingsTitle": {
+        "message": "廣域設定"
+    },
+    "messageSettingsTitle": {
+        "message": "個別設定"
+    },
     "messageSettingsButtonTitle": {
         "message": "評論主題設定"
     },

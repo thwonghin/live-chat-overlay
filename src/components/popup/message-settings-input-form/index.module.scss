@@ -82,3 +82,39 @@
         }
     }
 }
+
+.tab {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tab-list {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-bottom: var(--yt-spec-raised-background);
+}
+
+.tab-indicator {
+    position: absolute;
+    bottom: -1px;
+    height: 2px;
+    background-color: var(--yt-spec-themed-blue);
+    transition: all 250ms;
+}
+
+.tab-trigger {
+    display: inline-block;
+    padding: 8px 16px;
+    outline: none;
+
+    &:hover {
+        background-color: hsl(0deg 0% 98%);
+    }
+}
+
+.tab-content {
+    display: flex;
+    flex-direction: column;
+}
