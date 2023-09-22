@@ -1,5 +1,5 @@
 import { leadingAndTrailing, debounce } from '@solid-primitives/scheduled';
-import { type Component, createMemo, onCleanup } from 'solid-js';
+import { type Component, onCleanup } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
 
@@ -27,13 +27,10 @@ const SpeedSlider: Component = () => {
         100,
     );
 
-    const percentage = createMemo(() => {
-        return (
-            ((reverse(store.settingsStore.settings.flowTimeInSec) - minValue) /
-                (maxValue - minValue)) *
-            100
-        );
-    });
+    const percentage = () =>
+        ((reverse(store.settingsStore.settings.flowTimeInSec) - minValue) /
+            (maxValue - minValue)) *
+        100;
 
     onCleanup(() => {
         handleChange.clear();

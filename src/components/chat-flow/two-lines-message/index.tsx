@@ -1,4 +1,4 @@
-import { type Component, createMemo, onMount } from 'solid-js';
+import { type Component, onMount } from 'solid-js';
 
 import {
     isMembershipItem,
@@ -30,27 +30,13 @@ const TwoLinesMessage: Component<Props> = (props) => {
         }
     });
 
-    const actualNumberOfLines = createMemo(() =>
+    const actualNumberOfLines = () =>
         props.chatItem.messageParts.length > 0
             ? props.messageSettings.numberOfLines
-            : 1,
-    );
+            : 1;
 
-    const flexDirection = createMemo(() =>
-        actualNumberOfLines() === 2 ? 'column' : 'row',
-    );
-
-    const bgColor = createMemo(() =>
-        isNormalChatItem(props.chatItem) || isMembershipItem(props.chatItem)
-            ? props.messageSettings.bgColor
-            : props.chatItem.color,
-    );
-
-    const donationAmount = createMemo(() =>
-        isSuperChatItem(props.chatItem)
-            ? props.chatItem.donationAmount
-            : undefined,
-    );
+    const flexDirection = () =>
+        actualNumberOfLines() === 2 ? 'column' : 'row';
 
     return (
         <div
@@ -62,7 +48,11 @@ const TwoLinesMessage: Component<Props> = (props) => {
                 color: props.messageSettings.color,
                 'font-weight': props.messageSettings.weight,
                 opacity: props.messageSettings.opacity,
-                'background-color': bgColor(),
+                'background-color':
+                    isNormalChatItem(props.chatItem) ||
+                    isMembershipItem(props.chatItem)
+                        ? props.messageSettings.bgColor
+                        : props.chatItem.color,
                 '-webkit-text-stroke-color': props.messageSettings.strokeColor,
                 '-webkit-text-stroke-width': `${props.messageSettings.strokeWidth}em`,
                 'flex-direction': flexDirection(),
@@ -74,7 +64,11 @@ const TwoLinesMessage: Component<Props> = (props) => {
             <AuthorChip
                 avatars={props.chatItem.avatars}
                 name={props.chatItem.authorName}
-                donationAmount={donationAmount()}
+                donationAmount={
+                    isSuperChatItem(props.chatItem)
+                        ? props.chatItem.donationAmount
+                        : undefined
+                }
                 authorDisplaySetting={props.messageSettings.authorDisplay}
             />
             <MessagePartsRenderer

@@ -1,4 +1,4 @@
-import { type Component, For, Index, Show, createMemo } from 'solid-js';
+import { type Component, For, Index, Show } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
 import type { Metrics } from '@/utils/metrics';
@@ -44,16 +44,6 @@ type DebugOverlayLayoutProps = Readonly<{
 export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
     props,
 ) => {
-    const processXhrMetrics = createMemo(() => {
-        return renderMetrics(props.processXhrMetrics);
-    });
-    const processChatEventMetrics = createMemo(() => {
-        return renderMetrics(props.processChatEventMetrics);
-    });
-    const liveChatDelayMetrics = createMemo(() => {
-        return renderMetrics(props.liveChatDelay);
-    });
-
     return (
         <>
             <div class={styles['debug-container']}>
@@ -71,7 +61,7 @@ export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
                     <p class={styles['debug-text']}>
                         Process response metrics (μs):
                     </p>
-                    <Index each={processXhrMetrics()}>
+                    <Index each={renderMetrics(props.processXhrMetrics)}>
                         {(item) => <p class={styles['debug-text']}>{item()}</p>}
                     </Index>
                 </Show>
@@ -83,7 +73,7 @@ export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
                     <p class={styles['debug-text']}>
                         Process chat event metrics (μs):
                     </p>
-                    <Index each={processChatEventMetrics()}>
+                    <Index each={renderMetrics(props.processChatEventMetrics)}>
                         {(item) => <p class={styles['debug-text']}>{item()}</p>}
                     </Index>
                 </Show>
@@ -93,7 +83,7 @@ export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
                 </p>
                 <Show when={props.liveChatDelay.count !== 0}>
                     <p class={styles['debug-text']}>Live Chat Delay (s):</p>
-                    <Index each={liveChatDelayMetrics()}>
+                    <Index each={renderMetrics(props.liveChatDelay)}>
                         {(item) => <p class={styles['debug-text']}>{item()}</p>}
                     </Index>
                 </Show>
@@ -108,16 +98,7 @@ export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
 const DebugOverlay: Component = () => {
     const store = useStore();
 
-    const roundedProcessXhrMetrics = createMemo(() => {
-        return roundMetrics(store.debugInfoStore.state.processXhrMetrics);
-    });
-    const roundedProcessChatEventMetrics = createMemo(() => {
-        return roundMetrics(store.debugInfoStore.state.processChatEventMetrics);
-    });
-    const roundedLiveChatDelay = createMemo(() => {
-        return roundMetrics(store.debugInfoStore.state.liveChatDelay);
-    });
-    const chatItemsCountByLineNumber = createMemo(() => {
+    const chatItemsCountByLineNumber = () => {
         const grouped: Record<number, number> = {};
         store.chatItemStore.state.normalChatItems.forEach((item) => {
             if (item.lineNumber !== undefined) {
@@ -126,13 +107,17 @@ const DebugOverlay: Component = () => {
         });
 
         return grouped;
-    });
+    };
 
     return (
         <DebugOverlayLayout
             chatItemsCountByLineNumber={chatItemsCountByLineNumber()}
-            processChatEventMetrics={roundedProcessChatEventMetrics()}
-            processXhrMetrics={roundedProcessXhrMetrics()}
+            processChatEventMetrics={roundMetrics(
+                store.debugInfoStore.state.processChatEventMetrics,
+            )}
+            processXhrMetrics={roundMetrics(
+                store.debugInfoStore.state.processXhrMetrics,
+            )}
             processChatEventQueueLength={
                 store.debugInfoStore.state.processChatEventQueueLength
             }
@@ -142,7 +127,9 @@ const DebugOverlay: Component = () => {
             cleanedChatItemCount={
                 store.debugInfoStore.state.cleanedChatItemCount
             }
-            liveChatDelay={roundedLiveChatDelay()}
+            liveChatDelay={roundMetrics(
+                store.debugInfoStore.state.liveChatDelay,
+            )}
         />
     );
 };

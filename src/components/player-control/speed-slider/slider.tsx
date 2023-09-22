@@ -2,7 +2,6 @@ import { clamp } from 'lodash-es';
 import {
     type Component,
     createEffect,
-    createMemo,
     createSignal,
     onCleanup,
     onMount,
@@ -24,9 +23,9 @@ const Slider: Component<Props> = (props) => {
     const [handleEle, setHandleEle] = createSignal<HTMLDivElement>();
     const handleRect = useRect(handleEle);
 
-    const maxWidth = createMemo(() => {
+    const maxWidth = () => {
         return trackRect().width - handleRect().width;
-    });
+    };
 
     const [position, setPosition] = createSignal(0);
 

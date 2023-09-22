@@ -1,4 +1,4 @@
-import { type Component, Show, createMemo } from 'solid-js';
+import { type Component, Show } from 'solid-js';
 
 import type { Thumbnail } from '@/models/chat-item/types';
 import { AuthorDisplayMethod, type MessageSettings } from '@/models/settings';
@@ -13,17 +13,13 @@ type Props = Readonly<{
 }>;
 
 const AuthorChip: Component<Props> = (props) => {
-    const isAvatarShown = createMemo(
-        () =>
-            props.authorDisplaySetting === AuthorDisplayMethod.ALL ||
-            props.authorDisplaySetting === AuthorDisplayMethod.AVATAR_ONLY,
-    );
+    const isAvatarShown = () =>
+        props.authorDisplaySetting === AuthorDisplayMethod.ALL ||
+        props.authorDisplaySetting === AuthorDisplayMethod.AVATAR_ONLY;
 
-    const isNameShown = createMemo(
-        () =>
-            props.authorDisplaySetting === AuthorDisplayMethod.ALL ||
-            props.authorDisplaySetting === AuthorDisplayMethod.NAME_ONLY,
-    );
+    const isNameShown = () =>
+        props.authorDisplaySetting === AuthorDisplayMethod.ALL ||
+        props.authorDisplaySetting === AuthorDisplayMethod.NAME_ONLY;
 
     return (
         <Show when={isAvatarShown() || isNameShown() || props.donationAmount}>

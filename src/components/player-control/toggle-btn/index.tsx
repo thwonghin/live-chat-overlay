@@ -1,5 +1,5 @@
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
-import { type Component, createMemo } from 'solid-js';
+import { type Component } from 'solid-js';
 import browser from 'webextension-polyfill';
 
 import { useStore } from '@/contexts/root-store';
@@ -15,13 +15,13 @@ const withSlashIconRatio =
 const ToggleBtn: Component = () => {
     const store = useStore();
 
-    const width = createMemo(() => {
+    const width = () => {
         const ratio = store.settingsStore.settings.isEnabled
             ? withSlashIconRatio
             : iconToBtnRatio;
 
         return `${ratio * 100}%`;
-    });
+    };
 
     function handleClick(event: MouseEvent) {
         event.preventDefault();
