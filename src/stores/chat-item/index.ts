@@ -127,7 +127,7 @@ export class ChatItemStore {
         }
     };
 
-    private resetNonStickyChatItems(width?: number, height?: number): void {
+    private resetNonStickyChatItems(): void {
         this.setState('normalChatItems', (items) =>
             // Only remove the items that are displaying
             items.filter((item) => !item.addTimestamp),
@@ -144,6 +144,14 @@ export class ChatItemStore {
         );
 
         this.chatItemsByLineNumber.clear();
+    }
+
+    private handlePlayerSizeChange(width: number, height: number) {
+        this.resetNonStickyChatItems();
+    }
+
+    private handleSpeedChange(flowInTime: number) {
+        this.resetNonStickyChatItems();
     }
 
     private createAllIntervals() {
@@ -554,12 +562,23 @@ export class ChatItemStore {
                     return;
                 }
 
-                this.resetNonStickyChatItems(
+                this.handlePlayerSizeChange(
                     this.uiStore.state.playerState.width,
                     this.uiStore.state.playerState.height,
                 );
 
                 return newDimension;
+            });
+
+            createEffect((prev) => {
+                const newSpeed = this.settingsStore.settings.flowTimeInSec;
+                if (prev === newSpeed) {
+                    return;
+                }
+
+                this.handleSpeedChange(newSpeed);
+
+                return newSpeed;
             });
 
             createEffect((prev) => {
