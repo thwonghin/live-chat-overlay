@@ -1,4 +1,5 @@
 import { createForm } from '@felte/solid';
+import { Button } from '@kobalte/core';
 import { type Component } from 'solid-js';
 import browser from 'webextension-polyfill';
 
@@ -38,6 +39,18 @@ const GlobalSettingsForm: Component<Props> = (props) => {
                         step="0.01"
                     />
                 </label>
+            </div>
+            <div class={styles['btn-row']}>
+                <Button.Root type="submit" class={styles['btn-primary']}>
+                    {browser.i18n.getMessage('applyButtonText')}
+                </Button.Root>
+                <Button.Root
+                    type="button"
+                    class={styles['btn']}
+                    onClick={reset}
+                >
+                    {browser.i18n.getMessage('resetButtonText')}
+                </Button.Root>
             </div>
         </form>
     );

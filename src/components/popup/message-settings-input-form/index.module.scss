@@ -93,7 +93,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    border-bottom: var(--yt-spec-raised-background);
+    border-bottom: white;
 }
 
 .tab-indicator {
@@ -107,14 +107,16 @@
 .tab-trigger {
     display: inline-block;
     padding: 8px 16px;
+    color: white;
+    cursor: pointer;
+    background-color: transparent;
+    border-color: transparent;
+    border-radius: 0;
     outline: none;
-
-    &:hover {
-        background-color: hsl(0deg 0% 98%);
-    }
 }
 
 .tab-content {
     display: flex;
     flex-direction: column;
+    padding-top: 8px;
 }
