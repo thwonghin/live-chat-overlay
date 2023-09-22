@@ -1,8 +1,7 @@
-import { type Component, createSignal, createMemo, onMount } from 'solid-js';
+import { type Component, onMount } from 'solid-js';
 
 import type { SuperStickerItem } from '@/models/chat-item/types';
 import type { MessageSettings } from '@/models/settings';
-import { createError } from '@/utils/logger';
 
 import styles from './index.module.scss';
 import AuthorChip from '../author-chip';
@@ -21,9 +20,7 @@ const SuperChatSticker: Component<Props> = (props) => {
         }
     });
 
-    const imageSize = createMemo(
-        () => `${0.8 * props.messageSettings.numberOfLines}em`,
-    );
+    const imageSize = () => `${0.8 * props.messageSettings.numberOfLines}em`;
 
     return (
         <div

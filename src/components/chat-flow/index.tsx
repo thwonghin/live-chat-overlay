@@ -1,4 +1,4 @@
-import { type Component, createMemo, For, type JSX, Show } from 'solid-js';
+import { type Component, For, Show } from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
 import type { ChatItemModel } from '@/models/chat-item';
@@ -15,29 +15,29 @@ const ChatFlow: Component = () => {
         store.chatItemStore.removeStickyChatItemById(chatItem.value.id);
     }
 
-    const style = createMemo<JSX.CSSProperties>(() => ({
-        visibility: store.settingsStore.settings.isEnabled
-            ? 'visible'
-            : 'hidden',
-        opacity: store.settingsStore.settings.globalOpacity,
-    }));
-
-    const lineHeight = createMemo(
-        () =>
-            store.uiStore.state.playerState.height /
-            store.settingsStore.settings.totalNumberOfLines,
-    );
-    const containerStyle = createMemo<JSX.CSSProperties>(() => ({
-        'font-size': `${lineHeight()}px`,
-    }));
+    const lineHeight = () =>
+        store.uiStore.state.playerState.height /
+        store.settingsStore.settings.totalNumberOfLines;
 
     function handleRenderChatItem(chatItemId: string, element: HTMLElement) {
         store.chatItemStore.assignChatItemEle(chatItemId, element);
     }
 
     return (
-        <div class={styles['container']} style={containerStyle()}>
-            <div style={style()}>
+        <div
+            class={styles['container']}
+            style={{
+                'font-size': `${lineHeight()}px`,
+            }}
+        >
+            <div
+                style={{
+                    visibility: store.settingsStore.settings.isEnabled
+                        ? 'visible'
+                        : 'hidden',
+                    opacity: store.settingsStore.settings.globalOpacity,
+                }}
+            >
                 <For each={store.chatItemStore.state.normalChatItems}>
                     {(chatItem) => {
                         return (
