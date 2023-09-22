@@ -93,7 +93,7 @@
     position: relative;
     display: flex;
     align-items: center;
-    border-bottom: white;
+    border-bottom: solid 1px white;
 }
 
 .tab-indicator {
@@ -118,5 +118,5 @@
 .tab-content {
     display: flex;
     flex-direction: column;
-    padding-top: 8px;
+    padding-top: 16px;
 }
