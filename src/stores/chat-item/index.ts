@@ -54,6 +54,9 @@ export class ChatItemStore {
     private normalChatItemQueue: string[] = [];
     private readonly chatItemsByLineNumber = new Map<number, ChatItemModel[]>();
     private readonly chatItemIds = new Set<string>();
+
+    // Preserve the value of this set so the pinned comment won't show again when reset
+    private readonly closedPinnedComment = new Set<string>();
     private tickId: number | undefined;
     private cleanDisplayedIntervalId: number | undefined;
 
@@ -95,6 +98,7 @@ export class ChatItemStore {
 
     removeStickyChatItemById(id: string): void {
         this.chatItemIds.delete(id);
+        this.closedPinnedComment.add(id);
         this.setState('stickyChatItems', (s) =>
             s.filter((chatItem) => chatItem.value.id !== id),
         );
@@ -517,7 +521,9 @@ export class ChatItemStore {
             });
 
             const stickyChatItems = nonDuplicatedChatItems.filter(
-                (chatItem) => chatItem.messageSettings.isSticky,
+                (chatItem) =>
+                    chatItem.messageSettings.isSticky &&
+                    !this.closedPinnedComment.has(chatItem.value.id),
             );
             const normalChatItems = nonDuplicatedChatItems.filter(
                 (chatItem) => !chatItem.messageSettings.isSticky,
