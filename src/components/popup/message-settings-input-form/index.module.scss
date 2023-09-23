@@ -50,10 +50,6 @@
     }
 }
 
-.color-hint {
-    padding-bottom: 4px;
-}
-
 %input {
     padding: 4px 8px;
     margin-top: 4px;
@@ -130,6 +126,10 @@
     align-items: center;
 }
 
+.switch-label {
+    font-size: 11px;
+}
+
 .switch-control {
     display: inline-flex;
     align-items: center;
@@ -176,4 +176,5 @@
 
 .helper-text {
     margin: 8px 0;
+    font-size: 11px;
 }

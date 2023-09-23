@@ -26,7 +26,7 @@ const MessageSettingsForm: Component<Props> = (props) => {
 
     return (
         <form ref={form} class={styles['container-form']}>
-            <p class={styles['color-hint']}>
+            <p class={styles['helper-text']}>
                 {browser.i18n.getMessage('colorInputHelperText')}
             </p>
             <div class={styles['row']}>
