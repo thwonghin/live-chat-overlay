@@ -1,6 +1,6 @@
 import { createForm } from '@felte/solid';
 import { Button } from '@kobalte/core';
-import { type Component } from 'solid-js';
+import { createEffect, type Component } from 'solid-js';
 import browser from 'webextension-polyfill';
 
 import { type MessageSettings } from '@/models/settings';
@@ -8,26 +8,20 @@ import { type MessageSettings } from '@/models/settings';
 import styles from './index.module.scss';
 
 type Props = Readonly<{
-    globalOpacity: number;
     messageSettings: MessageSettings;
-    defaultValues: {
-        globalOpacity: number;
-        messageSettings: MessageSettings;
-    };
-    onSubmit: (value: {
-        globalOpacity: number;
-        messageSettings: MessageSettings;
-    }) => void;
+    onSubmit: (messageSettings: MessageSettings) => void;
     isBackgroundColorEditable: boolean;
 }>;
 
-const MessageSettingsInputFormLayout: Component<Props> = (props) => {
-    const { form, reset } = createForm({
-        initialValues: {
-            globalOpacity: props.globalOpacity,
-            messageSettings: props.messageSettings,
-        },
+const MessageSettingsForm: Component<Props> = (props) => {
+    const { form, reset, setInitialValues, setData } = createForm({
+        initialValues: props.messageSettings,
         onSubmit: props.onSubmit,
+    });
+
+    createEffect(() => {
+        setInitialValues(props.messageSettings);
+        setData(props.messageSettings);
     });
 
     return (
@@ -39,29 +33,12 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                 <label
                     class={styles['form-label']}
                     style={{
-                        width: '100%',
-                    }}
-                >
-                    {browser.i18n.getMessage('globalOpacityInputLabel')}
-                    <input
-                        name="globalOpacity"
-                        type="number"
-                        min="0"
-                        max="1"
-                        step="0.01"
-                    />
-                </label>
-            </div>
-            <div class={styles['row']}>
-                <label
-                    class={styles['form-label']}
-                    style={{
                         width: '60%',
                         'padding-right': '8px',
                     }}
                 >
                     {browser.i18n.getMessage('messageSettingsColorInputLabel')}
-                    <input name="messageSettings.color" type="text" />
+                    <input name="color" type="text" />
                 </label>
                 <label
                     class={styles['form-label']}
@@ -71,7 +48,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                 >
                     {browser.i18n.getMessage('messageSettingsWeightInputLabel')}
                     <input
-                        name="messageSettings.weight"
+                        name="weight"
                         type="number"
                         min="100"
                         max="900"
@@ -90,7 +67,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                     {browser.i18n.getMessage(
                         'messageSettingsStrokeColorInputLabel',
                     )}
-                    <input name="messageSettings.strokeColor" type="text" />
+                    <input name="strokeColor" type="text" />
                 </label>
                 <label
                     class={styles['form-label']}
@@ -102,11 +79,11 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                         'messageSettingsStrokeWidthInputLabel',
                     )}
                     <input
-                        name="messageSettings.strokeWidth"
+                        name="strokeWidth"
                         type="number"
                         min="0"
                         max="0.5"
-                        step="0.001"
+                        step="0.01"
                     />
                 </label>
             </div>
@@ -123,7 +100,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                     )}
                     <input
                         disabled={!props.isBackgroundColorEditable}
-                        name="messageSettings.bgColor"
+                        name="bgColor"
                         type="text"
                     />
                 </label>
@@ -137,7 +114,7 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
                         'messageSettingsOpacityInputLabel',
                     )}
                     <input
-                        name="messageSettings.opacity"
+                        name="opacity"
                         type="number"
                         min="0"
                         max="1"
@@ -161,4 +138,4 @@ const MessageSettingsInputFormLayout: Component<Props> = (props) => {
     );
 };
 
-export default MessageSettingsInputFormLayout;
+export default MessageSettingsForm;

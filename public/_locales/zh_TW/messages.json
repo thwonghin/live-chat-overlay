@@ -14,6 +14,21 @@
     "messageSettingsButtonTitle": {
         "message": "評論主題設定"
     },
+    "globalSettingsTitle": {
+        "message": "廣域設定"
+    },
+    "messageSettingsTitle": {
+        "message": "個別設定"
+    },
+    "fontSizeInputLabel": {
+        "message": "字體大小相關"
+    },
+    "fontScaleMethodInputLabel": {
+        "message": "自動縮放?"
+    },
+    "fontScaleMethodHelperText": {
+        "message": "當開啟時，文字大小將根據播放器的高度而變化。如果關閉，文字將保持相同大小。"
+    },
     "globalOpacityInputLabel": {
         "message": "廣域透明度"
     },

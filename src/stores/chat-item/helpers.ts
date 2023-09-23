@@ -202,7 +202,7 @@ export function getLineNumber({
 }: GetLineNumberParameters): number | undefined {
     for (
         let lineNumber = 0;
-        lineNumber < maxLineNumber - displayNumberOfLines - 1;
+        lineNumber <= maxLineNumber - displayNumberOfLines;
         lineNumber += 1
     ) {
         if (

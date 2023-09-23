@@ -5,6 +5,11 @@ export enum AuthorDisplayMethod {
     NONE = 'none',
 }
 
+export enum FontScaleMethod {
+    FIXED = 'fixed',
+    SCALED = 'scaled',
+}
+
 export type MessageSettings = {
     color: string;
     weight: number;
@@ -37,4 +42,7 @@ export type Settings = {
     flowTimeInSec: number;
     globalOpacity: number;
     messageSettings: Record<MessageSettingsKey, MessageSettings>;
+    fontSizeFixed: number;
+    fontSizeScaled: number;
+    fontScaleMethod: FontScaleMethod;
 };

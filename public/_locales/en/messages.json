@@ -14,8 +14,23 @@
     "messageSettingsButtonTitle": {
         "message": "Message Theme Settings"
     },
+    "globalSettingsTitle": {
+        "message": "Global"
+    },
+    "messageSettingsTitle": {
+        "message": "Message"
+    },
+    "fontSizeInputLabel": {
+        "message": "Font Size Related"
+    },
+    "fontScaleMethodInputLabel": {
+        "message": "Scale?"
+    },
+    "fontScaleMethodHelperText": {
+        "message": "When turned on, the text size will change based on the player's height. If turned off, the text will stay the same size."
+    },
     "globalOpacityInputLabel": {
-        "message": "Gloabl Opacity"
+        "message": "Global Opacity"
     },
     "messageSettingsColorInputLabel": {
         "message": "Text Color"

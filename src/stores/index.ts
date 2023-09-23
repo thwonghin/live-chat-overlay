@@ -24,7 +24,7 @@ export const createRootStore = (
 ): RootStore => {
     const settingsStore = new SettingsStore();
     const debugInfoStore = new DebugInfoStore();
-    const uiStore = new UiStore(videoPlayerEle, videoEle);
+    const uiStore = new UiStore(videoPlayerEle, videoEle, settingsStore);
     const chatItemStore = new ChatItemStore(
         uiStore,
         settingsStore,

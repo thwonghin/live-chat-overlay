@@ -14,6 +14,7 @@ import {
     type Settings,
     type MessageSettings,
     AuthorDisplayMethod,
+    FontScaleMethod,
 } from './types';
 
 export * from './types';
@@ -30,11 +31,14 @@ const commonMessageSettings: MessageSettings = {
     isSticky: false,
 } as const;
 
-export const defaultSettings = {
+export const defaultSettings: Settings = {
     isEnabled: true,
-    totalNumberOfLines: 15,
     flowTimeInSec: 10,
+    totalNumberOfLines: 15,
     globalOpacity: 0.7,
+    fontSizeFixed: 20,
+    fontSizeScaled: 6.67,
+    fontScaleMethod: FontScaleMethod.SCALED,
     messageSettings: {
         guest: commonMessageSettings,
         member: {
