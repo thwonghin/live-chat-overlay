@@ -69,7 +69,7 @@ const GlobalSettingsForm: Component<Props> = (props) => {
                         );
                     }}
                 >
-                    <KobalteSwitch.Label>
+                    <KobalteSwitch.Label class={styles['switch-label']}>
                         {browser.i18n.getMessage('fontScaleMethodInputLabel')}
                     </KobalteSwitch.Label>
                     <KobalteSwitch.Control class={styles['switch-control']}>
