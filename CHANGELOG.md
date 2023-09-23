@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.14.1](https://github.com/thwonghin/live-chat-overlay/compare/v2.14.0...v2.14.1) (2023-09-23)
+
+
+### Bug Fixes
+
+* keep pinned comment closed when reset ([#798](https://github.com/thwonghin/live-chat-overlay/issues/798)) ([31adbb0](https://github.com/thwonghin/live-chat-overlay/commit/31adbb05c096c98193194e30d2a8345452a194dc))
+* setting popup in fullscreen mode ([#797](https://github.com/thwonghin/live-chat-overlay/issues/797)) ([ef4c068](https://github.com/thwonghin/live-chat-overlay/commit/ef4c068842f0b8a86cd7787fc77357684a3f5819))
+
 ## [2.14.0](https://github.com/thwonghin/live-chat-overlay/compare/v2.13.8...v2.14.0) (2023-09-23)
 
 
