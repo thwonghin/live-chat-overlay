@@ -27,7 +27,7 @@
         "message": "Scale?"
     },
     "fontScaleMethodHelperText": {
-        "message": "When toggled, the text will be scaled with the height of the player. Otherwise it is displayed in pixel"
+        "message": "When turned on, the text size will change based on the player's height. If turned off, the text will stay the same size."
     },
     "globalOpacityInputLabel": {
         "message": "Global Opacity"
