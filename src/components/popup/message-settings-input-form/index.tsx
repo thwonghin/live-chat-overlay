@@ -12,7 +12,9 @@ import {
 } from '@/models/settings';
 import { assertNever } from '@/utils';
 
-import GlobalSettingsForm from './global-settings-form';
+import GlobalSettingsForm, {
+    type GlobalSettings,
+} from './global-settings-form';
 import styles from './index.module.scss';
 import MessageSettingsForm from './message-settings-form';
 import MessageSettingsTypeSelect from '../message-settings-type-select';
@@ -46,15 +48,15 @@ const MessageSettingsInputForm: Component = () => {
     const [selectedMessageType, setSelectedMessageType] =
         createSignal<MessageSettingsKey>(DEFAULT_MESSAGE_SETTING_KEY);
 
-    const handleSubmitGlobalSettings = (value: { globalOpacity: number }) => {
-        store.settingsStore.setSettings('globalOpacity', value.globalOpacity);
+    const handleSubmitGlobalSettings = (value: GlobalSettings) => {
+        store.settingsStore.setSettings(value);
     };
 
     function handleSubmitMessageSettings(messageSettings: MessageSettings) {
         store.settingsStore.setSettings(
             'messageSettings',
             selectedMessageType(),
-            { ...messageSettings },
+            messageSettings,
         );
     }
 
@@ -82,9 +84,15 @@ const MessageSettingsInputForm: Component = () => {
             </Tabs.List>
             <Tabs.Content class={styles['tab-content']} value="global">
                 <GlobalSettingsForm
-                    globalOpacity={store.settingsStore.settings.globalOpacity}
-                    defaultValues={{
-                        globalOpacity: defaultSettings.globalOpacity,
+                    settings={{
+                        globalOpacity:
+                            store.settingsStore.settings.globalOpacity,
+                        fontSizeFixed:
+                            store.settingsStore.settings.fontSizeFixed,
+                        fontSizeScaled:
+                            store.settingsStore.settings.fontSizeScaled,
+                        fontScaleMethod:
+                            store.settingsStore.settings.fontScaleMethod,
                     }}
                     onSubmit={handleSubmitGlobalSettings}
                 />

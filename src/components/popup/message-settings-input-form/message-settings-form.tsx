@@ -1,6 +1,6 @@
 import { createForm } from '@felte/solid';
 import { Button } from '@kobalte/core';
-import { type Component } from 'solid-js';
+import { createEffect, type Component } from 'solid-js';
 import browser from 'webextension-polyfill';
 
 import { type MessageSettings } from '@/models/settings';
@@ -14,9 +14,14 @@ type Props = Readonly<{
 }>;
 
 const MessageSettingsForm: Component<Props> = (props) => {
-    const { form, reset } = createForm({
+    const { form, reset, setInitialValues, setData } = createForm({
         initialValues: props.messageSettings,
         onSubmit: props.onSubmit,
+    });
+
+    createEffect(() => {
+        setInitialValues(props.messageSettings);
+        setData(props.messageSettings);
     });
 
     return (
@@ -78,7 +83,7 @@ const MessageSettingsForm: Component<Props> = (props) => {
                         type="number"
                         min="0"
                         max="0.5"
-                        step="0.001"
+                        step="0.01"
                     />
                 </label>
             </div>
