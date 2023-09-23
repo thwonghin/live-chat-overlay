@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.14.0](https://github.com/thwonghin/live-chat-overlay/compare/v2.13.8...v2.14.0) (2023-09-23)
+
+
+### Features
+
+* font size settings ([#795](https://github.com/thwonghin/live-chat-overlay/issues/795)) ([b0c0220](https://github.com/thwonghin/live-chat-overlay/commit/b0c02209cbb3012bffec30fbfa4e52631564d98e))
+* reset chat when speed change ([#794](https://github.com/thwonghin/live-chat-overlay/issues/794)) ([3b50550](https://github.com/thwonghin/live-chat-overlay/commit/3b505500f5ac74d0357cda8e0ef14d3a24fc9482))
+
+
+### Bug Fixes
+
+* better size change handling ([#785](https://github.com/thwonghin/live-chat-overlay/issues/785)) ([7953699](https://github.com/thwonghin/live-chat-overlay/commit/79536994cb521a2fd9a22ef0c75f4743ecf05a1a))
+* debug overlay issues ([#791](https://github.com/thwonghin/live-chat-overlay/issues/791)) ([e41f27f](https://github.com/thwonghin/live-chat-overlay/commit/e41f27ffe93a3de4a47a49a4374d635883e39ead))
+* live stream chat getting removed ([#789](https://github.com/thwonghin/live-chat-overlay/issues/789)) ([870170f](https://github.com/thwonghin/live-chat-overlay/commit/870170f07b1b4bb23f584cf5200283caece69a2d))
+* reset states when seek back in time ([#788](https://github.com/thwonghin/live-chat-overlay/issues/788)) ([cc79428](https://github.com/thwonghin/live-chat-overlay/commit/cc794284acddda8501ef301a1da4972dbe247b9f))
+* small fixes ([#780](https://github.com/thwonghin/live-chat-overlay/issues/780)) ([f5429ce](https://github.com/thwonghin/live-chat-overlay/commit/f5429cee92cdea166fd85277b494889c87341df8))
+
 ### [2.13.8](https://github.com/thwonghin/live-chat-overlay/compare/v2.13.7...v2.13.8) (2023-06-19)
 
 ### [2.13.7](https://github.com/thwonghin/live-chat-overlay/compare/v2.13.6...v2.13.7) (2023-06-19)
