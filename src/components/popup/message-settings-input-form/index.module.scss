@@ -54,6 +54,27 @@
     padding-bottom: 4px;
 }
 
+%input {
+    padding: 4px 8px;
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--yt-spec-text-primary);
+    background-color: var(--yt-spec-raised-background);
+    border: none;
+    border-bottom: solid 1px var(--yt-spec-text-primary);
+    border-radius: 0;
+    outline: none;
+
+    &:focus {
+        border-color: var(--yt-spec-themed-blue);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        background-color: var(--yt-spec-menu-background);
+    }
+}
+
 .form-label {
     display: inline-flex;
     flex-direction: column;
@@ -62,24 +83,7 @@
     font-size: 14px;
 
     > input {
-        padding: 4px 8px;
-        margin-top: 4px;
-        font-size: 14px;
-        color: var(--yt-spec-text-primary);
-        background-color: var(--yt-spec-raised-background);
-        border: none;
-        border-bottom: solid 1px var(--yt-spec-text-primary);
-        border-radius: 0;
-        outline: none;
-
-        &:focus {
-            border-color: var(--yt-spec-themed-blue);
-        }
-
-        &:disabled {
-            cursor: not-allowed;
-            background-color: var(--yt-spec-menu-background);
-        }
+        @extend %input;
     }
 }
 
@@ -129,40 +133,47 @@
 .switch-control {
     display: inline-flex;
     align-items: center;
-    width: 44px;
-    height: 24px;
-    padding: 0 2px;
+    width: 22px;
+    height: 12px;
+    margin-left: 4px;
+    cursor: pointer;
     background-color: hsl(240deg 6% 90%);
     border: 1px solid hsl(240deg 5% 84%);
-    border-radius: 12px;
+    border-radius: 6px;
     transition: 250ms background-color;
 }
 
-.switch-input:focus-visible + .switch-control {
-    outline: 2px solid hsl(200deg 98% 39%);
-    outline-offset: 2px;
-}
-
 .switch-control[data-checked] {
-    background-color: hsl(200deg 98% 39%);
-    border-color: hsl(200deg 98% 39%);
+    background-color: var(--yt-spec-themed-blue);
+    border-color: var(--yt-spec-themed-blue);
 }
 
 .switch-thumb {
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
     background-color: white;
-    border-radius: 10px;
+    border-radius: 5px;
     transition: 250ms transform;
 }
 
 .switch-thumb[data-checked] {
-    transform: translateX(calc(100% - 1px));
+    transform: translateX(100%);
 }
 
-.switch-label {
-    margin-right: 6px;
-    font-size: 14px;
-    color: hsl(240deg 6% 10%);
-    user-select: none;
+.font-size-input-row {
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    margin-left: 8px;
+
+    > input {
+        @extend %input;
+
+        width: 50px;
+        margin-top: 0;
+    }
+}
+
+.helper-text {
+    margin: 8px 0;
 }

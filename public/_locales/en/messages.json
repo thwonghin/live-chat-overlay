@@ -20,8 +20,11 @@
     "messageSettingsTitle": {
         "message": "Message"
     },
+    "fontSizeInputLabel": {
+        "message": "Font Size Related"
+    },
     "fontScaleMethodInputLabel": {
-        "message": "Text Scale With Player Size"
+        "message": "Scale?"
     },
     "fontScaleMethodHelperText": {
         "message": "When toggled, the text will be scaled with the height of the player. Otherwise it is displayed in pixel"

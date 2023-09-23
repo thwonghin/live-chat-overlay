@@ -52,67 +52,68 @@ const GlobalSettingsForm: Component<Props> = (props) => {
                     />
                 </label>
             </div>
-            <KobalteSwitch.Root
-                name="fontScaleMethod"
-                checked={data().fontScaleMethod === FontScaleMethod.SCALED}
-                class={styles['switch']}
-                onChange={(isChecked) => {
-                    setFields(
-                        'fontScaleMethod',
-                        isChecked
-                            ? FontScaleMethod.SCALED
-                            : FontScaleMethod.FIXED,
-                    );
-                }}
-            >
-                <KobalteSwitch.Label>
-                    {browser.i18n.getMessage('fontScaleMethodInputLabel')}
-                </KobalteSwitch.Label>
-                <KobalteSwitch.Input class={styles['switch-input']} />
-                <KobalteSwitch.Control class={styles['switch-control']}>
-                    <KobalteSwitch.Thumb class={styles['switch-thumb']} />
-                </KobalteSwitch.Control>
-            </KobalteSwitch.Root>
-            <p>{browser.i18n.getMessage('fontScaleMethodHelperText')}</p>
-            <Switch>
-                <Match when={data().fontScaleMethod === FontScaleMethod.SCALED}>
-                    <label
-                        class={styles['form-label']}
-                        style={{
-                            width: '100%',
-                        }}
-                    >
-                        {browser.i18n.getMessage('fontSizeScaled')}
-                        <input
-                            data-felte-keep-on-remove
-                            name="fontSizeScaled"
-                            type="number"
-                            min="1"
-                            max="100"
-                            step="0.01"
-                        />{' '}
-                        %
-                    </label>
-                </Match>
-                <Match when={data().fontScaleMethod === FontScaleMethod.FIXED}>
-                    <label
-                        class={styles['form-label']}
-                        style={{
-                            width: '100%',
-                        }}
-                    >
-                        {browser.i18n.getMessage('fontSizeFixed')}
-                        <input
-                            data-felte-keep-on-remove
-                            name="fontSizeFixed"
-                            type="number"
-                            min="1"
-                            step="1"
-                        />{' '}
-                        px
-                    </label>
-                </Match>
-            </Switch>
+            <label class={styles['form-label']}>
+                {browser.i18n.getMessage('fontSizeInputLabel')}
+            </label>
+            <div class={styles.row}>
+                <KobalteSwitch.Root
+                    name="fontScaleMethod"
+                    checked={data().fontScaleMethod === FontScaleMethod.SCALED}
+                    class={styles['switch']}
+                    onChange={(isChecked) => {
+                        setFields(
+                            'fontScaleMethod',
+                            isChecked
+                                ? FontScaleMethod.SCALED
+                                : FontScaleMethod.FIXED,
+                        );
+                    }}
+                >
+                    <KobalteSwitch.Label>
+                        {browser.i18n.getMessage('fontScaleMethodInputLabel')}
+                    </KobalteSwitch.Label>
+                    <KobalteSwitch.Control class={styles['switch-control']}>
+                        <KobalteSwitch.Thumb class={styles['switch-thumb']} />
+                    </KobalteSwitch.Control>
+                </KobalteSwitch.Root>
+                <div class={styles['font-size-input-row']}>
+                    <Switch>
+                        <Match
+                            when={
+                                data().fontScaleMethod ===
+                                FontScaleMethod.SCALED
+                            }
+                        >
+                            <input
+                                data-felte-keep-on-remove
+                                name="fontSizeScaled"
+                                type="number"
+                                min="1"
+                                max="100"
+                                step="0.01"
+                            />{' '}
+                            %
+                        </Match>
+                        <Match
+                            when={
+                                data().fontScaleMethod === FontScaleMethod.FIXED
+                            }
+                        >
+                            <input
+                                data-felte-keep-on-remove
+                                name="fontSizeFixed"
+                                type="number"
+                                min="1"
+                                step="1"
+                            />{' '}
+                            px
+                        </Match>
+                    </Switch>
+                </div>
+            </div>
+            <p class={styles['helper-text']}>
+                {browser.i18n.getMessage('fontScaleMethodHelperText')}
+            </p>
             <label
                 class={styles['form-label']}
                 style={{
