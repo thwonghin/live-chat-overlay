@@ -16,6 +16,10 @@ module.exports = {
         tsconfigRootDir: __dirname,
     },
     rules: {
+        '@typescript-eslint/no-unused-vars': [
+            'warn',
+            { argsIgnorePattern: '^_' },
+        ],
         'unicorn/no-array-callback-reference': 'off',
         'node/file-extension-in-import': 'off',
         '@typescript-eslint/no-implicit-any-catch': 'off',

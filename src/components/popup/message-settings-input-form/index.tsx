@@ -7,7 +7,6 @@ import { useRect } from '@/hooks';
 import {
     type MessageSettingsKey,
     type MessageSettings,
-    defaultSettings,
     messageSettingsKeys,
 } from '@/models/settings';
 import { assertNever } from '@/utils';
