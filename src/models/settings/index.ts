@@ -33,8 +33,8 @@ const commonMessageSettings: MessageSettings = {
 
 export const defaultSettings: Settings = {
     isEnabled: true,
-    totalNumberOfLines: 15,
     flowTimeInSec: 10,
+    totalNumberOfLines: 15,
     globalOpacity: 0.7,
     fontSizeFixed: 20,
     fontSizeScaled: 6.67,

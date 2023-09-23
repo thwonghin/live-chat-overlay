@@ -159,6 +159,10 @@ export class ChatItemStore {
         this.resetNonStickyChatItems();
     }
 
+    private handleMaxNumberOfLinesChange(maxNumberOfLines: number) {
+        this.resetNonStickyChatItems();
+    }
+
     private createAllIntervals() {
         this.clearAllIntervals();
 
@@ -606,6 +610,16 @@ export class ChatItemStore {
 
                 this.handleLineHeightChange(newLineHeight);
                 return newLineHeight;
+            });
+
+            createEffect((prev) => {
+                const newMaxNumberOfLines = this.uiStore.maxNumberOfLines();
+                if (prev === newMaxNumberOfLines) {
+                    return;
+                }
+
+                this.handleMaxNumberOfLinesChange(newMaxNumberOfLines);
+                return newMaxNumberOfLines;
             });
 
             onCleanup(() => {

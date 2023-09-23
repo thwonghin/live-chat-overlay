@@ -93,6 +93,8 @@ const MessageSettingsInputForm: Component = () => {
                             store.settingsStore.settings.fontSizeScaled,
                         fontScaleMethod:
                             store.settingsStore.settings.fontScaleMethod,
+                        totalNumberOfLines:
+                            store.settingsStore.settings.totalNumberOfLines,
                     }}
                     onSubmit={handleSubmitGlobalSettings}
                 />

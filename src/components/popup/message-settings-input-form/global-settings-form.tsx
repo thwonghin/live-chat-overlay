@@ -9,7 +9,11 @@ import styles from './index.module.scss';
 
 export type GlobalSettings = Pick<
     Settings,
-    'globalOpacity' | 'fontScaleMethod' | 'fontSizeFixed' | 'fontSizeScaled'
+    | 'globalOpacity'
+    | 'fontScaleMethod'
+    | 'fontSizeFixed'
+    | 'fontSizeScaled'
+    | 'totalNumberOfLines'
 >;
 
 type Props = Readonly<{
@@ -109,6 +113,22 @@ const GlobalSettingsForm: Component<Props> = (props) => {
                     </label>
                 </Match>
             </Switch>
+            <label
+                class={styles['form-label']}
+                style={{
+                    width: '100%',
+                }}
+            >
+                {browser.i18n.getMessage(
+                    'messageSettingsNumberOfLinesInputLabel',
+                )}
+                <input
+                    name="totalNumberOfLines"
+                    type="number"
+                    min="1"
+                    step="1"
+                />
+            </label>
             <div class={styles['btn-row']}>
                 <Button.Root type="submit" class={styles['btn-primary']}>
                     {browser.i18n.getMessage('applyButtonText')}

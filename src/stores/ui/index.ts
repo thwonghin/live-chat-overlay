@@ -78,7 +78,10 @@ export class UiStore {
     }
 
     maxNumberOfLines() {
-        return this.state.playerState.height / this.lineHeight();
+        return Math.min(
+            this.state.playerState.height / this.lineHeight(),
+            this.settingsStore.settings.totalNumberOfLines,
+        );
     }
 
     init() {
