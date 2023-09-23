@@ -1,5 +1,5 @@
 import { createForm } from '@felte/solid';
-import { Button, Switch as KobalteSwitch, TextField } from '@kobalte/core';
+import { Button, Switch as KobalteSwitch } from '@kobalte/core';
 import { createEffect, type Component, Switch, Match } from 'solid-js';
 import browser from 'webextension-polyfill';
 

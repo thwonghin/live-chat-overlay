@@ -1,5 +1,5 @@
 import { noop } from 'lodash-es';
-import { type Accessor, createRoot, onCleanup, onMount } from 'solid-js';
+import { createRoot, onCleanup, onMount } from 'solid-js';
 import { type SetStoreFunction, createStore } from 'solid-js/store';
 
 import { FontScaleMethod } from '@/models/settings';
