@@ -35,7 +35,7 @@ const GlobalSettingsForm: Component<Props> = (props) => {
 
     return (
         <form ref={form} class={styles['container-form']}>
-            <div class={styles.row}>
+            <div class={styles['row']}>
                 <label
                     class={styles['form-label']}
                     style={{
@@ -55,7 +55,7 @@ const GlobalSettingsForm: Component<Props> = (props) => {
             <label class={styles['form-label']}>
                 {browser.i18n.getMessage('fontSizeInputLabel')}
             </label>
-            <div class={styles.row}>
+            <div class={styles['row']}>
                 <KobalteSwitch.Root
                     name="fontScaleMethod"
                     checked={data().fontScaleMethod === FontScaleMethod.SCALED}
