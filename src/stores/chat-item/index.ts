@@ -9,6 +9,7 @@ import type {
     LiveContinuationContents,
 } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
+import { type FontScaleMethod } from '@/models/settings';
 import type { fetchInterceptor } from '@/services';
 import { youtube } from '@/utils';
 import { createError, logInfo } from '@/utils/logger';
@@ -151,6 +152,10 @@ export class ChatItemStore {
     }
 
     private handleSpeedChange(flowInTime: number) {
+        this.resetNonStickyChatItems();
+    }
+
+    private handleLineHeightChange(lineHeight: number) {
         this.resetNonStickyChatItems();
     }
 
@@ -327,7 +332,7 @@ export class ChatItemStore {
                 chatItemsByLineNumber: this.chatItemsByLineNumber,
                 elementWidth: chatItem.element!.getBoundingClientRect().width,
                 addTimestamp,
-                maxLineNumber: this.settingsStore.settings.totalNumberOfLines,
+                maxLineNumber: this.uiStore.maxNumberOfLines(),
                 flowTimeInSec: this.settingsStore.settings.flowTimeInSec,
                 containerWidth: this.uiStore.state.playerState.width,
                 displayNumberOfLines: chatItem.numberOfLines,
@@ -591,6 +596,16 @@ export class ChatItemStore {
                 }
 
                 return this.debugInfoStore.state.isDebugging;
+            });
+
+            createEffect((prev) => {
+                const newLineHeight = this.uiStore.lineHeight();
+                if (prev === newLineHeight) {
+                    return;
+                }
+
+                this.handleLineHeightChange(newLineHeight);
+                return newLineHeight;
             });
 
             onCleanup(() => {

@@ -1,8 +1,12 @@
 import { noop } from 'lodash-es';
-import { createRoot, onCleanup, onMount } from 'solid-js';
+import { type Accessor, createRoot, onCleanup, onMount } from 'solid-js';
 import { type SetStoreFunction, createStore } from 'solid-js/store';
 
+import { FontScaleMethod } from '@/models/settings';
+import { assertNever } from '@/utils';
+
 import type { PopupType } from './types';
+import { type SettingsStore } from '../settings';
 
 export type PlayerStateModel = {
     width: number;
@@ -35,6 +39,7 @@ export class UiStore {
     constructor(
         public videoPlayerEle: HTMLDivElement,
         private readonly videoEle: HTMLVideoElement,
+        private readonly settingsStore: SettingsStore,
     ) {
         const [state, setState] = createStore<UiStoreState>({
             currentPopup: undefined,
@@ -53,6 +58,27 @@ export class UiStore {
         // eslint-disable-next-line solid/reactivity
         this.state = state;
         this.setState = setState;
+    }
+
+    lineHeight() {
+        const playerHeight = this.state.playerState.height;
+        const { fontScaleMethod } = this.settingsStore.settings;
+        switch (fontScaleMethod) {
+            case FontScaleMethod.FIXED:
+                return this.settingsStore.settings.fontSizeFixed;
+            case FontScaleMethod.SCALED:
+                return (
+                    (playerHeight *
+                        this.settingsStore.settings.fontSizeScaled) /
+                    100
+                );
+            default:
+                return assertNever(fontScaleMethod);
+        }
+    }
+
+    maxNumberOfLines() {
+        return this.state.playerState.height / this.lineHeight();
     }
 
     init() {

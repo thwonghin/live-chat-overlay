@@ -15,10 +15,6 @@ const ChatFlow: Component = () => {
         store.chatItemStore.removeStickyChatItemById(chatItem.value.id);
     }
 
-    const lineHeight = () =>
-        store.uiStore.state.playerState.height /
-        store.settingsStore.settings.totalNumberOfLines;
-
     function handleRenderChatItem(chatItemId: string, element: HTMLElement) {
         store.chatItemStore.assignChatItemEle(chatItemId, element);
     }
@@ -27,7 +23,7 @@ const ChatFlow: Component = () => {
         <div
             class={styles['container']}
             style={{
-                'font-size': `${lineHeight()}px`,
+                'font-size': `${store.uiStore.lineHeight()}px`,
             }}
         >
             <div
@@ -46,7 +42,8 @@ const ChatFlow: Component = () => {
                                 top={
                                     chatItem.lineNumber === undefined
                                         ? 0
-                                        : lineHeight() * chatItem.lineNumber
+                                        : store.uiStore.lineHeight() *
+                                          chatItem.lineNumber
                                 }
                                 width={chatItem.width}
                                 containerWidth={
