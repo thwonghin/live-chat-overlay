@@ -34,16 +34,25 @@ function renderMetrics(metrics: RoundedMetrics): string[] {
 type DebugOverlayLayoutProps = Readonly<{
     chatItemsCountByLineNumber: Record<number, number>;
     processXhrMetrics: RoundedMetrics;
+    enqueuedChatItemCount: number;
     processChatEventMetrics: RoundedMetrics;
     processChatEventQueueLength: number;
     outdatedRemovedChatEventCount: number;
     cleanedChatItemCount: number;
     liveChatDelay: RoundedMetrics;
+    debugIntervalInSeconds: number;
 }>;
 
 export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
     props,
 ) => {
+    const cleanSpeed = () =>
+        props.cleanedChatItemCount / props.debugIntervalInSeconds;
+    const enqueueSpeed = () =>
+        props.enqueuedChatItemCount / props.debugIntervalInSeconds;
+    const dequeueSpeed = () =>
+        props.processChatEventMetrics.count / props.debugIntervalInSeconds;
+
     return (
         <>
             <div class={styles['debug-container']}>
@@ -55,6 +64,13 @@ export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
                         }: ${count}`}</p>
                     )}
                 </For>
+                <br />
+                <p class={styles['debug-text']}>Enqueue Chat Speed:</p>
+                <p class={styles['debug-text']}>{enqueueSpeed()}</p>
+                <p class={styles['debug-text']}>Dequeue Speed:</p>
+                <p class={styles['debug-text']}>{dequeueSpeed()}</p>
+                <p class={styles['debug-text']}>Clean Speed:</p>
+                <p class={styles['debug-text']}>{cleanSpeed()}</p>
             </div>
             <div class={styles['metrics-container']}>
                 <Show when={props.processXhrMetrics.count !== 0}>
@@ -130,6 +146,14 @@ const DebugOverlay: Component = () => {
             liveChatDelay={roundMetrics(
                 store.debugInfoStore.state.liveChatDelay,
             )}
+            enqueuedChatItemCount={
+                store.debugInfoStore.state.enqueuedChatItemCount
+            }
+            debugIntervalInSeconds={
+                (store.debugInfoStore.state.lastEventTimeMs -
+                    store.debugInfoStore.state.debugStartTimeMs) /
+                1000
+            }
         />
     );
 };

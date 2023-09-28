@@ -32,6 +32,7 @@ type DebugInfo = Partial<{
     processXhrResponseMs: number;
     processChatEventMs: number;
     processChatEventQueueLength: number;
+    enqueuedChatItemCount: number;
     outdatedChatEventCount: number;
     cleanedChatItemCount: number;
     liveChatDelayInMs: number;
@@ -111,10 +112,7 @@ export class ChatItemStore {
 
         this.setState('normalChatItems', []);
         this.setState('stickyChatItems', []);
-
-        this.updateDebugInfo({
-            processChatEventQueueLength: 0,
-        });
+        this.debugInfoStore.resetMetrics();
     }
 
     private startDebug(): void {
@@ -233,6 +231,12 @@ export class ChatItemStore {
         if (info.cleanedChatItemCount !== undefined) {
             this.debugInfoStore.addCleanedChatItemCount(
                 info.cleanedChatItemCount,
+            );
+        }
+
+        if (info.enqueuedChatItemCount !== undefined) {
+            this.debugInfoStore.addEnqueueChatItemCount(
+                info.enqueuedChatItemCount,
             );
         }
 
@@ -482,63 +486,71 @@ export class ChatItemStore {
             this.reset();
         }
 
-        const { runtime } = await benchmarkRuntimeAsync(async () => {
-            const timeInfo = this.getCurrentTimeInfo();
-            const chatItems =
-                this.mode === Mode.REPLAY
-                    ? mapChatItemsFromReplayResponse(
-                          timeInfo,
-                          continuationContents as ReplayContinuationContents,
-                          this.settingsStore.settings,
-                          isInitData,
-                      )
-                    : mapChatItemsFromLiveResponse(
-                          timeInfo,
-                          continuationContents as LiveContinuationContents,
-                          this.settingsStore.settings,
-                          isInitData,
-                      );
+        const { runtime, result: enqueuedChatItemCount } =
+            await benchmarkRuntimeAsync(async () => {
+                const timeInfo = this.getCurrentTimeInfo();
+                const chatItems =
+                    this.mode === Mode.REPLAY
+                        ? mapChatItemsFromReplayResponse(
+                              timeInfo,
+                              continuationContents as ReplayContinuationContents,
+                              this.settingsStore.settings,
+                              isInitData,
+                          )
+                        : mapChatItemsFromLiveResponse(
+                              timeInfo,
+                              continuationContents as LiveContinuationContents,
+                              this.settingsStore.settings,
+                              isInitData,
+                          );
 
-            const newItemTimestamp = chatItems[0]?.value.videoTimestampInMs;
-            const oldItemTimestamp = last(this.state.normalChatItems)?.value
-                .videoTimestampInMs;
+                const newItemTimestamp = chatItems[0]?.value.videoTimestampInMs;
+                const oldItemTimestamp = last(this.state.normalChatItems)?.value
+                    .videoTimestampInMs;
 
-            if (
-                this.mode === Mode.REPLAY &&
-                newItemTimestamp !== undefined &&
-                oldItemTimestamp !== undefined &&
-                newItemTimestamp < oldItemTimestamp
-            ) {
-                // New seek happened older than the current time
-                this.reset();
-            }
+                if (
+                    this.mode === Mode.REPLAY &&
+                    newItemTimestamp !== undefined &&
+                    oldItemTimestamp !== undefined &&
+                    newItemTimestamp < oldItemTimestamp
+                ) {
+                    // New seek happened older than the current time
+                    this.reset();
+                }
 
-            const nonDuplicatedChatItems = chatItems.filter(
-                (item) => !this.chatItemIds.has(item.value.id),
-            );
-            nonDuplicatedChatItems.forEach((item) => {
-                this.chatItemIds.add(item.value.id);
-            });
+                const nonDuplicatedChatItems = chatItems.filter(
+                    (item) => !this.chatItemIds.has(item.value.id),
+                );
+                nonDuplicatedChatItems.forEach((item) => {
+                    this.chatItemIds.add(item.value.id);
+                });
 
-            const stickyChatItems = nonDuplicatedChatItems.filter(
-                (chatItem) =>
-                    chatItem.messageSettings.isSticky &&
-                    !this.closedPinnedComment.has(chatItem.value.id),
-            );
-            const normalChatItems = nonDuplicatedChatItems.filter(
-                (chatItem) => !chatItem.messageSettings.isSticky,
-            );
-            this.normalChatItemQueue.push(
-                ...normalChatItems.map((item) => item.value.id),
-            );
+                const stickyChatItems = nonDuplicatedChatItems.filter(
+                    (chatItem) =>
+                        chatItem.messageSettings.isSticky &&
+                        !this.closedPinnedComment.has(chatItem.value.id),
+                );
+                const normalChatItems = nonDuplicatedChatItems.filter(
+                    (chatItem) => !chatItem.messageSettings.isSticky,
+                );
+                this.normalChatItemQueue.push(
+                    ...normalChatItems.map((item) => item.value.id),
+                );
 
-            this.setState('normalChatItems', (s) => s.concat(normalChatItems));
-            this.setState('stickyChatItems', (s) => s.concat(stickyChatItems));
-        }, this.debugInfoStore.state.isDebugging);
+                this.setState('normalChatItems', (s) =>
+                    s.concat(normalChatItems),
+                );
+                this.setState('stickyChatItems', (s) =>
+                    s.concat(stickyChatItems),
+                );
+
+                return normalChatItems.length;
+            }, this.debugInfoStore.state.isDebugging);
 
         this.updateDebugInfo({
             processXhrResponseMs: runtime,
             processChatEventQueueLength: this.normalChatItemQueue.length,
+            enqueuedChatItemCount,
         });
     };
 
