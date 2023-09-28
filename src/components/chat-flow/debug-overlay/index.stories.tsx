@@ -13,6 +13,7 @@ export const DebugOverlay: Component = () => {
                 chatItemsCountByLineNumber={{
                     1: 1,
                 }}
+                enqueuedChatItemCount={1}
                 processChatEventMetrics={{
                     min: '100.00',
                     max: '200.00',
@@ -37,6 +38,7 @@ export const DebugOverlay: Component = () => {
                 processChatEventQueueLength={100}
                 outdatedRemovedChatEventCount={200}
                 cleanedChatItemCount={300}
+                debugIntervalInSeconds={1000}
             />
         </div>
     );
