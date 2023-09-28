@@ -65,7 +65,7 @@ export const DebugOverlayLayout: Component<DebugOverlayLayoutProps> = (
                     )}
                 </For>
                 <br />
-                <p class={styles['debug-text']}>Enqueue Chat Speed:</p>
+                <p class={styles['debug-text']}>Enqueue Speed:</p>
                 <p class={styles['debug-text']}>{enqueueSpeed()}</p>
                 <p class={styles['debug-text']}>Dequeue Speed:</p>
                 <p class={styles['debug-text']}>{dequeueSpeed()}</p>
