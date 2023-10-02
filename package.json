@@ -35,12 +35,12 @@
         "@storybook/blocks": "^7.4.5",
         "@storybook/html": "^7.4.5",
         "@storybook/html-vite": "^7.4.5",
-        "@storybook/testing-library": "^0.2.1",
+        "@storybook/testing-library": "^0.2.2",
         "@types/lodash-es": "^4.17.9",
-        "@types/node": "^18.18.0",
+        "@types/node": "^18.18.3",
         "@types/webextension-polyfill": "^0.10.4",
-        "@typescript-eslint/eslint-plugin": "^6.7.3",
-        "@typescript-eslint/parser": "^6.7.3",
+        "@typescript-eslint/eslint-plugin": "^6.7.4",
+        "@typescript-eslint/parser": "^6.7.4",
         "autoprefixer": "^10.4.16",
         "eslint": "^8.50.0",
         "eslint-config-prettier": "^9.0.0",
@@ -63,14 +63,14 @@
         "stylelint-config-standard-scss": "^11.0.0",
         "stylelint-order": "^6.0.3",
         "stylelint-prettier": "^4.0.2",
-        "type-fest": "^4.3.2",
+        "type-fest": "^4.3.3",
         "typescript": "^5.2.2",
         "typescript-plugin-css-modules": "^5.0.1",
         "vite": "^4.4.9",
         "vite-plugin-solid": "^2.7.0",
         "vite-plugin-web-extension": "^3.2.0",
         "vite-tsconfig-paths": "^4.2.1",
-        "vitest": "^0.34.5"
+        "vitest": "^0.34.6"
     },
     "browserslist": [
         "Chrome >= 88"
@@ -82,7 +82,6 @@
         "@kobalte/core": "^0.11.0",
         "@solid-primitives/map": "^0.4.8",
         "@solid-primitives/scheduled": "^1.4.1",
-        "core-js": "^3.32.2",
         "lodash-es": "^4.17.21",
         "solid-js": "^1.7.12",
         "webextension-polyfill": "^0.10.0"
