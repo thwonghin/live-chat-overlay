@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.15.0](https://github.com/thwonghin/live-chat-overlay/compare/v2.14.1...v2.15.0) (2023-10-02)
+
+
+### Features
+
+* record chat speed in debug mode ([#799](https://github.com/thwonghin/live-chat-overlay/issues/799)) ([e0b7f77](https://github.com/thwonghin/live-chat-overlay/commit/e0b7f773a0567bce275eea14891f82ba93630ff8))
+
+
+### Bug Fixes
+
+* avoid freezing ([#801](https://github.com/thwonghin/live-chat-overlay/issues/801)) ([2858036](https://github.com/thwonghin/live-chat-overlay/commit/2858036875b20c201aa9d03277bd651cbec7fadf))
+
 ### [2.14.1](https://github.com/thwonghin/live-chat-overlay/compare/v2.14.0...v2.14.1) (2023-09-23)
 
 
