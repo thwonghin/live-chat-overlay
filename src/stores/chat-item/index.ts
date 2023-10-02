@@ -40,6 +40,7 @@ type DebugInfo = Partial<{
 
 const DEQUEUE_INTERVAL = 1000 / 60; // 5 FPS
 const CLEAN_INTERVAL = 1000;
+const MAX_DEQUEUE_ITEMS = 5;
 
 export type ChatItemStoreState = {
     normalChatItems: ChatItemModel[];
@@ -266,8 +267,9 @@ export class ChatItemStore {
             return;
         }
 
-        while (this.dequeueNormalChatItem()) {
-            continue;
+        let dequeueCount = MAX_DEQUEUE_ITEMS;
+        while (dequeueCount > 0 && this.dequeueNormalChatItem()) {
+            dequeueCount--;
         }
     };
 
