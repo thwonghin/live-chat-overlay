@@ -1,5 +1,6 @@
 import { render } from 'solid-js/web';
 
+import { OVERLAY_CONTAINER_ID, PLAYER_CONTROL_CONTAINER_ID } from '@/constants';
 import * as contexts from '@/contexts';
 import type { RootStore } from '@/stores';
 import { youtube } from '@/utils';
@@ -7,9 +8,6 @@ import { createError } from '@/utils/logger';
 
 import App from './app';
 import styles from './index.module.scss';
-
-const OVERLAY_CONTAINER = 'live-chat-overlay-app-container';
-const PLAYER_CONTROL_CONTAINER = 'live-chat-player-control-container';
 
 export async function injectLiveChatOverlay(
     store: RootStore,
@@ -27,19 +25,22 @@ export async function injectLiveChatOverlay(
     rightControlEle.style.display = 'flex';
 
     const liveChatContainer = document.createElement('div');
-    liveChatContainer.id = OVERLAY_CONTAINER;
+    liveChatContainer.id = OVERLAY_CONTAINER_ID;
     liveChatContainer.className = styles['live-chat-container']!;
     videoPlayerContainer.append(liveChatContainer);
 
     const playerControlContainer = document.createElement('span');
-    playerControlContainer.id = PLAYER_CONTROL_CONTAINER;
+    playerControlContainer.id = PLAYER_CONTROL_CONTAINER_ID;
     playerControlContainer.className = styles['player-control-container']!;
     rightControlEle.prepend(playerControlContainer);
 
     const cleanupRender = render(
         () => (
             <contexts.rootStore.StoreProvider store={store}>
-                <App playerControlContainer={playerControlContainer} />
+                <App
+                    playerControlContainer={playerControlContainer}
+                    liveChatContainer={liveChatContainer}
+                />
             </contexts.rootStore.StoreProvider>
         ),
         liveChatContainer,

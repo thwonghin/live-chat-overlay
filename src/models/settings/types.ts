@@ -36,6 +36,14 @@ export const messageSettingsKeys = [
 
 export type MessageSettingsKey = (typeof messageSettingsKeys)[number];
 
+export type MessagePosition = {
+    top: number;
+    left: number;
+    bottom: number;
+    right: number;
+    mode: 'fixed' | 'ratio';
+};
+
 export type Settings = {
     isEnabled: boolean;
     totalNumberOfLines: number;
@@ -45,4 +53,5 @@ export type Settings = {
     fontSizeFixed: number;
     fontSizeScaled: number;
     fontScaleMethod: FontScaleMethod;
+    messagePosition: MessagePosition;
 };

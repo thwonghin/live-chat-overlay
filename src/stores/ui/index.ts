@@ -77,9 +77,64 @@ export class UiStore {
         }
     }
 
+    messageFlowDimensionPx(): {
+        top: number;
+        bottom: number;
+        left: number;
+        right: number;
+        width: number;
+        height: number;
+    } {
+        const { messagePosition } = this.settingsStore.settings;
+        const { mode, top, left, bottom, right } = messagePosition;
+
+        switch (mode) {
+            case 'fixed': {
+                const clampedBottom = Math.min(
+                    bottom,
+                    this.state.playerState.height,
+                );
+                const clampedRight = Math.min(
+                    right,
+                    this.state.playerState.width,
+                );
+                return {
+                    top,
+                    left,
+                    bottom: clampedBottom,
+                    right: clampedRight,
+                    height: clampedBottom - top,
+                    width: clampedRight - left,
+                };
+            }
+
+            case 'ratio': {
+                const fixedTop = (this.state.playerState.height * top) / 100;
+                const fixedBottom =
+                    (this.state.playerState.height * bottom) / 100;
+                const fixedLeft = (this.state.playerState.width * left) / 100;
+                const fixedRight = (this.state.playerState.width * right) / 100;
+
+                return {
+                    top: fixedTop,
+                    bottom: fixedBottom,
+                    left: fixedLeft,
+                    right: fixedRight,
+                    height: fixedBottom - fixedTop,
+                    width: fixedRight - fixedLeft,
+                };
+            }
+
+            default:
+                return assertNever(mode);
+        }
+    }
+
     maxNumberOfLines() {
+        const messageFlowDimensionPx = this.messageFlowDimensionPx();
+
         return Math.min(
-            this.state.playerState.height / this.lineHeight(),
+            messageFlowDimensionPx.height / this.lineHeight(),
             this.settingsStore.settings.totalNumberOfLines,
         );
     }
