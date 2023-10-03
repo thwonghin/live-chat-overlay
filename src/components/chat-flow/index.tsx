@@ -1,4 +1,11 @@
-import { type Component, For, Show } from 'solid-js';
+import {
+    type Component,
+    For,
+    Show,
+    type JSX,
+    createEffect,
+    createMemo,
+} from 'solid-js';
 
 import { useStore } from '@/contexts/root-store';
 import type { ChatItemModel } from '@/models/chat-item';
@@ -8,7 +15,11 @@ import DebugOverlay from './debug-overlay';
 import styles from './index.module.scss';
 import MessageFlower from './message-flower';
 
-const ChatFlow: Component = () => {
+type Props = {
+    liveChatContainer: HTMLDivElement;
+};
+
+const ChatFlow: Component<Props> = (props) => {
     const store = useStore();
 
     function handleRemoveMessage(chatItem: ChatItemModel) {
@@ -19,10 +30,30 @@ const ChatFlow: Component = () => {
         store.chatItemStore.assignChatItemEle(chatItemId, element);
     }
 
+    const messageFlowDimensionPx = createMemo(() =>
+        store.uiStore.messageFlowDimensionPx(),
+    );
+
+    const containerStyle = (): JSX.CSSProperties => {
+        const dimensionInPx = messageFlowDimensionPx();
+
+        return {
+            top: `${dimensionInPx.top}px`,
+            left: `${dimensionInPx.left}px`,
+            width: `${dimensionInPx.width}px`,
+            height: `${dimensionInPx.height}px`,
+        };
+    };
+
+    createEffect(() => {
+        props.liveChatContainer.style.height = `${store.uiStore.state.playerState.height}px`;
+    });
+
     return (
         <div
             class={styles['container']}
             style={{
+                ...containerStyle(),
                 'font-size': `${store.uiStore.lineHeight()}px`,
             }}
         >
@@ -46,9 +77,7 @@ const ChatFlow: Component = () => {
                                           chatItem.lineNumber
                                 }
                                 width={chatItem.width}
-                                containerWidth={
-                                    store.uiStore.state.playerState.width
-                                }
+                                containerWidth={messageFlowDimensionPx().width}
                             >
                                 <ChatItemRenderer
                                     chatItem={chatItem}

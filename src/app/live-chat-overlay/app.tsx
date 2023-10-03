@@ -4,12 +4,13 @@ import PopupContainer from '@/components/popup';
 
 type Props = Readonly<{
     playerControlContainer: HTMLSpanElement;
+    liveChatContainer: HTMLDivElement;
 }>;
 
 const App = (props: Props) => {
     return (
         <>
-            <ChatFlow />
+            <ChatFlow liveChatContainer={props.liveChatContainer} />
             <PopupContainer
                 playerControlContainer={props.playerControlContainer}
             />

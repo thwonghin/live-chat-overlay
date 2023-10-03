@@ -39,6 +39,13 @@ export const defaultSettings: Settings = {
     fontSizeFixed: 20,
     fontSizeScaled: 6.67,
     fontScaleMethod: FontScaleMethod.SCALED,
+    messagePosition: {
+        top: 0,
+        bottom: 100,
+        left: 0,
+        right: 100,
+        mode: 'ratio',
+    },
     messageSettings: {
         guest: commonMessageSettings,
         member: {

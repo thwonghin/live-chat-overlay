@@ -347,7 +347,7 @@ export class ChatItemStore {
                 addTimestamp,
                 maxLineNumber: this.uiStore.maxNumberOfLines(),
                 flowTimeInSec: this.settingsStore.settings.flowTimeInSec,
-                containerWidth: this.uiStore.state.playerState.width,
+                containerWidth: this.uiStore.messageFlowDimensionPx().width,
                 displayNumberOfLines: chatItem.numberOfLines,
             });
 
