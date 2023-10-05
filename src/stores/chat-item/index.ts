@@ -56,7 +56,6 @@ export class ChatItemStore {
     private mode: Mode = Mode.LIVE;
     private normalChatItemQueue: string[] = [];
     private readonly chatItemsByLineNumber = new Map<number, ChatItemModel[]>();
-    private readonly chatItemIds = new Set<string>();
 
     // Preserve the value of this set so the pinned comment won't show again when reset
     private readonly closedPinnedComment = new Set<string>();
@@ -72,16 +71,14 @@ export class ChatItemStore {
                         this.setState('normalChatItems', {
                             [chatItemId]: undefined,
                         });
-                        this.chatItemIds.delete(chatItemId);
                     }
                 }
             }
-
-            this.normalChatItemQueue = this.normalChatItemQueue.filter(
-                (itemId) => this.chatItemIds.has(itemId),
-            );
-            this.chatItemsByLineNumber.clear();
         });
+        this.normalChatItemQueue = this.normalChatItemQueue.filter(
+            (itemId) => itemId in this.state.normalChatItems,
+        );
+        this.chatItemsByLineNumber.clear();
     });
 
     constructor(
@@ -117,7 +114,6 @@ export class ChatItemStore {
     }
 
     removeStickyChatItemById(id: string): void {
-        this.chatItemIds.delete(id);
         this.closedPinnedComment.add(id);
         this.setState('stickyChatItems', {
             [id]: undefined,
@@ -126,7 +122,6 @@ export class ChatItemStore {
 
     private reset(): void {
         this.chatItemsByLineNumber.clear();
-        this.chatItemIds.clear();
         this.normalChatItemQueue.splice(0);
         this.setState(
             reconcile({
@@ -311,7 +306,6 @@ export class ChatItemStore {
                     currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
             });
 
-            this.chatItemIds.delete(chatItemId);
             this.setState('normalChatItems', {
                 [chatItemId]: undefined,
             });
@@ -465,7 +459,6 @@ export class ChatItemStore {
                         line.findIndex((i) => i.value.id === chatItem.value.id),
                         1,
                     );
-                    this.chatItemIds.delete(chatItem.value.id);
                     cleanedChatItemCount++;
 
                     this.setState('normalChatItems', {
@@ -527,11 +520,12 @@ export class ChatItemStore {
                 batch(() => {
                     chatItems.forEach((item) => {
                         const chatItemId = item.value.id;
-                        if (this.chatItemIds.has(chatItemId)) {
+                        if (
+                            chatItemId in this.state.normalChatItems ||
+                            chatItemId in this.state.stickyChatItems
+                        ) {
                             return;
                         }
-
-                        this.chatItemIds.add(chatItemId);
 
                         if (!item.messageSettings.isSticky) {
                             this.setState('normalChatItems', {
