@@ -1,6 +1,6 @@
-import { last, noop } from 'lodash-es';
-import { createEffect, createRoot, onCleanup, onMount } from 'solid-js';
-import { type SetStoreFunction, createStore } from 'solid-js/store';
+import { noop, debounce } from 'lodash-es';
+import { createEffect, createRoot, onCleanup, onMount, batch } from 'solid-js';
+import { type SetStoreFunction, createStore, reconcile } from 'solid-js/store';
 
 import type {
     YoutubeChatResponse,
@@ -43,14 +43,15 @@ const CLEAN_INTERVAL = 1000;
 const MAX_DEQUEUE_ITEMS = 5;
 
 export type ChatItemStoreState = {
-    normalChatItems: ChatItemModel[];
-    stickyChatItems: ChatItemModel[];
+    normalChatItems: Record<string, ChatItemModel>;
+    stickyChatItems: Record<string, ChatItemModel>;
 };
 
 export class ChatItemStore {
     state: ChatItemStoreState;
     cleanup = noop;
     private readonly setState: SetStoreFunction<ChatItemStoreState>;
+    private lastTimestamp = 0;
     private isInitiated = false;
     private mode: Mode = Mode.LIVE;
     private normalChatItemQueue: string[] = [];
@@ -62,14 +63,35 @@ export class ChatItemStore {
     private tickId: number | undefined;
     private cleanDisplayedIntervalId: number | undefined;
 
+    private readonly resetNonStickyChatItems = debounce(() => {
+        batch(() => {
+            for (const chatItemId in this.state.normalChatItems) {
+                if (Object.hasOwn(this.state.normalChatItems, chatItemId)) {
+                    const chatItem = this.state.normalChatItems[chatItemId]!;
+                    if (chatItem.addTimestamp) {
+                        this.setState('normalChatItems', {
+                            [chatItemId]: undefined,
+                        });
+                        this.chatItemIds.delete(chatItemId);
+                    }
+                }
+            }
+
+            this.normalChatItemQueue = this.normalChatItemQueue.filter(
+                (itemId) => this.chatItemIds.has(itemId),
+            );
+            this.chatItemsByLineNumber.clear();
+        });
+    });
+
     constructor(
         private readonly uiStore: UiStore,
         private readonly settingsStore: SettingsStore,
         private readonly debugInfoStore: DebugInfoStore,
     ) {
         const [state, setState] = createStore<ChatItemStoreState>({
-            normalChatItems: [],
-            stickyChatItems: [],
+            normalChatItems: {},
+            stickyChatItems: {},
         });
         // eslint-disable-next-line solid/reactivity
         this.state = state;
@@ -89,30 +111,30 @@ export class ChatItemStore {
     assignChatItemEle(chatItemId: string, element: HTMLElement) {
         // Storing ele instead of width here so we can get the latest width value
         // when the player size is updated
-        this.setState(
-            'normalChatItems',
-            (item) => item.value.id === chatItemId,
-            {
-                element,
-            },
-        );
+        this.setState('normalChatItems', chatItemId, {
+            element,
+        });
     }
 
     removeStickyChatItemById(id: string): void {
         this.chatItemIds.delete(id);
         this.closedPinnedComment.add(id);
-        this.setState('stickyChatItems', (s) =>
-            s.filter((chatItem) => chatItem.value.id !== id),
-        );
+        this.setState('stickyChatItems', {
+            [id]: undefined,
+        });
     }
 
     private reset(): void {
         this.chatItemsByLineNumber.clear();
         this.chatItemIds.clear();
         this.normalChatItemQueue.splice(0);
+        this.setState(
+            reconcile({
+                normalChatItems: {},
+                stickyChatItems: {},
+            }),
+        );
 
-        this.setState('normalChatItems', []);
-        this.setState('stickyChatItems', []);
         this.debugInfoStore.resetMetrics();
     }
 
@@ -130,26 +152,7 @@ export class ChatItemStore {
         }
     };
 
-    private resetNonStickyChatItems(): void {
-        this.setState('normalChatItems', (items) =>
-            // Only remove the items that are displaying
-            items.filter((item) => !item.addTimestamp),
-        );
-        this.chatItemIds.clear();
-        this.state.normalChatItems.forEach((chatItem) => {
-            this.chatItemIds.add(chatItem.value.id);
-        });
-        this.state.stickyChatItems.forEach((chatItem) => {
-            this.chatItemIds.add(chatItem.value.id);
-        });
-        this.normalChatItemQueue = this.normalChatItemQueue.filter((itemId) =>
-            this.chatItemIds.has(itemId),
-        );
-
-        this.chatItemsByLineNumber.clear();
-    }
-
-    private handlePlayerSizeChange(_width: number, _height: number) {
+    private handlePlayerSizeChange(_width: number) {
         this.resetNonStickyChatItems();
     }
 
@@ -267,10 +270,12 @@ export class ChatItemStore {
             return;
         }
 
-        let dequeueCount = MAX_DEQUEUE_ITEMS;
-        while (dequeueCount > 0 && this.dequeueNormalChatItem()) {
-            dequeueCount--;
-        }
+        batch(() => {
+            let dequeueCount = MAX_DEQUEUE_ITEMS;
+            while (dequeueCount > 0 && this.dequeueNormalChatItem()) {
+                dequeueCount--;
+            }
+        });
     };
 
     /**
@@ -288,9 +293,7 @@ export class ChatItemStore {
             return false;
         }
 
-        const chatItem = this.state.normalChatItems.find(
-            (item) => item.value.id === chatItemId,
-        );
+        const chatItem = this.state.normalChatItems[chatItemId];
         if (!chatItem) {
             throw createError(`Chat Item not found for id = ${chatItemId}`);
         }
@@ -309,9 +312,9 @@ export class ChatItemStore {
             });
 
             this.chatItemIds.delete(chatItemId);
-            this.setState('normalChatItems', (s) =>
-                s.filter((item) => item.value.id !== chatItemId),
-            );
+            this.setState('normalChatItems', {
+                [chatItemId]: undefined,
+            });
 
             this.normalChatItemQueue.shift();
             return true;
@@ -369,17 +372,13 @@ export class ChatItemStore {
                 }
             }
 
-            this.setState(
-                'normalChatItems',
-                (item) => item.value.id === chatItem.value.id,
-                {
-                    lineNumber,
-                    addTimestamp,
-                    // Freeze the width value for performance
-                    // This item should be removed anyway when the player width is updated
-                    width: chatItem.element?.getBoundingClientRect().width,
-                },
-            );
+            this.setState('normalChatItems', chatItem.value.id, {
+                lineNumber,
+                addTimestamp,
+                // Freeze the width value for performance
+                // This item should be removed anyway when the player width is updated
+                width: chatItem.element?.getBoundingClientRect().width,
+            });
 
             this.normalChatItemQueue.shift();
             return true;
@@ -435,40 +434,46 @@ export class ChatItemStore {
             return item.addTimestamp >= cutoffTimestamp;
         }
 
-        this.state.normalChatItems.forEach((chatItem) => {
-            if (shouldKeepChatItem(chatItem)) {
-                return;
+        batch(() => {
+            for (const chatItemId in this.state.normalChatItems) {
+                if (Object.hasOwn(this.state.normalChatItems, chatItemId)) {
+                    const chatItem = this.state.normalChatItems[chatItemId]!;
+                    if (shouldKeepChatItem(chatItem)) {
+                        return;
+                    }
+
+                    if (chatItem.lineNumber === undefined) {
+                        throw createError(
+                            `Unknown line number for ${chatItem.value.id}`,
+                        );
+                    }
+
+                    const line =
+                        this.chatItemsByLineNumber.get(chatItem.lineNumber) ??
+                        [];
+                    const index = line.findIndex(
+                        (i) => i.value.id === chatItem.value.id,
+                    );
+
+                    if (index === -1) {
+                        throw createError(
+                            `Unknown index in line number ${chatItem.lineNumber} for ${chatItem.value.id}`,
+                        );
+                    }
+
+                    line.splice(
+                        line.findIndex((i) => i.value.id === chatItem.value.id),
+                        1,
+                    );
+                    this.chatItemIds.delete(chatItem.value.id);
+                    cleanedChatItemCount++;
+
+                    this.setState('normalChatItems', {
+                        [chatItemId]: undefined,
+                    });
+                }
             }
-
-            if (chatItem.lineNumber === undefined) {
-                throw createError(
-                    `Unknown line number for ${chatItem.value.id}`,
-                );
-            }
-
-            const line =
-                this.chatItemsByLineNumber.get(chatItem.lineNumber) ?? [];
-            const index = line.findIndex(
-                (i) => i.value.id === chatItem.value.id,
-            );
-
-            if (index === -1) {
-                throw createError(
-                    `Unknown index in line number ${chatItem.lineNumber} for ${chatItem.value.id}`,
-                );
-            }
-
-            line.splice(
-                line.findIndex((i) => i.value.id === chatItem.value.id),
-                1,
-            );
-            this.chatItemIds.delete(chatItem.value.id);
-            cleanedChatItemCount++;
         });
-
-        this.setState('normalChatItems', (items) =>
-            items.filter(shouldKeepChatItem),
-        );
 
         this.updateDebugInfo({ cleanedChatItemCount });
     };
@@ -507,46 +512,41 @@ export class ChatItemStore {
                           );
 
                 const newItemTimestamp = chatItems[0]?.value.videoTimestampInMs;
-                const oldItemTimestamp = last(this.state.normalChatItems)?.value
-                    .videoTimestampInMs;
 
                 if (
                     this.mode === Mode.REPLAY &&
                     newItemTimestamp !== undefined &&
-                    oldItemTimestamp !== undefined &&
-                    newItemTimestamp < oldItemTimestamp
+                    newItemTimestamp < this.lastTimestamp
                 ) {
                     // New seek happened older than the current time
                     this.reset();
                 }
 
-                const nonDuplicatedChatItems = chatItems.filter(
-                    (item) => !this.chatItemIds.has(item.value.id),
-                );
-                nonDuplicatedChatItems.forEach((item) => {
-                    this.chatItemIds.add(item.value.id);
+                this.lastTimestamp = newItemTimestamp!;
+
+                batch(() => {
+                    chatItems.forEach((item) => {
+                        const chatItemId = item.value.id;
+                        if (this.chatItemIds.has(chatItemId)) {
+                            return;
+                        }
+
+                        this.chatItemIds.add(chatItemId);
+
+                        if (!item.messageSettings.isSticky) {
+                            this.setState('normalChatItems', {
+                                [chatItemId]: item,
+                            });
+                            this.normalChatItemQueue.push(chatItemId);
+                        } else if (!this.closedPinnedComment.has(chatItemId)) {
+                            this.setState('stickyChatItems', {
+                                [item.value.id]: item,
+                            });
+                        }
+                    });
                 });
 
-                const stickyChatItems = nonDuplicatedChatItems.filter(
-                    (chatItem) =>
-                        chatItem.messageSettings.isSticky &&
-                        !this.closedPinnedComment.has(chatItem.value.id),
-                );
-                const normalChatItems = nonDuplicatedChatItems.filter(
-                    (chatItem) => !chatItem.messageSettings.isSticky,
-                );
-                this.normalChatItemQueue.push(
-                    ...normalChatItems.map((item) => item.value.id),
-                );
-
-                this.setState('normalChatItems', (s) =>
-                    s.concat(normalChatItems),
-                );
-                this.setState('stickyChatItems', (s) =>
-                    s.concat(stickyChatItems),
-                );
-
-                return normalChatItems.length;
+                return chatItems.length;
             }, this.debugInfoStore.state.isDebugging);
 
         this.updateDebugInfo({
@@ -583,19 +583,16 @@ export class ChatItemStore {
             });
 
             createEffect((prev) => {
-                const newDimension = `${Math.round(
-                    this.uiStore.state.playerState.width,
-                )},${Math.round(this.uiStore.state.playerState.height)}`;
-                if (prev === newDimension) {
+                const newWidth = this.uiStore.state.playerState.width;
+                if (prev === newWidth) {
                     return;
                 }
 
                 this.handlePlayerSizeChange(
                     this.uiStore.state.playerState.width,
-                    this.uiStore.state.playerState.height,
                 );
 
-                return newDimension;
+                return newWidth;
             });
 
             createEffect((prev) => {
