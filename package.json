@@ -80,7 +80,6 @@
         "@fortawesome/fontawesome-svg-core": "^6.4.2",
         "@fortawesome/free-solid-svg-icons": "^6.4.2",
         "@kobalte/core": "^0.11.0",
-        "@solid-primitives/map": "^0.4.8",
         "@solid-primitives/scheduled": "^1.4.1",
         "lodash-es": "^4.17.21",
         "solid-js": "^1.7.12",

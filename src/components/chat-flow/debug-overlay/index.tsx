@@ -116,11 +116,14 @@ const DebugOverlay: Component = () => {
 
     const chatItemsCountByLineNumber = () => {
         const grouped: Record<number, number> = {};
-        store.chatItemStore.state.normalChatItems.forEach((item) => {
-            if (item.lineNumber !== undefined) {
-                grouped[item.lineNumber] = (grouped[item.lineNumber] ?? 0) + 1;
-            }
-        });
+        Object.values(store.chatItemStore.state.normalChatItems).forEach(
+            (item) => {
+                if (item.lineNumber !== undefined) {
+                    grouped[item.lineNumber] =
+                        (grouped[item.lineNumber] ?? 0) + 1;
+                }
+            },
+        );
 
         return grouped;
     };

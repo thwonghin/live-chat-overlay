@@ -22,9 +22,6 @@ dependencies:
   '@kobalte/core':
     specifier: ^0.11.0
     version: 0.11.0(solid-js@1.7.12)
-  '@solid-primitives/map':
-    specifier: ^0.4.8
-    version: 0.4.8(solid-js@1.7.12)
   '@solid-primitives/scheduled':
     specifier: ^1.4.1
     version: 1.4.1(solid-js@1.7.12)

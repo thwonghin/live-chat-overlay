@@ -65,7 +65,11 @@ const ChatFlow: Component<Props> = (props) => {
                     opacity: store.settingsStore.settings.globalOpacity,
                 }}
             >
-                <For each={store.chatItemStore.state.normalChatItems}>
+                <For
+                    each={Object.values(
+                        store.chatItemStore.state.normalChatItems,
+                    )}
+                >
                     {(chatItem) => {
                         return (
                             <MessageFlower
@@ -90,7 +94,11 @@ const ChatFlow: Component<Props> = (props) => {
                         );
                     }}
                 </For>
-                <For each={store.chatItemStore.state.stickyChatItems}>
+                <For
+                    each={Object.values(
+                        store.chatItemStore.state.stickyChatItems,
+                    )}
+                >
                     {(chatItem) => (
                         <ChatItemRenderer
                             chatItem={chatItem}
