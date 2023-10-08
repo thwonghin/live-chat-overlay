@@ -1,7 +1,6 @@
 import { createForm } from '@felte/solid';
 import { Button } from '@kobalte/core';
 import { createEffect, type Component } from 'solid-js';
-import browser from 'webextension-polyfill';
 
 import { type MessageSettings } from '@/models/settings';
 
@@ -27,7 +26,7 @@ const MessageSettingsForm: Component<Props> = (props) => {
     return (
         <form ref={form} class={styles['container-form']}>
             <p class={styles['helper-text']}>
-                {browser.i18n.getMessage('colorInputHelperText')}
+                {chrome.i18n.getMessage('colorInputHelperText')}
             </p>
             <div class={styles['row']}>
                 <label
@@ -37,7 +36,7 @@ const MessageSettingsForm: Component<Props> = (props) => {
                         'padding-right': '8px',
                     }}
                 >
-                    {browser.i18n.getMessage('messageSettingsColorInputLabel')}
+                    {chrome.i18n.getMessage('messageSettingsColorInputLabel')}
                     <input name="color" type="text" />
                 </label>
                 <label
@@ -46,7 +45,7 @@ const MessageSettingsForm: Component<Props> = (props) => {
                         width: '30%',
                     }}
                 >
-                    {browser.i18n.getMessage('messageSettingsWeightInputLabel')}
+                    {chrome.i18n.getMessage('messageSettingsWeightInputLabel')}
                     <input
                         name="weight"
                         type="number"
@@ -64,7 +63,7 @@ const MessageSettingsForm: Component<Props> = (props) => {
                         'padding-right': '8px',
                     }}
                 >
-                    {browser.i18n.getMessage(
+                    {chrome.i18n.getMessage(
                         'messageSettingsStrokeColorInputLabel',
                     )}
                     <input name="strokeColor" type="text" />
@@ -75,7 +74,7 @@ const MessageSettingsForm: Component<Props> = (props) => {
                         width: '30%',
                     }}
                 >
-                    {browser.i18n.getMessage(
+                    {chrome.i18n.getMessage(
                         'messageSettingsStrokeWidthInputLabel',
                     )}
                     <input
@@ -95,9 +94,7 @@ const MessageSettingsForm: Component<Props> = (props) => {
                         'padding-right': '8px',
                     }}
                 >
-                    {browser.i18n.getMessage(
-                        'messageSettingsBgColorInputLabel',
-                    )}
+                    {chrome.i18n.getMessage('messageSettingsBgColorInputLabel')}
                     <input
                         disabled={!props.isBackgroundColorEditable}
                         name="bgColor"
@@ -110,9 +107,7 @@ const MessageSettingsForm: Component<Props> = (props) => {
                         width: '30%',
                     }}
                 >
-                    {browser.i18n.getMessage(
-                        'messageSettingsOpacityInputLabel',
-                    )}
+                    {chrome.i18n.getMessage('messageSettingsOpacityInputLabel')}
                     <input
                         name="opacity"
                         type="number"
@@ -124,14 +119,14 @@ const MessageSettingsForm: Component<Props> = (props) => {
             </div>
             <div class={styles['btn-row']}>
                 <Button.Root type="submit" class={styles['btn-primary']}>
-                    {browser.i18n.getMessage('applyButtonText')}
+                    {chrome.i18n.getMessage('applyButtonText')}
                 </Button.Root>
                 <Button.Root
                     type="button"
                     class={styles['btn']}
                     onClick={reset}
                 >
-                    {browser.i18n.getMessage('resetButtonText')}
+                    {chrome.i18n.getMessage('resetButtonText')}
                 </Button.Root>
             </div>
         </form>

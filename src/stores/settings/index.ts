@@ -1,7 +1,6 @@
 import { noop } from 'lodash-es';
 import { createEffect, createRoot } from 'solid-js';
 import { type SetStoreFunction, createStore } from 'solid-js/store';
-import browser from 'webextension-polyfill';
 
 import {
     type Settings,
@@ -14,7 +13,7 @@ import { MIGRATIONS_STORAGE_KEY, SETTINGS_STORAGE_KEY } from './const';
 import { migrations } from './migrations';
 
 async function runMigrations() {
-    const result = await browser.storage.sync.get(MIGRATIONS_STORAGE_KEY);
+    const result = await chrome.storage.sync.get(MIGRATIONS_STORAGE_KEY);
     const currentMigrations = (result[MIGRATIONS_STORAGE_KEY] ??
         []) as string[];
 
@@ -24,15 +23,15 @@ async function runMigrations() {
 
     await promiseSeries(
         missingMigrations.map((migration) => async () => {
-            await migration.run(browser);
+            await migration.run();
 
-            const getResult = await browser.storage.sync.get(
+            const getResult = await chrome.storage.sync.get(
                 MIGRATIONS_STORAGE_KEY,
             );
             const migrated = (getResult[MIGRATIONS_STORAGE_KEY] ??
                 []) as string[];
 
-            await browser.storage.sync.set({
+            await chrome.storage.sync.set({
                 [MIGRATIONS_STORAGE_KEY]: [...migrated, migration.name],
             });
         }),
@@ -41,7 +40,7 @@ async function runMigrations() {
 
 async function loadFromStorage() {
     const storedSettings = await catchWithFallback(async () => {
-        const result = await browser.storage.sync.get(SETTINGS_STORAGE_KEY);
+        const result = await chrome.storage.sync.get(SETTINGS_STORAGE_KEY);
         return result[SETTINGS_STORAGE_KEY] as Settings;
     }, undefined);
 
@@ -75,7 +74,7 @@ export class SettingsStore {
     }
 
     async updateSettingsInStorage(settings: SettingsModel) {
-        return browser.storage.sync.set({
+        return chrome.storage.sync.set({
             [SETTINGS_STORAGE_KEY]: settings,
         });
     }

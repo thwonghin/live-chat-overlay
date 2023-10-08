@@ -1,7 +1,6 @@
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { Select } from '@kobalte/core';
 import { type Component } from 'solid-js';
-import browser from 'webextension-polyfill';
 
 import FontAwesomeIcon from '@/components/font-awesome';
 import { type MessageSettingsKey } from '@/models/settings';
@@ -13,23 +12,23 @@ import styles from './index.module.scss';
 function getStringByMessageKey(key: MessageSettingsKey): string {
     switch (key) {
         case 'guest':
-            return browser.i18n.getMessage('guestMessageType');
+            return chrome.i18n.getMessage('guestMessageType');
         case 'member':
-            return browser.i18n.getMessage('memberMessageType');
+            return chrome.i18n.getMessage('memberMessageType');
         case 'verified':
-            return browser.i18n.getMessage('verifiedMessageType');
+            return chrome.i18n.getMessage('verifiedMessageType');
         case 'moderator':
-            return browser.i18n.getMessage('moderatorMessageType');
+            return chrome.i18n.getMessage('moderatorMessageType');
         case 'owner':
-            return browser.i18n.getMessage('ownerMessageType');
+            return chrome.i18n.getMessage('ownerMessageType');
         case 'you':
             throw createError('"you" type message Not supported');
         case 'membership':
-            return browser.i18n.getMessage('membershipMessageType');
+            return chrome.i18n.getMessage('membershipMessageType');
         case 'super-chat':
-            return browser.i18n.getMessage('superChatMessageType');
+            return chrome.i18n.getMessage('superChatMessageType');
         case 'pinned':
-            return browser.i18n.getMessage('pinnedMessageType');
+            return chrome.i18n.getMessage('pinnedMessageType');
         default:
             return assertNever(key);
     }
@@ -67,7 +66,7 @@ const MessageSettingsTypeSelect: Component<Props> = (props) => {
 
     return (
         <label class={styles['form-label']}>
-            {browser.i18n.getMessage('messageTypeSelectLabel')}
+            {chrome.i18n.getMessage('messageTypeSelectLabel')}
             <Select.Root
                 options={messageSettingsOptions}
                 defaultValue={defaultValue}

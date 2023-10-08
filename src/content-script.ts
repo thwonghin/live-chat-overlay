@@ -1,5 +1,3 @@
-import browser from 'webextension-polyfill';
-
 import { waitForValue, youtube } from '@/utils';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
@@ -91,14 +89,14 @@ async function init() {
         store.cleanup();
         cleanupLiveChat();
         window.removeEventListener(
-            `${browser.runtime.id}-${CHAT_END_EVENT}`,
+            `${chrome.runtime.id}-${CHAT_END_EVENT}`,
             cleanup,
         );
     }
 
-    window.addEventListener(`${browser.runtime.id}-${CHAT_END_EVENT}`, cleanup);
+    window.addEventListener(`${chrome.runtime.id}-${CHAT_END_EVENT}`, cleanup);
 }
 
-window.addEventListener(`${browser.runtime.id}-${CHAT_START_EVENT}`, init);
+window.addEventListener(`${chrome.runtime.id}-${CHAT_START_EVENT}`, init);
 
 logInfo('injected script from', window.location.href);
