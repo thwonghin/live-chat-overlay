@@ -1,7 +1,6 @@
 import { createForm } from '@felte/solid';
 import { Button, Switch as KobalteSwitch } from '@kobalte/core';
 import { createEffect, type Component, Switch, Match } from 'solid-js';
-import browser from 'webextension-polyfill';
 
 import { FontScaleMethod, type Settings } from '@/models/settings';
 
@@ -42,7 +41,7 @@ const GlobalSettingsForm: Component<Props> = (props) => {
                         width: '100%',
                     }}
                 >
-                    {browser.i18n.getMessage('globalOpacityInputLabel')}
+                    {chrome.i18n.getMessage('globalOpacityInputLabel')}
                     <input
                         name="globalOpacity"
                         type="number"
@@ -53,7 +52,7 @@ const GlobalSettingsForm: Component<Props> = (props) => {
                 </label>
             </div>
             <label class={styles['form-label']}>
-                {browser.i18n.getMessage('fontSizeInputLabel')}
+                {chrome.i18n.getMessage('fontSizeInputLabel')}
             </label>
             <div class={styles['row']}>
                 <KobalteSwitch.Root
@@ -70,7 +69,7 @@ const GlobalSettingsForm: Component<Props> = (props) => {
                     }}
                 >
                     <KobalteSwitch.Label class={styles['switch-label']}>
-                        {browser.i18n.getMessage('fontScaleMethodInputLabel')}
+                        {chrome.i18n.getMessage('fontScaleMethodInputLabel')}
                     </KobalteSwitch.Label>
                     <KobalteSwitch.Control class={styles['switch-control']}>
                         <KobalteSwitch.Thumb class={styles['switch-thumb']} />
@@ -112,7 +111,7 @@ const GlobalSettingsForm: Component<Props> = (props) => {
                 </div>
             </div>
             <p class={styles['helper-text']}>
-                {browser.i18n.getMessage('fontScaleMethodHelperText')}
+                {chrome.i18n.getMessage('fontScaleMethodHelperText')}
             </p>
             <label
                 class={styles['form-label']}
@@ -120,7 +119,7 @@ const GlobalSettingsForm: Component<Props> = (props) => {
                     width: '100%',
                 }}
             >
-                {browser.i18n.getMessage(
+                {chrome.i18n.getMessage(
                     'messageSettingsNumberOfLinesInputLabel',
                 )}
                 <input
@@ -132,14 +131,14 @@ const GlobalSettingsForm: Component<Props> = (props) => {
             </label>
             <div class={styles['btn-row']}>
                 <Button.Root type="submit" class={styles['btn-primary']}>
-                    {browser.i18n.getMessage('applyButtonText')}
+                    {chrome.i18n.getMessage('applyButtonText')}
                 </Button.Root>
                 <Button.Root
                     type="button"
                     class={styles['btn']}
                     onClick={reset}
                 >
-                    {browser.i18n.getMessage('resetButtonText')}
+                    {chrome.i18n.getMessage('resetButtonText')}
                 </Button.Root>
             </div>
         </form>

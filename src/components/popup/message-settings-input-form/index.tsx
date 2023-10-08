@@ -1,6 +1,5 @@
 import { Tabs } from '@kobalte/core';
 import { type Component, Index, Show, createSignal } from 'solid-js';
-import browser from 'webextension-polyfill';
 
 import { useStore } from '@/contexts/root-store';
 import { useRect } from '@/hooks';
@@ -67,14 +66,14 @@ const MessageSettingsInputForm: Component = () => {
                     value="global"
                     ref={setFirstTabRef}
                 >
-                    {browser.i18n.getMessage('globalSettingsTitle')}
+                    {chrome.i18n.getMessage('globalSettingsTitle')}
                 </Tabs.Trigger>
                 <Tabs.Trigger
                     class={styles['tab-trigger']}
                     value="message"
                     ref={setSecondTabRef}
                 >
-                    {browser.i18n.getMessage('messageSettingsTitle')}
+                    {chrome.i18n.getMessage('messageSettingsTitle')}
                 </Tabs.Trigger>
                 <Tabs.Indicator
                     class={styles['tab-indicator']}

@@ -1,6 +1,5 @@
 import { faPalette } from '@fortawesome/free-solid-svg-icons';
 import { type Component } from 'solid-js';
-import browser from 'webextension-polyfill';
 
 import { useStore } from '@/contexts/root-store';
 
@@ -15,7 +14,7 @@ const MessageSettingsBtn: Component = () => {
 
     return (
         <BtnTooltip
-            title={browser.i18n.getMessage('messageSettingsButtonTitle')}
+            title={chrome.i18n.getMessage('messageSettingsButtonTitle')}
             onClickTrigger={handleClick}
             icon={faPalette}
         />

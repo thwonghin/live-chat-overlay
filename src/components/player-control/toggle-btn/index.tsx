@@ -1,6 +1,5 @@
 import { faCommentSlash, faComment } from '@fortawesome/free-solid-svg-icons';
 import { type Component } from 'solid-js';
-import browser from 'webextension-polyfill';
 
 import { useStore } from '@/contexts/root-store';
 
@@ -32,8 +31,8 @@ const ToggleBtn: Component = () => {
         <BtnTooltip
             title={
                 store.settingsStore.settings.isEnabled
-                    ? browser.i18n.getMessage('toggleButtonHideTitle')
-                    : browser.i18n.getMessage('toggleButtonShowTitle')
+                    ? chrome.i18n.getMessage('toggleButtonHideTitle')
+                    : chrome.i18n.getMessage('toggleButtonShowTitle')
             }
             onClickTrigger={handleClick}
             iconWidth={width()}
