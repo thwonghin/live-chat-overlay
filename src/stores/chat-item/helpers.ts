@@ -12,7 +12,6 @@ import {
 } from '@/models/chat-item';
 import { isNormalChatItem } from '@/models/chat-item/mapper';
 import type { ChatItem } from '@/models/chat-item/types';
-import type { SettingsModel } from '@/models/settings';
 import { isNotNil } from '@/utils';
 import { createError } from '@/utils/logger';
 
@@ -29,7 +28,6 @@ type TimeInfo = {
 export function mapChatItemsFromReplayResponse(
     timeInfo: TimeInfo,
     continuationContents: ReplayContinuationContents,
-    settingsModel: SettingsModel,
     isInitData: boolean,
 ): ChatItemModel[] {
     return (continuationContents.liveChatContinuation.actions ?? [])
@@ -54,7 +52,6 @@ export function mapChatItemsFromReplayResponse(
                             playerTimestampMs: timeInfo.playerTimestampMs,
                             videoTimestampInMs,
                         },
-                        settingsModel,
                         isInitData,
                     ),
                 )
@@ -67,7 +64,6 @@ export function mapChatItemsFromReplayResponse(
 export function mapChatItemsFromLiveResponse(
     timeInfo: TimeInfo,
     continuationContents: LiveContinuationContents,
-    settingsModel: SettingsModel,
     isInitData: boolean,
 ): ChatItemModel[] {
     return (continuationContents.liveChatContinuation.actions ?? [])
@@ -80,7 +76,6 @@ export function mapChatItemsFromLiveResponse(
                     currentTimestampMs: timeInfo.currentTimestampMs,
                     playerTimestampMs: timeInfo.playerTimestampMs,
                 },
-                settingsModel,
                 isInitData,
             ),
         )

@@ -26,8 +26,11 @@ const ChatFlow: Component<Props> = (props) => {
         store.chatItemStore.removeStickyChatItemById(chatItem.value.id);
     }
 
-    function handleRenderChatItem(chatItemId: string, element: HTMLElement) {
-        store.chatItemStore.assignChatItemEle(chatItemId, element);
+    function handleRenderChatItem(
+        chatItem: ChatItemModel,
+        element: HTMLElement,
+    ) {
+        store.chatItemStore.assignChatItemEle(chatItem.value.id, element);
     }
 
     const messageFlowDimensionPx = createMemo(() =>
@@ -85,10 +88,12 @@ const ChatFlow: Component<Props> = (props) => {
                             >
                                 <ChatItemRenderer
                                     chatItem={chatItem}
-                                    onRender={[
-                                        handleRenderChatItem,
-                                        chatItem.value.id,
-                                    ]}
+                                    messageSettings={store.settingsStore.settings.getMessageSettings(
+                                        chatItem.value,
+                                    )}
+                                    onRender={(ele: HTMLElement) => {
+                                        handleRenderChatItem(chatItem, ele);
+                                    }}
                                 />
                             </MessageFlower>
                         );
@@ -102,6 +107,9 @@ const ChatFlow: Component<Props> = (props) => {
                     {(chatItem) => (
                         <ChatItemRenderer
                             chatItem={chatItem}
+                            messageSettings={store.settingsStore.settings.getMessageSettings(
+                                chatItem.value,
+                            )}
                             onClickClose={() => {
                                 handleRemoveMessage(chatItem);
                             }}
