@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.15.3](https://github.com/thwonghin/live-chat-overlay/compare/v2.15.2...v2.15.3) (2023-10-12)
+
+
+### Bug Fixes
+
+* window freezes when back from background ([#811](https://github.com/thwonghin/live-chat-overlay/issues/811)) ([4c0fb2c](https://github.com/thwonghin/live-chat-overlay/commit/4c0fb2c7881fb87e44aabad57e5f414be3e088fc))
+
 ### [2.15.2](https://github.com/thwonghin/live-chat-overlay/compare/v2.15.1...v2.15.2) (2023-10-08)
 
 ### [2.15.1](https://github.com/thwonghin/live-chat-overlay/compare/v2.15.0...v2.15.1) (2023-10-05)
