@@ -65,8 +65,11 @@ async function init() {
         };
     }
 
+    logDebug('Getting init data');
     const initData = await getInitData(chatFrame.document);
+    logDebug('Finish getting init data', initData);
 
+    logDebug('Waiting for player ready');
     await youtube.waitForPlayerReady();
 
     const videoPlayerEle = youtube.getVideoPlayerEle();
@@ -80,8 +83,10 @@ async function init() {
     }
 
     const store = createRootStore(videoEle, videoPlayerEle);
+    logDebug('Initiating the store');
     await store.init(initData, attachChatEvent);
 
+    logDebug('Injecting the live chat overlay');
     const cleanupLiveChat = await injectLiveChatOverlay(store);
 
     function cleanup(): void {
