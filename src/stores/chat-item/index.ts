@@ -147,6 +147,16 @@ export class ChatItemStore {
         }
     };
 
+    private readonly handleDocumentVisible = (
+        isDocumentVisible: boolean,
+    ): void => {
+        if (isDocumentVisible) {
+            this.createAllIntervals();
+        } else {
+            this.clearAllIntervals();
+        }
+    };
+
     private handlePlayerSizeChange(_width: number) {
         this.resetNonStickyChatItems();
     }
@@ -164,26 +174,27 @@ export class ChatItemStore {
     }
 
     private createAllIntervals() {
-        this.clearAllIntervals();
+        this.tickId =
+            this.tickId ??
+            window.setInterval(
+                this.dequeueAvailableChatItems,
+                DEQUEUE_INTERVAL,
+            );
 
-        this.tickId = window.setInterval(
-            this.dequeueAvailableChatItems,
-            DEQUEUE_INTERVAL,
-        );
-
-        this.cleanDisplayedIntervalId = window.setInterval(
-            this.cleanDisplayedChatItems,
-            CLEAN_INTERVAL,
-        );
+        this.cleanDisplayedIntervalId =
+            this.cleanDisplayedIntervalId ??
+            window.setInterval(this.cleanDisplayedChatItems, CLEAN_INTERVAL);
     }
 
     private clearAllIntervals() {
         if (this.tickId !== undefined) {
             window.clearInterval(this.tickId);
+            this.tickId = undefined;
         }
 
         if (this.cleanDisplayedIntervalId !== undefined) {
             window.clearInterval(this.cleanDisplayedIntervalId);
+            this.cleanDisplayedIntervalId = undefined;
         }
     }
 
@@ -261,7 +272,7 @@ export class ChatItemStore {
     };
 
     private readonly dequeueAvailableChatItems = () => {
-        if (!this.isInitiated || !this.uiStore.state.isDocumentVisible) {
+        if (!this.isInitiated) {
             return;
         }
 
@@ -556,15 +567,25 @@ export class ChatItemStore {
             });
 
             createEffect((prev) => {
-                if (prev === this.uiStore.state.playerState.isPaused) {
+                const newState = this.uiStore.state.playerState.isPaused;
+                if (prev === newState) {
                     return;
                 }
 
-                this.handlePlayerPauseOrResume(
-                    this.uiStore.state.playerState.isPaused,
-                );
+                this.handlePlayerPauseOrResume(newState);
 
-                return this.uiStore.state.playerState.isPaused;
+                return newState;
+            });
+
+            createEffect((prev) => {
+                const newState = this.uiStore.state.isDocumentVisible;
+                if (prev === newState) {
+                    return;
+                }
+
+                this.handleDocumentVisible(newState);
+
+                return newState;
             });
 
             createEffect((prev) => {
@@ -573,9 +594,7 @@ export class ChatItemStore {
                     return;
                 }
 
-                this.handlePlayerSizeChange(
-                    this.uiStore.state.playerState.width,
-                );
+                this.handlePlayerSizeChange(newWidth);
 
                 return newWidth;
             });
@@ -592,15 +611,16 @@ export class ChatItemStore {
             });
 
             createEffect((prev) => {
-                if (prev === this.debugInfoStore.state.isDebugging) {
+                const newState = this.debugInfoStore.state.isDebugging;
+                if (prev === newState) {
                     return;
                 }
 
-                if (this.debugInfoStore.state.isDebugging) {
+                if (newState) {
                     this.startDebug();
                 }
 
-                return this.debugInfoStore.state.isDebugging;
+                return newState;
             });
 
             createEffect((prev) => {
