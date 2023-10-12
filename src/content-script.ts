@@ -9,7 +9,7 @@ import {
 import { type InitData } from './definitions/youtube';
 import { type ChatEventDetail } from './services/fetch-interceptor';
 import { createRootStore } from './stores';
-import { createError, logInfo } from './utils/logger';
+import { createError, logDebug, logInfo } from './utils/logger';
 
 function getChatFrame() {
     const chatFrame = document.getElementById(
