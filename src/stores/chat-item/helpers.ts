@@ -20,15 +20,8 @@ export enum Mode {
     REPLAY = 'replay',
 }
 
-type TimeInfo = {
-    currentTimestampMs: number;
-    playerTimestampMs: number;
-};
-
 export function mapChatItemsFromReplayResponse(
-    timeInfo: TimeInfo,
     continuationContents: ReplayContinuationContents,
-    isInitData: boolean,
 ): ChatItemModel[] {
     return (continuationContents.liveChatContinuation.actions ?? [])
         .map((a) => a.replayChatItemAction)
@@ -45,15 +38,10 @@ export function mapChatItemsFromReplayResponse(
             const videoTimestampMs = Number(a.videoOffsetTimeMsec);
             const items = actions
                 .map((action) =>
-                    createChatItemModelFromAction(
-                        {
-                            action,
-                            currentTimestampMs: timeInfo.currentTimestampMs,
-                            playerTimestampMs: timeInfo.playerTimestampMs,
-                            videoTimestampMs,
-                        },
-                        isInitData,
-                    ),
+                    createChatItemModelFromAction({
+                        action,
+                        videoTimestampMs,
+                    }),
                 )
                 .filter(isNotNil);
 
@@ -62,42 +50,48 @@ export function mapChatItemsFromReplayResponse(
 }
 
 export function mapChatItemsFromLiveResponse(
-    timeInfo: TimeInfo,
     continuationContents: LiveContinuationContents,
-    isInitData: boolean,
 ): ChatItemModel[] {
     return (continuationContents.liveChatContinuation.actions ?? [])
         .map((v) => v.addChatItemAction ?? v.addBannerToLiveChatCommand)
         .filter(isNotNil)
         .map((action) =>
-            createChatItemModelFromAction(
-                {
-                    action,
-                    currentTimestampMs: timeInfo.currentTimestampMs,
-                    playerTimestampMs: timeInfo.playerTimestampMs,
-                },
-                isInitData,
-            ),
+            createChatItemModelFromAction({
+                action,
+            }),
         )
         .filter(isNotNil);
 }
 
+type TimeInfo = {
+    playerTimestampMs: number;
+    currentTimestampMs: number;
+};
+
 type IsTimeToDispatchParameters = {
-    currentPlayerTimeMs: number;
+    timeInfo: TimeInfo;
     chatItem: ChatItem;
 };
 
 export function isTimeToDispatch({
-    currentPlayerTimeMs,
+    timeInfo,
     chatItem,
 }: IsTimeToDispatchParameters): boolean {
-    return currentPlayerTimeMs >= chatItem.videoTimestampMs;
+    if (chatItem.videoTimestampMs !== undefined) {
+        return timeInfo.playerTimestampMs >= chatItem.videoTimestampMs;
+    }
+
+    if (chatItem.liveTimestampMs !== undefined) {
+        return timeInfo.currentTimestampMs >= chatItem.liveTimestampMs;
+    }
+
+    throw createError(`No time info for chatItem ${chatItem.id}`);
 }
 
 export const MAX_CHAT_DISPLAY_DELAY_IN_SEC = 5;
 const REMOVABLE_AUTHOR_TYPES = ['guest', 'member'];
 
-export function getOutdatedFactor(chatItem: ChatItem): number {
+function getOutdatedFactor(chatItem: ChatItem): number {
     if (
         isNormalChatItem(chatItem) &&
         REMOVABLE_AUTHOR_TYPES.includes(chatItem.authorType)
@@ -109,20 +103,29 @@ export function getOutdatedFactor(chatItem: ChatItem): number {
 }
 
 type IsOutdatedChatItemParameters = {
-    currentPlayerTimeMs: number;
-    chatItemAtVideoTimestampMs: number;
-    factor: number;
+    chatItem: ChatItem;
+    liveChatDelayMs: number;
+    timeInfo: TimeInfo;
 };
 
 export function isOutdatedChatItem({
-    currentPlayerTimeMs,
-    chatItemAtVideoTimestampMs,
-    factor,
+    chatItem,
+    liveChatDelayMs,
+    timeInfo,
 }: IsOutdatedChatItemParameters): boolean {
-    return (
-        chatItemAtVideoTimestampMs <
-        currentPlayerTimeMs - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * factor
-    );
+    const factor = getOutdatedFactor(chatItem);
+    const delayMs =
+        (MAX_CHAT_DISPLAY_DELAY_IN_SEC + liveChatDelayMs) * 1000 * factor;
+
+    if (chatItem.videoTimestampMs !== undefined) {
+        return chatItem.videoTimestampMs < timeInfo.playerTimestampMs - delayMs;
+    }
+
+    if (chatItem.liveTimestampMs !== undefined) {
+        return chatItem.liveTimestampMs < timeInfo.currentTimestampMs - delayMs;
+    }
+
+    throw createError(`No time info for chatItem ${chatItem.id}`);
 }
 
 export function isReplayInitData(

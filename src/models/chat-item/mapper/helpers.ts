@@ -101,15 +101,11 @@ export function calculateVideoTimestampMsFromLiveTimestamp(parameters: {
 
 type MapLiveChatMembershipItemRendererParameters = {
     renderer: liveChatResponse.LiveChatMembershipItemRenderer;
-    currentTimestampMs: number;
-    playerTimestampMs: number;
     videoTimestampMs?: number;
 };
 
 export function mapLiveChatMembershipItemRenderer({
     renderer,
-    currentTimestampMs,
-    playerTimestampMs,
     videoTimestampMs,
 }: MapLiveChatMembershipItemRendererParameters): MembershipItem {
     const liveTimestampMs = Number(renderer.timestampUsec) / 1000;
@@ -121,31 +117,21 @@ export function mapLiveChatMembershipItemRenderer({
             []
         ).map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
-        videoTimestampMs:
-            videoTimestampMs ??
-            calculateVideoTimestampMsFromLiveTimestamp({
-                playerTimestampMs,
-                currentTimestampMs,
-                liveTimestampMs,
-            }),
         authorName: renderer.authorName?.simpleText ?? '',
         chatType: 'membership',
         authorBadges: mapAuthorBadges(renderer.authorBadges),
+        videoTimestampMs,
         liveTimestampMs,
     };
 }
 
 type MapLiveChatPaidMessageItemRendererParameters = {
     renderer: liveChatResponse.LiveChatPaidMessageRenderer;
-    currentTimestampMs: number;
-    playerTimestampMs: number;
     videoTimestampMs?: number;
 };
 
 export function mapLiveChatPaidMessageItemRenderer({
     renderer,
-    currentTimestampMs,
-    playerTimestampMs,
     videoTimestampMs,
 }: MapLiveChatPaidMessageItemRendererParameters): SuperChatItem {
     const liveTimestampMs = Number(renderer.timestampUsec) / 1000;
@@ -153,13 +139,7 @@ export function mapLiveChatPaidMessageItemRenderer({
         id: renderer.id,
         messageParts: (renderer.message?.runs ?? []).map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
-        videoTimestampMs:
-            videoTimestampMs ??
-            calculateVideoTimestampMsFromLiveTimestamp({
-                playerTimestampMs,
-                currentTimestampMs,
-                liveTimestampMs,
-            }),
+        videoTimestampMs,
         authorName: renderer.authorName?.simpleText ?? '',
         chatType: 'super-chat',
         donationAmount: renderer.purchaseAmountText.simpleText,
@@ -170,28 +150,18 @@ export function mapLiveChatPaidMessageItemRenderer({
 
 type MapLiveChatPaidStickerRendererParameters = {
     renderer: liveChatResponse.LiveChatPaidStickerRenderer;
-    currentTimestampMs: number;
-    playerTimestampMs: number;
     videoTimestampMs?: number;
 };
 
 export function mapLiveChatPaidStickerRenderer({
     renderer,
-    currentTimestampMs,
-    playerTimestampMs,
     videoTimestampMs,
 }: MapLiveChatPaidStickerRendererParameters): SuperStickerItem {
     const liveTimestampMs = Number(renderer.timestampUsec) / 1000;
     return {
         id: renderer.id,
         avatars: renderer.authorPhoto.thumbnails,
-        videoTimestampMs:
-            videoTimestampMs ??
-            calculateVideoTimestampMsFromLiveTimestamp({
-                playerTimestampMs,
-                currentTimestampMs,
-                liveTimestampMs,
-            }),
+        videoTimestampMs,
         authorName: renderer.authorName?.simpleText ?? '',
         chatType: 'super-sticker',
         donationAmount: renderer.purchaseAmountText.simpleText,
@@ -203,15 +173,11 @@ export function mapLiveChatPaidStickerRenderer({
 
 type MapLiveChatTextMessageRendererParameters = {
     renderer: liveChatResponse.LiveChatTextMessageRenderer;
-    currentTimestampMs: number;
-    playerTimestampMs: number;
     videoTimestampMs?: number;
 };
 
 export function mapLiveChatTextMessageRenderer({
     renderer,
-    currentTimestampMs,
-    playerTimestampMs,
     videoTimestampMs,
 }: MapLiveChatTextMessageRendererParameters): NormalChatItem {
     const liveTimestampMs = Number(renderer.timestampUsec) / 1000;
@@ -219,13 +185,7 @@ export function mapLiveChatTextMessageRenderer({
         id: renderer.id,
         messageParts: renderer.message.runs.map(mapMessagePart),
         avatars: renderer.authorPhoto.thumbnails,
-        videoTimestampMs:
-            videoTimestampMs ??
-            calculateVideoTimestampMsFromLiveTimestamp({
-                playerTimestampMs,
-                currentTimestampMs,
-                liveTimestampMs,
-            }),
+        videoTimestampMs,
         authorName: renderer.authorName?.simpleText ?? '',
         authorType: getAuthorTypeFromBadges(renderer.authorBadges),
         chatType: 'normal',
@@ -236,15 +196,11 @@ export function mapLiveChatTextMessageRenderer({
 
 export function mapPinnedLiveChatTextMessageRenderer({
     renderer,
-    currentTimestampMs,
-    playerTimestampMs,
     videoTimestampMs,
 }: MapLiveChatTextMessageRendererParameters): PinnedChatItem {
     return {
         ...mapLiveChatTextMessageRenderer({
             renderer,
-            currentTimestampMs,
-            playerTimestampMs,
             videoTimestampMs,
         }),
         chatType: 'pinned',

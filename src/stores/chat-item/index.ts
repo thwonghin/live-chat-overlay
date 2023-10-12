@@ -19,7 +19,6 @@ import {
     mapChatItemsFromLiveResponse,
     isTimeToDispatch,
     isOutdatedChatItem,
-    getOutdatedFactor,
     isReplayInitData,
     getLineNumber,
     Mode,
@@ -280,9 +279,6 @@ export class ChatItemStore {
      * @returns {boolean} - Whether we can continue to dequeue
      */
     private dequeueNormalChatItem(): boolean {
-        const currentPlayerTimeMs =
-            this.uiStore.state.playerState.videoCurrentTimeInSecs * 1000;
-
         const chatItemId = this.normalChatItemQueue[0];
 
         if (!chatItemId) {
@@ -295,9 +291,7 @@ export class ChatItemStore {
         }
 
         // Outdated, continue next dequeue
-        if (
-            this.isOutdatedChatItemForPlayerTime(chatItem, currentPlayerTimeMs)
-        ) {
+        if (this.isOutdatedChatItemForPlayerTime(chatItem)) {
             this.updateDebugInfo({
                 outdatedChatEventCount: 1,
             });
@@ -313,7 +307,7 @@ export class ChatItemStore {
         if (
             !isTimeToDispatch({
                 chatItem: chatItem.value,
-                currentPlayerTimeMs,
+                timeInfo: this.getCurrentTimeInfo(),
             })
         ) {
             this.updateDebugInfo({
@@ -377,23 +371,18 @@ export class ChatItemStore {
         return isInserted.result;
     }
 
-    private isOutdatedChatItemForPlayerTime(
-        chatItem: ChatItemModel,
-        currentPlayerTimeMs: number,
-    ): boolean {
-        if (chatItem.value.chatType === 'pinned') {
+    private isOutdatedChatItemForPlayerTime(chatItem: ChatItemModel): boolean {
+        const { isSticky } = this.settingsStore.settings.getMessageSettings(
+            chatItem.value,
+        );
+        if (isSticky) {
             return false;
         }
 
-        if (this.mode === Mode.LIVE && !chatItem.isInitData) {
-            return false;
-        }
-
-        const factor = getOutdatedFactor(chatItem.value);
         return isOutdatedChatItem({
-            factor,
-            currentPlayerTimeMs,
-            chatItemAtVideoTimestampMs: chatItem.value.videoTimestampMs,
+            chatItem: chatItem.value,
+            liveChatDelayMs: this.liveChatDelayMs,
+            timeInfo: this.getCurrentTimeInfo(),
         });
     }
 
@@ -478,18 +467,13 @@ export class ChatItemStore {
 
         const { runtime, result: enqueuedChatItemCount } =
             await benchmarkRuntimeAsync(async () => {
-                const timeInfo = this.getCurrentTimeInfo();
                 const chatItems =
                     this.mode === Mode.REPLAY
                         ? mapChatItemsFromReplayResponse(
-                              timeInfo,
                               continuationContents as ReplayContinuationContents,
-                              isInitData,
                           )
                         : mapChatItemsFromLiveResponse(
-                              timeInfo,
                               continuationContents as LiveContinuationContents,
-                              isInitData,
                           );
 
                 const firstItem = first(chatItems);

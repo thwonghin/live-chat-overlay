@@ -23,23 +23,17 @@ export type MapActionsParameters = {
     action:
         | liveChatResponse.AddChatItemAction
         | liveChatResponse.AddBannerToLiveChatCommand;
-    currentTimestampMs: number;
-    playerTimestampMs: number;
     videoTimestampMs?: number;
 };
 
 export function mapAddChatItemActions({
     action,
-    currentTimestampMs,
-    playerTimestampMs,
     videoTimestampMs,
 }: MapActionsParameters): ChatItem | undefined {
     if ('item' in action) {
         if (action.item?.liveChatPaidMessageRenderer) {
             return mapLiveChatPaidMessageItemRenderer({
                 renderer: action.item.liveChatPaidMessageRenderer,
-                currentTimestampMs,
-                playerTimestampMs,
                 videoTimestampMs,
             });
         }
@@ -47,8 +41,6 @@ export function mapAddChatItemActions({
         if (action.item?.liveChatPaidStickerRenderer) {
             return mapLiveChatPaidStickerRenderer({
                 renderer: action.item.liveChatPaidStickerRenderer,
-                currentTimestampMs,
-                playerTimestampMs,
                 videoTimestampMs,
             });
         }
@@ -56,8 +48,6 @@ export function mapAddChatItemActions({
         if (action.item?.liveChatMembershipItemRenderer) {
             return mapLiveChatMembershipItemRenderer({
                 renderer: action.item.liveChatMembershipItemRenderer,
-                currentTimestampMs,
-                playerTimestampMs,
                 videoTimestampMs,
             });
         }
@@ -65,8 +55,6 @@ export function mapAddChatItemActions({
         if (action.item?.liveChatTextMessageRenderer) {
             return mapLiveChatTextMessageRenderer({
                 renderer: action.item.liveChatTextMessageRenderer,
-                currentTimestampMs,
-                playerTimestampMs,
                 videoTimestampMs,
             });
         }
@@ -89,8 +77,6 @@ export function mapAddChatItemActions({
             renderer:
                 action.bannerRenderer.liveChatBannerRenderer.contents
                     .liveChatTextMessageRenderer,
-            currentTimestampMs,
-            playerTimestampMs,
             videoTimestampMs,
         });
     }

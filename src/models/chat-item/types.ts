@@ -20,12 +20,12 @@ export type NormalChatItem = {
     id: string;
     messageParts: MessagePart[];
     avatars: Thumbnail[];
-    videoTimestampMs: number;
     authorName: string;
     authorBadges: string[];
     authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you' | 'verified';
     chatType: 'normal';
     liveTimestampMs?: number;
+    videoTimestampMs?: number;
 };
 
 export type SuperChatItem = Omit<
