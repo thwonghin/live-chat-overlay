@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.15.4](https://github.com/thwonghin/live-chat-overlay/compare/v2.15.3...v2.15.4) (2023-10-12)
+
 ### [2.15.3](https://github.com/thwonghin/live-chat-overlay/compare/v2.15.2...v2.15.3) (2023-10-12)
 
 
