@@ -8,7 +8,7 @@
     "license": "MIT",
     "type": "module",
     "engines": {
-        "node": ">=18.16.0"
+        "node": ">=18.18.1"
     },
     "scripts": {
         "test:unit": "vitest run",
@@ -90,7 +90,7 @@
         "postcss": "^8.4.31"
     },
     "volta": {
-        "node": "18.16.0"
+        "node": "18.18.1"
     },
     "pnpm": {
         "auditConfig": {
