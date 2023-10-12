@@ -4,34 +4,36 @@ import {
     isSuperChatItem,
 } from './mapper';
 import type { ChatItem } from './types';
-import type { MessageSettings, SettingsModel } from '../settings';
+import type { SettingsModel } from '../settings';
 
 export type ChatItemModel = {
     element: HTMLElement | undefined;
     width: number | undefined;
     addTimestamp: number | undefined;
     lineNumber: number | undefined;
+    getNumberOfLines: (settings: SettingsModel) => number;
     readonly value: ChatItem;
-    readonly messageSettings: MessageSettings;
-    readonly numberOfLines: number;
     readonly isInitData: boolean;
 };
 
 export const createChatItemModel = (
     value: ChatItem,
-    messageSettings: MessageSettings,
-    numberOfLines: number,
     isInitData: boolean,
 ): ChatItemModel => {
     const chatItemModel: ChatItemModel = {
         value,
-        messageSettings,
-        numberOfLines,
         isInitData,
         width: undefined,
         element: undefined,
         addTimestamp: undefined,
         lineNumber: undefined,
+        getNumberOfLines(settings: SettingsModel): number {
+            const messageSettings = settings.getMessageSettings(this.value);
+            return isSuperChatItem(this.value) &&
+                this.value.messageParts.length === 0
+                ? 1
+                : messageSettings.numberOfLines;
+        },
     };
 
     return chatItemModel;
@@ -39,7 +41,6 @@ export const createChatItemModel = (
 
 export const createChatItemModelFromAction = (
     params: MapActionsParameters,
-    settings: SettingsModel,
     isInitData: boolean,
 ): ChatItemModel | undefined => {
     const chatItem = mapAddChatItemActions(params);
@@ -48,17 +49,5 @@ export const createChatItemModelFromAction = (
         return undefined;
     }
 
-    const messageSettings = settings.getMessageSettings(chatItem);
-
-    const numberOfLines =
-        isSuperChatItem(chatItem) && chatItem.messageParts.length === 0
-            ? 1
-            : messageSettings.numberOfLines;
-
-    return createChatItemModel(
-        chatItem,
-        messageSettings,
-        numberOfLines,
-        isInitData,
-    );
+    return createChatItemModel(chatItem, isInitData);
 };

@@ -337,6 +337,9 @@ export class ChatItemStore {
         });
 
         const isInserted = benchmarkRuntime((): boolean => {
+            const numberOfLines = chatItem.getNumberOfLines(
+                this.settingsStore.settings,
+            );
             const addTimestamp = Date.now();
             const lineNumber = getLineNumber({
                 chatItemsByLineNumber: this.chatItemsByLineNumber,
@@ -345,7 +348,7 @@ export class ChatItemStore {
                 maxLineNumber: this.uiStore.maxNumberOfLines(),
                 flowTimeInSec: this.settingsStore.settings.flowTimeInSec,
                 containerWidth: this.uiStore.messageFlowDimensionPx().width,
-                displayNumberOfLines: chatItem.numberOfLines,
+                displayNumberOfLines: numberOfLines,
             });
 
             // No place to insert
@@ -353,11 +356,7 @@ export class ChatItemStore {
                 return false;
             }
 
-            for (
-                let i = lineNumber;
-                i < lineNumber + chatItem.numberOfLines;
-                i++
-            ) {
+            for (let i = lineNumber; i < lineNumber + numberOfLines; i++) {
                 const line = this.chatItemsByLineNumber.get(i);
                 if (line) {
                     line.push(chatItem);
@@ -494,13 +493,11 @@ export class ChatItemStore {
                         ? mapChatItemsFromReplayResponse(
                               timeInfo,
                               continuationContents as ReplayContinuationContents,
-                              this.settingsStore.settings,
                               isInitData,
                           )
                         : mapChatItemsFromLiveResponse(
                               timeInfo,
                               continuationContents as LiveContinuationContents,
-                              this.settingsStore.settings,
                               isInitData,
                           );
 
@@ -527,7 +524,12 @@ export class ChatItemStore {
                             return;
                         }
 
-                        if (!item.messageSettings.isSticky) {
+                        const { isSticky } =
+                            this.settingsStore.settings.getMessageSettings(
+                                item.value,
+                            );
+
+                        if (!isSticky) {
                             this.setState('normalChatItems', {
                                 [chatItemId]: item,
                             });
