@@ -261,7 +261,7 @@ export class ChatItemStore {
     };
 
     private readonly dequeueAvailableChatItems = () => {
-        if (!this.isInitiated) {
+        if (!this.isInitiated || !this.uiStore.state.isDocumentVisible) {
             return;
         }
 
