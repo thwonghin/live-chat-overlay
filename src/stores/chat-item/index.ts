@@ -1,4 +1,4 @@
-import { noop, debounce } from 'lodash-es';
+import { noop, debounce, first } from 'lodash-es';
 import { createEffect, createRoot, onCleanup, onMount, batch } from 'solid-js';
 import { type SetStoreFunction, createStore, reconcile } from 'solid-js/store';
 
@@ -35,7 +35,7 @@ type DebugInfo = Partial<{
     enqueuedChatItemCount: number;
     outdatedChatEventCount: number;
     cleanedChatItemCount: number;
-    liveChatDelayInMs: number;
+    liveChatDelayMs: number;
 }>;
 
 const DEQUEUE_INTERVAL = 1000 / 60; // 5 FPS
@@ -51,6 +51,7 @@ export class ChatItemStore {
     state: ChatItemStoreState;
     cleanup = noop;
     private readonly setState: SetStoreFunction<ChatItemStoreState>;
+    private liveChatDelayMs = 0;
     private lastTimestamp = 0;
     private isInitiated = false;
     private mode: Mode = Mode.LIVE;
@@ -240,8 +241,8 @@ export class ChatItemStore {
         }
 
         // Meaningless to measure this in replay mode
-        if (this.mode === Mode.LIVE && info.liveChatDelayInMs !== undefined) {
-            this.debugInfoStore.addLiveChatDelay(info.liveChatDelayInMs);
+        if (this.mode === Mode.LIVE && info.liveChatDelayMs !== undefined) {
+            this.debugInfoStore.addLiveChatDelay(info.liveChatDelayMs);
         }
     }
 
@@ -279,7 +280,7 @@ export class ChatItemStore {
      * @returns {boolean} - Whether we can continue to dequeue
      */
     private dequeueNormalChatItem(): boolean {
-        const currentPlayerTimeInMsc =
+        const currentPlayerTimeMs =
             this.uiStore.state.playerState.videoCurrentTimeInSecs * 1000;
 
         const chatItemId = this.normalChatItemQueue[0];
@@ -295,15 +296,10 @@ export class ChatItemStore {
 
         // Outdated, continue next dequeue
         if (
-            this.isOutdatedChatItemForPlayerTime(
-                chatItem,
-                currentPlayerTimeInMsc,
-            )
+            this.isOutdatedChatItemForPlayerTime(chatItem, currentPlayerTimeMs)
         ) {
             this.updateDebugInfo({
                 outdatedChatEventCount: 1,
-                liveChatDelayInMs:
-                    currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
             });
 
             this.setState('normalChatItems', {
@@ -317,7 +313,7 @@ export class ChatItemStore {
         if (
             !isTimeToDispatch({
                 chatItem: chatItem.value,
-                currentPlayerTimeInMsc,
+                currentPlayerTimeMs,
             })
         ) {
             this.updateDebugInfo({
@@ -330,11 +326,6 @@ export class ChatItemStore {
         if (!chatItem.element) {
             return false;
         }
-
-        this.updateDebugInfo({
-            liveChatDelayInMs:
-                currentPlayerTimeInMsc - chatItem.value.videoTimestampInMs,
-        });
 
         const isInserted = benchmarkRuntime((): boolean => {
             const numberOfLines = chatItem.getNumberOfLines(
@@ -388,7 +379,7 @@ export class ChatItemStore {
 
     private isOutdatedChatItemForPlayerTime(
         chatItem: ChatItemModel,
-        currentPlayerTimeInMsc: number,
+        currentPlayerTimeMs: number,
     ): boolean {
         if (chatItem.value.chatType === 'pinned') {
             return false;
@@ -401,8 +392,8 @@ export class ChatItemStore {
         const factor = getOutdatedFactor(chatItem.value);
         return isOutdatedChatItem({
             factor,
-            currentPlayerTimeInMsc,
-            chatItemAtVideoTimestampInMs: chatItem.value.videoTimestampInMs,
+            currentPlayerTimeMs,
+            chatItemAtVideoTimestampMs: chatItem.value.videoTimestampMs,
         });
     }
 
@@ -412,9 +403,9 @@ export class ChatItemStore {
         }
 
         const currentTimestamp = Date.now();
-        const flowTimeInMs = this.settingsStore.settings.flowTimeInSec * 1000;
+        const flowTimeMs = this.settingsStore.settings.flowTimeInSec * 1000;
 
-        const cutoffTimestamp = currentTimestamp - flowTimeInMs;
+        const cutoffTimestamp = currentTimestamp - flowTimeMs;
 
         let cleanedChatItemCount = 0;
 
@@ -501,7 +492,21 @@ export class ChatItemStore {
                               isInitData,
                           );
 
-                const newItemTimestamp = chatItems[0]?.value.videoTimestampInMs;
+                const firstItem = first(chatItems);
+                if (!firstItem) {
+                    return 0;
+                }
+
+                const newItemTimestamp = firstItem.value.videoTimestampMs;
+
+                if (this.mode === Mode.LIVE) {
+                    this.liveChatDelayMs =
+                        Date.now() - firstItem.value.liveTimestampMs!;
+
+                    this.updateDebugInfo({
+                        liveChatDelayMs: this.liveChatDelayMs,
+                    });
+                }
 
                 if (
                     this.mode === Mode.REPLAY &&

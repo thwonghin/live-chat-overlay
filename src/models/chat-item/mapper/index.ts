@@ -25,14 +25,14 @@ export type MapActionsParameters = {
         | liveChatResponse.AddBannerToLiveChatCommand;
     currentTimestampMs: number;
     playerTimestampMs: number;
-    videoTimestampInMs?: number;
+    videoTimestampMs?: number;
 };
 
 export function mapAddChatItemActions({
     action,
     currentTimestampMs,
     playerTimestampMs,
-    videoTimestampInMs,
+    videoTimestampMs,
 }: MapActionsParameters): ChatItem | undefined {
     if ('item' in action) {
         if (action.item?.liveChatPaidMessageRenderer) {
@@ -40,7 +40,7 @@ export function mapAddChatItemActions({
                 renderer: action.item.liveChatPaidMessageRenderer,
                 currentTimestampMs,
                 playerTimestampMs,
-                videoTimestampInMs,
+                videoTimestampMs,
             });
         }
 
@@ -49,7 +49,7 @@ export function mapAddChatItemActions({
                 renderer: action.item.liveChatPaidStickerRenderer,
                 currentTimestampMs,
                 playerTimestampMs,
-                videoTimestampInMs,
+                videoTimestampMs,
             });
         }
 
@@ -58,7 +58,7 @@ export function mapAddChatItemActions({
                 renderer: action.item.liveChatMembershipItemRenderer,
                 currentTimestampMs,
                 playerTimestampMs,
-                videoTimestampInMs,
+                videoTimestampMs,
             });
         }
 
@@ -67,7 +67,7 @@ export function mapAddChatItemActions({
                 renderer: action.item.liveChatTextMessageRenderer,
                 currentTimestampMs,
                 playerTimestampMs,
-                videoTimestampInMs,
+                videoTimestampMs,
             });
         }
 
@@ -91,7 +91,7 @@ export function mapAddChatItemActions({
                     .liveChatTextMessageRenderer,
             currentTimestampMs,
             playerTimestampMs,
-            videoTimestampInMs,
+            videoTimestampMs,
         });
     }
 

@@ -42,7 +42,7 @@ export function mapChatItemsFromReplayResponse(
                 )
                 .filter(isNotNil);
 
-            const videoTimestampInMs = Number(a.videoOffsetTimeMsec);
+            const videoTimestampMs = Number(a.videoOffsetTimeMsec);
             const items = actions
                 .map((action) =>
                     createChatItemModelFromAction(
@@ -50,7 +50,7 @@ export function mapChatItemsFromReplayResponse(
                             action,
                             currentTimestampMs: timeInfo.currentTimestampMs,
                             playerTimestampMs: timeInfo.playerTimestampMs,
-                            videoTimestampInMs,
+                            videoTimestampMs,
                         },
                         isInitData,
                     ),
@@ -83,15 +83,15 @@ export function mapChatItemsFromLiveResponse(
 }
 
 type IsTimeToDispatchParameters = {
-    currentPlayerTimeInMsc: number;
+    currentPlayerTimeMs: number;
     chatItem: ChatItem;
 };
 
 export function isTimeToDispatch({
-    currentPlayerTimeInMsc,
+    currentPlayerTimeMs,
     chatItem,
 }: IsTimeToDispatchParameters): boolean {
-    return currentPlayerTimeInMsc >= chatItem.videoTimestampInMs;
+    return currentPlayerTimeMs >= chatItem.videoTimestampMs;
 }
 
 export const MAX_CHAT_DISPLAY_DELAY_IN_SEC = 5;
@@ -109,19 +109,19 @@ export function getOutdatedFactor(chatItem: ChatItem): number {
 }
 
 type IsOutdatedChatItemParameters = {
-    currentPlayerTimeInMsc: number;
-    chatItemAtVideoTimestampInMs: number;
+    currentPlayerTimeMs: number;
+    chatItemAtVideoTimestampMs: number;
     factor: number;
 };
 
 export function isOutdatedChatItem({
-    currentPlayerTimeInMsc,
-    chatItemAtVideoTimestampInMs,
+    currentPlayerTimeMs,
+    chatItemAtVideoTimestampMs,
     factor,
 }: IsOutdatedChatItemParameters): boolean {
     return (
-        chatItemAtVideoTimestampInMs <
-        currentPlayerTimeInMsc - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * factor
+        chatItemAtVideoTimestampMs <
+        currentPlayerTimeMs - MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 * factor
     );
 }
 

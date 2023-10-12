@@ -18,14 +18,14 @@ export type MessagePart = TextPart | EmojiPart;
 
 export type NormalChatItem = {
     id: string;
-    width?: number;
     messageParts: MessagePart[];
     avatars: Thumbnail[];
-    videoTimestampInMs: number;
+    videoTimestampMs: number;
     authorName: string;
     authorBadges: string[];
     authorType: 'moderator' | 'member' | 'guest' | 'owner' | 'you' | 'verified';
     chatType: 'normal';
+    liveTimestampMs?: number;
 };
 
 export type SuperChatItem = Omit<

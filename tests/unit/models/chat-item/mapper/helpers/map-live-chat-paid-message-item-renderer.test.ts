@@ -132,7 +132,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1431023794624.462,
+            videoTimestampMs: 1431023794624.462,
             authorName: 'Sample Author',
             chatType: 'super-chat',
             color: 'rgba(230,33,23,1)',
@@ -143,7 +143,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
     it('should map with videoTimestamp corretly', () => {
         const result = mapLiveChatPaidMessageItemRenderer({
             renderer: getFixture(),
-            videoTimestampInMs: 100000000,
+            videoTimestampMs: 100000000,
             currentTimestampMs: 160000000000,
             playerTimestampMs: 1500,
         });
@@ -183,7 +183,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 100000000,
+            videoTimestampMs: 100000000,
             authorName: 'Sample Author',
             chatType: 'super-chat',
             color: 'rgba(230,33,23,1)',
@@ -215,7 +215,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1431023794624.462,
+            videoTimestampMs: 1431023794624.462,
             authorName: 'Sample Author',
             chatType: 'super-chat',
             color: 'rgba(230,33,23,1)',

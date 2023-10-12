@@ -22,9 +22,9 @@ describe('isOutdatedChatItem', () => {
                 expect(
                     isOutdatedChatItem({
                         factor: 1,
-                        chatItemAtVideoTimestampInMs:
+                        chatItemAtVideoTimestampMs:
                             chatItemVideoTimestamp * 1000,
-                        currentPlayerTimeInMsc:
+                        currentPlayerTimeMs:
                             testParameters.currentPlayerTime * 1000,
                     }),
                 ).toBe(testParameters.expectedResult);
@@ -45,9 +45,9 @@ describe('isOutdatedChatItem', () => {
                 expect(
                     isOutdatedChatItem({
                         factor: 3,
-                        chatItemAtVideoTimestampInMs:
+                        chatItemAtVideoTimestampMs:
                             chatItemVideoTimestamp * 1000,
-                        currentPlayerTimeInMsc:
+                        currentPlayerTimeMs:
                             testParameters.currentPlayerTime * 1000,
                     }),
                 ).toBe(testParameters.expectedResult);

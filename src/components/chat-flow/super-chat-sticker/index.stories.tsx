@@ -28,7 +28,7 @@ const superStickerItem: SuperStickerItem = {
     id: 'super-chat-sticker',
     stickers,
     avatars,
-    videoTimestampInMs: 0,
+    videoTimestampMs: 0,
     donationAmount: 'HK$ 100.00',
     authorName,
     color: 'red',

@@ -199,7 +199,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
                         height: 64,
                     },
                 ],
-                videoTimestampInMs: 1340000001500,
+                videoTimestampMs: 1340000001500,
                 authorName: 'Sample Author',
                 authorBadges: ['https://badge-url', 'https://badge-url-2'],
                 chatType: 'membership',
@@ -209,7 +209,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
         it('should map with videoTimestamp correctly', () => {
             const result = mapLiveChatMembershipItemRenderer({
                 renderer: getNewJoinerFixture(),
-                videoTimestampInMs: 100000000,
+                videoTimestampMs: 100000000,
                 currentTimestampMs: 160000000000,
                 playerTimestampMs: 1500,
             });
@@ -249,7 +249,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
                         height: 64,
                     },
                 ],
-                videoTimestampInMs: 100000000,
+                videoTimestampMs: 100000000,
                 authorName: 'Sample Author',
                 authorBadges: ['https://badge-url', 'https://badge-url-2'],
                 chatType: 'membership',
@@ -300,7 +300,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
                         height: 64,
                     },
                 ],
-                videoTimestampInMs: 1340000001500,
+                videoTimestampMs: 1340000001500,
                 authorName: 'Sample Author',
                 authorBadges: ['https://badge-url', 'https://badge-url-2'],
                 chatType: 'membership',
@@ -310,7 +310,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
         it('should map with videoTimestamp correctly', () => {
             const result = mapLiveChatMembershipItemRenderer({
                 renderer: getSuperChatFixture(),
-                videoTimestampInMs: 100000000,
+                videoTimestampMs: 100000000,
                 currentTimestampMs: 160000000000,
                 playerTimestampMs: 1500,
             });
@@ -350,7 +350,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
                         height: 64,
                     },
                 ],
-                videoTimestampInMs: 100000000,
+                videoTimestampMs: 100000000,
                 authorName: 'Sample Author',
                 authorBadges: ['https://badge-url', 'https://badge-url-2'],
                 chatType: 'membership',
