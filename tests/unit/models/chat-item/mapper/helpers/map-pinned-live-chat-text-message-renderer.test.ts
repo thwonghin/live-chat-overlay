@@ -120,8 +120,7 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
     it('should map member type chat correctly', () => {
         const result = mapPinnedLiveChatTextMessageRenderer({
             renderer: getFixture(),
-            currentTimestampMs: 160000000000,
-            playerTimestampMs: 1500,
+            videoTimestampMs: 1500,
         });
 
         expect(result).toEqual({
@@ -159,7 +158,8 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1340000001500,
+            liveTimestampMs: 1500000000000,
+            videoTimestampMs: 1500,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'member',
@@ -173,8 +173,7 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
 
         const result = mapPinnedLiveChatTextMessageRenderer({
             renderer: fixture,
-            currentTimestampMs: 160000000000,
-            playerTimestampMs: 1500,
+            videoTimestampMs: 1500,
         });
 
         expect(result).toEqual({
@@ -212,7 +211,8 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1340000001500,
+            liveTimestampMs: 1500000000000,
+            videoTimestampMs: 1500,
             authorName: 'Sample Author',
             authorBadges: [],
             authorType: 'guest',
@@ -238,8 +238,7 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
 
         const result = mapPinnedLiveChatTextMessageRenderer({
             renderer: fixture,
-            currentTimestampMs: 160000000000,
-            playerTimestampMs: 1500,
+            videoTimestampMs: 1500,
         });
 
         expect(result).toEqual({
@@ -277,63 +276,11 @@ describe('mapStickyLiveChatTextMessageRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1340000001500,
+            liveTimestampMs: 1500000000000,
+            videoTimestampMs: 1500,
             authorName: 'Sample Author',
             authorBadges: ['https://badge-url', 'https://badge-url-2'],
             authorType: 'moderator',
-            chatType: 'pinned',
-        });
-    });
-
-    it('should map with videoTimestamp corretly', () => {
-        const fixture = getFixture();
-
-        const result = mapPinnedLiveChatTextMessageRenderer({
-            renderer: fixture,
-            currentTimestampMs: 160000000000,
-            playerTimestampMs: 1500,
-            videoTimestampInMs: 100000000,
-        });
-
-        expect(result).toEqual({
-            id: 'random-id',
-            messageParts: [
-                {
-                    text: 'Test Message',
-                },
-                {
-                    thumbnails: [
-                        {
-                            url: 'https://sample-image',
-                            width: 24,
-                            height: 24,
-                        },
-                        {
-                            url: 'https://sample-image-larger',
-                            width: 48,
-                            height: 48,
-                        },
-                    ],
-                    shortcuts: [':text-emoji:'],
-                    id: 'sample-emoji-id',
-                },
-            ],
-            avatars: [
-                {
-                    url: 'https://sample-author-avatar/small.jpg',
-                    width: 32,
-                    height: 32,
-                },
-                {
-                    url: 'https://sample-author-avatar/large.jpg',
-                    width: 64,
-                    height: 64,
-                },
-            ],
-            videoTimestampInMs: 100000000,
-            authorName: 'Sample Author',
-            authorBadges: ['https://badge-url', 'https://badge-url-2'],
-            authorType: 'member',
             chatType: 'pinned',
         });
     });

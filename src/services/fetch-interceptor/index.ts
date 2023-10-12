@@ -1,3 +1,5 @@
+import { logDebug } from '@/utils/logger';
+
 export type ChatEventDetail = {
     response: unknown;
     url: string;
@@ -29,9 +31,11 @@ export function initInterceptor(
             const clonedResult = fetchResult.clone();
 
             setTimeout(async () => {
+                const data = (await clonedResult.json()) as unknown;
+                logDebug('Intercepted', requestUrl, data);
                 const event = new CustomEvent<ChatEventDetail>(eventName, {
                     detail: {
-                        response: await clonedResult.json(),
+                        response: data,
                         url: requestUrl,
                     },
                 });

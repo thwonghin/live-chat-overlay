@@ -160,8 +160,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
         it('should map member type chat correctly', () => {
             const result = mapLiveChatMembershipItemRenderer({
                 renderer: getNewJoinerFixture(),
-                currentTimestampMs: 160000000000,
-                playerTimestampMs: 1500,
+                videoTimestampMs: 1500,
             });
 
             expect(result).toEqual({
@@ -199,57 +198,8 @@ describe('mapLiveChatMembershipItemRenderer', () => {
                         height: 64,
                     },
                 ],
-                videoTimestampInMs: 1340000001500,
-                authorName: 'Sample Author',
-                authorBadges: ['https://badge-url', 'https://badge-url-2'],
-                chatType: 'membership',
-            });
-        });
-
-        it('should map with videoTimestamp correctly', () => {
-            const result = mapLiveChatMembershipItemRenderer({
-                renderer: getNewJoinerFixture(),
-                videoTimestampInMs: 100000000,
-                currentTimestampMs: 160000000000,
-                playerTimestampMs: 1500,
-            });
-
-            expect(result).toEqual({
-                id: 'random-id',
-                messageParts: [
-                    {
-                        text: 'Test Message',
-                    },
-                    {
-                        thumbnails: [
-                            {
-                                url: 'https://sample-image',
-                                width: 24,
-                                height: 24,
-                            },
-                            {
-                                url: 'https://sample-image-larger',
-                                width: 48,
-                                height: 48,
-                            },
-                        ],
-                        shortcuts: [':text-emoji:'],
-                        id: 'sample-emoji-id',
-                    },
-                ],
-                avatars: [
-                    {
-                        url: 'https://sample-author-avatar/small.jpg',
-                        width: 32,
-                        height: 32,
-                    },
-                    {
-                        url: 'https://sample-author-avatar/large.jpg',
-                        width: 64,
-                        height: 64,
-                    },
-                ],
-                videoTimestampInMs: 100000000,
+                liveTimestampMs: 1500000000000,
+                videoTimestampMs: 1500,
                 authorName: 'Sample Author',
                 authorBadges: ['https://badge-url', 'https://badge-url-2'],
                 chatType: 'membership',
@@ -261,8 +211,7 @@ describe('mapLiveChatMembershipItemRenderer', () => {
         it('should map member type chat correctly', () => {
             const result = mapLiveChatMembershipItemRenderer({
                 renderer: getSuperChatFixture(),
-                currentTimestampMs: 160000000000,
-                playerTimestampMs: 1500,
+                videoTimestampMs: 1500,
             });
 
             expect(result).toEqual({
@@ -300,57 +249,8 @@ describe('mapLiveChatMembershipItemRenderer', () => {
                         height: 64,
                     },
                 ],
-                videoTimestampInMs: 1340000001500,
-                authorName: 'Sample Author',
-                authorBadges: ['https://badge-url', 'https://badge-url-2'],
-                chatType: 'membership',
-            });
-        });
-
-        it('should map with videoTimestamp correctly', () => {
-            const result = mapLiveChatMembershipItemRenderer({
-                renderer: getSuperChatFixture(),
-                videoTimestampInMs: 100000000,
-                currentTimestampMs: 160000000000,
-                playerTimestampMs: 1500,
-            });
-
-            expect(result).toEqual({
-                id: 'random-id',
-                messageParts: [
-                    {
-                        text: 'Test SuperChat Message',
-                    },
-                    {
-                        thumbnails: [
-                            {
-                                url: 'https://sample-image',
-                                width: 24,
-                                height: 24,
-                            },
-                            {
-                                url: 'https://sample-image-larger',
-                                width: 48,
-                                height: 48,
-                            },
-                        ],
-                        shortcuts: [':text-emoji:'],
-                        id: 'sample-emoji-id',
-                    },
-                ],
-                avatars: [
-                    {
-                        url: 'https://sample-author-avatar/small.jpg',
-                        width: 32,
-                        height: 32,
-                    },
-                    {
-                        url: 'https://sample-author-avatar/large.jpg',
-                        width: 64,
-                        height: 64,
-                    },
-                ],
-                videoTimestampInMs: 100000000,
+                liveTimestampMs: 1500000000000,
+                videoTimestampMs: 1500,
                 authorName: 'Sample Author',
                 authorBadges: ['https://badge-url', 'https://badge-url-2'],
                 chatType: 'membership',

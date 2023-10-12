@@ -13,16 +13,11 @@ export type ChatItemModel = {
     lineNumber: number | undefined;
     getNumberOfLines: (settings: SettingsModel) => number;
     readonly value: ChatItem;
-    readonly isInitData: boolean;
 };
 
-export const createChatItemModel = (
-    value: ChatItem,
-    isInitData: boolean,
-): ChatItemModel => {
+export const createChatItemModel = (value: ChatItem): ChatItemModel => {
     const chatItemModel: ChatItemModel = {
         value,
-        isInitData,
         width: undefined,
         element: undefined,
         addTimestamp: undefined,
@@ -41,7 +36,6 @@ export const createChatItemModel = (
 
 export const createChatItemModelFromAction = (
     params: MapActionsParameters,
-    isInitData: boolean,
 ): ChatItemModel | undefined => {
     const chatItem = mapAddChatItemActions(params);
 
@@ -49,5 +43,5 @@ export const createChatItemModelFromAction = (
         return undefined;
     }
 
-    return createChatItemModel(chatItem, isInitData);
+    return createChatItemModel(chatItem);
 };

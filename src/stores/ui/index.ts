@@ -19,6 +19,7 @@ export type PlayerStateModel = {
 
 export type UiStoreState = {
     currentPopup?: PopupType;
+    isDocumentVisible: boolean;
     playerState: PlayerStateModel;
 };
 
@@ -43,6 +44,7 @@ export class UiStore {
     ) {
         const [state, setState] = createStore<UiStoreState>({
             currentPopup: undefined,
+            isDocumentVisible: !document.hidden,
             playerState: {
                 width: 0,
                 height: 0,
@@ -186,6 +188,24 @@ export class UiStore {
                             this.handleVideoStateChange,
                         );
                     });
+                });
+            });
+
+            onMount(() => {
+                const handleVisibilityChange = () => {
+                    this.setState('isDocumentVisible', !document.hidden);
+                };
+
+                document.addEventListener(
+                    'visibilitychange',
+                    handleVisibilityChange,
+                );
+
+                onCleanup(() => {
+                    document.removeEventListener(
+                        'visibilitychange',
+                        handleVisibilityChange,
+                    );
                 });
             });
 

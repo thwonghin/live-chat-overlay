@@ -22,7 +22,7 @@ const pinnedMessage: PinnedChatItem = {
     authorBadges: [],
     messageParts: [{ text: 'This is a pinned message' }],
     avatars,
-    videoTimestampInMs: 0,
+    videoTimestampMs: 0,
     authorName,
     chatType: 'pinned',
     authorType: 'owner',

@@ -105,15 +105,15 @@ export async function waitForValue<T>(
             return;
         }
 
-        let retryTimeInMs = 0;
+        let retryTimeMs = 0;
         const interval = setInterval(() => {
             const value = getValue();
             if (value) {
                 resolve(value);
                 clearInterval(interval);
             } else {
-                retryTimeInMs += retryIntervalMs;
-                if (retryTimeInMs >= maxRetryMs) {
+                retryTimeMs += retryIntervalMs;
+                if (retryTimeMs >= maxRetryMs) {
                     reject(createError());
                 }
             }

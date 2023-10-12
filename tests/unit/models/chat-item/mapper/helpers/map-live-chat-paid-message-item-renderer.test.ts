@@ -93,8 +93,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
     it('should map to correct result', () => {
         const result = mapLiveChatPaidMessageItemRenderer({
             renderer: getFixture(),
-            currentTimestampMs: 160000000000,
-            playerTimestampMs: 1500,
+            videoTimestampMs: 1500,
         });
 
         expect(result).toEqual({
@@ -132,58 +131,8 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1431023794624.462,
-            authorName: 'Sample Author',
-            chatType: 'super-chat',
-            color: 'rgba(230,33,23,1)',
-            donationAmount: 'HK$1,500.00',
-        });
-    });
-
-    it('should map with videoTimestamp corretly', () => {
-        const result = mapLiveChatPaidMessageItemRenderer({
-            renderer: getFixture(),
-            videoTimestampInMs: 100000000,
-            currentTimestampMs: 160000000000,
-            playerTimestampMs: 1500,
-        });
-
-        expect(result).toEqual({
-            id: 'random-id',
-            messageParts: [
-                {
-                    text: 'Test Message',
-                },
-                {
-                    thumbnails: [
-                        {
-                            url: 'https://sample-image',
-                            width: 24,
-                            height: 24,
-                        },
-                        {
-                            url: 'https://sample-image-larger',
-                            width: 48,
-                            height: 48,
-                        },
-                    ],
-                    shortcuts: [':text-emoji:'],
-                    id: 'sample-emoji-id',
-                },
-            ],
-            avatars: [
-                {
-                    url: 'https://sample-author-avatar/small.jpg',
-                    width: 32,
-                    height: 32,
-                },
-                {
-                    url: 'https://sample-author-avatar/large.jpg',
-                    width: 64,
-                    height: 64,
-                },
-            ],
-            videoTimestampInMs: 100000000,
+            liveTimestampMs: 1591023793124.462,
+            videoTimestampMs: 1500,
             authorName: 'Sample Author',
             chatType: 'super-chat',
             color: 'rgba(230,33,23,1)',
@@ -196,8 +145,7 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
         sample.message = undefined;
         const result = mapLiveChatPaidMessageItemRenderer({
             renderer: sample,
-            currentTimestampMs: 160000000000,
-            playerTimestampMs: 1500,
+            videoTimestampMs: 1500,
         });
 
         expect(result).toEqual({
@@ -215,7 +163,8 @@ describe('mapLiveChatPaidMessageItemRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1431023794624.462,
+            liveTimestampMs: 1591023793124.462,
+            videoTimestampMs: 1500,
             authorName: 'Sample Author',
             chatType: 'super-chat',
             color: 'rgba(230,33,23,1)',

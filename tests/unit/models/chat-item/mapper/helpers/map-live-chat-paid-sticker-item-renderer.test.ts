@@ -78,8 +78,7 @@ describe('mapLiveChatPaidStickerRenderer', () => {
     it('should map to correct result', () => {
         const result = mapLiveChatPaidStickerRenderer({
             renderer: getFixture(),
-            currentTimestampMs: 160000000000,
-            playerTimestampMs: 1500,
+            videoTimestampMs: 1500,
         });
 
         expect(result).toEqual({
@@ -108,49 +107,8 @@ describe('mapLiveChatPaidStickerRenderer', () => {
                     height: 64,
                 },
             ],
-            videoTimestampInMs: 1431023794624.462,
-            authorName: 'Sample Author',
-            chatType: 'super-sticker',
-            color: 'rgba(208,0,0,1)',
-            donationAmount: 'HK$1,500.00',
-        });
-    });
-
-    it('should map with videoTimestamp corretly', () => {
-        const result = mapLiveChatPaidStickerRenderer({
-            renderer: getFixture(),
-            videoTimestampInMs: 100000000,
-            currentTimestampMs: 160000000000,
-            playerTimestampMs: 1500,
-        });
-
-        expect(result).toEqual({
-            id: 'random-id',
-            stickers: [
-                {
-                    url: 'https://sample-sticker/small.jpg',
-                    width: 32,
-                    height: 32,
-                },
-                {
-                    url: 'https://sample-sticker/large.jpg',
-                    width: 64,
-                    height: 64,
-                },
-            ],
-            avatars: [
-                {
-                    url: 'https://sample-author-avatar/small.jpg',
-                    width: 32,
-                    height: 32,
-                },
-                {
-                    url: 'https://sample-author-avatar/large.jpg',
-                    width: 64,
-                    height: 64,
-                },
-            ],
-            videoTimestampInMs: 100000000,
+            liveTimestampMs: 1591023793124.462,
+            videoTimestampMs: 1500,
             authorName: 'Sample Author',
             chatType: 'super-sticker',
             color: 'rgba(208,0,0,1)',
