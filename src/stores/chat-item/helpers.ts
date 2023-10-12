@@ -115,7 +115,7 @@ export function isOutdatedChatItem({
 }: IsOutdatedChatItemParameters): boolean {
     const factor = getOutdatedFactor(chatItem);
     const delayMs =
-        (MAX_CHAT_DISPLAY_DELAY_IN_SEC + liveChatDelayMs) * 1000 * factor;
+        (MAX_CHAT_DISPLAY_DELAY_IN_SEC * 1000 + liveChatDelayMs) * factor;
 
     if (chatItem.videoTimestampMs !== undefined) {
         return chatItem.videoTimestampMs < timeInfo.playerTimestampMs - delayMs;
