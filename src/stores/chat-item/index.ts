@@ -404,18 +404,19 @@ export class ChatItemStore {
             return false;
         }
 
-        if (chatItem.lineNumber === undefined) {
-            return false;
+        if (chatItem.lineNumber !== undefined) {
+            const line =
+                this.chatItemsByLineNumber.get(chatItem.lineNumber) ?? [];
+            const index = line.findIndex(
+                (i) => i.value.id === chatItem.value.id,
+            );
+
+            if (index === -1) {
+                return false;
+            }
+
+            line.splice(index, 1);
         }
-
-        const line = this.chatItemsByLineNumber.get(chatItem.lineNumber) ?? [];
-        const index = line.findIndex((i) => i.value.id === chatItem.value.id);
-
-        if (index === -1) {
-            return false;
-        }
-
-        line.splice(index, 1);
 
         this.setState('normalChatItems', {
             [chatItemId]: undefined,
