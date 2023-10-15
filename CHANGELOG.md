@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.15.5](https://github.com/thwonghin/live-chat-overlay/compare/v2.15.4...v2.15.5) (2023-10-15)
+
+
+### Bug Fixes
+
+* add max queue length to avoid freeze in background ([#813](https://github.com/thwonghin/live-chat-overlay/issues/813)) ([193707a](https://github.com/thwonghin/live-chat-overlay/commit/193707a6a1a1aab9995de5b1fb1ff892dde5aeba))
+
 ### [2.15.4](https://github.com/thwonghin/live-chat-overlay/compare/v2.15.3...v2.15.4) (2023-10-12)
 
 ### [2.15.3](https://github.com/thwonghin/live-chat-overlay/compare/v2.15.2...v2.15.3) (2023-10-12)
