@@ -40,6 +40,7 @@ type DebugInfo = Partial<{
 const DEQUEUE_INTERVAL = 1000 / 60; // 5 FPS
 const CLEAN_INTERVAL = 1000;
 const MAX_DEQUEUE_ITEMS = 5;
+const MAX_QUEUE_LENGTH = 500;
 
 export type ChatItemStoreState = {
     normalChatItems: Record<string, ChatItemModel>;
@@ -397,6 +398,33 @@ export class ChatItemStore {
         });
     }
 
+    private removeNormalChatItem(chatItemId: string): boolean {
+        const chatItem = this.state.normalChatItems[chatItemId];
+        if (!chatItem) {
+            return false;
+        }
+
+        if (chatItem.lineNumber !== undefined) {
+            const line =
+                this.chatItemsByLineNumber.get(chatItem.lineNumber) ?? [];
+            const index = line.findIndex(
+                (i) => i.value.id === chatItem.value.id,
+            );
+
+            if (index === -1) {
+                return false;
+            }
+
+            line.splice(index, 1);
+        }
+
+        this.setState('normalChatItems', {
+            [chatItemId]: undefined,
+        });
+
+        return true;
+    }
+
     private readonly cleanDisplayedChatItems = (): void => {
         if (!this.isInitiated) {
             return;
@@ -426,34 +454,13 @@ export class ChatItemStore {
                         return;
                     }
 
-                    if (chatItem.lineNumber === undefined) {
+                    if (this.removeNormalChatItem(chatItemId)) {
+                        cleanedChatItemCount++;
+                    } else {
                         throw createError(
-                            `Unknown line number for ${chatItem.value.id}`,
+                            `Cannot remove chatItemId = ${chatItemId}`,
                         );
                     }
-
-                    const line =
-                        this.chatItemsByLineNumber.get(chatItem.lineNumber) ??
-                        [];
-                    const index = line.findIndex(
-                        (i) => i.value.id === chatItem.value.id,
-                    );
-
-                    if (index === -1) {
-                        throw createError(
-                            `Unknown index in line number ${chatItem.lineNumber} for ${chatItem.value.id}`,
-                        );
-                    }
-
-                    line.splice(
-                        line.findIndex((i) => i.value.id === chatItem.value.id),
-                        1,
-                    );
-                    cleanedChatItemCount++;
-
-                    this.setState('normalChatItems', {
-                        [chatItemId]: undefined,
-                    });
                 }
             }
         });
@@ -529,15 +536,28 @@ export class ChatItemStore {
                                 item.value,
                             );
 
-                        if (!isSticky) {
-                            this.setState('normalChatItems', {
-                                [chatItemId]: item,
-                            });
-                            this.normalChatItemQueue.push(chatItemId);
-                        } else if (!this.closedPinnedComment.has(chatItemId)) {
+                        if (isSticky) {
                             this.setState('stickyChatItems', {
                                 [item.value.id]: item,
                             });
+                            return;
+                        }
+
+                        this.setState('normalChatItems', {
+                            [chatItemId]: item,
+                        });
+                        this.normalChatItemQueue.push(chatItemId);
+
+                        if (
+                            this.normalChatItemQueue.length > MAX_QUEUE_LENGTH
+                        ) {
+                            const dequeuedChatItemId =
+                                this.normalChatItemQueue.shift();
+                            if (!dequeuedChatItemId) {
+                                return;
+                            }
+
+                            this.removeNormalChatItem(dequeuedChatItemId);
                         }
                     });
                 });
