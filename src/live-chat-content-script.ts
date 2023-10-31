@@ -1,4 +1,4 @@
-import { CHAT_END_EVENT, CHAT_START_EVENT } from './constants';
+import { CHAT_START_EVENT } from './constants';
 import { injectScript } from './utils';
 import { logInfo } from './utils/logger';
 
@@ -9,11 +9,4 @@ function start() {
     window.parent.window.dispatchEvent(event);
 }
 
-function end() {
-    logInfo('ending from live chat iframe');
-    const event = new CustomEvent(`${chrome.runtime.id}-${CHAT_END_EVENT}`);
-    window.parent.window.dispatchEvent(event);
-}
-
 document.addEventListener('DOMContentLoaded', start);
-window.addEventListener('unload', end);

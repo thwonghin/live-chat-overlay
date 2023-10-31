@@ -1,11 +1,7 @@
 import { waitForValue, youtube } from '@/utils';
 
 import { injectLiveChatOverlay } from './app/live-chat-overlay';
-import {
-    CHAT_END_EVENT,
-    CHAT_START_EVENT,
-    LIVE_CHAT_API_INTERCEPT_EVENT,
-} from './constants';
+import { CHAT_START_EVENT, LIVE_CHAT_API_INTERCEPT_EVENT } from './constants';
 import { type InitData } from './definitions/youtube';
 import { type ChatEventDetail } from './services/fetch-interceptor';
 import { createRootStore } from './stores';
@@ -89,17 +85,18 @@ async function init() {
     logDebug('Injecting the live chat overlay');
     const cleanupLiveChat = await injectLiveChatOverlay(store);
 
-    function cleanup(): void {
-        logInfo('cleaning up in main player page');
-        store.cleanup();
-        cleanupLiveChat();
-        window.removeEventListener(
-            `${chrome.runtime.id}-${CHAT_END_EVENT}`,
-            cleanup,
-        );
-    }
+    const handleMessage: Parameters<
+        typeof chrome.runtime.onMessage.addListener
+    >[0] = (request) => {
+        if (request.message === 'urlChanged') {
+            logInfo('cleaning up in main player page');
+            store.cleanup();
+            cleanupLiveChat();
+            chrome.runtime.onMessage.removeListener(handleMessage);
+        }
+    };
 
-    window.addEventListener(`${chrome.runtime.id}-${CHAT_END_EVENT}`, cleanup);
+    chrome.runtime.onMessage.addListener(handleMessage);
 }
 
 window.addEventListener(`${chrome.runtime.id}-${CHAT_START_EVENT}`, init);
