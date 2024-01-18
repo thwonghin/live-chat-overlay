@@ -1,8 +1,66 @@
-import { isNil } from 'lodash-es';
-
 import { createError } from '@/utils/logger';
 
 export * as youtube from './youtube';
+
+// https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore
+// Lodash is not used due to it having `Function()` call that is blocked by CSP in web extensions
+
+export function isNil(value: any): value is null | undefined {
+    // eslint-disable-next-line no-eq-null, eqeqeq
+    return value == null;
+}
+
+export function isNotNil<T>(value?: T | undefined): value is NonNullable<T> {
+    return !isNil(value);
+}
+
+export function clamp(value: number, min: number, max: number): number {
+    return Math.max(Math.min(value, max), min);
+}
+
+export function mapValues<T extends object, K extends keyof T, U>(
+    value: T,
+    mapper: (value: T[K]) => U,
+): Record<string, U> {
+    return Object.fromEntries(
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        Object.entries(value).map(([key, value]) => [key, mapper(value)]),
+    );
+}
+
+export function defaultsDeep<T extends Record<string, any>>(
+    values: Partial<T>,
+    defaultValues: Partial<T>,
+): Partial<T> {
+    const result: Record<string, any> = structuredClone(values);
+
+    Object.entries(defaultValues).forEach(([key, value]) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const originalValue = result[key];
+        if (originalValue === undefined) {
+            if (typeof value === 'function') {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                result[key] = value;
+            } else {
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                result[key] = structuredClone(value);
+            }
+        } else if (
+            typeof originalValue === 'object' &&
+            originalValue !== null &&
+            !Array.isArray(originalValue) &&
+            value !== undefined
+        ) {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            result[key] = defaultsDeep(originalValue, value);
+        }
+    });
+
+    return result as T;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export function noop() {}
 
 export function assertNever(type: never): never {
     throw createError(`Unknown object: ${type as string}`);
@@ -19,10 +77,6 @@ export function colorFromDecimal(decimal: number): string {
     ].join(',')})`;
 }
 /* eslint-enable no-bitwise */
-
-export function isNotNil<T>(value?: T | undefined): value is NonNullable<T> {
-    return !isNil(value);
-}
 
 export function injectScript(scriptSrc: string) {
     const scriptTag = document.createElement('script');

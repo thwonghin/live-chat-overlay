@@ -1,5 +1,3 @@
-import { isNil, last } from 'lodash-es';
-
 import type {
     ReplayContinuationContents,
     LiveContinuationContents,
@@ -12,7 +10,7 @@ import {
 } from '@/models/chat-item';
 import { isNormalChatItem } from '@/models/chat-item/mapper';
 import type { ChatItem } from '@/models/chat-item/types';
-import { isNotNil } from '@/utils';
+import { isNil, isNotNil } from '@/utils';
 import { createError } from '@/utils/logger';
 
 export enum Mode {
@@ -208,9 +206,9 @@ export function getLineNumber({
                 .fill(null)
                 .map((v, index) => index + lineNumber)
                 .every((loopLineNumber) => {
-                    const lastMessageInLine = last(
-                        chatItemsByLineNumber.get(loopLineNumber),
-                    );
+                    const lastMessageInLine = chatItemsByLineNumber
+                        .get(loopLineNumber)
+                        ?.at(-1);
 
                     return (
                         !lastMessageInLine ||

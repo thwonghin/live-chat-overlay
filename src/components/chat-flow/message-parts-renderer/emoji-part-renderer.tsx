@@ -1,4 +1,3 @@
-import { last } from 'lodash-es';
 import { createMemo, type Component } from 'solid-js';
 
 import type { EmojiPart } from '@/models/chat-item/types';
@@ -8,7 +7,7 @@ type Props = Readonly<{
 }>;
 
 const EmojiPartRenderer: Component<Props> = (props) => {
-    const thumbnail = createMemo(() => last(props.emojiPart.thumbnails));
+    const thumbnail = createMemo(() => props.emojiPart.thumbnails.at(-1));
     return (
         <img
             src={thumbnail()?.url}

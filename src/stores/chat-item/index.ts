@@ -1,4 +1,4 @@
-import { noop, debounce, first } from 'lodash-es';
+import { leadingAndTrailing, debounce } from '@solid-primitives/scheduled';
 import { createEffect, createRoot, onCleanup, onMount, batch } from 'solid-js';
 import { type SetStoreFunction, createStore, reconcile } from 'solid-js/store';
 
@@ -10,7 +10,7 @@ import type {
 } from '@/definitions/youtube';
 import type { ChatItemModel } from '@/models/chat-item';
 import type { fetchInterceptor } from '@/services';
-import { youtube } from '@/utils';
+import { noop, youtube } from '@/utils';
 import { createError, logInfo } from '@/utils/logger';
 import { benchmarkRuntime, benchmarkRuntimeAsync } from '@/utils/metrics';
 
@@ -63,24 +63,29 @@ export class ChatItemStore {
     private tickId: number | undefined;
     private cleanDisplayedIntervalId: number | undefined;
 
-    private readonly resetNonStickyChatItems = debounce(() => {
-        batch(() => {
-            for (const chatItemId in this.state.normalChatItems) {
-                if (Object.hasOwn(this.state.normalChatItems, chatItemId)) {
-                    const chatItem = this.state.normalChatItems[chatItemId]!;
-                    if (chatItem.addTimestamp) {
-                        this.setState('normalChatItems', {
-                            [chatItemId]: undefined,
-                        });
+    private readonly resetNonStickyChatItems = leadingAndTrailing(
+        debounce,
+        () => {
+            batch(() => {
+                for (const chatItemId in this.state.normalChatItems) {
+                    if (Object.hasOwn(this.state.normalChatItems, chatItemId)) {
+                        const chatItem =
+                            this.state.normalChatItems[chatItemId]!;
+                        if (chatItem.addTimestamp) {
+                            this.setState('normalChatItems', {
+                                [chatItemId]: undefined,
+                            });
+                        }
                     }
                 }
-            }
-        });
-        this.normalChatItemQueue = this.normalChatItemQueue.filter(
-            (itemId) => itemId in this.state.normalChatItems,
-        );
-        this.chatItemsByLineNumber.clear();
-    });
+            });
+            this.normalChatItemQueue = this.normalChatItemQueue.filter(
+                (itemId) => itemId in this.state.normalChatItems,
+            );
+            this.chatItemsByLineNumber.clear();
+        },
+        100,
+    );
 
     constructor(
         private readonly uiStore: UiStore,
@@ -494,7 +499,7 @@ export class ChatItemStore {
                               continuationContents as LiveContinuationContents,
                           );
 
-                const firstItem = first(chatItems);
+                const firstItem = chatItems.at(0);
                 if (!firstItem) {
                     return 0;
                 }

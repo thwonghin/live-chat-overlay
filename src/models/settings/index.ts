@@ -1,5 +1,3 @@
-import { defaultsDeep } from 'lodash-es';
-
 import {
     isMembershipItem,
     isNormalChatItem,
@@ -8,7 +6,7 @@ import {
     isSuperStickerItem,
 } from '@/models/chat-item/mapper';
 import type { ChatItem } from '@/models/chat-item/types';
-import { assertNever } from '@/utils';
+import { assertNever, defaultsDeep } from '@/utils';
 
 import {
     type Settings,
@@ -19,7 +17,7 @@ import {
 
 export * from './types';
 
-const commonMessageSettings: MessageSettings = {
+const commonMessageSettings: Readonly<MessageSettings> = Object.freeze({
     color: 'white',
     weight: 700,
     opacity: 0.8,
@@ -29,9 +27,9 @@ const commonMessageSettings: MessageSettings = {
     numberOfLines: 1,
     authorDisplay: AuthorDisplayMethod.NONE,
     isSticky: false,
-} as const;
+} as const);
 
-export const defaultSettings: Settings = {
+export const defaultSettings: Readonly<Settings> = Object.freeze({
     isEnabled: true,
     flowTimeInSec: 10,
     totalNumberOfLines: 15,
@@ -90,7 +88,7 @@ export const defaultSettings: Settings = {
             isSticky: true,
         },
     },
-};
+} as const);
 
 export type SettingsModel = {
     setRawSettings(settings: Settings): SettingsModel;
@@ -101,7 +99,7 @@ export const createSettingsModel = (): SettingsModel => {
     const settingsModel: SettingsModel = {
         ...defaultSettings,
         setRawSettings(settings: Settings) {
-            Object.assign(settingsModel, defaultsDeep(settings, this));
+            Object.assign(settingsModel, defaultsDeep(settings, { ...this }));
             return settingsModel;
         },
         getMessageSettings(chatItem: ChatItem): MessageSettings {

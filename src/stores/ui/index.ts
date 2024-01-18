@@ -1,9 +1,8 @@
-import { noop } from 'lodash-es';
 import { createRoot, onCleanup, onMount } from 'solid-js';
 import { type SetStoreFunction, createStore } from 'solid-js/store';
 
 import { FontScaleMethod } from '@/models/settings';
-import { assertNever } from '@/utils';
+import { assertNever, noop } from '@/utils';
 
 import type { PopupType } from './types';
 import { type SettingsStore } from '../settings';

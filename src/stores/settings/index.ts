@@ -1,4 +1,3 @@
-import { noop } from 'lodash-es';
 import { createEffect, createRoot } from 'solid-js';
 import { type SetStoreFunction, createStore } from 'solid-js/store';
 
@@ -7,7 +6,7 @@ import {
     type SettingsModel,
     createSettingsModel,
 } from '@/models/settings';
-import { catchWithFallback, promiseSeries } from '@/utils';
+import { catchWithFallback, noop, promiseSeries } from '@/utils';
 
 import { MIGRATIONS_STORAGE_KEY, SETTINGS_STORAGE_KEY } from './const';
 import { migrations } from './migrations';
