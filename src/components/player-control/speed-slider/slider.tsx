@@ -1,4 +1,3 @@
-import { clamp } from 'lodash-es';
 import {
     type Component,
     createEffect,
@@ -8,6 +7,7 @@ import {
 } from 'solid-js';
 
 import { useRect } from '@/hooks';
+import { clamp } from '@/utils';
 
 import styles from './slider.module.scss';
 

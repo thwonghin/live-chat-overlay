@@ -1,8 +1,7 @@
-import { noop } from 'lodash-es';
 import { createRoot, onCleanup, onMount } from 'solid-js';
 import { type SetStoreFunction, createStore } from 'solid-js/store';
 
-import { attachKeydownEventListener } from '@/utils';
+import { attachKeydownEventListener, noop } from '@/utils';
 import { updateMetrics } from '@/utils/metrics';
 
 import { type DebugInfo } from './types';

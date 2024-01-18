@@ -1,6 +1,6 @@
-import { mapValues } from 'lodash-es';
 import { describe, it, expect } from 'vitest';
 
+import { mapValues } from '@/utils';
 import { updateMetrics, type Metrics } from '@/utils/metrics';
 
 type TestParameters = {
